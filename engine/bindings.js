@@ -69,6 +69,9 @@ const btnBackMon = document.getElementById('btnBackMon');
 if (btnBackMon) btnBackMon.onclick = () => { stopVoice(); buildChapterGrid(); showPage('pageSelect'); };
 const btnBackWea = document.getElementById('btnBackWea');
 if (btnBackWea) btnBackWea.onclick = () => { stopVoice(); buildChapterGrid(); showPage('pageSelect'); };
+// v75: 🔢 算数·数学 (series 11)
+const btnBackMath = document.getElementById('btnBackMath');
+if (btnBackMath) btnBackMath.onclick = () => { stopVoice(); buildChapterGrid(); showPage('pageSelect'); };
 document.getElementById('btnBackStory').onclick = () => showPage('pageStory');
 
 document.getElementById('btnNotebook1').onclick = openNotebook;
@@ -93,9 +96,14 @@ const btnVoiceMon = document.getElementById('btnVoiceMon');
 if (btnVoiceMon) btnVoiceMon.onclick = toggleVoice;
 const btnVoiceWea = document.getElementById('btnVoiceWea');
 if (btnVoiceWea) btnVoiceWea.onclick = toggleVoice;
+const btnVoiceMath = document.getElementById('btnVoiceMath');
+if (btnVoiceMath) btnVoiceMath.onclick = toggleVoice;
 
 const btnBackLearn = document.getElementById('btnBackLearn');
 if (btnBackLearn) btnBackLearn.onclick = () => { sfx('click'); WeaLearnState.currentCase = null; buildChapterGrid(); showPage('pageSelect'); };
+// v75: 算数·数学 학습 자료 페이지 뒤로가기
+const btnBackMathLearn = document.getElementById('btnBackMathLearn');
+if (btnBackMathLearn) btnBackMathLearn.onclick = () => { sfx('click'); MathLearnState.currentCase = null; buildChapterGrid(); showPage('pageSelect'); };
 updateVoiceButton();
 
 document.getElementById('dialogueArea').onclick = advanceDialogue;

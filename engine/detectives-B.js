@@ -2236,3 +2236,41 @@ function bindWeaEvents() {
   }
 }
 
+
+
+// ============================================================
+// v75: 🔢 算数·数学 探偵団 (series 11) — skeleton
+// ============================================================
+// Phase 4c-1: placeholder. 실제 build/start/render/bind 구현은
+// Phase 4c-2 ~ 4c-3 에서 채움 (weather 패턴 따름).
+
+function buildMathGrid(grid) {
+  // Phase 4c-1 skeleton — MATH_STORY 가 비어있으면 "준비 중" 표시
+  if (typeof MATH_STORY === 'undefined' || MATH_STORY.length === 0) {
+    grid.innerHTML =
+      '<div style="grid-column:1/-1;padding:60px 20px;text-align:center;background:linear-gradient(135deg,#f3e8ff 0%,#e9d5ff 100%);border-radius:12px;border:2px solid #7c3aed;margin-bottom:14px;">' +
+        '<div style="font-size:48px;margin-bottom:12px;">🔢</div>' +
+        '<div style="font-size:20px;color:#5b21b6;font-weight:bold;margin-bottom:6px;font-family:RocknRoll One;">算数·数学 探偵団</div>' +
+        '<div style="font-size:13px;color:#7c3aed;line-height:1.6;">~ 算数·数学の 推理で 事件を 解決 ~</div>' +
+        '<div style="font-size:12px;color:#7c3aed;margin-top:14px;line-height:1.6;">' +
+          '準備中 — 사건 1~10 데이터 작성 중<br>' +
+          '<span style="opacity:0.7;font-size:11px;">Phase 4c-2 / 4c-3 で 公開予定</span>' +
+        '</div>' +
+      '</div>';
+    return;
+  }
+  // TODO: Phase 4c-2 — 실제 사건 카드 그리드 빌드 (weather 패턴 따라)
+  // WEA pattern reference: buildWeaGrid (this file 위쪽)
+}
+
+function startMathCase(idx) {
+  // Phase 4c-1 skeleton — Phase 4c-2 에서 startWeaCase 패턴 따라 구현
+}
+
+function renderMath() {
+  // Phase 4c-1 skeleton — Phase 4c-2 에서 renderWea 패턴 따라 구현
+}
+
+function bindMathEvents() {
+  // Phase 4c-1 skeleton — Phase 4c-2 에서 bindWeaEvents 패턴 따라 구현
+}

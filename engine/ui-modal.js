@@ -36,6 +36,8 @@ function switchTab(tab) {
   document.getElementById('tabSoc').classList.toggle('active', tab === 'soc');
   document.getElementById('tabMon').classList.toggle('active', tab === 'mon');
   document.getElementById('tabWea').classList.toggle('active', tab === 'wea');
+  const tabMathEl = document.getElementById('tabMath');
+  if (tabMathEl) tabMathEl.classList.toggle('active', tab === 'math');
   buildChapterGrid();
 }
 
@@ -201,6 +203,9 @@ function buildChapterGrid() {
   } else if (State.currentTab === 'wea') {
     // v71: 🌦 気象予報士 탭
     buildWeaGrid(grid);
+  } else if (State.currentTab === 'math') {
+    // v75: 🔢 算数·数学 탭
+    buildMathGrid(grid);
   }
 
   // 리셋 버튼 핸들러

@@ -118,6 +118,20 @@ const WeaState = {
   answered: false,
 };
 
+// v75: 🔢 算数·数学 探偵団 (series 11)
+const MathState = {
+  caseIdx: 0,
+  phase: 'intro',
+  introIdx: 0,
+  stepIdx: 0,
+  stepPhase: 'intro',
+  stepIntroIdx: 0,
+  collectedClues: [],
+  selectedSuspectId: null,
+  hintShown: false,
+  answered: false,
+};
+
 
 
 

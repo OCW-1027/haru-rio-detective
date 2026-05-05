@@ -55,6 +55,8 @@
       <button class="tab mon" id="tabMon" onclick="switchTab('mon')">💴 お金</button>
       <button class="tab wea" id="tabWea" onclick="switchTab('wea')">🌦 気象</button>
       <button class="tab" id="tabWeaLearn" style="background:linear-gradient(135deg,#ffa040,#d47020);color:white;" onclick="openWeaLearn()">📚 試験対策</button>
+      <button class="tab math" id="tabMath" onclick="switchTab('math')">🔢 算数</button>
+      <button class="tab" id="tabMathLearn" style="background:linear-gradient(135deg,#9333ea,#5b21b6);color:white;" onclick="openMathLearn()">📐 算数試験対策</button>
     </div>
 
     <div class="chapter-grid" id="chapterGrid"></div>
@@ -301,6 +303,27 @@
     <div id="weaLearnArea"></div>
   </div>
 
+  <!-- 🔢 v75: 算数·数学 探偵団 스토리 페이지 (series 11) -->
+  <div class="page sci-story-page" id="pageMath">
+    <button class="back-btn" id="btnBackMath">← もくじ</button>
+    <button class="voice-btn" id="btnVoiceMath">🔊 音声ON</button>
+    <div style="position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(255,255,255,0.6);font-family:monospace;z-index:50;pointer-events:none;">v75 🔢</div>
+    <div class="sci-stage" id="mathStage">
+      <div class="sci-stage-bg" id="mathStageBg"></div>
+      <div class="sci-stage-progress" id="mathStageProgress"></div>
+      <div class="sci-stage-chars" id="mathStageChars"></div>
+    </div>
+    <div class="sci-bottom" id="mathBottom">
+      <div class="science-area" id="mathArea"></div>
+    </div>
+  </div>
+
+  <!-- 📐 v75: 算数·数学 학습 자료 페이지 -->
+  <div class="page wea-learn-page" id="pageMathLearn">
+    <button class="back-btn" id="btnBackMathLearn">← もくじ</button>
+    <div id="mathLearnArea"></div>
+  </div>
+
 
 
 
@@ -348,6 +371,8 @@
 <script src="data/series9-money.js"></script>
 <script src="data/series10-weather.js"></script>
 <script src="data/series10-weather-learn.js"></script>
+<script src="data/series11-math.js"></script>
+<script src="data/series11-math-learn.js"></script>
 
 <!-- 엔진 모듈 (v73 step4a) -->
 <script src="engine/core.js"></script>
@@ -361,6 +386,7 @@
 <script src="engine/detectives-A.js"></script>
 <script src="engine/detectives-B.js"></script>
 <script src="engine/weather-learn.js"></script>
+<script src="engine/math-learn.js"></script>
 <script src="engine/bindings.js"></script>
 
 </body>
