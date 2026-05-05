@@ -2239,38 +2239,566 @@ function bindWeaEvents() {
 
 
 // ============================================================
-// v75: 🔢 算数·数学 探偵団 (series 11) — skeleton
+// v75: 🔢 算数·数学 探偵団 (series 11) — Phase 4c-2 implementation
 // ============================================================
-// Phase 4c-1: placeholder. 실제 build/start/render/bind 구현은
-// Phase 4c-2 ~ 4c-3 에서 채움 (weather 패턴 따름).
+// Weather (series 10) 패턴 정밀 mirror. 변경: Wea→Math / WEA_→MATH_ /
+// weaCleared→mathCleared / weaArea·weaStage*→mathArea·mathStage* /
+// pageWea→pageMath / btnVoiceWea·btnBackWea→btnVoiceMath·btnBackMath.
+// 헤더 텍스트 3 군데 contextual 적응 (시리즈명·서브타이틀·설명).
 
 function buildMathGrid(grid) {
-  // Phase 4c-1 skeleton — MATH_STORY 가 비어있으면 "준비 중" 표시
-  if (typeof MATH_STORY === 'undefined' || MATH_STORY.length === 0) {
-    grid.innerHTML =
-      '<div style="grid-column:1/-1;padding:60px 20px;text-align:center;background:linear-gradient(135deg,#f3e8ff 0%,#e9d5ff 100%);border-radius:12px;border:2px solid #7c3aed;margin-bottom:14px;">' +
-        '<div style="font-size:48px;margin-bottom:12px;">🔢</div>' +
-        '<div style="font-size:20px;color:#5b21b6;font-weight:bold;margin-bottom:6px;font-family:RocknRoll One;">算数·数学 探偵団</div>' +
-        '<div style="font-size:13px;color:#7c3aed;line-height:1.6;">~ 算数·数学の 推理で 事件を 解決 ~</div>' +
-        '<div style="font-size:12px;color:#7c3aed;margin-top:14px;line-height:1.6;">' +
-          '準備中 — 사건 1~10 데이터 작성 중<br>' +
-          '<span style="opacity:0.7;font-size:11px;">Phase 4c-2 / 4c-3 で 公開予定</span>' +
-        '</div>' +
-      '</div>';
-    return;
-  }
-  // TODO: Phase 4c-2 — 실제 사건 카드 그리드 빌드 (weather 패턴 따라)
-  // WEA pattern reference: buildWeaGrid (this file 위쪽)
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'grid-column:1/-1;';
+
+  const totalCases = MATH_STORY.length;
+  const clearedCount = State.mathCleared.filter(c => c).length;
+
+  let html = '<div class="sci-header">';
+  html += '<div class="sci-h-title">🔢 算数·数学 探偵団 ハル & リオ</div>';
+  html += '<div class="sci-h-sub">~消えた図形と 数の 謎~</div>';
+  html += '<div style="font-size:12px;color:#4a8a9a;margin-top:6px;font-family:Klee One;">';
+  html += '深い 推理と 算数·数学の 知識で 事件を 解決しよう! (進行: ' + clearedCount + ' / ' + totalCases + ')';
+  html += '</div>';
+  html += '</div>';
+
+  // 사건 카드들
+  MATH_STORY.forEach((s, i) => {
+    const cleared = State.mathCleared[i];
+    const comingSoon = s.comingSoon;
+    // 잠금 조건: 이전 장 클리어 + 준비완료 사건만
+    let locked = false;
+    if (i > 0) {
+      // 이전 장이 comingSoon이거나 클리어 안 했으면 잠금
+      const prev = MATH_STORY[i - 1];
+      if (prev.comingSoon || !State.mathCleared[i - 1]) locked = true;
+    }
+    let cls = 'sci-case-card';
+    if (locked) cls += ' locked';
+    if (cleared) cls += ' cleared';
+    if (comingSoon) cls += ' coming-soon';
+    html += '<div class="' + cls + '" data-idx="' + i + '">';
+    html += '<div class="sci-case-num">第' + s.id + '事件</div>';
+    // v32: 일러스트가 있으면 표시, 없으면 큰 이모지
+    if (s.illustration) {
+      html += '<div class="sci-case-illust" style="background-image:url(' + s.illustration + ');"></div>';
+    } else {
+      html += '<div class="sci-case-icon">' + s.icon + '</div>';
+    }
+    html += '<div class="sci-case-title">' + escapeHtml(s.title) + '</div>';
+    html += '<div class="sci-case-sub">' + escapeHtml(s.subtitle) + '</div>';
+    html += '<div style="text-align:center;"><span class="sci-case-theme">' + escapeHtml(s.theme) + '</span></div>';
+    if (comingSoon) {
+      html += '<div style="text-align:center;margin-top:6px;font-family:RocknRoll One;font-size:11px;color:#b85a5a;">🚧 準備中…</div>';
+    } else {
+      html += '<div class="sci-case-stars">' + (cleared ? '⭐⭐⭐' : '') + '</div>';
+    }
+    if (locked && !comingSoon) html += '<div class="sci-case-lock">🔒</div>';
+    html += '</div>';
+  });
+
+  // 진행도 안내
+  const ready = MATH_STORY.filter(s => !s.comingSoon).length;
+  html += '<div style="background:rgba(255,255,255,0.7);border:2px solid #2a7a8a;border-radius:14px;padding:10px 14px;text-align:center;color:#1a4a5a;font-family:Klee One;font-size:12px;margin-top:8px;">';
+  html += '🔬 現在 ' + ready + ' / ' + MATH_STORY.length + ' 事件 公開中。残りは 準備中です。';
+  html += '</div>';
+
+  wrapper.innerHTML = html;
+  grid.appendChild(wrapper);
+
+  wrapper.querySelectorAll('.sci-case-card').forEach(card => {
+    card.onclick = () => {
+      const idx = parseInt(card.dataset.idx);
+      const s = MATH_STORY[idx];
+      if (s.comingSoon) {
+        sfx('wrong');
+        showModal('🚧', '準備中', 'この 事件は まだ 準備中です。\nもうしばらく お待ちください!',
+          [{text:'OK', cb:closeModal}], 'fail');
+        return;
+      }
+      if (card.classList.contains('locked')) {
+        sfx('wrong');
+        showModal('🔒', '事件 ロック中', '前の 事件を 解決すると 開きます。',
+          [{text:'OK', cb:closeModal}], 'fail');
+        return;
+      }
+      sfx('click');
+      startMathCase(idx);
+    };
+  });
 }
 
 function startMathCase(idx) {
-  // Phase 4c-1 skeleton — Phase 4c-2 에서 startWeaCase 패턴 따라 구현
+  MathState.caseIdx = idx;
+  MathState.phase = 'intro';
+  MathState.introIdx = 0;
+  MathState.stepIdx = 0;
+  MathState.stepPhase = 'intro';
+  MathState.stepIntroIdx = 0;
+  MathState.collectedClues = [];
+  MathState.selectedSuspectId = null;
+  MathState.hintShown = false;
+  MathState.answered = false;
+  MathState.wrongSuspects = [];  // v51: 추리 단계에서 틀린 용의자 누적
+  MathState.wrongIds = [];  // v50: 한 번 틀린 용의자 ID 모음 (정답이 자동 노출되지 않도록)
+  showPage('pageMath');
+  // v32: 사건별 BGM 분위기
+  const bgmKey = MATH_STORY[idx].bgm || 'mystery';
+  playBGM(bgmKey);
+  renderMath();
 }
 
 function renderMath() {
-  // Phase 4c-1 skeleton — Phase 4c-2 에서 renderWea 패턴 따라 구현
+  const c = MATH_STORY[MathState.caseIdx];
+
+  // ===== 상단 STAGE 갱신 =====
+  const stageBg = document.getElementById('mathStageBg');
+  const stageProg = document.getElementById('mathStageProgress');
+  const stageChars = document.getElementById('mathStageChars');
+
+  // 배경: 항상 사건 일러스트
+  if (stageBg && c.illustration) {
+    stageBg.style.backgroundImage = 'url(' + c.illustration + ')';
+  }
+
+  // 진행 dot
+  if (stageProg) {
+    let progHtml = '';
+    c.steps.forEach((s, i) => {
+      let cls = 'pdot';
+      if (i < MathState.stepIdx) cls += ' done';
+      else if (i === MathState.stepIdx && MathState.phase === 'step') cls += ' current';
+      progHtml += '<div class="' + cls + '">' + (i+1) + '</div>';
+    });
+    let finalCls = 'pdot';
+    if (MathState.phase === 'resolved') finalCls += ' done';
+    else if (MathState.phase === 'final') finalCls += ' current';
+    progHtml += '<div class="' + finalCls + '">🔍</div>';
+    stageProg.innerHTML = progHtml;
+  }
+
+  // 캐릭터 컷인 + 말풍선
+  if (stageChars) {
+    let charsHtml = '';
+    let currentLine = null;
+
+    if (MathState.phase === 'intro') {
+      currentLine = c.intro[MathState.introIdx];
+    } else if (MathState.phase === 'step' && MathState.stepPhase === 'intro') {
+      const step = c.steps[MathState.stepIdx];
+      if (step && step.intro) currentLine = step.intro[MathState.stepIntroIdx];
+    }
+
+    // 위치 결정 함수 (대화 중인 사람 위치)
+    let charLayout = []; // [{key, pos: 'left'|'right'|'center', state: 'speaking'|'dimmed'|''}]
+
+    if (currentLine) {
+      const speaker = currentLine.charKey;
+      const cls = currentLine.cls || '';
+      // v39: 스토리 방식 - 말하는 사람만 등장 (다른 캐릭터는 화면에서 사라짐)
+      if (speaker === 'haru') {
+        charLayout.push({ key: 'haru', pos: 'left', state: '' });
+      } else if (speaker === 'rio') {
+        charLayout.push({ key: 'rio', pos: 'right', state: '' });
+      } else if (speaker && SCI_CHARS[speaker]) {
+        // 박사·용의자가 중앙
+        charLayout.push({ key: speaker, pos: 'center', state: '' });
+      }
+      // 나레이터의 경우는 캐릭터 없이 자막만 표시
+    } else if (MathState.phase === 'step' && MathState.stepPhase === 'puzzle') {
+      // 퍼즐 풀이 중 - ハル·リオ 둘 다 (생각하는 모습)
+      charLayout.push({ key: 'haru', pos: 'left', state: '' });
+      charLayout.push({ key: 'rio', pos: 'right', state: '' });
+    } else if (MathState.phase === 'step' && MathState.stepPhase === 'clue') {
+      // 단서 발견 - 둘 다 기뻐
+      charLayout.push({ key: 'haru', pos: 'left', state: '' });
+      charLayout.push({ key: 'rio', pos: 'right', state: '' });
+    } else if (MathState.phase === 'final') {
+      // 최종 추리 - ハル·リオ가 함께
+      charLayout.push({ key: 'haru', pos: 'left', state: '' });
+      charLayout.push({ key: 'rio', pos: 'right', state: '' });
+    } else if (MathState.phase === 'resolved') {
+      // 사건 해결 - 둘 다 환호
+      charLayout.push({ key: 'haru', pos: 'left', state: '' });
+      charLayout.push({ key: 'rio', pos: 'right', state: '' });
+    }
+
+    // 캐릭터 그리기 (말풍선 없이 - 대사는 하단 박스에 표시됨)
+    charLayout.forEach(c => {
+      if (!SCI_CHARS[c.key]) return;
+      charsHtml += '<div class="sci-char ' + c.pos + ' ' + c.state + '" style="background-image:url(' + SCI_CHARS[c.key] + ');"></div>';
+    });
+
+    // v41: 음성 재생만 (말풍선 표시는 제거 - 하단 박스에서 텍스트 표시)
+    if (currentLine) {
+      try { speakLine(currentLine); } catch(e) {}
+    }
+
+    stageChars.innerHTML = charsHtml;
+  }
+
+  // ===== 하단 AREA 갱신 =====
+  const area = document.getElementById('mathArea');
+  let html = '';
+
+  // 사건 제목 미니 헤더
+  html += '<div style="font-family:RocknRoll One;font-size:13px;color:#1a4a5a;margin-bottom:8px;text-align:center;">';
+  html += c.icon + ' 第' + c.id + '事件: ' + escapeHtml(c.title);
+  html += '</div>';
+
+  if (MathState.phase === 'intro') {
+    // v41: 기존 스토리 풍 대사 박스 (위는 캐릭터, 아래는 대사)
+    const line = c.intro[MathState.introIdx];
+    const cls = line.cls || 'haru';
+    html += '<div class="sci-dialogue" id="mathDialogue">';
+    html += '<span class="speaker-bubble ' + cls + '">' + escapeHtml(line.speaker) + '</span>';
+    html += '<div class="dialogue-content">' + escapeHtml(line.text) + '</div>';
+    if (MathState.introIdx < c.intro.length - 1) {
+      html += '<span class="tap-hint">▼ タップ</span>';
+    } else {
+      html += '<button class="sci-next-btn" id="mathNext" style="margin-top:14px;">🔍 捜査 開始!</button>';
+    }
+    html += '</div>';
+  }
+  else if (MathState.phase === 'step') {
+    const step = c.steps[MathState.stepIdx];
+    if (MathState.stepPhase === 'intro') {
+      const line = (step.intro || [])[MathState.stepIntroIdx];
+      if (line) {
+        const cls = line.cls || 'haru';
+        html += '<div style="font-family:RocknRoll One;font-size:14px;color:#8a6a2a;margin-bottom:6px;text-align:center;">' + escapeHtml(step.title) + '</div>';
+        html += '<div class="sci-dialogue" id="mathDialogue">';
+        html += '<span class="speaker-bubble ' + cls + '">' + escapeHtml(line.speaker) + '</span>';
+        html += '<div class="dialogue-content">' + escapeHtml(line.text) + '</div>';
+        if (MathState.stepIntroIdx < (step.intro || []).length - 1) {
+          html += '<span class="tap-hint">▼ タップ</span>';
+        } else {
+          html += '<button class="sci-next-btn" id="mathNext" style="margin-top:10px;">問題に 進む →</button>';
+        }
+        html += '</div>';
+      }
+    }
+    else if (MathState.stepPhase === 'puzzle') {
+      // 단서 패널
+      if (MathState.collectedClues.length > 0) {
+        html += '<div class="sci-notes-panel">';
+        html += '<div class="sci-notes-h">📓 捜査ノート (' + MathState.collectedClues.length + '件)</div>';
+        MathState.collectedClues.forEach(cl => {
+          html += '<div class="sci-notes-item"><strong>' + escapeHtml(cl.title) + ':</strong> ' + escapeHtml(cl.desc) + '</div>';
+        });
+        html += '</div>';
+      }
+      html += '<div style="font-family:RocknRoll One;font-size:14px;color:#8a6a2a;margin-bottom:6px;">' + escapeHtml(step.title) + '</div>';
+      html += '<div class="sci-puzzle-card">';
+      html += '<div class="sci-puzzle-prompt">' + escapeHtml(step.puzzle.prompt) + '</div>';
+      html += '<div class="sci-puzzle-options">';
+      step.puzzle.options.forEach((opt, i) => {
+        html += '<div class="sci-puzzle-opt" data-i="' + i + '">' + (i+1) + '. ' + escapeHtml(opt) + '</div>';
+      });
+      html += '</div>';
+      html += '<button class="sci-hint-toggle" id="mathHintBtn">' + (MathState.hintShown ? '💡 ヒントを 隠す' : '💡 ヒントを 見る') + '</button>';
+      html += '<div class="sci-puzzle-hint' + (MathState.hintShown ? ' show' : '') + '" id="mathHint">';
+      html += '💡 ' + escapeHtml(step.puzzle.hint);
+      html += '</div>';
+      html += '</div>';
+      html += '<div id="mathFeedback"></div>';
+    }
+    else if (MathState.stepPhase === 'clue') {
+      html += '<div class="sci-clue-note">';
+      html += '<div class="sci-clue-h">📓 新しい 手がかりを 発見!</div>';
+      html += '<div class="sci-clue-text"><strong>' + escapeHtml(step.clue.title) + ':</strong> ' + escapeHtml(step.clue.desc) + '</div>';
+      html += '</div>';
+      const isLastStep = MathState.stepIdx >= c.steps.length - 1;
+      html += '<button class="sci-next-btn" id="mathNext">' + (isLastStep ? '🔍 容疑者の 確認 →' : '次の STEP →') + '</button>';
+    }
+  }
+  else if (MathState.phase === 'final') {
+    html += '<div class="sci-notes-panel">';
+    html += '<div class="sci-notes-h">📓 捜査ノート 全件</div>';
+    MathState.collectedClues.forEach(cl => {
+      html += '<div class="sci-notes-item"><strong>' + escapeHtml(cl.title) + ':</strong> ' + escapeHtml(cl.desc) + '</div>';
+    });
+    html += '</div>';
+    html += '<div class="sci-puzzle-card">';
+    html += '<div class="sci-puzzle-prompt">' + escapeHtml(c.finalQ.prompt) + '</div>';
+    html += '<div style="font-family:RocknRoll One;font-size:15px;color:#8a6a2a;margin:10px 0 6px;">' + escapeHtml(c.finalQ.question) + '</div>';
+    html += '<div class="sci-suspects-grid">';
+    c.suspects.forEach(s => {
+      const isSelected = MathState.selectedSuspectId === s.id;
+      const isWrong = (MathState.wrongIds || []).includes(s.id);  // v50: 이미 틀린 용의자
+      const wrongStyle = isWrong ? 'border-color:#b85a5a;background:#f5c6c6;opacity:0.55;cursor:not-allowed;' : '';
+      html += '<div class="sci-suspect-card' + (isSelected ? ' selected' : '') + (isWrong ? ' tried-wrong' : '') + '" data-id="' + s.id + '" style="' + wrongStyle + '">';
+      if (isWrong) {
+        html += '<div style="position:absolute;top:8px;right:10px;font-size:22px;color:#b85a5a;font-weight:bold;">✗</div>';
+      }
+      html += '<div class="sci-suspect-row">';
+      if (s.charKey && SCI_CHARS[s.charKey]) {
+        html += '<div class="sci-suspect-portrait" style="background-image:url(' + SCI_CHARS[s.charKey] + ');"></div>';
+      } else {
+        html += '<div class="sci-suspect-icon">' + s.icon + '</div>';
+      }
+      html += '<div class="sci-suspect-info">';
+      html += '<div class="sci-suspect-name">' + escapeHtml(s.name) + '</div>';
+      html += '<div class="sci-suspect-role">' + escapeHtml(s.role) + '</div>';
+      html += '</div></div>';
+      html += '<div class="sci-suspect-detail">';
+      html += '<div class="sci-suspect-line"><span class="sci-suspect-key">専門:</span><span>' + escapeHtml(s.specialty) + '</span></div>';
+      html += '<div class="sci-suspect-line"><span class="sci-suspect-key">外見:</span><span>' + escapeHtml(s.height + ' / ' + s.clothes) + '</span></div>';
+      html += '<div class="sci-suspect-line"><span class="sci-suspect-key">アリバイ:</span><span>' + escapeHtml(s.alibi) + '</span></div>';
+      html += '<div class="sci-suspect-line"><span class="sci-suspect-key">証言:</span><span>「' + escapeHtml(s.testimony) + '」</span></div>';
+      html += '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<button class="sci-hint-toggle" id="mathHintBtn">' + (MathState.hintShown ? '💡 ヒントを 隠す' : '💡 ヒントを 見る') + '</button>';
+    html += '<div class="sci-puzzle-hint' + (MathState.hintShown ? ' show' : '') + '" id="mathHint">';
+    html += '💡 ' + escapeHtml(c.finalQ.hint);
+    html += '</div>';
+    html += '<button class="sci-next-btn" id="mathSubmit"' + (MathState.selectedSuspectId ? '' : ' disabled style="opacity:0.5;"') + '>🔍 この人物を 推理する!</button>';
+    html += '</div>';
+    html += '<div id="mathFeedback"></div>';
+  }
+  else if (MathState.phase === 'resolved') {
+    html += '<div class="sci-resolved">';
+    html += '<div class="sci-resolved-title">🏆 事件 解決!</div>';
+    html += '<div style="font-family:Klee One;font-size:14px;color:var(--deep-ink);line-height:1.7;white-space:pre-wrap;">' + escapeHtml(c.finalQ.explanation) + '</div>';
+    html += '<div class="sci-learned-box">';
+    html += '<div class="sci-learned-h">' + escapeHtml(c.learned.title) + '</div>';
+    c.learned.points.forEach(p => {
+      html += '<div class="sci-learned-item">' + escapeHtml(p) + '</div>';
+    });
+    html += '</div>';
+    html += '</div>';
+    const nextIdx = MathState.caseIdx + 1;
+    if (nextIdx < MATH_STORY.length && !MATH_STORY[nextIdx].comingSoon) {
+      html += '<button class="sci-next-btn" id="mathGoNext">第' + MATH_STORY[nextIdx].id + '事件 へ →</button>';
+    }
+    html += '<button class="sci-next-btn" id="mathGoMenu" style="background:#7a4a8a;margin-top:8px;">事件一覧へ</button>';
+  }
+
+  area.innerHTML = html;
+  bindMathEvents();
 }
 
 function bindMathEvents() {
-  // Phase 4c-1 skeleton — Phase 4c-2 에서 bindWeaEvents 패턴 따라 구현
+  const c = MATH_STORY[MathState.caseIdx];
+
+  // v41: 대화 진행 - 「sciDialogue」 영역 또는 상단 stage 탭으로 다음 대사
+  const advanceDialog = () => {
+    if (MathState.phase === 'intro') {
+      if (MathState.introIdx < c.intro.length - 1) {
+        sfx('click');
+        MathState.introIdx++;
+        renderMath();
+        return true;
+      }
+    } else if (MathState.phase === 'step' && MathState.stepPhase === 'intro') {
+      const step = c.steps[MathState.stepIdx];
+      if (MathState.stepIntroIdx < (step.intro || []).length - 1) {
+        sfx('click');
+        MathState.stepIntroIdx++;
+        renderMath();
+        return true;
+      }
+    }
+    return false;
+  };
+
+  // 대사 박스 클릭
+  const dlgBox = document.getElementById('mathDialogue');
+  if (dlgBox) dlgBox.onclick = advanceDialog;
+
+  // 상단 stage 자체도 탭 가능 (대화 단계일 때만)
+  const stage = document.getElementById('mathStage');
+  if (stage) {
+    stage.onclick = () => {
+      if (MathState.phase === 'intro' ||
+          (MathState.phase === 'step' && MathState.stepPhase === 'intro')) {
+        advanceDialog();
+      }
+    };
+  }
+
+  // 다음 버튼
+  const nextBtn = document.getElementById('mathNext');
+  if (nextBtn) {
+    nextBtn.onclick = () => {
+      sfx('click');
+      if (MathState.phase === 'intro') {
+        if (MathState.introIdx < c.intro.length - 1) {
+          MathState.introIdx++;
+        } else {
+          // 단계로 진입
+          MathState.phase = 'step';
+          MathState.stepIdx = 0;
+          MathState.stepPhase = 'intro';
+          MathState.stepIntroIdx = 0;
+          MathState.hintShown = false;
+        }
+      } else if (MathState.phase === 'step') {
+        const step = c.steps[MathState.stepIdx];
+        if (MathState.stepPhase === 'intro') {
+          if (MathState.stepIntroIdx < (step.intro || []).length - 1) {
+            MathState.stepIntroIdx++;
+          } else {
+            MathState.stepPhase = 'puzzle';
+            MathState.hintShown = false;
+            MathState.answered = false;
+          }
+        } else if (MathState.stepPhase === 'clue') {
+          // 다음 단계 또는 최종
+          if (MathState.stepIdx < c.steps.length - 1) {
+            MathState.stepIdx++;
+            MathState.stepPhase = 'intro';
+            MathState.stepIntroIdx = 0;
+            MathState.hintShown = false;
+          } else {
+            MathState.phase = 'final';
+            MathState.hintShown = false;
+            MathState.selectedSuspectId = null;
+            MathState.answered = false;  // v50 fix: puzzle에서 set된 answered가 final까지 그대로 와서 용의자 클릭 차단되는 버그 수정
+            MathState.wrongIds = [];  // v50: 새 final 진입 시 wrongIds 리셋
+          }
+        }
+      }
+      renderMath();
+    };
+  }
+
+  // 힌트 토글
+  const hintBtn = document.getElementById('mathHintBtn');
+  if (hintBtn) {
+    hintBtn.onclick = () => {
+      MathState.hintShown = !MathState.hintShown;
+      sfx('click');
+      // v70: render() 대신 DOM 직접 조작 (정답 후 피드백·続けるボタン 보존)
+      const hintEl = document.getElementById('mathHint');
+      if (hintEl) {
+        hintEl.classList.toggle('show', MathState.hintShown);
+      }
+      hintBtn.textContent = MathState.hintShown ? '💡 ヒントを 隠す' : '💡 ヒントを 見る';
+    };
+  }
+
+  // 퍼즐 옵션 (step phase) - v52: 오답 시 정답 자동 노출 X, 누른 옵션만 wrong 처리
+  if (MathState.phase === 'step' && MathState.stepPhase === 'puzzle') {
+    const step = c.steps[MathState.stepIdx];
+    document.querySelectorAll('.sci-puzzle-opt').forEach(opt => {
+      opt.onclick = () => {
+        if (MathState.answered) return;
+        if (opt.classList.contains('wrong')) return;  // 이미 틀린 옵션은 클릭 불가
+        const chosen = parseInt(opt.dataset.i);
+        const correct = step.puzzle.answer;
+        const ok = chosen === correct;
+        const fb = document.getElementById('mathFeedback');
+
+        if (ok) {
+          // 정답: 모든 옵션 disabled, 정답에만 correct 표시, explanation 공개
+          MathState.answered = true;
+          document.querySelectorAll('.sci-puzzle-opt').forEach((o, i) => {
+            o.classList.add('answered');
+            if (i === correct) o.classList.add('correct');
+          });
+          sfx('unlock');
+          let fbHtml = '<div class="sci-feedback ok">';
+          fbHtml += '<div class="sci-feedback-h ok">🎉 正解!</div>';
+          fbHtml += '<div class="sci-feedback-text">' + escapeHtml(step.puzzle.explanation) + '</div>';
+          fbHtml += '</div>';
+          if (step.clue) MathState.collectedClues.push(step.clue);
+          fbHtml += '<button class="sci-next-btn" id="mathNextOk">続ける →</button>';
+          fb.innerHTML = fbHtml;
+          setTimeout(() => { fb.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+          const nb = document.getElementById('mathNextOk');
+          if (nb) nb.onclick = () => {
+            sfx('clue');
+            MathState.stepPhase = 'clue';
+            renderMath();
+          };
+        } else {
+          // 오답: 누른 옵션만 wrong, 정답은 절대 표시하지 않음, explanation도 미공개
+          opt.classList.add('answered', 'wrong');
+          sfx('wrong');
+          // 남은 선택지 수
+          const remaining = document.querySelectorAll('.sci-puzzle-opt:not(.wrong)').length;
+          fb.innerHTML = '<div class="sci-feedback ng">' +
+            '<div class="sci-feedback-h ng">✗ 違う…</div>' +
+            '<div class="sci-feedback-text">それは 答えでは ない。手がかりを もう一度 考えて、別の 答えを 試そう。残り: ' + remaining + '個</div>' +
+            '</div>';
+          setTimeout(() => { fb.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+        }
+      };
+    });
+  }
+
+  // 용의자 선택 (final phase)
+  if (MathState.phase === 'final') {
+    document.querySelectorAll('.sci-suspect-card').forEach(card => {
+      card.onclick = () => {
+        if (MathState.answered) return;
+        if ((MathState.wrongIds || []).includes(card.dataset.id)) return;  // v50: 이미 틀린 용의자는 클릭 불가
+        sfx('select');  // v32: 용의자 선택
+        MathState.selectedSuspectId = card.dataset.id;
+        renderMath();
+      };
+    });
+    const submitBtn = document.getElementById('mathSubmit');
+    if (submitBtn) {
+      submitBtn.onclick = () => {
+        if (!MathState.selectedSuspectId) return;
+        MathState.answered = true;
+        const ok = MathState.selectedSuspectId === c.finalQ.answer;
+        if (ok) {
+          // v50: 정답일 때만 정답 카드 강조
+          document.querySelectorAll('.sci-suspect-card').forEach(card => {
+            if (card.dataset.id === c.finalQ.answer) {
+              card.style.borderColor = '#6ba76b';
+              card.style.background = '#c8e6c8';
+              card.style.opacity = '1';
+            }
+          });
+          sfx('reveal');  // v32: 모순/진실 발견의 긴장감
+          setTimeout(() => sfx('resolved'), 800);  // 그 다음 해결의 환희
+          triggerConfetti();
+          // 클리어 처리
+          State.mathCleared[MathState.caseIdx] = true;
+          saveState();
+          setTimeout(() => {
+            MathState.phase = 'resolved';
+            renderMath();
+          }, 1800);
+        } else {
+          // v50: 오답이면 정답을 자동으로 알려주지 않고, 그 용의자만 X 처리
+          if (!MathState.wrongIds) MathState.wrongIds = [];
+          if (!MathState.wrongIds.includes(MathState.selectedSuspectId)) {
+            MathState.wrongIds.push(MathState.selectedSuspectId);
+          }
+          sfx('wrong');
+          const fb = document.getElementById('mathFeedback');
+          // 남은 용의자 수 계산 (정답 힌트 X)
+          const remaining = c.suspects.length - MathState.wrongIds.length;
+          fb.innerHTML = '<div class="sci-feedback ng">' +
+            '<div class="sci-feedback-h ng">✗ 違うようだ…</div>' +
+            '<div class="sci-feedback-text">この人は 犯人では ない。残り 容疑者: ' + remaining + '名。手がかりを もう一度 見直そう。</div>' +
+            '</div>' +
+            '<button class="sci-next-btn" id="mathTryAgain" style="background:#b85a5a;">もう一度 推理</button>';
+          document.getElementById('mathTryAgain').onclick = () => {
+            sfx('click');
+            MathState.answered = false;
+            MathState.selectedSuspectId = null;
+            // wrongIds는 유지 (다음 시도 시 X 마크 그대로)
+            renderMath();
+          };
+        }
+      };
+    }
+  }
+
+  // 해결 후 버튼
+  const goNext = document.getElementById('mathGoNext');
+  if (goNext) {
+    goNext.onclick = () => { sfx('click'); startMathCase(MathState.caseIdx + 1); };
+  }
+  const goMenu = document.getElementById('mathGoMenu');
+  if (goMenu) {
+    goMenu.onclick = () => { sfx('click'); buildChapterGrid(); showPage('pageSelect'); };
+  }
 }
