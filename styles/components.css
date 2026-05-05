@@ -1,0 +1,262 @@
+/* components.css — extracted from index.html (v73 step2)
+ * Original locations: lines 176-291 (CHAPTER SELECT) + 3239-3380 (HUD/MODAL/NOTEBOOK/Confetti)
+ * Contents: chapter select, tabs, back-btn HUD buttons, modal, notebook, confetti
+ */
+/* ===== CHAPTER SELECT ===== */
+.chapter-select {
+  padding: 30px 24px;
+  background: linear-gradient(180deg, #fdf8ec 0%, #f7eed8 100%);
+  overflow-y: auto;
+}
+
+.select-title {
+  font-family: 'RocknRoll One';
+  font-size: 28px;
+  color: var(--deep-ink);
+  text-align: center;
+  margin-bottom: 6px;
+}
+.select-sub {
+  text-align: center;
+  font-size: 15px;
+  color: var(--accent-red);
+  margin-bottom: 22px;
+}
+
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+
+.chapter-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px 14px;
+  border: 4px solid var(--line);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 5px 0 var(--line);
+  position: relative;
+}
+.chapter-card:hover { transform: translateY(-3px); box-shadow: 0 8px 0 var(--line); }
+.chapter-card.locked { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+.chapter-card.cleared { background: var(--soft-yellow); border-color: var(--accent-yellow); box-shadow: 0 5px 0 #c89c40; }
+.chapter-card.eng { border-color: var(--accent-blue); box-shadow: 0 5px 0 #4a7a92; }
+.chapter-card.eng.cleared { background: #d4ebf5; }
+
+.chapter-num {
+  font-family: 'RocknRoll One';
+  font-size: 12px;
+  color: var(--accent-red);
+  margin-bottom: 4px;
+}
+.chapter-card.eng .chapter-num { color: var(--accent-blue); }
+
+.chapter-icon-big {
+  font-size: 56px;
+  text-align: center;
+  margin: 4px 0 8px;
+}
+.chapter-title {
+  font-family: 'RocknRoll One';
+  font-size: 16px;
+  color: var(--deep-ink);
+  text-align: center;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.chapter-desc {
+  font-size: 12px;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.5;
+  min-height: 36px;
+}
+.chapter-stars {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 16px;
+  letter-spacing: 4px;
+  min-height: 22px;
+}
+.chapter-lock {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 50px;
+  pointer-events: none;
+}
+
+.tab-bar {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.tab {
+  padding: 8px 14px;
+  background: white;
+  border: 3px solid var(--line);
+  border-radius: 22px;
+  font-family: 'RocknRoll One';
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--deep-ink);
+  white-space: nowrap;
+}
+.tab.active { background: var(--accent-red); color: white; border-color: var(--accent-red); }
+.tab.eng.active { background: var(--accent-blue); border-color: var(--accent-blue); }
+.tab.quiz.active { background: #a04ab0; color: white; border-color: #a04ab0; }
+.tab.game.active { background: #4a8a4a; color: white; border-color: #4a8a4a; }
+.tab.science.active { background: #2a7a8a; color: white; border-color: #2a7a8a; }
+.tab.world.active { background: #c4934a; color: white; border-color: #c4934a; }
+.tab.lit.active { background: #8b4789; color: white; border-color: #8b4789; }  /* v54: 文学・芸術 보라톤 */
+
+/* ===== HUD ===== */
+.back-btn, .notebook-btn, .voice-btn {
+  position: absolute;
+  top: 12px;
+  z-index: 10;
+  border: 3px solid var(--deep-ink);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-family: 'RocknRoll One';
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--deep-ink);
+  color: var(--deep-ink);
+}
+.back-btn { left: 12px; background: white; }
+.notebook-btn { right: 12px; background: var(--soft-yellow); border-color: var(--accent-yellow); box-shadow: 0 3px 0 #c89c40; }
+.voice-btn { right: 110px; background: #d4ebf5; border-color: #6ba8c4; box-shadow: 0 3px 0 #4a8aa8; }
+@media (max-width: 480px) {
+  .voice-btn { right: 100px; font-size: 11px; padding: 6px 10px; }
+}
+
+/* ===== MODAL ===== */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(58, 74, 92, 0.7);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-bg.active { display: flex; }
+
+.modal {
+  background: var(--cream);
+  border-radius: 22px;
+  padding: 24px 22px;
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  border: 5px solid var(--accent-red);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  animation: pop 0.3s ease;
+}
+.modal.success { border-color: var(--accent-green); }
+.modal.fail { border-color: #c4625e; }
+
+@keyframes pop {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.modal-icon { font-size: 56px; margin-bottom: 8px; }
+.modal-title {
+  font-family: 'RocknRoll One';
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: var(--deep-ink);
+}
+.modal-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink);
+  margin-bottom: 18px;
+  white-space: pre-line;
+}
+.modal-btn {
+  font-family: 'RocknRoll One';
+  font-size: 16px;
+  padding: 11px 28px;
+  background: var(--accent-red);
+  color: white;
+  border: none;
+  border-radius: 22px;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #b85a40;
+  margin: 4px;
+}
+.modal-btn.secondary { background: #95a5a6; box-shadow: 0 5px 0 #6c7e7f; }
+.modal-btn:active { transform: translateY(2px); }
+
+/* ===== NOTEBOOK ===== */
+.notebook-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 90;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.notebook-modal.active { display: flex; }
+.notebook {
+  background: var(--warm-cream);
+  border-radius: 14px;
+  padding: 22px;
+  max-width: 460px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 5px solid var(--deep-ink);
+}
+.notebook-h {
+  font-family: 'RocknRoll One';
+  font-size: 20px;
+  color: var(--accent-red);
+  text-align: center;
+  border-bottom: 3px dashed var(--deep-ink);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+.note-item {
+  background: white;
+  border-left: 5px solid var(--accent-yellow);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.note-item.eng { border-left-color: var(--accent-blue); }
+.note-item-t { font-family: 'RocknRoll One'; color: var(--deep-ink); margin-bottom: 4px; }
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+}
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  width: 10px;
+  height: 10px;
+  animation: fall 3s linear forwards;
+}
+@keyframes fall {
+  to { transform: translateY(100vh) rotate(720deg); }
+}

@@ -1,0 +1,160 @@
+/* core.css — extracted from index.html (v73 step2)
+ * Original location: lines 20-175
+ * Contents: reset, :root variables, body/book/page layout, TITLE
+ */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+
+:root {
+  --cream: #fdf8ec;
+  --warm-cream: #f7eed8;
+  --soft-blue: #a8d8ea;
+  --soft-pink: #ffd8c2;
+  --soft-yellow: #ffe9a8;
+  --soft-green: #c8e6c9;
+  --ink: #3a4a5c;
+  --deep-ink: #2c3e50;
+  --accent-red: #e07b5e;
+  --accent-blue: #6ba8c4;
+  --accent-yellow: #f0c674;
+  --accent-purple: #9b87bc;
+  --accent-green: #6fb074;
+  --shadow: rgba(58, 74, 92, 0.15);
+  --line: #c4b89a;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: #2a2a35;
+}
+
+body {
+  font-family: 'Klee One', 'Hiragino Maru Gothic ProN', 'YuMincho', sans-serif;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 100dvh;
+}
+
+/* 기본 (휴대폰 세로 모드): 화면 가득 채움 */
+#book {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--cream);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  border-radius: 0;
+}
+
+/* 가로 화면 (휴대폰 가로, 태블릿 가로, 노트북, 데스크톱): 16:9 비율 가운데 정렬 */
+@media (min-aspect-ratio: 4/3) {
+  #book {
+    width: min(100vw, calc(100vh * 16 / 9), 1400px);
+    height: min(100vh, calc(100vw * 9 / 16), 900px);
+    border-radius: 4px;
+  }
+}
+
+/* 정사각형 가까운 화면 (태블릿 세로): 적당한 크기 */
+@media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) {
+  #book {
+    width: min(100vw, 900px);
+    height: min(100dvh, 1100px);
+    border-radius: 4px;
+  }
+}
+
+/* 페이지: 단일 컨테이너로 표시. flex-direction은 컨테이너에 둠 */
+.page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.page.active {
+  visibility: visible;
+  opacity: 1;
+  z-index: 2;
+}
+
+/* ===== TITLE ===== */
+.title-page {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  background: linear-gradient(180deg, #ffe9a8 0%, #ffd8c2 60%, #a8d8ea 100%);
+}
+
+.title-illustration {
+  width: min(85%, 480px);
+  height: auto;
+  max-height: 30vh;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 8px 20px var(--shadow));
+  border-radius: 16px;
+  object-fit: contain;
+}
+
+.title-h1 {
+  font-family: 'RocknRoll One';
+  font-size: 42px;
+  color: var(--deep-ink);
+  margin-bottom: 12px;
+  text-shadow: 3px 3px 0 rgba(255,255,255,0.6);
+  letter-spacing: 4px;
+}
+
+.title-h2 {
+  font-family: 'Yusei Magic';
+  font-size: 22px;
+  color: var(--accent-red);
+  margin-bottom: 36px;
+  letter-spacing: 2px;
+}
+
+.title-btn {
+  font-family: 'RocknRoll One';
+  font-size: 19px;
+  padding: 14px 36px;
+  background: var(--accent-red);
+  color: white;
+  border: 4px solid white;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 7px 0 #b85a40, 0 10px 20px rgba(0,0,0,0.18);
+  transition: transform 0.15s, box-shadow 0.15s;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.title-btn:active { transform: translateY(4px); box-shadow: 0 3px 0 #b85a40; }
+
+.title-mode {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.mode-btn {
+  background: white;
+  border: 3px solid var(--deep-ink);
+  padding: 10px 22px;
+  border-radius: 22px;
+  font-family: 'RocknRoll One';
+  font-size: 15px;
+  cursor: pointer;
+  color: var(--deep-ink);
+  box-shadow: 0 4px 0 var(--deep-ink);
+}
+.mode-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--deep-ink); }
+.mode-btn.eng { background: var(--soft-blue); }
+
