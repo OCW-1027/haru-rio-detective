@@ -1848,3 +1848,4 @@ const QUIZ_CATEGORIES = [
   { id: 'flags', label: '🏳️ 国旗', data: QUIZ_FLAGS },
   { id: 'world', label: '🌐 世界文化', data: QUIZ_WORLD },
   { id: 'science', label: '🔬 科学', data: QUIZ_SCIENCE },
+];
