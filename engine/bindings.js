@@ -25,6 +25,29 @@ loadState();
   }
 })();
 
+// v75: 영어 토큰 확장 — 새 4 필드를 기존 save에 자동 추가 (값 검증)
+(function migrateTokensV75() {
+  let dirty = false;
+  if (!State.phraseCategoryDailyViews || typeof State.phraseCategoryDailyViews !== 'object'
+      || !Array.isArray(State.phraseCategoryDailyViews.cats)) {
+    State.phraseCategoryDailyViews = { date: '', cats: [] };
+    dirty = true;
+  }
+  if (typeof State.dailyMissionLastDate !== 'string') {
+    State.dailyMissionLastDate = '';
+    dirty = true;
+  }
+  if (!State.newsQuizDailyTokens || typeof State.newsQuizDailyTokens !== 'object') {
+    State.newsQuizDailyTokens = { date: '', count: 0 };
+    dirty = true;
+  }
+  if (!State.compoundDailyTokens || typeof State.compoundDailyTokens !== 'object') {
+    State.compoundDailyTokens = { date: '', count: 0 };
+    dirty = true;
+  }
+  if (dirty) saveState();
+})();
+
 // 타이틀 이미지 설정
 (function() {
   var img = document.getElementById('titleBgImg');

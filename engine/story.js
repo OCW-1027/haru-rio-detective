@@ -195,6 +195,7 @@ function finishEngMystery() {
     State.notes.push(engCh.note);
   }
   State.engMysteryActive = null;
+  // v75: eng mystery 는 추리 카테고리로 분리·영어 학습 토큰 미발급
   saveState();
   sfx('chime');
   triggerConfetti();
@@ -627,6 +628,39 @@ function nextEngQ() {
   }
 }
 
+// v75: 영어 토큰 발급 공통 함수 (모든 영어 sub-탭 종료점에서 호출)
+// reason: 통계용 라벨 (vocab/mystery/grammar/comp/writing/phrase/daily/news_read/news_quiz/compound)
+// 반환: 이번 호출에서 토큰을 새로 획득했는지 (true/false)
+function awardEngToken(reason) {
+  State.engClearCount = (State.engClearCount || 0) + 1;
+  let earned = false;
+  if (State.engClearCount % 3 === 0) {
+    State.gameTokens = (State.gameTokens || 0) + 1;
+    earned = true;
+  }
+  saveState();
+  return earned;
+}
+
+// v75: 오늘 날짜 문자열 'YYYY-MM-DD'
+function getTodayStr() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+// v75: 일 1 토큰 캡 헬퍼 (news quiz·compound 4 모드 통합)
+// stateField: 'newsQuizDailyTokens' | 'compoundDailyTokens'
+// 캡 도달 시 null 반환 (조용히 skip), 발급 시 awardEngToken 의 결과 (bool) 반환
+function tryAwardCappedToken(stateField, reason) {
+  const today = getTodayStr();
+  let cap = State[stateField] || { date: '', count: 0 };
+  if (cap.date !== today) { cap = { date: today, count: 0 }; }
+  if (cap.count >= 1) { State[stateField] = cap; saveState(); return null; }
+  cap.count = 1;
+  State[stateField] = cap;
+  return awardEngToken(reason);
+}
+
 function finishEngChapter() {
   const ch = ENG_CHAPTERS[State.engChapter];
   const total = ch.questions.length;
@@ -639,11 +673,8 @@ function finishEngChapter() {
     State.engCleared[State.engChapter] = true;
     if (ch.note && !State.notes.find(n => n.title === ch.note.title)) State.notes.push(ch.note);
     // v74: 첫 클리어든 복습이든 합격할 때마다 카운트, 3회마다 토큰 (반복 학습 인센티브)
-    State.engClearCount = (State.engClearCount || 0) + 1;
-    if (State.engClearCount % 3 === 0) {
-      State.gameTokens = (State.gameTokens || 0) + 1;
-      earnedToken = true;
-    }
+    // v75: awardEngToken 헬퍼로 통일
+    earnedToken = awardEngToken('vocab');
   }
   saveState();
   sfx('chime');

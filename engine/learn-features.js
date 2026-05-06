@@ -57,8 +57,24 @@ function renderPhraseDict() {
 
   area.querySelectorAll('.pd-cat-btn').forEach(b => {
     b.onclick = () => {
-      PhraseDictState.selectedCat = b.dataset.cat;
+      const cat = b.dataset.cat;
+      PhraseDictState.selectedCat = cat;
       sfx('click');
+      // v75: 카테고리별 일 1회 토큰 카운트 ('all' 클릭은 제외)
+      if (cat !== 'all') {
+        const today = getTodayStr();
+        let dailyView = State.phraseCategoryDailyViews || { date: '', cats: [] };
+        if (dailyView.date !== today) {
+          dailyView = { date: today, cats: [] };
+        }
+        if (!dailyView.cats.includes(cat)) {
+          dailyView.cats.push(cat);
+          State.phraseCategoryDailyViews = dailyView;
+          awardEngToken('phrase');
+        } else {
+          State.phraseCategoryDailyViews = dailyView;
+        }
+      }
       renderPhraseDict();
     };
   });
@@ -176,6 +192,12 @@ function renderDailyMission() {
       text: text,
       savedAt: Date.now(),
     });
+    // v75: 일 1회 토큰 카운트 (같은 날 재저장은 skip)
+    const today = getTodayStr();
+    if (State.dailyMissionLastDate !== today) {
+      State.dailyMissionLastDate = today;
+      awardEngToken('daily');
+    }
     saveMsg.textContent = '✓ 保存しました!';
     saveMsg.style.color = '#4a8a4a';
     sfx('correct');
@@ -193,6 +215,8 @@ let NewsState = {
   quizCorrect: 0,
   quizAnswered: false,
   quizCurrent: null,
+  // v75: 세션 단위 헤드라인 열람 추적 (페이지 진입마다 reset, 10 unique = 1 카운트)
+  viewedSet: null,
 };
 
 function startNewsChapter() {
@@ -200,6 +224,7 @@ function startNewsChapter() {
   NewsState.selectedCat = 'all';
   NewsState.quizIdx = 0;
   NewsState.quizCorrect = 0;
+  NewsState.viewedSet = new Set();
   showPage('pageNews');
   playBGM('eng');
   renderNews();
@@ -233,7 +258,9 @@ function renderNews() {
       : NEWS_HEADLINES.filter(n => n.cat === NewsState.selectedCat);
 
     filtered.forEach((n, idx) => {
-      html += '<div class="news-card" data-idx="' + idx + '">';
+      // v75: 카테고리 필터 후에도 안정적인 unique id를 위해 global index 사용
+      const globalIdx = NEWS_HEADLINES.indexOf(n);
+      html += '<div class="news-card" data-idx="' + globalIdx + '">';
       html += '<div class="news-card-cat">' + escapeHtml(n.cat) + '</div>';
       html += '<div class="news-en">' + escapeHtml(n.en) + '</div>';
       html += '<div class="news-ja">▸ ' + escapeHtml(n.ja) + '</div>';
@@ -307,6 +334,22 @@ function renderNews() {
   area.querySelectorAll('.news-desc').forEach(d => {
     d.onclick = () => {
       d.classList.toggle('revealed');
+      // v75: 헤드라인 열람 추적 (read 모드 only, 세션 unique 10개 = 1 카운트)
+      if (NewsState.mode === 'read') {
+        const card = d.closest('.news-card');
+        if (card) {
+          const idx = parseInt(card.dataset.idx, 10);
+          if (!isNaN(idx) && idx >= 0) {
+            if (!NewsState.viewedSet) NewsState.viewedSet = new Set();
+            if (!NewsState.viewedSet.has(idx)) {
+              NewsState.viewedSet.add(idx);
+              if (NewsState.viewedSet.size % 10 === 0) {
+                awardEngToken('news_read');
+              }
+            }
+          }
+        }
+      }
     };
   });
   // 퀴즈 옵션 클릭
@@ -333,6 +376,8 @@ function renderNews() {
         fbHtml += '<button class="news-quiz-next" id="newsQuizNext">次へ →</button>';
       } else {
         const total = 10;
+        // v75: 일 1 토큰 캡 (캡 도달 시 조용히 skip·UI 변경 없음)
+        tryAwardCappedToken('newsQuizDailyTokens', 'news_quiz');
         fbHtml += '<div style="text-align:center;margin-top:14px;font-family:RocknRoll One;color:var(--accent-red);">🏁 完了! ' + NewsState.quizCorrect + ' / ' + total + '</div>';
         fbHtml += '<button class="news-quiz-next" id="newsQuizRestart">もう一度</button>';
       }
@@ -394,6 +439,8 @@ let CompoundState = {
   answered: false,
   currentQ: null,
   shuffled: null,
+  // v75: 토큰 발급 추적 (chapter 진입마다 reset)
+  tokenAwarded: false,
 };
 
 function startCompoundChapter(ch) {
@@ -401,6 +448,7 @@ function startCompoundChapter(ch) {
   CompoundState.correct = 0;
   CompoundState.answered = false;
   CompoundState.currentQ = null;
+  CompoundState.tokenAwarded = false;
   // 모드별 데이터 셋 결정
   const mode = (ch && ch.mode) || 'basic';
   CompoundState.mode = mode;
@@ -423,6 +471,11 @@ function renderCompound() {
 
   // 완료 화면
   if (CompoundState.qIdx >= total) {
+    // v75: 1 게임 완료 = 일 1 토큰 캡 (4 모드 통합·캡 도달 시 조용히 skip)
+    if (!CompoundState.tokenAwarded) {
+      CompoundState.tokenAwarded = true;
+      tryAwardCappedToken('compoundDailyTokens', 'compound');
+    }
     const pct = Math.round(CompoundState.correct / total * 100);
     let html = '<div class="cmp-header"><div class="cmp-title">🎉 完了!</div></div>';
     html += '<div class="cmp-question-card">';

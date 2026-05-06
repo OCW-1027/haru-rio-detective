@@ -215,10 +215,15 @@ const State = {
   monCleared: new Array(10).fill(false),  // v67: 日常のお金 시리즈 클리어 상태
   weaCleared: new Array(10).fill(false),  // v71: 🌦 気象予報士 시리즈 클리어 상태
   mathCleared: new Array(10).fill(false), // v75: 🔢 算数·数学 시리즈 클리어 상태
-  // v30: 게임 토큰 시스템 (5챕터 클리어마다 1토큰)
+  // v30: 게임 토큰 시스템 (3 단위마다 1토큰·v74에서 5→3 변경)
   engClearCount: 0,    // 누적 영어 챕터 클리어 수 (토큰 환산용)
   gameTokens: 0,       // 현재 보유 토큰
   tokensUsed: 0,       // 사용한 토큰 누계 (통계용)
+  // v75: 영어 토큰 확장 (8 콘텐츠 추가) — phrase·daily·news quiz·compound 일 캡 + news read 카운터
+  phraseCategoryDailyViews: { date: '', cats: [] },  // phrase dict 카테고리별 일 1회 캡 (cats=오늘 본 cat 문자열들)
+  dailyMissionLastDate: '',                           // daily mission 마지막 카운트 날짜 (일 1회)
+  newsQuizDailyTokens: { date: '', count: 0 },        // news quiz 일 1 토큰 캡
+  compoundDailyTokens: { date: '', count: 0 },        // compound ×4 통합 일 1 토큰 캡
   notes: [],
   currentChapter: 0,
   currentTab: 'story',
@@ -274,6 +279,11 @@ function saveState() {
       engClearCount: State.engClearCount || 0,
       gameTokens: State.gameTokens || 0,
       tokensUsed: State.tokensUsed || 0,
+      // v75: 영어 토큰 확장 필드
+      phraseCategoryDailyViews: State.phraseCategoryDailyViews || { date: '', cats: [] },
+      dailyMissionLastDate: State.dailyMissionLastDate || '',
+      newsQuizDailyTokens: State.newsQuizDailyTokens || { date: '', count: 0 },
+      compoundDailyTokens: State.compoundDailyTokens || { date: '', count: 0 },
       voiceOn: State.voiceOn,
     };
     localStorage.setItem(SAVE_KEY, JSON.stringify(data));
@@ -385,6 +395,26 @@ function loadState() {
     if (typeof data.engClearCount === 'number') State.engClearCount = data.engClearCount;
     if (typeof data.gameTokens === 'number') State.gameTokens = data.gameTokens;
     if (typeof data.tokensUsed === 'number') State.tokensUsed = data.tokensUsed;
+    // v75: 영어 토큰 확장 필드 복원
+    if (data.phraseCategoryDailyViews && typeof data.phraseCategoryDailyViews === 'object') {
+      State.phraseCategoryDailyViews = {
+        date: data.phraseCategoryDailyViews.date || '',
+        cats: Array.isArray(data.phraseCategoryDailyViews.cats) ? data.phraseCategoryDailyViews.cats : [],
+      };
+    }
+    if (typeof data.dailyMissionLastDate === 'string') State.dailyMissionLastDate = data.dailyMissionLastDate;
+    if (data.newsQuizDailyTokens && typeof data.newsQuizDailyTokens === 'object') {
+      State.newsQuizDailyTokens = {
+        date: data.newsQuizDailyTokens.date || '',
+        count: data.newsQuizDailyTokens.count || 0,
+      };
+    }
+    if (data.compoundDailyTokens && typeof data.compoundDailyTokens === 'object') {
+      State.compoundDailyTokens = {
+        date: data.compoundDailyTokens.date || '',
+        count: data.compoundDailyTokens.count || 0,
+      };
+    }
     if (typeof data.voiceOn === 'boolean') State.voiceOn = data.voiceOn;
   } catch(e) {
     console.log('Load failed:', e.message);
@@ -406,6 +436,11 @@ function resetSave() {
   State.engClearCount = 0;
   State.gameTokens = 0;
   State.tokensUsed = 0;
+  // v75: 영어 토큰 확장 필드 reset
+  State.phraseCategoryDailyViews = { date: '', cats: [] };
+  State.dailyMissionLastDate = '';
+  State.newsQuizDailyTokens = { date: '', count: 0 };
+  State.compoundDailyTokens = { date: '', count: 0 };
 }
 
 // 틀린 단어 추가
