@@ -16,6 +16,9 @@ let WritingState = {
   yesno: 'yes', // yes | no (read 단계에서)
   examState: 'writing', // writing | submitted
   examText: '',
+  // v75: 토큰 발급 추적 (chapter 진입마다 reset)
+  visitedTopics: null,
+  tokenAwarded: false,
 };
 
 function startWritingChapter(ch) {
@@ -25,6 +28,9 @@ function startWritingChapter(ch) {
   WritingState.yesno = 'yes';
   WritingState.examState = 'writing';
   WritingState.examText = '';
+  // v75: 매 진입마다 토큰 추적 reset (복습 시에도 토큰 재발급 가능)
+  WritingState.visitedTopics = new Set();
+  WritingState.tokenAwarded = false;
   showPage('pageWriting');
   playBGM('eng');
   renderWriting();
@@ -32,6 +38,13 @@ function startWritingChapter(ch) {
 
 function renderWriting() {
   const ch = WritingState.chapter;
+  // v75: 현재 토픽을 방문 기록에 추가, 모든 토픽 방문 완료 시 토큰
+  if (!WritingState.visitedTopics) WritingState.visitedTopics = new Set();
+  WritingState.visitedTopics.add(WritingState.topicIdx);
+  if (!WritingState.tokenAwarded && WritingState.visitedTopics.size >= ch.topics.length) {
+    WritingState.tokenAwarded = true;
+    awardEngToken('writing');
+  }
   const t = ch.topics[WritingState.topicIdx];
   const area = document.getElementById('writingArea');
   const stepLabels = { read: 'A. 模範解答', blank: 'B. 穴埋め', order: 'C. 順番', compare: 'D. Yes/No 比較', exam: 'E. ✏️ 試験形式' };
@@ -455,6 +468,8 @@ let GrammarState = {
   qIdx: 0,
   correct: 0,
   answered: false,
+  // v75: 토큰 발급 추적
+  tokenAwarded: false,
 };
 
 function startGrammarChapter(ch) {
@@ -462,6 +477,8 @@ function startGrammarChapter(ch) {
   GrammarState.qIdx = 0;
   GrammarState.correct = 0;
   GrammarState.answered = false;
+  // v75: 매 진입마다 토큰 추적 reset (복습 시 재발급 가능)
+  GrammarState.tokenAwarded = false;
   showPage('pageGrammar');
   playBGM('eng');
   renderGrammar();
@@ -473,13 +490,18 @@ function renderGrammar() {
     // 완료
     const total = ch.topics.length;
     const pct = Math.round(GrammarState.correct / total * 100);
+    // v75: 챕터 완료 시 1회 토큰 발급 (정답률 무관·vocab 패턴 mirror)
+    if (!GrammarState.tokenAwarded) {
+      GrammarState.tokenAwarded = true;
+      awardEngToken('grammar');
+    }
     document.getElementById('grammarTitle').textContent = '🎉 完了!';
     document.getElementById('grammarProgress').textContent = '正解 ' + GrammarState.correct + ' / ' + total + ' (' + pct + '%)';
     const area = document.getElementById('grammarArea');
     area.innerHTML = '<div class="gr-question-box"><div class="gr-result correct">🎉 おつかれさまでした!</div><div style="text-align:center;margin-top:14px;">' +
       GrammarState.correct + ' / ' + total + ' (' + pct + '%)</div></div>' +
       '<button class="gr-next-btn" id="grRestart">もう一度</button>';
-    document.getElementById('grRestart').onclick = () => { GrammarState.qIdx = 0; GrammarState.correct = 0; renderGrammar(); };
+    document.getElementById('grRestart').onclick = () => { GrammarState.qIdx = 0; GrammarState.correct = 0; GrammarState.tokenAwarded = false; renderGrammar(); };
     if (pct >= 80) launchConfetti();
     return;
   }
@@ -666,6 +688,8 @@ function renderComposition() {
     finishBtn.onclick = () => {
       sfx('correct');
       launchConfetti();
+      // v75: 1 챕터 완료 = 1 토큰 카운트 (composition·comp1~3)
+      awardEngToken('comp');
       buildChapterGrid();
       showPage('pageSelect');
     };
