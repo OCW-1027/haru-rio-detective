@@ -214,6 +214,7 @@ const State = {
   socCleared: new Array(10).fill(false),  // v65: 社会科総合 시리즈 클리어 상태
   monCleared: new Array(10).fill(false),  // v67: 日常のお金 시리즈 클리어 상태
   weaCleared: new Array(10).fill(false),  // v71: 🌦 気象予報士 시리즈 클리어 상태
+  mathCleared: new Array(10).fill(false), // v75: 🔢 算数·数学 시리즈 클리어 상태
   // v30: 게임 토큰 시스템 (5챕터 클리어마다 1토큰)
   engClearCount: 0,    // 누적 영어 챕터 클리어 수 (토큰 환산용)
   gameTokens: 0,       // 현재 보유 토큰
@@ -264,6 +265,7 @@ function saveState() {
       socCleared: State.socCleared,  // v65
       monCleared: State.monCleared,  // v67
       weaCleared: State.weaCleared,  // v71
+      mathCleared: State.mathCleared, // v75
       notes: State.notes,
       wrongWords: State.wrongWords,
       stats: State.stats,
@@ -363,6 +365,16 @@ function loadState() {
       });
       while (State.weaCleared.length < WEA_STORY.length) {
         State.weaCleared.push(false);
+      }
+    }
+    if (Array.isArray(data.mathCleared)) {  // v75: 🔢 算数·数学 시리즈 복원
+      data.mathCleared.slice(0, State.mathCleared.length).forEach((v, i) => {
+        State.mathCleared[i] = v;
+      });
+      if (typeof MATH_STORY !== 'undefined') {
+        while (State.mathCleared.length < MATH_STORY.length) {
+          State.mathCleared.push(false);
+        }
       }
     }
     if (Array.isArray(data.notes)) State.notes = data.notes;

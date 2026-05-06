@@ -117,6 +117,7 @@
 .tab.science.active { background: #2a7a8a; color: white; border-color: #2a7a8a; }
 .tab.world.active { background: #c4934a; color: white; border-color: #c4934a; }
 .tab.lit.active { background: #8b4789; color: white; border-color: #8b4789; }  /* v54: 文学・芸術 보라톤 */
+.tab.math.active { background: #7c3aed; color: white; border-color: #7c3aed; }  /* v75: 🔢 算数·数学 보라톤 */
 
 /* ===== HUD ===== */
 .back-btn, .notebook-btn, .voice-btn {
