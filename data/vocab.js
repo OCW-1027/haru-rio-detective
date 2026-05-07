@@ -800,6 +800,69 @@ const G2_VERBS_PLUS2 = [
   { en:'unite', ja:'けつごう (結合)' },
 ];
 
+// 英検2級 動詞 추가분 50개 (PLUS3, 기존 동사 204와 중복 없음)
+const G2_VERBS_PLUS3 = [
+  // ===== 動作 (10) =====
+  { en:'chase', ja:'おいかける (追いかける)' },
+  { en:'chew', ja:'かむ (噛む)' },
+  { en:'crawl', ja:'はう (這う)' },
+  { en:'fetch', ja:'とってくる (取ってくる)' },
+  { en:'cuddle', ja:'だきしめる (抱きしめる)' },
+  { en:'devour', ja:'むさぼりくう (貪り食う)' },
+  { en:'fasten', ja:'とめる (留める)' },
+  { en:'inhabit', ja:'すむ (住む)' },
+  { en:'overlap', ja:'かさなる (重なる)' },
+  { en:'partition', ja:'ぶんかつする (分割する)' },
+
+  // ===== 思考·分析 (10) =====
+  { en:'comprehend', ja:'りかいする (理解する)' },
+  { en:'estimate', ja:'みつもる (見積もる)' },
+  { en:'foresee', ja:'よけんする (予見する)' },
+  { en:'predict', ja:'よそくする (予測する)' },
+  { en:'hesitate', ja:'ためらう (躊躇う)' },
+  { en:'mimic', ja:'まねる (真似る)' },
+  { en:'clarify', ja:'めいかくにする (明確にする)' },
+  { en:'distract', ja:'ちゅういをそらす (注意を逸らす)' },
+  { en:'confine', ja:'せいげんする (制限する)' },
+  { en:'inspect', ja:'けんさする (検査する)' },
+
+  // ===== 伝達·表現 (10) =====
+  { en:'accuse', ja:'こくはつする (告発する)' },
+  { en:'denounce', ja:'ひなんする (非難する)' },
+  { en:'rebuke', ja:'しっせきする (叱責する)' },
+  { en:'confess', ja:'こくはくする (告白する)' },
+  { en:'compose', ja:'こうせいする (構成する)' },
+  { en:'disclaim', ja:'ほうきする (放棄する)' },
+  { en:'coax', ja:'なだめる (宥める)' },
+  { en:'amaze', ja:'おどろかせる (驚かせる)' },
+  { en:'insist', ja:'しゅちょうする (主張する)' },
+  { en:'linger', ja:'いつづける (居続ける)' },
+
+  // ===== 増減·変化 (10) =====
+  { en:'amass', ja:'ためこむ (溜め込む)' },
+  { en:'broaden', ja:'ひろげる (広げる)' },
+  { en:'prolong', ja:'えんちょうする (延長する)' },
+  { en:'deposit', ja:'あずける (預ける)' },
+  { en:'aggregate', ja:'しゅうけいする (集計する)' },
+  { en:'exhaust', ja:'つかいはたす (使い果たす)' },
+  { en:'diminish', ja:'げんしょうする (減少する)' },
+  { en:'disappoint', ja:'しつぼうさせる (失望させる)' },
+  { en:'exploit', ja:'りようする (利用する)' },
+  { en:'recruit', ja:'ぼしゅうする (募集する)' },
+
+  // ===== 制度·結末 (10) =====
+  { en:'abolish', ja:'はいしする (廃止する)' },
+  { en:'arrest', ja:'たいほする (逮捕する)' },
+  { en:'terminate', ja:'しゅうりょうする (終了する)' },
+  { en:'dominate', ja:'しはいする (支配する)' },
+  { en:'overpower', ja:'あっとうする (圧倒する)' },
+  { en:'safeguard', ja:'まもる (守る)' },
+  { en:'unify', ja:'とういつする (統一する)' },
+  { en:'liaise', ja:'れんけいする (連携する)' },
+  { en:'endure', ja:'たえる (耐える)' },
+  { en:'enroll', ja:'とうろくする (登録する)' },
+];
+
 // 英検2級 名詞 추가분 50개 (기존 172개와 중복 없음)
 const G2_NOUNS_PLUS2 = [
   { en:'absence', ja:'けっせき (欠席)' },
