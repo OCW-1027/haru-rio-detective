@@ -9,12 +9,12 @@
 // 게임 로직 재시작 (이후 코드는 위 데이터 모듈에 의존)
 // ============================================================
 
-const ALL_VERBS = [...G2_VERBS, ...G2_VERBS_PLUS, ...G2_VERBS_PLUS2];
-const ALL_NOUNS = [...G2_NOUNS, ...G2_NOUNS_PLUS, ...G2_NOUNS_PLUS2];
-const ALL_ADJADV = [...G2_ADJADV, ...G2_ADJADV_PLUS, ...G2_ADJADV_PLUS2];
+const ALL_VERBS = [...G2_VERBS, ...G2_VERBS_PLUS, ...G2_VERBS_PLUS2, ...G2_VERBS_PLUS3];
+const ALL_NOUNS = [...G2_NOUNS, ...G2_NOUNS_PLUS, ...G2_NOUNS_PLUS2, ...G2_NOUNS_PLUS3];
+const ALL_ADJADV = [...G2_ADJADV, ...G2_ADJADV_PLUS, ...G2_ADJADV_PLUS2, ...G2_ADJADV_PLUS3];
 const ALL_G2 = [...ALL_VERBS, ...ALL_NOUNS, ...ALL_ADJADV];
 const ALL_IDIOMS = [...IDIOMS_G3, ...IDIOMS_G3_PLUS, ...IDIOMS_G_PRE2, ...IDIOMS_G_PRE2_PLUS, ...IDIOMS_G2, ...IDIOMS_G2_PLUS];
-const ALL_PRE1 = [...G_PRE1_WORDS, ...G_PRE1_WORDS_PLUS];
+const ALL_PRE1 = [...G_PRE1_WORDS, ...G_PRE1_WORDS_PLUS, ...G_PRE1_WORDS_PLUS2, ...G_PRE1_WORDS_PLUS3];
 const ALL_DAILY = DAILY_PHRASES;
 const ALL_SCHOOL = SCHOOL_WORDS;
 
@@ -107,10 +107,12 @@ function buildAllChapters() {
     // ===== 신규: 学校生活 2개 (40개) =====
     buildChapter('sc1', '🎒', '学校の 単語 ①', 'がっこうで つかう', ALL_SCHOOL.slice(0, 20), 12, 'meaning'),
     buildChapter('sc2', '🎒', '学校の 単語 ②', 'がっこうで つかう', ALL_SCHOOL.slice(20), 12, 'meaning'),
-    // ===== 준1급 3개 (총 152개, 도전!) =====
-    buildChapter('p1', '🔥', '準1級 ①', 'チャレンジ!むずかしい', ALL_PRE1.slice(0, 50), 15, 'meaning'),
-    buildChapter('p2', '🔥', '準1級 ②', 'チャレンジ!むずかしい', ALL_PRE1.slice(40, 100), 15, 'meaning'),
-    buildChapter('p3', '🔥', '準1級 ③', 'チャレンジ!むずかしい', ALL_PRE1.slice(100), 15, 'meaning'),
+    // ===== 준1급 5개 (총 352개, v76 확장: 152 → 352) =====
+    buildChapter('p1', '🔥', '準1級 ①', 'チャレンジ!基礎', ALL_PRE1.slice(0, 70), 15, 'meaning'),
+    buildChapter('p2', '🔥', '準1級 ②', 'チャレンジ!基礎', ALL_PRE1.slice(60, 140), 15, 'meaning'),
+    buildChapter('p3', '🔥', '準1級 ③', 'チャレンジ!応用', ALL_PRE1.slice(130, 210), 15, 'meaning'),
+    buildChapter('p4', '🔥', '準1級 ④', 'チャレンジ!応用', ALL_PRE1.slice(200, 280), 15, 'meaning'),
+    buildChapter('p5', '🔥', '準1級 ⑤', 'チャレンジ!上級', ALL_PRE1.slice(270), 15, 'meaning'),
     // ===== 종합 =====
     buildChapter('mix2', '⭐', '腕だめし!2級', 'ぜんぶ ごちゃまぜ', [...ALL_G2, ...ALL_IDIOMS], 25, 'meaning'),
     buildChapter('mixall', '🌟', 'マスター挑戦', '2級+準1級ぜんぶ', [...ALL_G2, ...ALL_IDIOMS, ...ALL_PRE1], 30, 'meaning'),
@@ -224,6 +226,8 @@ const State = {
   dailyMissionLastDate: '',                           // daily mission 마지막 카운트 날짜 (일 1회)
   newsQuizDailyTokens: { date: '', count: 0 },        // news quiz 일 1 토큰 캡
   compoundDailyTokens: { date: '', count: 0 },        // compound ×4 통합 일 1 토큰 캡
+  // v76: vocab 확장 — p4·p5 추가로 인한 engCleared shift 마이그레이션 플래그
+  vocabV76Migrated: true,  // 신규 사용자 default true (마이그 불필요), 기존 save 에서 부재 시 false 로 처리
   notes: [],
   currentChapter: 0,
   currentTab: 'story',
@@ -284,6 +288,8 @@ function saveState() {
       dailyMissionLastDate: State.dailyMissionLastDate || '',
       newsQuizDailyTokens: State.newsQuizDailyTokens || { date: '', count: 0 },
       compoundDailyTokens: State.compoundDailyTokens || { date: '', count: 0 },
+      // v76: vocab 확장 마이그레이션 플래그
+      vocabV76Migrated: State.vocabV76Migrated !== false,  // default true (이미 마이그됨)
       voiceOn: State.voiceOn,
     };
     localStorage.setItem(SAVE_KEY, JSON.stringify(data));
@@ -308,9 +314,24 @@ function loadState() {
       });
     }
     if (Array.isArray(data.engCleared)) {
-      data.engCleared.slice(0, State.engCleared.length).forEach((v, i) => {
+      // v76: vocab 확장 — p4·p5 가 p3 직후 (idx 28, 29) 에 삽입됨
+      // 기존 save 는 vocabV76Migrated 플래그가 없거나 false → engCleared shift 필요
+      // (idx 28+ 의 mix2·mixall·s1~ 등이 +2 칸 밀림)
+      let savedEngCleared = data.engCleared;
+      if (data.vocabV76Migrated !== true && savedEngCleared.length >= 28) {
+        savedEngCleared = [
+          ...savedEngCleared.slice(0, 28),
+          false, false,                       // p4·p5 신규 (미클리어)
+          ...savedEngCleared.slice(28),
+        ];
+      }
+      savedEngCleared.slice(0, State.engCleared.length).forEach((v, i) => {
         State.engCleared[i] = v;
       });
+      // 챕터 길이가 늘어났을 경우 (p4·p5 외 추가 시) false 채움
+      while (State.engCleared.length < ENG_CHAPTERS.length) {
+        State.engCleared.push(false);
+      }
     }
     if (Array.isArray(data.scienceCleared)) {
       data.scienceCleared.slice(0, State.scienceCleared.length).forEach((v, i) => {
@@ -415,6 +436,8 @@ function loadState() {
         count: data.compoundDailyTokens.count || 0,
       };
     }
+    // v76: 마이그레이션 플래그 — 기존 save 에 없으면 위 engCleared shift 가 이미 실행됨, 다음 save 부터 true
+    State.vocabV76Migrated = true;
     if (typeof data.voiceOn === 'boolean') State.voiceOn = data.voiceOn;
   } catch(e) {
     console.log('Load failed:', e.message);
@@ -441,6 +464,7 @@ function resetSave() {
   State.dailyMissionLastDate = '';
   State.newsQuizDailyTokens = { date: '', count: 0 };
   State.compoundDailyTokens = { date: '', count: 0 };
+  State.vocabV76Migrated = true;  // v76: 신규 reset 은 마이그 불필요
 }
 
 // 틀린 단어 추가
