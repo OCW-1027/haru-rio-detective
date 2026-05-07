@@ -1024,6 +1024,69 @@ const G2_ADJADV_PLUS2 = [
   { en:'urgent', ja:'きんきゅうの (緊急)' },
 ];
 
+// 英検2級 形容詞·副詞 추가분 50개 (PLUS3, 기존 203과 중복 없음)
+const G2_ADJADV_PLUS3 = [
+  // ===== 性格·態度 (10) =====
+  { en:'attentive', ja:'ちゅういぶかい (注意深い)' },
+  { en:'considerate', ja:'おもいやりがある (思いやりがある)' },
+  { en:'courteous', ja:'れいぎただしい (礼儀正しい)' },
+  { en:'diligent', ja:'きんべんな (勤勉な)' },
+  { en:'cunning', ja:'こうかつな (狡猾な)' },
+  { en:'modest', ja:'ひかえめな (控えめな)' },
+  { en:'magnanimous', ja:'かんだいな (寛大な)' },
+  { en:'wary', ja:'ようじんぶかい (用心深い)' },
+  { en:'zealous', ja:'ねっしんな (熱心な)' },
+  { en:'loyal', ja:'ちゅうじつな (忠実な)' },
+
+  // ===== 状態·状況 (10) =====
+  { en:'capable', ja:'のうりょくのある (能力のある)' },
+  { en:'distinct', ja:'めいかくな (明確な)' },
+  { en:'drastic', ja:'おもいきった (思い切った)' },
+  { en:'durable', ja:'たいきゅうせいの (耐久性の)' },
+  { en:'exotic', ja:'エキゾチックな (異国情緒)' },
+  { en:'formal', ja:'せいしきな (正式な)' },
+  { en:'fortunate', ja:'うんのよい (運の良い)' },
+  { en:'frantic', ja:'ひっしの (必死の)' },
+  { en:'neutral', ja:'ちゅうりつの (中立の)' },
+  { en:'hollow', ja:'うつろな (虚ろな)' },
+
+  // ===== 大きさ·強度 (10) =====
+  { en:'brilliant', ja:'すばらしい (素晴らしい)' },
+  { en:'intense', ja:'げきれつな (激烈な)' },
+  { en:'gigantic', ja:'きょだいな (巨大な)' },
+  { en:'immense', ja:'こうだいな (広大な)' },
+  { en:'voluminous', ja:'ぼうだいな (膨大な)' },
+  { en:'paramount', ja:'さいじゅうような (最重要な)' },
+  { en:'splendid', ja:'はなやかな (華やかな)' },
+  { en:'flawless', ja:'かんぺきな (完璧な)' },
+  { en:'compact', ja:'コンパクトな (小型)' },
+  { en:'refined', ja:'せんれんされた (洗練された)' },
+
+  // ===== 動作·移動 (10) =====
+  { en:'brisk', ja:'きびきびした (機敏)' },
+  { en:'chaotic', ja:'こんとんとした (混沌)' },
+  { en:'clever', ja:'りこうな (利口な)' },
+  { en:'endless', ja:'はてしない (果てしない)' },
+  { en:'energetic', ja:'かっぱつな (活発な)' },
+  { en:'fluent', ja:'りゅうちょうな (流暢な)' },
+  { en:'graceful', ja:'ゆうがな (優雅な)' },
+  { en:'keen', ja:'するどい (鋭い)' },
+  { en:'unwavering', ja:'ゆるぎない (揺るぎない)' },
+  { en:'streamlined', ja:'こうりつてきな (効率的な)' },
+
+  // ===== 性質·その他 (10) =====
+  { en:'brittle', ja:'もろい (脆い)' },
+  { en:'damp', ja:'しめった (湿った)' },
+  { en:'equivalent', ja:'どうとうの (同等の)' },
+  { en:'identical', ja:'どういつの (同一の)' },
+  { en:'incremental', ja:'だんかいてきな (段階的な)' },
+  { en:'innate', ja:'うまれつきの (生まれつきの)' },
+  { en:'jovial', ja:'ようきな (陽気な)' },
+  { en:'lenient', ja:'おんびんな (穏便な)' },
+  { en:'literal', ja:'もじどおりの (文字通りの)' },
+  { en:'salient', ja:'めだった (目立った)' },
+];
+
 // 熟語 3급 추가 20개 (중복 없음)
 const IDIOMS_G3_PLUS = [
   { en:'all day', ja:'いちにちじゅう (一日中)' },
