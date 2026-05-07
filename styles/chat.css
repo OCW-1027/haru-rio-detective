@@ -456,6 +456,169 @@
 .chat-emoji-item:hover { background: #fffdc0; border-color: #ddd; }
 .chat-emoji-item:active { transform: scale(0.9); }
 
+/* ===== Bundle B: presence / typing / read receipt / toast / mute ===== */
+
+/* Topbar — title wrap with presence subtitle */
+.chat-title-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+.chat-title-wrap .chat-title {
+  flex: initial;  /* override outer .chat-title flex:1 */
+}
+.chat-presence-line {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.chat-presence-line.chat-presence-online { color: #2a8a3a; }
+.chat-presence-line.chat-hidden { display: none; }
+
+/* Typing bar (above input) */
+.chat-typing-bar {
+  padding: 6px 14px;
+  font-size: 13px;
+  color: #888;
+  background: #fff;
+  border-top: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.chat-typing-bar.chat-hidden { display: none; }
+.chat-typing-dots {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 2px;
+}
+.chat-typing-dots span {
+  font-weight: bold;
+  color: #888;
+  animation: chat-typing-blink 1.2s infinite;
+  display: inline-block;
+}
+.chat-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.chat-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes chat-typing-blink {
+  0%, 60%, 100% { opacity: 0.2; }
+  30% { opacity: 1; }
+}
+
+/* Read receipt badge */
+.chat-msg-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+  padding: 0 4px;
+  font-size: 11px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.chat-msg.chat-mine .chat-msg-meta {
+  justify-content: flex-end;
+}
+.chat-msg.chat-other .chat-msg-meta {
+  justify-content: flex-start;
+}
+.chat-read-badge {
+  color: #ff3b30;
+  font-weight: bold;
+  font-size: 11px;
+}
+.chat-time-inline {
+  color: #555;
+  font-size: 11px;
+}
+
+/* Toast (top-right, body-level) */
+.chat-toast {
+  position: fixed;
+  top: 80px;
+  right: 16px;
+  width: 320px;
+  max-width: 92vw;
+  background: #fff;
+  border: 2px solid #c4a000;
+  border-left: 6px solid #fee500;
+  border-radius: 12px;
+  padding: 10px 12px 10px 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  z-index: 10010;
+  cursor: pointer;
+  font-family: 'Klee One', -apple-system, sans-serif;
+  animation: chat-toast-in 0.25s ease-out;
+}
+.chat-toast.chat-toast-fading {
+  animation: chat-toast-out 0.35s ease-out forwards;
+}
+@keyframes chat-toast-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes chat-toast-out {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(100%); opacity: 0; }
+}
+.chat-toast-close {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  color: #888;
+  padding: 4px 8px;
+  border-radius: 6px;
+  line-height: 1;
+}
+.chat-toast-close:hover { background: #f0f0f0; color: #333; }
+.chat-toast-header {
+  font-weight: bold;
+  font-size: 14px;
+  color: #1a1a1a;
+  margin-right: 24px;
+}
+.chat-toast-body {
+  font-size: 13px;
+  color: #444;
+  margin-top: 4px;
+  word-break: break-word;
+  line-height: 1.4;
+}
+.chat-toast-time {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+  text-align: right;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Mute toggle (settings) */
+.chat-mute-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: #444;
+  cursor: pointer;
+  padding: 6px 0;
+}
+.chat-mute-toggle input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
 /* ===== Mobile tweaks ===== */
 @media (max-width: 480px) {
   .chat-modal-content { max-width: 100%; }

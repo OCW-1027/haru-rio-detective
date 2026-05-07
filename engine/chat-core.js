@@ -1,4 +1,4 @@
-// engine/chat-core.js — Phase 1 chat: anon auth + pairing + text messaging
+// engine/chat-core.js — Phase 1 chat + Bundle B (presence/typing/incoming-msg notify)
 // Public API consumed by chat-ui.js / chat-bindings.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
 import {
@@ -16,6 +16,7 @@ const LS = {
   PAIR_ID: 'haruchat_pair_id',
   PARENT_NAME: 'haruchat_parent_name',
   CHILD_NAME: 'haruchat_child_name',
+  MUTED: 'haruchat_muted',
 };
 
 export const ChatState = {
@@ -27,12 +28,17 @@ export const ChatState = {
   messages: [],
   unreadCount: 0,
   isReady: false,
+  // Bundle B additions
+  otherPresence: { online: false, lastSeen: null, typing: false },
+  muted: false,
   // Callbacks (UI/bindings register)
   onMessagesUpdate: null,
   onUnreadUpdate: null,
   onPairingComplete: null,
   onAuthReady: null,
   onPairLost: null,
+  onPresenceUpdate: null,    // Bundle B
+  onIncomingMessage: null,   // Bundle B
 };
 
 let app, auth, db;
@@ -40,6 +46,15 @@ let messagesUnsub = null;
 let pairUnsub = null;
 let pairPollInterval = null;
 let pairPollTimeout = null;
+
+// Bundle B presence/typing state
+let _modalOpen = false;
+let _inChatView = false;
+let _presenceLastWrittenOnline = null;  // null = never written, true/false = last value
+let _presenceTypingState = false;
+let _presenceHeartbeatTimer = null;
+let _typingInputTimer = null;
+let _otherPresenceUnsub = null;
 
 function notify(cbName, ...args) {
   const cb = ChatState[cbName];
@@ -67,7 +82,6 @@ async function loadPairAndSubscribe() {
     return;
   }
   if (!snap.exists()) {
-    // Pair vanished (other side reset). Clear local pair state.
     console.warn('[chat] pair not found, clearing local pair');
     clearPairLocal();
     notify('onPairLost');
@@ -79,7 +93,6 @@ async function loadPairAndSubscribe() {
   localStorage.setItem(LS.PARENT_NAME, ChatState.parentName);
   localStorage.setItem(LS.CHILD_NAME, ChatState.childName);
 
-  // Subscribe to pair doc (catch deletion / name updates)
   if (pairUnsub) { pairUnsub(); pairUnsub = null; }
   pairUnsub = onSnapshot(pairRef, (snap2) => {
     if (!snap2.exists()) {
@@ -94,15 +107,31 @@ async function loadPairAndSubscribe() {
     localStorage.setItem(LS.CHILD_NAME, ChatState.childName);
   });
 
-  // Subscribe to messages (asc by createdAt)
   if (messagesUnsub) { messagesUnsub(); messagesUnsub = null; }
   const q = query(
     collection(db, 'pairs', ChatState.pairId, 'messages'),
     orderBy('createdAt', 'asc')
   );
+  // Bundle B: track new incoming messages for notification trigger
+  const seenMsgIds = new Set();
+  let initialLoadDone = false;
   messagesUnsub = onSnapshot(q, (snap2) => {
+    const newIncoming = [];
+    snap2.docs.forEach(d2 => {
+      if (!seenMsgIds.has(d2.id)) {
+        seenMsgIds.add(d2.id);
+        if (initialLoadDone) {
+          const data = d2.data();
+          if (data.senderRole !== ChatState.role) {
+            newIncoming.push({ id: d2.id, ...data });
+          }
+        }
+      }
+    });
     ChatState.messages = snap2.docs.map(d2 => ({ id: d2.id, ...d2.data() }));
     recomputeUnread();
+    initialLoadDone = true;
+    for (const m of newIncoming) notify('onIncomingMessage', m);
     notify('onMessagesUpdate', ChatState.messages);
     notify('onUnreadUpdate', ChatState.unreadCount);
   });
@@ -111,12 +140,19 @@ async function loadPairAndSubscribe() {
 function clearPairLocal() {
   if (messagesUnsub) { messagesUnsub(); messagesUnsub = null; }
   if (pairUnsub) { pairUnsub(); pairUnsub = null; }
+  unsubscribeOtherPresence();
+  if (_presenceHeartbeatTimer) { clearInterval(_presenceHeartbeatTimer); _presenceHeartbeatTimer = null; }
+  if (_typingInputTimer) { clearTimeout(_typingInputTimer); _typingInputTimer = null; }
+  _presenceLastWrittenOnline = null;
+  _presenceTypingState = false;
   ChatState.pairId = null;
   ChatState.messages = [];
   ChatState.unreadCount = 0;
+  ChatState.otherPresence = { online: false, lastSeen: null, typing: false };
   localStorage.removeItem(LS.PAIR_ID);
   notify('onMessagesUpdate', []);
   notify('onUnreadUpdate', 0);
+  notify('onPresenceUpdate', ChatState.otherPresence);
 }
 
 export async function initChat() {
@@ -125,11 +161,31 @@ export async function initChat() {
   auth = getAuth(app);
   db = getFirestore(app);
 
-  // Restore from localStorage
   ChatState.role = localStorage.getItem(LS.ROLE) || null;
   ChatState.pairId = localStorage.getItem(LS.PAIR_ID) || null;
   ChatState.parentName = localStorage.getItem(LS.PARENT_NAME) || 'パパ';
   ChatState.childName = localStorage.getItem(LS.CHILD_NAME) || 'ハル';
+  ChatState.muted = localStorage.getItem(LS.MUTED) === '1';
+
+  // Bundle B: visibility/unload handlers (registered once)
+  if (typeof document !== 'undefined' && !window._haruChatVisHooked) {
+    window._haruChatVisHooked = true;
+    document.addEventListener('visibilitychange', () => {
+      updatePresenceInternal();
+    });
+    window.addEventListener('beforeunload', () => {
+      // Best-effort offline write — Firestore SDK may queue but unload may interrupt
+      if (_presenceLastWrittenOnline === true) {
+        const ref = presenceRef();
+        if (ref) {
+          try {
+            setDoc(ref, { online: false, typing: false, lastSeen: serverTimestamp() }, { merge: true })
+              .catch(() => {});
+          } catch (e) {}
+        }
+      }
+    });
+  }
 
   return new Promise((resolve, reject) => {
     let resolved = false;
@@ -205,7 +261,6 @@ function startPairPolling(code) {
       const q = query(collection(db, 'pairs'), where('parentUid', '==', ChatState.user.uid));
       const snap = await getDocs(q);
       if (!snap.empty) {
-        // Pick the most recent pair (in case multiple — shouldn't happen but be defensive)
         let pairDoc = snap.docs[0];
         for (const d2 of snap.docs) {
           const a = pairDoc.data().createdAt?.toMillis?.() || 0;
@@ -223,7 +278,6 @@ function startPairPolling(code) {
       console.error('[chat] pair polling', e);
     }
   }, 2000);
-  // Auto cleanup after 5 minutes
   pairPollTimeout = setTimeout(() => {
     stopPairPolling();
     deleteDoc(doc(db, 'pairing_codes', code)).catch(() => {});
@@ -252,7 +306,6 @@ export async function pairWithCode(code) {
   if (codeData.expiresAt && codeData.expiresAt.toMillis() < Date.now()) {
     throw new Error('コードの有効期限が切れました(5分超過)');
   }
-  // Create pair
   const pairData = {
     parentUid: codeData.parentUid,
     childUid: ChatState.user.uid,
@@ -281,7 +334,8 @@ export async function sendMessage(text) {
     createdAt: serverTimestamp(),
     readByOther: false,
   });
-  // Best-effort lastActivityAt update (non-blocking)
+  // Bundle B: send → typing off
+  notifyTypingStop();
   updateDoc(doc(db, 'pairs', ChatState.pairId), {
     lastActivityAt: serverTimestamp(),
   }).catch(() => {});
@@ -304,7 +358,138 @@ export function resetPairing() {
   clearPairLocal();
 }
 
-// Debug helpers (browser console)
+// =====================================================================
+// Bundle B: presence + typing
+// =====================================================================
+
+function presenceRef(role) {
+  if (!ChatState.pairId) return null;
+  const r = role || ChatState.role;
+  if (!r) return null;
+  return doc(db, 'pairs', ChatState.pairId, 'presence', r);
+}
+
+async function writePresenceOnline(online) {
+  if (_presenceLastWrittenOnline === online) return;
+  _presenceLastWrittenOnline = online;
+  if (!online) _presenceTypingState = false;  // typing implicitly false when offline
+  const ref = presenceRef();
+  if (!ref) return;
+  try {
+    await setDoc(ref, {
+      online,
+      typing: online ? _presenceTypingState : false,
+      lastSeen: serverTimestamp(),
+    }, { merge: true });
+  } catch (e) {
+    if (e && e.code !== 'permission-denied') console.error('[chat] presence-online', e);
+  }
+}
+
+async function writePresenceTyping(typing) {
+  if (_presenceTypingState === typing) return;
+  _presenceTypingState = typing;
+  const ref = presenceRef();
+  if (!ref) return;
+  try {
+    await setDoc(ref, { typing, lastSeen: serverTimestamp() }, { merge: true });
+  } catch (e) {
+    if (e && e.code !== 'permission-denied') console.error('[chat] presence-typing', e);
+  }
+}
+
+async function writePresenceHeartbeat() {
+  if (!_presenceLastWrittenOnline) return;
+  const ref = presenceRef();
+  if (!ref) return;
+  try {
+    await setDoc(ref, { lastSeen: serverTimestamp() }, { merge: true });
+  } catch (e) {
+    if (e && e.code !== 'permission-denied') console.error('[chat] presence-hb', e);
+  }
+}
+
+function subscribeOtherPresence() {
+  if (_otherPresenceUnsub) return;
+  if (!ChatState.pairId || !ChatState.role) return;
+  const otherRole = ChatState.role === 'parent' ? 'child' : 'parent';
+  const ref = doc(db, 'pairs', ChatState.pairId, 'presence', otherRole);
+  _otherPresenceUnsub = onSnapshot(ref, (snap) => {
+    if (!snap.exists()) {
+      ChatState.otherPresence = { online: false, lastSeen: null, typing: false };
+    } else {
+      const d = snap.data();
+      ChatState.otherPresence = {
+        online: !!d.online,
+        lastSeen: d.lastSeen || null,
+        typing: !!d.typing,
+      };
+    }
+    notify('onPresenceUpdate', ChatState.otherPresence);
+  }, (err) => {
+    if (err && err.code !== 'permission-denied') console.error('[chat] presence-sub', err);
+  });
+}
+
+function unsubscribeOtherPresence() {
+  if (_otherPresenceUnsub) { _otherPresenceUnsub(); _otherPresenceUnsub = null; }
+}
+
+function updatePresenceInternal() {
+  const tabVisible = (typeof document === 'undefined') || !document.hidden;
+  const desiredOnline = _modalOpen && _inChatView && tabVisible;
+
+  // Write own state if changed
+  writePresenceOnline(desiredOnline).catch(() => {});
+
+  // Heartbeat: only when online
+  if (desiredOnline && !_presenceHeartbeatTimer) {
+    _presenceHeartbeatTimer = setInterval(() => writePresenceHeartbeat(), 30000);
+  } else if (!desiredOnline && _presenceHeartbeatTimer) {
+    clearInterval(_presenceHeartbeatTimer);
+    _presenceHeartbeatTimer = null;
+  }
+
+  // Subscription: while modal open
+  if (_modalOpen) subscribeOtherPresence();
+  else unsubscribeOtherPresence();
+}
+
+export function setPresenceModalOpen(open) {
+  _modalOpen = !!open;
+  if (!open) {
+    notifyTypingStop();
+    _inChatView = false;
+  }
+  updatePresenceInternal();
+}
+
+export function setPresenceChatView(active) {
+  _inChatView = !!active;
+  if (!active) notifyTypingStop();
+  updatePresenceInternal();
+}
+
+export function notifyTyping() {
+  if (_typingInputTimer) clearTimeout(_typingInputTimer);
+  if (!_presenceTypingState) writePresenceTyping(true).catch(() => {});
+  _typingInputTimer = setTimeout(() => {
+    _typingInputTimer = null;
+    writePresenceTyping(false).catch(() => {});
+  }, 3000);
+}
+
+export function notifyTypingStop() {
+  if (_typingInputTimer) { clearTimeout(_typingInputTimer); _typingInputTimer = null; }
+  writePresenceTyping(false).catch(() => {});
+}
+
+export function setMuted(muted) {
+  ChatState.muted = !!muted;
+  try { localStorage.setItem(LS.MUTED, ChatState.muted ? '1' : '0'); } catch (e) {}
+}
+
+// Debug helpers
 if (typeof window !== 'undefined') {
   window.__chatDebug = function() {
     return {
@@ -316,6 +501,10 @@ if (typeof window !== 'undefined') {
       messageCount: ChatState.messages.length,
       unreadCount: ChatState.unreadCount,
       isReady: ChatState.isReady,
+      otherPresence: ChatState.otherPresence,
+      muted: ChatState.muted,
+      _modalOpen, _inChatView,
+      _presenceLastWrittenOnline, _presenceTypingState,
     };
   };
   window.__chatReset = function() {

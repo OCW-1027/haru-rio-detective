@@ -1,14 +1,16 @@
-// engine/chat-ui.js — Chat modal UI: role/pairing/chat/settings views + emoji picker (Bundle A)
-// All UI strings localized to Japanese.
+// engine/chat-ui.js — Chat modal UI (Bundle B: presence·typing·read·in-app notify)
 import {
   ChatState, setRole, setNames, generatePairingCode, pairWithCode,
-  sendMessage, markAllAsRead, resetPairing
+  sendMessage, markAllAsRead, resetPairing,
+  setPresenceModalOpen, setPresenceChatView,
+  notifyTyping, notifyTypingStop, setMuted
 } from './chat-core.js';
 
 let modalEl = null;
 let currentView = null;
 let emojiPanelOpen = false;
 let currentEmojiTab = '表情';
+let _audioCtx = null;
 
 // Quick row (12, frequently used)
 const EMOJI_QUICK = ['😀','😂','😍','🥰','😊','😢','😭','❤️','👍','🎉','🌟','✨'];
@@ -53,6 +55,20 @@ function formatTime(ts) {
   return `${h}:${m}`;
 }
 
+// ===== Presence helper text =====
+function formatPresence(p) {
+  if (!p) return '';
+  if (p.online) return '🟢 オンライン';
+  if (!p.lastSeen) return '';  // never seen
+  const ms = p.lastSeen.toMillis ? p.lastSeen.toMillis() : new Date(p.lastSeen).getTime();
+  const diff = Date.now() - ms;
+  if (diff < 60 * 1000) return '⚪ さっきまで オンライン';
+  if (diff < 60 * 60 * 1000) return '⚪ ' + Math.floor(diff / 60000) + '分前';
+  if (diff < 24 * 60 * 60 * 1000) return '⚪ ' + Math.floor(diff / (60 * 60 * 1000)) + '時間前';
+  const d = new Date(ms);
+  return '⚪ ' + d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
 function ensureModal() {
   if (modalEl) return modalEl;
   modalEl = document.createElement('div');
@@ -61,11 +77,17 @@ function ensureModal() {
     <div class="chat-modal-content">
       <div class="chat-topbar">
         <button class="chat-back" id="chatBack">← 閉じる</button>
-        <div class="chat-title" id="chatTitle">チャット</div>
+        <div class="chat-title-wrap">
+          <div class="chat-title" id="chatTitle">チャット</div>
+          <div class="chat-presence-line chat-hidden" id="chatPresence"></div>
+        </div>
         <button class="chat-settings chat-hidden" id="chatSettings">⚙</button>
       </div>
       <div class="chat-body" id="chatBody"></div>
       <div class="chat-emoji-panel chat-hidden" id="chatEmojiPanel"></div>
+      <div class="chat-typing-bar chat-hidden" id="chatTypingBar">
+        <span id="chatTypingText"></span><span class="chat-typing-dots"><span>·</span><span>·</span><span>·</span></span>
+      </div>
       <div class="chat-input-bar chat-hidden" id="chatInputBar">
         <button class="chat-emoji-btn" id="chatEmojiBtn" type="button" aria-label="絵文字">😀</button>
         <textarea class="chat-input" id="chatInput" rows="1" placeholder="メッセージを入力…"></textarea>
@@ -90,6 +112,12 @@ function ensureModal() {
   inputEl.addEventListener('input', () => {
     inputEl.style.height = 'auto';
     inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
+    // Bundle B: typing notification (debounced inside core)
+    if (inputEl.value.trim().length > 0) {
+      notifyTyping();
+    } else {
+      notifyTypingStop();
+    }
   });
   inputEl.addEventListener('focus', () => {
     if (emojiPanelOpen) closeEmojiPanel();
@@ -155,7 +183,6 @@ function renderEmojiPanel() {
 function insertEmoji(emoji) {
   const input = document.getElementById('chatInput');
   if (!input || !emoji) return;
-  // Insert at cursor (fallback to append)
   const start = input.selectionStart;
   const end = input.selectionEnd;
   if (typeof start === 'number' && typeof end === 'number' && document.activeElement === input) {
@@ -166,7 +193,6 @@ function insertEmoji(emoji) {
   } else {
     input.value += emoji;
   }
-  // Trigger input event so auto-grow works
   input.dispatchEvent(new Event('input'));
 }
 
@@ -188,6 +214,7 @@ async function handleSend() {
 export function openChatModal() {
   ensureModal();
   modalEl.classList.remove('chat-hidden');
+  setPresenceModalOpen(true);
   if (!ChatState.isReady) {
     switchView('loading');
     return;
@@ -205,19 +232,28 @@ export function openChatModal() {
 export function closeChatModal() {
   if (modalEl) modalEl.classList.add('chat-hidden');
   closeEmojiPanel();
+  setPresenceChatView(false);
+  setPresenceModalOpen(false);
 }
 
 function switchView(view) {
   ensureModal();
+  const wasInChat = currentView === 'chat';
   currentView = view;
   const body = document.getElementById('chatBody');
   const inputBar = document.getElementById('chatInputBar');
   const settingsBtn = document.getElementById('chatSettings');
   const titleEl = document.getElementById('chatTitle');
+  const presenceEl = document.getElementById('chatPresence');
+  const typingBar = document.getElementById('chatTypingBar');
 
   inputBar.classList.add('chat-hidden');
   settingsBtn.classList.add('chat-hidden');
+  if (presenceEl) presenceEl.classList.add('chat-hidden');
+  if (typingBar) typingBar.classList.add('chat-hidden');
   closeEmojiPanel();
+
+  if (wasInChat && view !== 'chat') setPresenceChatView(false);
 
   if (view === 'loading') {
     titleEl.textContent = 'チャット';
@@ -320,8 +356,18 @@ function switchView(view) {
     titleEl.textContent = otherName || 'チャット';
     inputBar.classList.remove('chat-hidden');
     settingsBtn.classList.remove('chat-hidden');
+    if (presenceEl) {
+      const txt = formatPresence(ChatState.otherPresence);
+      if (txt) {
+        presenceEl.textContent = txt;
+        presenceEl.classList.remove('chat-hidden');
+        presenceEl.classList.toggle('chat-presence-online', !!ChatState.otherPresence?.online);
+      }
+    }
+    setPresenceChatView(true);
     body.innerHTML = `<div class="chat-messages" id="chatMessages"></div>`;
     renderMessages();
+    updateTypingBar();
     return;
   }
 
@@ -337,6 +383,11 @@ function switchView(view) {
         </label>
         <button id="chatSaveNames" class="chat-action-btn">呼び方を保存</button>
         <hr>
+        <label class="chat-mute-toggle">
+          <input type="checkbox" id="chatMuteToggle" ${ChatState.muted ? '' : 'checked'}>
+          <span>🔔 通知音</span>
+        </label>
+        <hr>
         <button id="chatBackToChat" class="chat-action-btn">← 戻る</button>
         <button id="chatResetPair" class="chat-danger-btn">ペアリングをリセット</button>
       </div>
@@ -350,6 +401,10 @@ function switchView(view) {
       } catch (e) {
         alert('保存に失敗しました: ' + (e.message || e));
       }
+    };
+    document.getElementById('chatMuteToggle').onchange = (e) => {
+      // Checkbox checked = sound ON = muted false
+      setMuted(!e.target.checked);
     };
     document.getElementById('chatBackToChat').onclick = () => {
       if (ChatState.pairId) switchView('chat');
@@ -377,10 +432,18 @@ function renderMessages() {
     const t = msg.createdAt ? formatTime(msg.createdAt) : '';
     const timeKey = `${mine ? 'me' : 'other'}_${t}`;
     const showTime = !!t && timeKey !== lastTimeKey;
+    // Bundle B: read receipt "1" badge for own unread messages
+    const showReadBadge = mine && msg.readByOther === false;
+    let metaHtml = '';
+    if (showReadBadge || showTime) {
+      const readPart = showReadBadge ? `<span class="chat-read-badge">1</span>` : '';
+      const timePart = showTime ? `<span class="chat-time-inline">${escapeHtml(t)}</span>` : '';
+      metaHtml = `<div class="chat-msg-meta">${readPart}${timePart}</div>`;
+    }
     html += `
       <div class="chat-msg ${mine ? 'chat-mine' : 'chat-other'}">
         <div class="chat-bubble">${escapeHtml(msg.text || '')}</div>
-        ${showTime ? `<div class="chat-time">${escapeHtml(t)}</div>` : ''}
+        ${metaHtml}
       </div>
     `;
     if (showTime) lastTimeKey = timeKey;
@@ -388,6 +451,99 @@ function renderMessages() {
   wrap.innerHTML = html;
   requestAnimationFrame(() => { wrap.scrollTop = wrap.scrollHeight; });
 }
+
+function updatePresenceLine() {
+  const presenceEl = document.getElementById('chatPresence');
+  if (!presenceEl) return;
+  if (currentView !== 'chat') {
+    presenceEl.classList.add('chat-hidden');
+    return;
+  }
+  const txt = formatPresence(ChatState.otherPresence);
+  if (txt) {
+    presenceEl.textContent = txt;
+    presenceEl.classList.remove('chat-hidden');
+    presenceEl.classList.toggle('chat-presence-online', !!ChatState.otherPresence?.online);
+  } else {
+    presenceEl.classList.add('chat-hidden');
+  }
+}
+
+function updateTypingBar() {
+  const bar = document.getElementById('chatTypingBar');
+  if (!bar) return;
+  const showing = currentView === 'chat' && ChatState.otherPresence && ChatState.otherPresence.typing;
+  if (showing) {
+    const otherName = ChatState.role === 'parent' ? ChatState.childName : ChatState.parentName;
+    const txt = document.getElementById('chatTypingText');
+    if (txt) txt.textContent = (otherName || '相手') + 'が 入力中';
+    bar.classList.remove('chat-hidden');
+  } else {
+    bar.classList.add('chat-hidden');
+  }
+}
+
+// ===== In-app notification (Web Audio + Toast) =====
+
+function playDing() {
+  if (ChatState.muted) return;
+  try {
+    if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = _audioCtx;
+    // Resume if suspended (autoplay policy)
+    if (ctx.state === 'suspended') { try { ctx.resume(); } catch (e) {} }
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(660, ctx.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.32);
+  } catch (e) {}
+}
+
+function showToast(msg) {
+  const toast = document.createElement('div');
+  toast.className = 'chat-toast';
+  const sender = msg.senderRole === 'parent' ? ChatState.parentName : ChatState.childName;
+  const preview = (msg.text || '').slice(0, 50) + ((msg.text || '').length > 50 ? '…' : '');
+  const time = msg.createdAt ? formatTime(msg.createdAt) : '';
+  toast.innerHTML = `
+    <button class="chat-toast-close" type="button" aria-label="閉じる">✕</button>
+    <div class="chat-toast-header">💬 ${escapeHtml(sender || '')}</div>
+    <div class="chat-toast-body">${escapeHtml(preview)}</div>
+    <div class="chat-toast-time">${escapeHtml(time)}</div>
+  `;
+  document.body.appendChild(toast);
+
+  let removed = false;
+  const remove = () => {
+    if (removed) return;
+    removed = true;
+    toast.classList.add('chat-toast-fading');
+    setTimeout(() => {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 360);
+  };
+  const autoTimer = setTimeout(remove, 4000);
+
+  toast.addEventListener('click', (e) => {
+    if (e.target.classList.contains('chat-toast-close')) {
+      e.stopPropagation();
+      clearTimeout(autoTimer);
+      remove();
+      return;
+    }
+    clearTimeout(autoTimer);
+    remove();
+    openChatModal();
+  });
+}
+
+// ===== ChatState callbacks =====
 
 ChatState.onMessagesUpdate = () => {
   if (currentView === 'chat') {
@@ -413,4 +569,22 @@ ChatState.onPairLost = () => {
       switchView('role-select');
     }
   }
+};
+
+// Bundle B
+ChatState.onPresenceUpdate = () => {
+  updatePresenceLine();
+  updateTypingBar();
+};
+
+ChatState.onIncomingMessage = (msg) => {
+  const modalOpen = modalEl && !modalEl.classList.contains('chat-hidden');
+  const inChatView = currentView === 'chat';
+  const tabHidden = typeof document !== 'undefined' && document.hidden;
+  // Skip notification when actively viewing chat
+  if (modalOpen && inChatView && !tabHidden) return;
+  // Always play ding (unless muted)
+  playDing();
+  // Toast only when tab visible (no point if tab hidden)
+  if (!tabHidden) showToast(msg);
 };
