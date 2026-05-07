@@ -10,8 +10,8 @@ function injectEntryButton() {
   entryBtn = document.createElement('button');
   entryBtn.id = 'chatEntryBtn';
   entryBtn.className = 'chat-entry-btn';
-  entryBtn.title = '채팅';
-  entryBtn.setAttribute('aria-label', '채팅');
+  entryBtn.title = 'チャット';
+  entryBtn.setAttribute('aria-label', 'チャット');
   entryBtn.innerHTML = '💬<span class="chat-entry-badge chat-hidden" id="chatEntryBadge">0</span>';
   document.body.appendChild(entryBtn);
   badgeEl = document.getElementById('chatEntryBadge');

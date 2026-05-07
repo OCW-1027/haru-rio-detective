@@ -22,8 +22,8 @@ export const ChatState = {
   user: null,
   role: null,             // 'parent' | 'child' | null
   pairId: null,
-  parentName: '아빠',
-  childName: '하루',
+  parentName: 'パパ',
+  childName: 'ハル',
   messages: [],
   unreadCount: 0,
   isReady: false,
@@ -128,8 +128,8 @@ export async function initChat() {
   // Restore from localStorage
   ChatState.role = localStorage.getItem(LS.ROLE) || null;
   ChatState.pairId = localStorage.getItem(LS.PAIR_ID) || null;
-  ChatState.parentName = localStorage.getItem(LS.PARENT_NAME) || '아빠';
-  ChatState.childName = localStorage.getItem(LS.CHILD_NAME) || '하루';
+  ChatState.parentName = localStorage.getItem(LS.PARENT_NAME) || 'パパ';
+  ChatState.childName = localStorage.getItem(LS.CHILD_NAME) || 'ハル';
 
   return new Promise((resolve, reject) => {
     let resolved = false;
@@ -238,25 +238,25 @@ function stopPairPolling() {
 export async function pairWithCode(code) {
   if (ChatState.role !== 'child') throw new Error('child role required');
   if (!ChatState.user) throw new Error('not authenticated');
-  if (!/^\d{6}$/.test(code)) throw new Error('6자리 숫자를 입력하세요');
+  if (!/^\d{6}$/.test(code)) throw new Error('6桁の数字を入力してください');
   const codeRef = doc(db, 'pairing_codes', code);
   let codeSnap;
   try {
     codeSnap = await getDoc(codeRef);
   } catch (e) {
     console.error('[chat] code read', e);
-    throw new Error('코드 조회 실패');
+    throw new Error('コードの取得に失敗しました');
   }
-  if (!codeSnap.exists()) throw new Error('코드를 찾을 수 없습니다');
+  if (!codeSnap.exists()) throw new Error('コードが見つかりません');
   const codeData = codeSnap.data();
   if (codeData.expiresAt && codeData.expiresAt.toMillis() < Date.now()) {
-    throw new Error('코드가 만료되었습니다');
+    throw new Error('コードの有効期限が切れました(5分超過)');
   }
   // Create pair
   const pairData = {
     parentUid: codeData.parentUid,
     childUid: ChatState.user.uid,
-    parentName: codeData.parentName || '아빠',
+    parentName: codeData.parentName || 'パパ',
     childName: ChatState.childName,
     createdAt: serverTimestamp(),
     lastActivityAt: serverTimestamp(),
