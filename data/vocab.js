@@ -800,6 +800,69 @@ const G2_VERBS_PLUS2 = [
   { en:'unite', ja:'けつごう (結合)' },
 ];
 
+// 英検2級 動詞 추가분 50개 (PLUS3, 기존 동사 204와 중복 없음)
+const G2_VERBS_PLUS3 = [
+  // ===== 動作 (10) =====
+  { en:'chase', ja:'おいかける (追いかける)' },
+  { en:'chew', ja:'かむ (噛む)' },
+  { en:'crawl', ja:'はう (這う)' },
+  { en:'fetch', ja:'とってくる (取ってくる)' },
+  { en:'cuddle', ja:'だきしめる (抱きしめる)' },
+  { en:'devour', ja:'むさぼりくう (貪り食う)' },
+  { en:'fasten', ja:'とめる (留める)' },
+  { en:'inhabit', ja:'すむ (住む)' },
+  { en:'overlap', ja:'かさなる (重なる)' },
+  { en:'partition', ja:'ぶんかつする (分割する)' },
+
+  // ===== 思考·分析 (10) =====
+  { en:'comprehend', ja:'りかいする (理解する)' },
+  { en:'estimate', ja:'みつもる (見積もる)' },
+  { en:'foresee', ja:'よけんする (予見する)' },
+  { en:'predict', ja:'よそくする (予測する)' },
+  { en:'hesitate', ja:'ためらう (躊躇う)' },
+  { en:'mimic', ja:'まねる (真似る)' },
+  { en:'clarify', ja:'めいかくにする (明確にする)' },
+  { en:'distract', ja:'ちゅういをそらす (注意を逸らす)' },
+  { en:'confine', ja:'せいげんする (制限する)' },
+  { en:'inspect', ja:'けんさする (検査する)' },
+
+  // ===== 伝達·表現 (10) =====
+  { en:'accuse', ja:'こくはつする (告発する)' },
+  { en:'denounce', ja:'ひなんする (非難する)' },
+  { en:'rebuke', ja:'しっせきする (叱責する)' },
+  { en:'confess', ja:'こくはくする (告白する)' },
+  { en:'compose', ja:'こうせいする (構成する)' },
+  { en:'disclaim', ja:'ほうきする (放棄する)' },
+  { en:'coax', ja:'なだめる (宥める)' },
+  { en:'amaze', ja:'おどろかせる (驚かせる)' },
+  { en:'insist', ja:'しゅちょうする (主張する)' },
+  { en:'linger', ja:'いつづける (居続ける)' },
+
+  // ===== 増減·変化 (10) =====
+  { en:'amass', ja:'ためこむ (溜め込む)' },
+  { en:'broaden', ja:'ひろげる (広げる)' },
+  { en:'prolong', ja:'えんちょうする (延長する)' },
+  { en:'deposit', ja:'あずける (預ける)' },
+  { en:'aggregate', ja:'しゅうけいする (集計する)' },
+  { en:'exhaust', ja:'つかいはたす (使い果たす)' },
+  { en:'diminish', ja:'げんしょうする (減少する)' },
+  { en:'disappoint', ja:'しつぼうさせる (失望させる)' },
+  { en:'exploit', ja:'りようする (利用する)' },
+  { en:'recruit', ja:'ぼしゅうする (募集する)' },
+
+  // ===== 制度·結末 (10) =====
+  { en:'abolish', ja:'はいしする (廃止する)' },
+  { en:'arrest', ja:'たいほする (逮捕する)' },
+  { en:'terminate', ja:'しゅうりょうする (終了する)' },
+  { en:'dominate', ja:'しはいする (支配する)' },
+  { en:'overpower', ja:'あっとうする (圧倒する)' },
+  { en:'safeguard', ja:'まもる (守る)' },
+  { en:'unify', ja:'とういつする (統一する)' },
+  { en:'liaise', ja:'れんけいする (連携する)' },
+  { en:'endure', ja:'たえる (耐える)' },
+  { en:'enroll', ja:'とうろくする (登録する)' },
+];
+
 // 英検2級 名詞 추가분 50개 (기존 172개와 중복 없음)
 const G2_NOUNS_PLUS2 = [
   { en:'absence', ja:'けっせき (欠席)' },
@@ -854,6 +917,69 @@ const G2_NOUNS_PLUS2 = [
   { en:'harbor', ja:'みなと (港)' },
 ];
 
+// 英検2級 名詞 추가분 50개 (PLUS3, 기존 명사 222와 중복 없음)
+const G2_NOUNS_PLUS3 = [
+  // ===== 生活·自然 (10) =====
+  { en:'anniversary', ja:'きねんび (記念日)' },
+  { en:'atmosphere', ja:'ふんいき (雰囲気)' },
+  { en:'drought', ja:'かんばつ (干ばつ)' },
+  { en:'harvest', ja:'しゅうかく (収穫)' },
+  { en:'ladder', ja:'はしご (梯子)' },
+  { en:'landscape', ja:'けしき (景色)' },
+  { en:'laundry', ja:'せんたく (洗濯)' },
+  { en:'mansion', ja:'こうきゅうじゅうたく (高級住宅)' },
+  { en:'moisture', ja:'しっけ (湿気)' },
+  { en:'monument', ja:'きねんひ (記念碑)' },
+
+  // ===== 社会·文化 (10) =====
+  { en:'attendance', ja:'しゅっせき (出席)' },
+  { en:'award', ja:'しょう (賞)' },
+  { en:'decoration', ja:'そうしょく (装飾)' },
+  { en:'era', ja:'じだい (時代)' },
+  { en:'neighborhood', ja:'きんじょ (近所)' },
+  { en:'participant', ja:'さんかしゃ (参加者)' },
+  { en:'peer', ja:'なかま (仲間)' },
+  { en:'ritual', ja:'ぎしき (儀式)' },
+  { en:'masterpiece', ja:'けっさく (傑作)' },
+  { en:'lifestyle', ja:'せいかつようしき (生活様式)' },
+
+  // ===== ビジネス·商品 (10) =====
+  { en:'bargain', ja:'とくばい (特売)' },
+  { en:'expense', ja:'けいひ (経費)' },
+  { en:'feedback', ja:'フィードバック (反応)' },
+  { en:'insurance', ja:'ほけん (保険)' },
+  { en:'license', ja:'めんきょ (免許)' },
+  { en:'merchandise', ja:'しょうひん (商品)' },
+  { en:'apparel', ja:'いふく (衣服)' },
+  { en:'apparatus', ja:'そうち (装置)' },
+  { en:'proficiency', ja:'じゅくれん (熟練)' },
+  { en:'mentor', ja:'しどうしゃ (指導者)' },
+
+  // ===== 動作·結果 (10) =====
+  { en:'endeavor', ja:'こころみ (試み)' },
+  { en:'impulse', ja:'しょうどう (衝動)' },
+  { en:'incident', ja:'じけん (事件)' },
+  { en:'ingredient', ja:'ざいりょう (材料)' },
+  { en:'motive', ja:'どうき (動機)' },
+  { en:'panic', ja:'パニック (恐慌)' },
+  { en:'remark', ja:'はつげん (発言)' },
+  { en:'reprimand', ja:'おしかり (お叱り)' },
+  { en:'summons', ja:'しょうかんじょう (召喚状)' },
+  { en:'nourishment', ja:'じよう (滋養)' },
+
+  // ===== 抽象·概念 (10) =====
+  { en:'cornerstone', ja:'きそいし (礎石)' },
+  { en:'enthusiasm', ja:'ねっきょう (熱狂)' },
+  { en:'guidance', ja:'しどう (指導)' },
+  { en:'impediment', ja:'しょうがい (障害)' },
+  { en:'legacy', ja:'いさん (遺産)' },
+  { en:'locale', ja:'げんち (現地)' },
+  { en:'luxury', ja:'ぜいたく (贅沢)' },
+  { en:'aftermath', ja:'よは (余波)' },
+  { en:'unanimity', ja:'まんじょういっち (満場一致)' },
+  { en:'beast', ja:'けもの (獣)' },
+];
+
 // 英検2級 形容詞·副詞 추가분 40개 (기존 163개와 중복 없음)
 const G2_ADJADV_PLUS2 = [
   { en:'aggressive', ja:'こうげきてきな (攻撃的)' },
@@ -896,6 +1022,69 @@ const G2_ADJADV_PLUS2 = [
   { en:'shallow', ja:'あさい (浅)' },
   { en:'tight', ja:'きつい' },
   { en:'urgent', ja:'きんきゅうの (緊急)' },
+];
+
+// 英検2級 形容詞·副詞 추가분 50개 (PLUS3, 기존 203과 중복 없음)
+const G2_ADJADV_PLUS3 = [
+  // ===== 性格·態度 (10) =====
+  { en:'attentive', ja:'ちゅういぶかい (注意深い)' },
+  { en:'considerate', ja:'おもいやりがある (思いやりがある)' },
+  { en:'courteous', ja:'れいぎただしい (礼儀正しい)' },
+  { en:'diligent', ja:'きんべんな (勤勉な)' },
+  { en:'cunning', ja:'こうかつな (狡猾な)' },
+  { en:'modest', ja:'ひかえめな (控えめな)' },
+  { en:'magnanimous', ja:'かんだいな (寛大な)' },
+  { en:'wary', ja:'ようじんぶかい (用心深い)' },
+  { en:'zealous', ja:'ねっしんな (熱心な)' },
+  { en:'loyal', ja:'ちゅうじつな (忠実な)' },
+
+  // ===== 状態·状況 (10) =====
+  { en:'capable', ja:'のうりょくのある (能力のある)' },
+  { en:'distinct', ja:'めいかくな (明確な)' },
+  { en:'drastic', ja:'おもいきった (思い切った)' },
+  { en:'durable', ja:'たいきゅうせいの (耐久性の)' },
+  { en:'exotic', ja:'エキゾチックな (異国情緒)' },
+  { en:'formal', ja:'せいしきな (正式な)' },
+  { en:'fortunate', ja:'うんのよい (運の良い)' },
+  { en:'frantic', ja:'ひっしの (必死の)' },
+  { en:'neutral', ja:'ちゅうりつの (中立の)' },
+  { en:'hollow', ja:'うつろな (虚ろな)' },
+
+  // ===== 大きさ·強度 (10) =====
+  { en:'brilliant', ja:'すばらしい (素晴らしい)' },
+  { en:'intense', ja:'げきれつな (激烈な)' },
+  { en:'gigantic', ja:'きょだいな (巨大な)' },
+  { en:'immense', ja:'こうだいな (広大な)' },
+  { en:'voluminous', ja:'ぼうだいな (膨大な)' },
+  { en:'paramount', ja:'さいじゅうような (最重要な)' },
+  { en:'splendid', ja:'はなやかな (華やかな)' },
+  { en:'flawless', ja:'かんぺきな (完璧な)' },
+  { en:'compact', ja:'コンパクトな (小型)' },
+  { en:'refined', ja:'せんれんされた (洗練された)' },
+
+  // ===== 動作·移動 (10) =====
+  { en:'brisk', ja:'きびきびした (機敏)' },
+  { en:'chaotic', ja:'こんとんとした (混沌)' },
+  { en:'clever', ja:'りこうな (利口な)' },
+  { en:'endless', ja:'はてしない (果てしない)' },
+  { en:'energetic', ja:'かっぱつな (活発な)' },
+  { en:'fluent', ja:'りゅうちょうな (流暢な)' },
+  { en:'graceful', ja:'ゆうがな (優雅な)' },
+  { en:'keen', ja:'するどい (鋭い)' },
+  { en:'unwavering', ja:'ゆるぎない (揺るぎない)' },
+  { en:'streamlined', ja:'こうりつてきな (効率的な)' },
+
+  // ===== 性質·その他 (10) =====
+  { en:'brittle', ja:'もろい (脆い)' },
+  { en:'damp', ja:'しめった (湿った)' },
+  { en:'equivalent', ja:'どうとうの (同等の)' },
+  { en:'identical', ja:'どういつの (同一の)' },
+  { en:'incremental', ja:'だんかいてきな (段階的な)' },
+  { en:'innate', ja:'うまれつきの (生まれつきの)' },
+  { en:'jovial', ja:'ようきな (陽気な)' },
+  { en:'lenient', ja:'おんびんな (穏便な)' },
+  { en:'literal', ja:'もじどおりの (文字通りの)' },
+  { en:'salient', ja:'めだった (目立った)' },
 ];
 
 // 熟語 3급 추가 20개 (중복 없음)
@@ -1025,6 +1214,242 @@ const G_PRE1_WORDS_PLUS = [
   { en:'empirical', ja:'けいけんてきな (経験的)' },
   { en:'imminent', ja:'さしせまった (差迫)' },
   { en:'ingenious', ja:'はつめいの才 (発明)' },
+];
+
+// 영검 준1급 빈출 어휘 +100 (PLUS2): 학술·비즈니스·정치·환경·의학·추상·형용사 분포
+// 카테고리: 학술/論文 15·비즈니스/経済 15·정치/社会 15·환경/科学 15·의학/心理 10·추상/감정 15·형용사/부사 15
+const G_PRE1_WORDS_PLUS2 = [
+  // ===== 学術·論文 (15) =====
+  { en:'delineate', ja:'はっきりしめす (明示)' },
+  { en:'quantitative', ja:'りょうてきな (量的)' },
+  { en:'coherent', ja:'いっかんした (一貫)' },
+  { en:'theoretical', ja:'りろんてきな (理論的)' },
+  { en:'methodology', ja:'ほうほうろん (方法論)' },
+  { en:'paradigm', ja:'はんれい (範例)' },
+  { en:'articulate', ja:'はっきりのべる (明確)' },
+  { en:'refute', ja:'はんろんする (反論)' },
+  { en:'plausible', ja:'もっともらしい (尤)' },
+  { en:'scrutiny', ja:'せいさ (精査)' },
+  { en:'formulate', ja:'こうそうする (構想)' },
+  { en:'premise', ja:'ぜんてい (前提)' },
+  { en:'disparity', ja:'かくさ (格差)' },
+  { en:'conjecture', ja:'すいそく (推測)' },
+  { en:'inquiry', ja:'ちょうさ (調査)' },
+
+  // ===== ビジネス·経済 (15) =====
+  { en:'revenue', ja:'しゅうえき (収益)' },
+  { en:'asset', ja:'しさん (資産)' },
+  { en:'audit', ja:'かんさする (監査)' },
+  { en:'deficit', ja:'あかじ (赤字)' },
+  { en:'fluctuate', ja:'へんどうする (変動)' },
+  { en:'lucrative', ja:'もうかる (儲)' },
+  { en:'monopoly', ja:'どくせん (独占)' },
+  { en:'procure', ja:'ちょうたつする (調達)' },
+  { en:'recession', ja:'けいきこうたい (景気後退)' },
+  { en:'stipulate', ja:'きていする (規定)' },
+  { en:'subsidy', ja:'ほじょきん (補助金)' },
+  { en:'surplus', ja:'よじょう (余剰)' },
+  { en:'reimburse', ja:'はらいもどす (払戻)' },
+  { en:'leverage', ja:'かつようする (活用)' },
+  { en:'liquidate', ja:'せいさんする (清算)' },
+
+  // ===== 政治·社会 (15) =====
+  { en:'legislation', ja:'りっぽう (立法)' },
+  { en:'jurisdiction', ja:'かんかつけん (管轄権)' },
+  { en:'ratify', ja:'ひじゅんする (批准)' },
+  { en:'mandate', ja:'いにん (委任)' },
+  { en:'sanction', ja:'せいさい (制裁)' },
+  { en:'sovereignty', ja:'しゅけん (主権)' },
+  { en:'advocacy', ja:'ようご (擁護)' },
+  { en:'ideology', ja:'しそう (思想)' },
+  { en:'dispatch', ja:'はけんする (派遣)' },
+  { en:'corruption', ja:'おしょく (汚職)' },
+  { en:'referendum', ja:'こくみんとうひょう (国民投票)' },
+  { en:'regime', ja:'せいけん (政権)' },
+  { en:'treaty', ja:'じょうやく (条約)' },
+  { en:'dissident', ja:'はんたいしゃ (反対者)' },
+  { en:'amnesty', ja:'おんしゃ (恩赦)' },
+
+  // ===== 環境·科学 (15) =====
+  { en:'sustainable', ja:'じぞくかのうな (持続可能)' },
+  { en:'ecosystem', ja:'せいたいけい (生態系)' },
+  { en:'biodiversity', ja:'せいぶつたようせい (生物多様性)' },
+  { en:'conservation', ja:'ほぜん (保全)' },
+  { en:'contamination', ja:'おせん (汚染)' },
+  { en:'deforestation', ja:'しんりんばっさい (森林伐採)' },
+  { en:'emission', ja:'はいしゅつ (排出)' },
+  { en:'habitat', ja:'せいそくち (生息地)' },
+  { en:'pollutant', ja:'おせんぶっしつ (汚染物質)' },
+  { en:'renewable', ja:'さいせいかのうな (再生可能)' },
+  { en:'deplete', ja:'こかつさせる (枯渇)' },
+  { en:'replenish', ja:'ほじゅうする (補充)' },
+  { en:'indigenous', ja:'せんじゅうの (先住)' },
+  { en:'organism', ja:'ゆうきたい (有機体)' },
+  { en:'vegetation', ja:'しょくせい (植生)' },
+
+  // ===== 医学·心理 (10) =====
+  { en:'chronic', ja:'まんせいの (慢性)' },
+  { en:'anxiety', ja:'ふあん (不安)' },
+  { en:'immunity', ja:'めんえき (免疫)' },
+  { en:'contagious', ja:'でんせんせいの (伝染性)' },
+  { en:'dementia', ja:'にんちしょう (認知症)' },
+  { en:'paralyze', ja:'まひさせる (麻痺)' },
+  { en:'fatigue', ja:'ひろう (疲労)' },
+  { en:'trauma', ja:'がいしょう (外傷)' },
+  { en:'obesity', ja:'ひまん (肥満)' },
+  { en:'insomnia', ja:'ふみんしょう (不眠症)' },
+
+  // ===== 抽象·感情 (15) =====
+  { en:'resentment', ja:'うらみ (恨)' },
+  { en:'perseverance', ja:'にんたい (忍耐)' },
+  { en:'contempt', ja:'けいべつ (軽蔑)' },
+  { en:'indignation', ja:'ふんがい (憤慨)' },
+  { en:'melancholy', ja:'ゆううつ (憂鬱)' },
+  { en:'ambition', ja:'やしん (野心)' },
+  { en:'gratitude', ja:'かんしゃ (感謝)' },
+  { en:'optimism', ja:'らくてんしゅぎ (楽天主義)' },
+  { en:'pessimism', ja:'ひかんしゅぎ (悲観主義)' },
+  { en:'remorse', ja:'こうかい (後悔)' },
+  { en:'solitude', ja:'こどく (孤独)' },
+  { en:'vanity', ja:'きょえい (虚栄)' },
+  { en:'jealousy', ja:'しっと (嫉妬)' },
+  { en:'dread', ja:'きょうふ (恐怖)' },
+  { en:'awe', ja:'いけい (畏敬)' },
+
+  // ===== 形容詞·副詞 (15) =====
+  { en:'intricate', ja:'こみいった (込入)' },
+  { en:'succinct', ja:'かんけつな (簡潔)' },
+  { en:'momentous', ja:'じゅうだいな (重大)' },
+  { en:'equivocal', ja:'あいまいな (曖昧)' },
+  { en:'lucid', ja:'めいかいな (明快)' },
+  { en:'meticulous', ja:'ちみつな (緻密)' },
+  { en:'robust', ja:'がんじょうな (頑丈)' },
+  { en:'scarce', ja:'とぼしい (乏)' },
+  { en:'viable', ja:'じっこうかのうな (実行可能)' },
+  { en:'prevalent', ja:'ふきゅうした (普及)' },
+  { en:'redundant', ja:'よけいな (余計)' },
+  { en:'conspicuous', ja:'めだつ (目立)' },
+  { en:'obsolete', ja:'じだいおくれの (時代遅)' },
+  { en:'pivotal', ja:'かなめの (要)' },
+  { en:'tedious', ja:'たいくつな (退屈)' },
+];
+
+// 영검 준1급 빈출 어휘 +100 (PLUS3): PLUS2와 동일 카테고리 분포·다른 단어들
+// ja 가이드: 한자 사전형 + 送り仮名 포함, 학습자 친화 한자 우선
+const G_PRE1_WORDS_PLUS3 = [
+  // ===== 学術·論文 (15) =====
+  { en:'correlate', ja:'そうかんする (相関する)' },
+  { en:'substantiate', ja:'うらづける (裏付ける)' },
+  { en:'exemplify', ja:'れいしょうする (例証する)' },
+  { en:'discern', ja:'みわける (見分ける)' },
+  { en:'compile', ja:'へんさんする (編纂する)' },
+  { en:'speculate', ja:'すいさつする (推察する)' },
+  { en:'dismantle', ja:'ぶんかいする (分解する)' },
+  { en:'entail', ja:'ともなう (伴う)' },
+  { en:'validate', ja:'にんしょうする (認証する)' },
+  { en:'infer', ja:'すいろんする (推論する)' },
+  { en:'elaborate', ja:'くわしくのべる (詳しく述べる)' },
+  { en:'postulate', ja:'かていする (仮定する)' },
+  { en:'deduce', ja:'みちびきだす (導き出す)' },
+  { en:'synthesize', ja:'そうごうする (総合する)' },
+  { en:'reconcile', ja:'わかいする (和解する)' },
+
+  // ===== ビジネス·経済 (15) =====
+  { en:'portfolio', ja:'ポートフォリオ (作品集)' },
+  { en:'dividend', ja:'はいとうきん (配当金)' },
+  { en:'inflation', ja:'インフレ (物価上昇)' },
+  { en:'acquisition', ja:'かくとく (獲得)' },
+  { en:'merger', ja:'がっぺい (合併)' },
+  { en:'bankruptcy', ja:'はさん (破産)' },
+  { en:'quota', ja:'わりあて (割り当て)' },
+  { en:'tariff', ja:'かんぜい (関税)' },
+  { en:'invoice', ja:'せいきゅうしょ (請求書)' },
+  { en:'equity', ja:'こうへい (公平)' },
+  { en:'liability', ja:'ふさい (負債)' },
+  { en:'franchise', ja:'フランチャイズ (営業権)' },
+  { en:'yield', ja:'うみだす (生み出す)' },
+  { en:'depreciate', ja:'かちがさがる (価値が下がる)' },
+  { en:'endorse', ja:'しょうにんする (承認する)' },
+
+  // ===== 政治·社会 (15) =====
+  { en:'constitution', ja:'けんぽう (憲法)' },
+  { en:'parliament', ja:'ぎかい (議会)' },
+  { en:'propaganda', ja:'プロパガンダ (宣伝)' },
+  { en:'censorship', ja:'けんえつ (検閲)' },
+  { en:'petition', ja:'せいがん (請願)' },
+  { en:'activism', ja:'かつどうしゅぎ (活動主義)' },
+  { en:'uprising', ja:'ほうき (蜂起)' },
+  { en:'coalition', ja:'れんりつ (連立)' },
+  { en:'antagonist', ja:'てきたいしゃ (敵対者)' },
+  { en:'embargo', ja:'きんゆそち (禁輸措置)' },
+  { en:'naturalize', ja:'きかする (帰化する)' },
+  { en:'prosecute', ja:'きそする (起訴する)' },
+  { en:'testify', ja:'しょうげんする (証言する)' },
+  { en:'diplomacy', ja:'がいこう (外交)' },
+  { en:'revamp', ja:'かいぞうする (改造する)' },
+
+  // ===== 環境·科学 (15) =====
+  { en:'fossil', ja:'かせき (化石)' },
+  { en:'landfill', ja:'うめたてち (埋め立て地)' },
+  { en:'reservoir', ja:'ちょすいち (貯水池)' },
+  { en:'sediment', ja:'たいせきぶつ (堆積物)' },
+  { en:'erosion', ja:'しんしょく (浸食)' },
+  { en:'coral', ja:'さんご (珊瑚)' },
+  { en:'desertification', ja:'さばくか (砂漠化)' },
+  { en:'extinction', ja:'ぜつめつ (絶滅)' },
+  { en:'ozone', ja:'オゾン (オゾン層)' },
+  { en:'glacier', ja:'ひょうが (氷河)' },
+  { en:'famine', ja:'ききん (飢饉)' },
+  { en:'greenhouse', ja:'おんしつ (温室)' },
+  { en:'wildlife', ja:'やせいせいぶつ (野生生物)' },
+  { en:'toxic', ja:'ゆうどくな (有毒な)' },
+  { en:'acid', ja:'さんせいの (酸性の)' },
+
+  // ===== 医学·心理 (10) =====
+  { en:'epidemic', ja:'りゅうこうびょう (流行病)' },
+  { en:'pandemic', ja:'パンデミック (世界的流行)' },
+  { en:'allergy', ja:'アレルギー (過敏症)' },
+  { en:'diabetes', ja:'とうにょうびょう (糖尿病)' },
+  { en:'cognition', ja:'にんち (認知)' },
+  { en:'phobia', ja:'きょうふしょう (恐怖症)' },
+  { en:'compulsion', ja:'しょうどう (衝動)' },
+  { en:'hygiene', ja:'えいせい (衛生)' },
+  { en:'nutrition', ja:'えいよう (栄養)' },
+  { en:'posture', ja:'しせい (姿勢)' },
+
+  // ===== 抽象·感情 (15) =====
+  { en:'nostalgia', ja:'なつかしさ (懐かしさ)' },
+  { en:'euphoria', ja:'こうようかん (高揚感)' },
+  { en:'grief', ja:'かなしみ (悲しみ)' },
+  { en:'apathy', ja:'むかんしん (無関心)' },
+  { en:'altruism', ja:'りたしゅぎ (利他主義)' },
+  { en:'humility', ja:'けんきょさ (謙虚さ)' },
+  { en:'arrogance', ja:'ごうまんさ (傲慢さ)' },
+  { en:'delusion', ja:'もうそう (妄想)' },
+  { en:'hostility', ja:'てきい (敵意)' },
+  { en:'sympathy', ja:'どうじょう (同情)' },
+  { en:'empathy', ja:'きょうかん (共感)' },
+  { en:'dignity', ja:'そんげん (尊厳)' },
+  { en:'virtue', ja:'びとく (美徳)' },
+  { en:'malice', ja:'あくい (悪意)' },
+  { en:'rectitude', ja:'こうせい (公正)' },
+
+  // ===== 形容詞·副詞 (15) =====
+  { en:'ferocious', ja:'きょうぼうな (凶暴な)' },
+  { en:'timid', ja:'おくびょうな (臆病な)' },
+  { en:'notorious', ja:'あくみょうたかい (悪名高い)' },
+  { en:'eminent', ja:'ちょめいな (著名な)' },
+  { en:'exquisite', ja:'みごとな (見事な)' },
+  { en:'pertinent', ja:'てきせつな (適切な)' },
+  { en:'compulsory', ja:'きょうせいてきな (強制的な)' },
+  { en:'spontaneous', ja:'じはつてきな (自発的な)' },
+  { en:'capricious', ja:'きまぐれな (気まぐれな)' },
+  { en:'dubious', ja:'うたがわしい (疑わしい)' },
+  { en:'persistent', ja:'ねばりづよい (粘り強い)' },
+  { en:'vibrant', ja:'かっきあふれる (活気あふれる)' },
+  { en:'tranquil', ja:'おだやかな (穏やかな)' },
+  { en:'abrupt', ja:'とつぜんの (突然の)' },
+  { en:'mediocre', ja:'へいぼんな (平凡な)' },
 ];
 
 // 일상 회화 표현 50개 (기존과 중복 없음)
