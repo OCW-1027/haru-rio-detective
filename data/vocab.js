@@ -917,6 +917,69 @@ const G2_NOUNS_PLUS2 = [
   { en:'harbor', ja:'みなと (港)' },
 ];
 
+// 英検2級 名詞 추가분 50개 (PLUS3, 기존 명사 222와 중복 없음)
+const G2_NOUNS_PLUS3 = [
+  // ===== 生活·自然 (10) =====
+  { en:'anniversary', ja:'きねんび (記念日)' },
+  { en:'atmosphere', ja:'ふんいき (雰囲気)' },
+  { en:'drought', ja:'かんばつ (干ばつ)' },
+  { en:'harvest', ja:'しゅうかく (収穫)' },
+  { en:'ladder', ja:'はしご (梯子)' },
+  { en:'landscape', ja:'けしき (景色)' },
+  { en:'laundry', ja:'せんたく (洗濯)' },
+  { en:'mansion', ja:'こうきゅうじゅうたく (高級住宅)' },
+  { en:'moisture', ja:'しっけ (湿気)' },
+  { en:'monument', ja:'きねんひ (記念碑)' },
+
+  // ===== 社会·文化 (10) =====
+  { en:'attendance', ja:'しゅっせき (出席)' },
+  { en:'award', ja:'しょう (賞)' },
+  { en:'decoration', ja:'そうしょく (装飾)' },
+  { en:'era', ja:'じだい (時代)' },
+  { en:'neighborhood', ja:'きんじょ (近所)' },
+  { en:'participant', ja:'さんかしゃ (参加者)' },
+  { en:'peer', ja:'なかま (仲間)' },
+  { en:'ritual', ja:'ぎしき (儀式)' },
+  { en:'masterpiece', ja:'けっさく (傑作)' },
+  { en:'lifestyle', ja:'せいかつようしき (生活様式)' },
+
+  // ===== ビジネス·商品 (10) =====
+  { en:'bargain', ja:'とくばい (特売)' },
+  { en:'expense', ja:'けいひ (経費)' },
+  { en:'feedback', ja:'フィードバック (反応)' },
+  { en:'insurance', ja:'ほけん (保険)' },
+  { en:'license', ja:'めんきょ (免許)' },
+  { en:'merchandise', ja:'しょうひん (商品)' },
+  { en:'apparel', ja:'いふく (衣服)' },
+  { en:'apparatus', ja:'そうち (装置)' },
+  { en:'proficiency', ja:'じゅくれん (熟練)' },
+  { en:'mentor', ja:'しどうしゃ (指導者)' },
+
+  // ===== 動作·結果 (10) =====
+  { en:'endeavor', ja:'こころみ (試み)' },
+  { en:'impulse', ja:'しょうどう (衝動)' },
+  { en:'incident', ja:'じけん (事件)' },
+  { en:'ingredient', ja:'ざいりょう (材料)' },
+  { en:'motive', ja:'どうき (動機)' },
+  { en:'panic', ja:'パニック (恐慌)' },
+  { en:'remark', ja:'はつげん (発言)' },
+  { en:'reprimand', ja:'おしかり (お叱り)' },
+  { en:'summons', ja:'しょうかんじょう (召喚状)' },
+  { en:'nourishment', ja:'じよう (滋養)' },
+
+  // ===== 抽象·概念 (10) =====
+  { en:'cornerstone', ja:'きそいし (礎石)' },
+  { en:'enthusiasm', ja:'ねっきょう (熱狂)' },
+  { en:'guidance', ja:'しどう (指導)' },
+  { en:'impediment', ja:'しょうがい (障害)' },
+  { en:'legacy', ja:'いさん (遺産)' },
+  { en:'locale', ja:'げんち (現地)' },
+  { en:'luxury', ja:'ぜいたく (贅沢)' },
+  { en:'aftermath', ja:'よは (余波)' },
+  { en:'unanimity', ja:'まんじょういっち (満場一致)' },
+  { en:'beast', ja:'けもの (獣)' },
+];
+
 // 英検2級 形容詞·副詞 추가분 40개 (기존 163개와 중복 없음)
 const G2_ADJADV_PLUS2 = [
   { en:'aggressive', ja:'こうげきてきな (攻撃的)' },
