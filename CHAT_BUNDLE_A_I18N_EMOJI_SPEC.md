@@ -136,7 +136,7 @@ localStorage.getItem(KEY.CHILD_NAME) || '하루' → || 'ハル'
 └────────────────────────────────────┘
 ```
 
-- 😀 이모지 버튼: 입력창 좌측에 정사각형 (44x44px, ASD 친화 터치 크기)
+- 😀 이모지 버튼: 입력창 좌측에 정사각형 (44x44px, 충분한 터치 크기)
 - 클릭 시 입력창 위로 이모지 패널이 슬라이드 업
 - 패널 닫기: 😀 버튼 다시 클릭 또는 입력창 포커스 시
 
@@ -187,7 +187,7 @@ localStorage.getItem(KEY.CHILD_NAME) || '하루' → || 'ハル'
 - 전송 시 이모지 그대로 Firestore에 저장 (UTF-8)
 - 받은 이모지 메시지 정상 렌더링 (브라우저 기본 이모지 폰트)
 
-### 4-4. ASD 친화 UX
+### 4-4. 큰 폰트·터치 영역으로 가독성·조작성 확보
 
 - 빠른 선택 12개는 항상 보이게 (자주 쓰는 것 즉시 접근)
 - 카테고리 탭은 큰 터치 영역 (44px+)
@@ -257,7 +257,7 @@ git commit -m "feat(chat): i18n to Japanese + emoji picker (Bundle A)
 - Default names: パパ / ハル (existing localStorage preserved)
 - Emoji picker beside input: 12 quick-select + 4 category tabs
   (表情·動物·食べ物·ハート, ~100 emojis total)
-- ASD-friendly: 44px+ touch targets, persistent quick-select row
+- Large touch targets (44px+), persistent quick-select row
 - No backend/security/data-model changes (UI-only)"
 git push origin main
 ```

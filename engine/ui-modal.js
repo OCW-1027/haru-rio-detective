@@ -97,6 +97,7 @@ function buildChapterGrid() {
     subTabBar.style.cssText = 'grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:6px;';
     const subTabs = [
       { id: 'vocab',   label: '📚 単語' },
+      { id: 'learn',   label: '📖 学習' },  // v77: 単語·熟語 学習 (vocab-learn.js modal)
       { id: 'writing', label: '✍️ ライティング' },
       { id: 'grammar', label: '📐 2級文法' },
       { id: 'pre1',    label: '🎯 準1級' },
@@ -104,13 +105,23 @@ function buildChapterGrid() {
     ];
     subTabs.forEach(t => {
       const btn = document.createElement('button');
-      const active = State.engSubTab === t.id;
+      // 'learn' is action-style (opens modal), not a state tab — never appears active
+      const active = t.id !== 'learn' && State.engSubTab === t.id;
       btn.style.cssText = 'background:' + (active ? 'var(--accent-red)' : 'white') +
         ';color:' + (active ? 'white' : 'var(--ink)') + ';border:3px solid var(--line)' +
         ';padding:6px 14px;border-radius:18px;font-family:RocknRoll One;font-size:12px;cursor:pointer;' +
         (active ? 'border-color:var(--accent-red);' : '');
       btn.textContent = t.label;
-      btn.onclick = () => { sfx('click'); State.engSubTab = t.id; buildChapterGrid(); };
+      btn.onclick = () => {
+        sfx('click');
+        if (t.id === 'learn') {
+          // v77: open vocab-learn modal instead of switching sub-tab
+          if (typeof openVocabLearn === 'function') openVocabLearn();
+          return;
+        }
+        State.engSubTab = t.id;
+        buildChapterGrid();
+      };
       subTabBar.appendChild(btn);
     });
     grid.appendChild(subTabBar);

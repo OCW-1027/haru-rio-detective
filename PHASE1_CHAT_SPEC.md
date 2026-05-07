@@ -228,7 +228,7 @@ haruchat_child_name   "하루" (기본, 변경 가능)
 - 호칭 변경 (parentName, childName) — 즉시 localStorage + Firestore pair 문서 동기화
 - 페어링 초기화 버튼 (확인 다이얼로그 후 실행)
 
-### 6-6. ASD 자녀 친화 UX
+### 6-6. 터치 영역·가독성 강화
 
 - 입력창 폰트 18px 이상
 - 메시지 말풍선 폰트 16px 이상
