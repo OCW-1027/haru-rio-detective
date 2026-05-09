@@ -44,6 +44,37 @@ const EMOJI_CATS = {
   ]
 };
 
+// Bundle F: Force the message list to stick to the bottom after a render.
+// The actual scroll container is .chat-body (id=chatBody); .chat-messages
+// has no overflow, so setting scrollTop on it does nothing. Double rAF +
+// a 50ms fallback covers PWA / mobile layout-completion races (esp. when
+// the soft keyboard pushes/releases the visual viewport).
+function scrollToBottom() {
+  const wrap = document.getElementById('chatBody');
+  if (!wrap) return;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      wrap.scrollTop = wrap.scrollHeight;
+      setTimeout(() => { wrap.scrollTop = wrap.scrollHeight; }, 50);
+    });
+  });
+}
+
+function setupViewportListeners() {
+  if (window._haruChatViewportHooked) return;
+  window._haruChatViewportHooked = true;
+  // Window resize covers desktop and most Android keyboard cases.
+  window.addEventListener('resize', () => {
+    if (currentView === 'chat') scrollToBottom();
+  });
+  // Visual Viewport API: precise keyboard tracking on iOS Safari + modern Chrome.
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', () => {
+      if (currentView === 'chat') scrollToBottom();
+    });
+  }
+}
+
 function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -124,6 +155,7 @@ function ensureModal() {
   inputEl.addEventListener('focus', () => {
     if (emojiPanelOpen) closeEmojiPanel();
   });
+  setupViewportListeners();
   return modalEl;
 }
 
@@ -370,6 +402,8 @@ function switchView(view) {
     body.innerHTML = `<div class="chat-messages" id="chatMessages"></div>`;
     renderMessages();
     updateTypingBar();
+    // Bundle F: force scroll on chat-view entry so latest message is visible immediately
+    scrollToBottom();
     return;
   }
 
@@ -514,7 +548,7 @@ function renderMessages() {
     if (showTime) lastTimeKey = timeKey;
   }
   wrap.innerHTML = html;
-  requestAnimationFrame(() => { wrap.scrollTop = wrap.scrollHeight; });
+  scrollToBottom();
 }
 
 function updatePresenceLine() {
@@ -613,6 +647,9 @@ function showToast(msg) {
 ChatState.onMessagesUpdate = () => {
   if (currentView === 'chat') {
     renderMessages();
+    // Bundle F: extra scroll guarantee — covers PWA standalone where the
+    // post-render RAF inside renderMessages can race with viewport changes.
+    scrollToBottom();
     if (modalEl && !modalEl.classList.contains('chat-hidden')) {
       markAllAsRead().catch(() => {});
     }

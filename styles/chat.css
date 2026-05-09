@@ -100,8 +100,13 @@
 .chat-body {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 0;
   background: #b2c7d9;
+  /* Bundle F: keep scroll container reliable in flex parents and on mobile */
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: auto;
 }
 
 /* ===== Input bar ===== */
@@ -151,7 +156,9 @@
   flex-direction: column;
   gap: 4px;
   padding: 12px;
-  min-height: 100%;
+  /* Bundle F: 100% would force the inner box to fill .chat-body, defeating
+     the parent's overflow trigger and producing flaky scrollHeight. */
+  min-height: 0;
   box-sizing: border-box;
 }
 .chat-msg {
