@@ -1,5 +1,5 @@
-// engine/chat-core.js — Phase 1 chat + Bundle B (presence/typing/incoming-msg notify)
-// Public API consumed by chat-ui.js / chat-bindings.js
+// engine/chat-core.js — Phase 1 chat + Bundle B (presence/typing/incoming-msg notify) + Bundle C (FCM hook)
+// Public API consumed by chat-ui.js / chat-bindings.js / chat-fcm.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
 import {
   getAuth, signInAnonymously, onAuthStateChanged
@@ -10,6 +10,7 @@ import {
   serverTimestamp, Timestamp
 } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 import { firebaseConfig } from "./chat-config.js";
+import { initFCM } from "./chat-fcm.js";
 
 const LS = {
   ROLE: 'haruchat_role',
@@ -17,6 +18,7 @@ const LS = {
   PARENT_NAME: 'haruchat_parent_name',
   CHILD_NAME: 'haruchat_child_name',
   MUTED: 'haruchat_muted',
+  PUSH_ENABLED: 'haruchat_push_enabled',
 };
 
 export const ChatState = {
@@ -31,6 +33,8 @@ export const ChatState = {
   // Bundle B additions
   otherPresence: { online: false, lastSeen: null, typing: false },
   muted: false,
+  // Bundle C addition
+  pushEnabled: false,
   // Callbacks (UI/bindings register)
   onMessagesUpdate: null,
   onUnreadUpdate: null,
@@ -166,6 +170,7 @@ export async function initChat() {
   ChatState.parentName = localStorage.getItem(LS.PARENT_NAME) || 'パパ';
   ChatState.childName = localStorage.getItem(LS.CHILD_NAME) || 'ハル';
   ChatState.muted = localStorage.getItem(LS.MUTED) === '1';
+  ChatState.pushEnabled = localStorage.getItem(LS.PUSH_ENABLED) === '1';
 
   // Bundle B: visibility/unload handlers (registered once)
   if (typeof document !== 'undefined' && !window._haruChatVisHooked) {
@@ -196,6 +201,8 @@ export async function initChat() {
         if (ChatState.pairId) {
           try { await loadPairAndSubscribe(); } catch (e) { console.error('[chat] auto-restore', e); }
         }
+        // Bundle C: re-register FCM token if user previously opted in (best-effort, silent on failure)
+        try { await initFCM(app, db, ChatState); } catch (e) { console.warn('[chat] initFCM', e); }
         notify('onAuthReady');
         resolved = true;
         resolve();
@@ -489,6 +496,18 @@ export function setMuted(muted) {
   try { localStorage.setItem(LS.MUTED, ChatState.muted ? '1' : '0'); } catch (e) {}
 }
 
+// =====================================================================
+// Bundle C: FCM opt-in flag + Firebase getters (consumed by chat-fcm.js)
+// =====================================================================
+
+export function setPushEnabled(enabled) {
+  ChatState.pushEnabled = !!enabled;
+  try { localStorage.setItem(LS.PUSH_ENABLED, ChatState.pushEnabled ? '1' : '0'); } catch (e) {}
+}
+
+export function getFirebaseApp() { return app; }
+export function getFirebaseDb() { return db; }
+
 // Debug helpers
 if (typeof window !== 'undefined') {
   window.__chatDebug = function() {
@@ -503,6 +522,8 @@ if (typeof window !== 'undefined') {
       isReady: ChatState.isReady,
       otherPresence: ChatState.otherPresence,
       muted: ChatState.muted,
+      pushEnabled: ChatState.pushEnabled,
+      notificationPermission: typeof Notification !== 'undefined' ? Notification.permission : 'n/a',
       _modalOpen, _inChatView,
       _presenceLastWrittenOnline, _presenceTypingState,
     };

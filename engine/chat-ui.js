@@ -3,8 +3,10 @@ import {
   ChatState, setRole, setNames, generatePairingCode, pairWithCode,
   sendMessage, markAllAsRead, resetPairing,
   setPresenceModalOpen, setPresenceChatView,
-  notifyTyping, notifyTypingStop, setMuted
+  notifyTyping, notifyTypingStop, setMuted,
+  setPushEnabled, getFirebaseApp, getFirebaseDb
 } from './chat-core.js';
+import { enablePush, disablePush } from './chat-fcm.js';
 
 let modalEl = null;
 let currentView = null;
@@ -387,6 +389,11 @@ function switchView(view) {
           <input type="checkbox" id="chatMuteToggle" ${ChatState.muted ? '' : 'checked'}>
           <span>🔔 通知音</span>
         </label>
+        <label class="chat-mute-toggle">
+          <input type="checkbox" id="chatPushToggle" ${ChatState.pushEnabled ? 'checked' : ''}>
+          <span>📲 プッシュ通知 (チャット閉じても受信)</span>
+        </label>
+        <div class="chat-push-status chat-hidden" id="chatPushStatus"></div>
         <hr>
         <button id="chatBackToChat" class="chat-action-btn">← 戻る</button>
         <button id="chatResetPair" class="chat-danger-btn">ペアリングをリセット</button>
@@ -405,6 +412,56 @@ function switchView(view) {
     document.getElementById('chatMuteToggle').onchange = (e) => {
       // Checkbox checked = sound ON = muted false
       setMuted(!e.target.checked);
+    };
+    const pushToggle = document.getElementById('chatPushToggle');
+    const pushStatus = document.getElementById('chatPushStatus');
+    const setPushStatusText = (txt) => {
+      if (!pushStatus) return;
+      if (txt) {
+        pushStatus.textContent = txt;
+        pushStatus.classList.remove('chat-hidden');
+      } else {
+        pushStatus.classList.add('chat-hidden');
+      }
+    };
+    if (typeof Notification === 'undefined') {
+      pushToggle.disabled = true;
+      setPushStatusText('このブラウザはプッシュ通知に未対応です');
+    }
+    pushToggle.onchange = async (e) => {
+      const wantOn = e.target.checked;
+      pushToggle.disabled = true;
+      if (wantOn) {
+        if (!ChatState.pairId) {
+          setPushStatusText('ペアリング後に有効化できます');
+          pushToggle.checked = false;
+          pushToggle.disabled = false;
+          return;
+        }
+        setPushStatusText('登録中…');
+        const r = await enablePush(getFirebaseApp(), getFirebaseDb(), ChatState);
+        pushToggle.disabled = false;
+        if (r && r.ok) {
+          setPushEnabled(true);
+          pushToggle.checked = true;
+          setPushStatusText('✓ 有効');
+        } else {
+          pushToggle.checked = false;
+          const reason = r && r.reason || 'error';
+          if (reason === 'permission-denied') {
+            setPushStatusText('通知が拒否されています。ブラウザ設定で許可してください');
+          } else if (reason === 'unsupported') {
+            setPushStatusText('このブラウザはプッシュ通知に未対応です');
+          } else {
+            setPushStatusText('登録に失敗しました');
+          }
+        }
+      } else {
+        await disablePush();
+        setPushEnabled(false);
+        pushToggle.disabled = false;
+        setPushStatusText('無効化しました');
+      }
     };
     document.getElementById('chatBackToChat').onclick = () => {
       if (ChatState.pairId) switchView('chat');
