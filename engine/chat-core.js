@@ -7,7 +7,7 @@ import {
 import {
   getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs,
   updateDoc, deleteDoc, onSnapshot, query, where, orderBy,
-  serverTimestamp, Timestamp
+  serverTimestamp, Timestamp, writeBatch
 } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 import { firebaseConfig } from "./chat-config.js";
 import { initFCM } from "./chat-fcm.js";
@@ -249,6 +249,9 @@ export async function setNames({ parentName, childName }) {
 export async function generatePairingCode() {
   if (ChatState.role !== 'parent') throw new Error('parent role required');
   if (!ChatState.user) throw new Error('not authenticated');
+  // Bundle D guard: clean stale pairs (e.g. user cleared only localStorage) so
+  // watchForPairing doesn't auto-restore an old pair when the new code is issued.
+  await deleteOwnPairs();
   const code = String(Math.floor(100000 + Math.random() * 900000));
   const expiresAt = Timestamp.fromMillis(Date.now() + 5 * 60 * 1000);
   await setDoc(doc(db, 'pairing_codes', code), {
@@ -300,6 +303,8 @@ export async function pairWithCode(code) {
   if (ChatState.role !== 'child') throw new Error('child role required');
   if (!ChatState.user) throw new Error('not authenticated');
   if (!/^\d{6}$/.test(code)) throw new Error('6桁の数字を入力してください');
+  // Bundle D guard: clean stale pairs before joining a new one.
+  await deleteOwnPairs();
   const codeRef = doc(db, 'pairing_codes', code);
   let codeSnap;
   try {
@@ -360,9 +365,80 @@ export async function markAllAsRead() {
   ));
 }
 
-export function resetPairing() {
+// =====================================================================
+// Bundle D: stale pair cleanup (private helper)
+// Deletes every /pairs/{id} where the current user is a member, plus its
+// messages and presence subcollections. Subcollections are deleted FIRST
+// because security rules on those use get(...pairs/$(pairId)) lookups —
+// once the pair doc is gone, those rules fail (denied).
+// Best-effort: per-pair errors are logged and skipped, never thrown.
+// =====================================================================
+async function deleteOwnPairs() {
+  if (!ChatState.user || !ChatState.user.uid || !ChatState.role) return 0;
+
+  const field = ChatState.role === 'parent' ? 'parentUid' : 'childUid';
+  const q = query(collection(db, 'pairs'), where(field, '==', ChatState.user.uid));
+  let snap;
+  try {
+    snap = await getDocs(q);
+  } catch (e) {
+    console.warn('[chat] deleteOwnPairs query', e);
+    return 0;
+  }
+
+  let deleted = 0;
+  for (const pairDoc of snap.docs) {
+    const pairId = pairDoc.id;
+    try {
+      // Sub-collections first (messages, presence)
+      for (const subName of ['messages', 'presence']) {
+        const subSnap = await getDocs(collection(db, 'pairs', pairId, subName));
+        if (subSnap.size > 0) {
+          const batch = writeBatch(db);
+          subSnap.docs.forEach(d => batch.delete(d.ref));
+          await batch.commit();
+        }
+      }
+      // Pair doc last
+      await deleteDoc(doc(db, 'pairs', pairId));
+      deleted++;
+    } catch (e) {
+      console.warn('[chat] delete pair', pairId, e);
+    }
+  }
+
+  // Parent: also clean up own pairing_codes (if any are still lingering)
+  if (ChatState.role === 'parent') {
+    try {
+      const codeQ = query(collection(db, 'pairing_codes'), where('parentUid', '==', ChatState.user.uid));
+      const codeSnap = await getDocs(codeQ);
+      for (const codeDoc of codeSnap.docs) {
+        await deleteDoc(codeDoc.ref).catch(() => {});
+      }
+    } catch (e) {}
+  }
+
+  return deleted;
+}
+
+export async function resetPairing() {
   stopPairPolling();
+  // 1. Firestore stale pairs (best-effort; rule denials are logged inside)
+  await deleteOwnPairs();
+  // 2. Local memory + persisted state — full reset back to first-launch defaults
   clearPairLocal();
+  ChatState.role = null;
+  ChatState.parentName = 'パパ';
+  ChatState.childName = 'ハル';
+  ChatState.muted = false;
+  ChatState.pushEnabled = false;
+  try {
+    localStorage.removeItem(LS.ROLE);
+    localStorage.removeItem(LS.PARENT_NAME);
+    localStorage.removeItem(LS.CHILD_NAME);
+    localStorage.removeItem(LS.MUTED);
+    localStorage.removeItem(LS.PUSH_ENABLED);
+  } catch (e) {}
 }
 
 // =====================================================================
@@ -528,10 +604,8 @@ if (typeof window !== 'undefined') {
       _presenceLastWrittenOnline, _presenceTypingState,
     };
   };
-  window.__chatReset = function() {
-    resetPairing();
-    localStorage.removeItem(LS.ROLE);
-    ChatState.role = null;
+  window.__chatReset = async function() {
+    await resetPairing();
     console.log('[chat] reset done — reload to re-init');
   };
 }

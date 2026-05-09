@@ -468,12 +468,20 @@ function switchView(view) {
       else if (ChatState.role) switchView(ChatState.role === 'parent' ? 'pairing-parent' : 'pairing-child');
       else switchView('role-select');
     };
-    document.getElementById('chatResetPair').onclick = () => {
-      if (!confirm('本当にペアリングをリセットしますか？メッセージは相手の機器には残ります。')) return;
-      resetPairing();
-      try { localStorage.removeItem('haruchat_role'); } catch (e) {}
-      ChatState.role = null;
-      switchView('role-select');
+    document.getElementById('chatResetPair').onclick = async () => {
+      if (!confirm('ペアリングをリセットすると、これまでのチャット履歴もすべて削除されます。本当によろしいですか？')) return;
+      const btn = document.getElementById('chatResetPair');
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'リセット中…';
+      try {
+        await resetPairing();
+        switchView('role-select');
+      } catch (e) {
+        alert('リセットに失敗しました: ' + (e.message || e));
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
     };
     return;
   }
