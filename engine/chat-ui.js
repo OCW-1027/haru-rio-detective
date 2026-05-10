@@ -291,7 +291,7 @@ function switchView(view) {
 
   if (view === 'loading') {
     titleEl.textContent = 'チャット';
-    body.innerHTML = `<div class="chat-role-select"><h2>読み込み中…</h2><p>Firebase に接続中です。少々お待ちください。</p></div>`;
+    body.innerHTML = `<div class="chat-role-select"><h2>読み込み中…</h2><p>Firebase に接続中です。少々お待ちください。</p><p style="font-size:12px;color:#888;margin-top:16px;">自動的に切り替わります</p></div>`;
     return;
   }
 
@@ -653,6 +653,30 @@ ChatState.onMessagesUpdate = () => {
     if (modalEl && !modalEl.classList.contains('chat-hidden')) {
       markAllAsRead().catch(() => {});
     }
+  }
+};
+
+// Bundle G: when auth becomes ready while the modal is showing the loading view
+// (user opened chat very fast after app start), auto-transition to the right view
+// instead of leaving them stuck on '読み込み中…'. Preserves any prior onAuthReady
+// hook to avoid stepping on future registrations.
+const _priorOnAuthReady = ChatState.onAuthReady;
+ChatState.onAuthReady = () => {
+  if (typeof _priorOnAuthReady === 'function') {
+    try { _priorOnAuthReady(); } catch (e) {}
+  }
+  if (!modalEl) return;
+  if (modalEl.classList.contains('chat-hidden')) return;
+  if (currentView !== 'loading') return;
+  if (ChatState.pairId) {
+    switchView('chat');
+    markAllAsRead().catch(() => {});
+  } else if (ChatState.role === 'parent') {
+    switchView('pairing-parent');
+  } else if (ChatState.role === 'child') {
+    switchView('pairing-child');
+  } else {
+    switchView('role-select');
   }
 };
 
