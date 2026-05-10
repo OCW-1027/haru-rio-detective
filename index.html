@@ -62,6 +62,7 @@
       <button class="tab" id="tabWeaLearn" style="background:linear-gradient(135deg,#ffa040,#d47020);color:white;" onclick="openWeaLearn()">📚 試験対策</button>
       <button class="tab math" id="tabMath" onclick="switchTab('math')">🔢 算数</button>
       <button class="tab" id="tabMathLearn" style="background:linear-gradient(135deg,#9333ea,#5b21b6);color:white;" onclick="openMathLearn()">📐 算数試験対策</button>
+      <button class="tab scientists" id="tabScientists" onclick="switchTab('scientists')">👨‍🔬 偉人科学者</button>
     </div>
 
     <div class="chapter-grid" id="chapterGrid"></div>
@@ -329,6 +330,21 @@
     <div id="mathLearnArea"></div>
   </div>
 
+  <!-- 👨‍🔬 series 4: 偉人科学者ファイル 스토리 페이지 (placeholder until SERIES4_CONTENT_SPEC) -->
+  <div class="page sci-story-page" id="pageScientists">
+    <button class="back-btn" id="btnBackScientists">← もくじ</button>
+    <button class="voice-btn" id="btnVoiceScientists">🔊 音声ON</button>
+    <div style="position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(255,255,255,0.6);font-family:monospace;z-index:50;pointer-events:none;">s4 👨‍🔬</div>
+    <div class="sci-stage" id="scientistsStage">
+      <div class="sci-stage-bg" id="scientistsStageBg"></div>
+      <div class="sci-stage-progress" id="scientistsStageProgress"></div>
+      <div class="sci-stage-chars" id="scientistsStageChars"></div>
+    </div>
+    <div class="sci-bottom" id="scientistsBottom">
+      <div class="science-area" id="scientistsArea"></div>
+    </div>
+  </div>
+
 
 
 
@@ -378,6 +394,7 @@
 <script src="data/series10-weather-learn.js"></script>
 <script src="data/series11-math.js"></script>
 <script src="data/series11-math-learn.js"></script>
+<script src="data/series4-scientists.js"></script>
 
 <!-- 엔진 모듈 (v73 step4a) -->
 <script src="engine/core.js"></script>

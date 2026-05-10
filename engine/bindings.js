@@ -95,6 +95,9 @@ if (btnBackWea) btnBackWea.onclick = () => { stopVoice(); buildChapterGrid(); sh
 // v75: 🔢 算数·数学 (series 11)
 const btnBackMath = document.getElementById('btnBackMath');
 if (btnBackMath) btnBackMath.onclick = () => { stopVoice(); buildChapterGrid(); showPage('pageSelect'); };
+// s4: 👨‍🔬 偉人科学者ファイル (series 4)
+const btnBackScientists = document.getElementById('btnBackScientists');
+if (btnBackScientists) btnBackScientists.onclick = () => { stopVoice(); buildChapterGrid(); showPage('pageSelect'); };
 document.getElementById('btnBackStory').onclick = () => showPage('pageStory');
 
 document.getElementById('btnNotebook1').onclick = openNotebook;

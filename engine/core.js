@@ -217,6 +217,7 @@ const State = {
   monCleared: new Array(10).fill(false),  // v67: 日常のお金 시리즈 클리어 상태
   weaCleared: new Array(10).fill(false),  // v71: 🌦 気象予報士 시리즈 클리어 상태
   mathCleared: new Array(10).fill(false), // v75: 🔢 算数·数学 시리즈 클리어 상태
+  scientistsCleared: new Array(10).fill(false), // s4: 👨‍🔬 偉人科学者ファイル 시리즈 클리어 상태
   // v30: 게임 토큰 시스템 (3 단위마다 1토큰·v74에서 5→3 변경)
   engClearCount: 0,    // 누적 영어 챕터 클리어 수 (토큰 환산용)
   gameTokens: 0,       // 현재 보유 토큰
@@ -275,6 +276,7 @@ function saveState() {
       monCleared: State.monCleared,  // v67
       weaCleared: State.weaCleared,  // v71
       mathCleared: State.mathCleared, // v75
+      scientistsCleared: State.scientistsCleared, // s4
       notes: State.notes,
       wrongWords: State.wrongWords,
       stats: State.stats,
@@ -405,6 +407,16 @@ function loadState() {
       if (typeof MATH_STORY !== 'undefined') {
         while (State.mathCleared.length < MATH_STORY.length) {
           State.mathCleared.push(false);
+        }
+      }
+    }
+    if (Array.isArray(data.scientistsCleared)) {  // s4: 👨‍🔬 偉人科学者 시리즈 복원
+      data.scientistsCleared.slice(0, State.scientistsCleared.length).forEach((v, i) => {
+        State.scientistsCleared[i] = v;
+      });
+      if (typeof SCIENTISTS_STORY !== 'undefined') {
+        while (State.scientistsCleared.length < SCIENTISTS_STORY.length) {
+          State.scientistsCleared.push(false);
         }
       }
     }

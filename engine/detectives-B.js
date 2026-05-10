@@ -2802,3 +2802,118 @@ function bindMathEvents() {
     goMenu.onclick = () => { sfx('click'); buildChapterGrid(); showPage('pageSelect'); };
   }
 }
+
+// ============================================================
+// Series 4 — 偉人科学者ファイル (placeholder grid)
+// Mirrors buildMathGrid; chapters are all comingSoon=true until
+// SERIES4_CONTENT_SPEC.md fills in stories. startScientistsCase
+// is a defensive stub (never reached via the grid since every card
+// triggers the 準備中 modal).
+// ============================================================
+const ScientistsState = {
+  caseIdx: 0,
+  phase: 'intro',
+  introIdx: 0,
+  stepIdx: 0,
+  stepPhase: 'intro',
+  stepIntroIdx: 0,
+  collectedClues: [],
+  selectedSuspectId: null,
+  hintShown: false,
+  answered: false,
+  wrongSuspects: [],
+  wrongIds: [],
+};
+
+function buildScientistsGrid(grid) {
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'grid-column:1/-1;';
+
+  const totalCases = SCIENTISTS_STORY.length;
+  const clearedCount = State.scientistsCleared.filter(c => c).length;
+
+  // s4: clean header pattern matching series 9/10/11 — no inline
+  // background, default .sci-header / .sci-h-title styling. The
+  // bg_main_study asset stays registered in SCENE_IMAGES for future
+  // content (boss case backdrop etc.); it's just not used here.
+  let html = '<div class="sci-header">';
+  html += '<div class="sci-h-title">👨‍🔬 偉人科学者ファイル ハル & リオ</div>';
+  html += '<div class="sci-h-sub">~歴史を変えた 発見の 謎~</div>';
+  html += '<div style="font-size:12px;color:#4a8a9a;margin-top:6px;font-family:Klee One;">';
+  html += '偉人科学者の 発見を 追体験しよう! (進行: ' + clearedCount + ' / ' + totalCases + ')';
+  html += '</div>';
+  html += '</div>';
+
+  SCIENTISTS_STORY.forEach((s, i) => {
+    const cleared = State.scientistsCleared[i];
+    const comingSoon = s.comingSoon;
+    let locked = false;
+    if (i > 0) {
+      const prev = SCIENTISTS_STORY[i - 1];
+      if (prev.comingSoon || !State.scientistsCleared[i - 1]) locked = true;
+    }
+    let cls = 'sci-case-card';
+    if (locked) cls += ' locked';
+    if (cleared) cls += ' cleared';
+    if (comingSoon) cls += ' coming-soon';
+    html += '<div class="' + cls + '" data-idx="' + i + '">';
+    html += '<div class="sci-case-num">第' + s.id + '事件</div>';
+    if (s.illustration) {
+      // s4: chapter cards use landscape scene PNGs (bg_chXX_*) — same
+      // visual pattern as series 9. CSS default (.sci-case-illust:
+      // background-size:cover) handles framing; no inline override.
+      html += '<div class="sci-case-illust" style="background-image:url(' + s.illustration + ');"></div>';
+    } else {
+      html += '<div class="sci-case-icon">' + s.icon + '</div>';
+    }
+    html += '<div class="sci-case-title">' + escapeHtml(s.title) + '</div>';
+    html += '<div class="sci-case-sub">' + escapeHtml(s.subtitle) + '</div>';
+    html += '<div style="text-align:center;"><span class="sci-case-theme">' + escapeHtml(s.theme) + '</span></div>';
+    if (comingSoon) {
+      html += '<div style="text-align:center;margin-top:6px;font-family:RocknRoll One;font-size:11px;color:#b85a5a;">🚧 準備中…</div>';
+    } else {
+      html += '<div class="sci-case-stars">' + (cleared ? '⭐⭐⭐' : '') + '</div>';
+    }
+    if (locked && !comingSoon) html += '<div class="sci-case-lock">🔒</div>';
+    html += '</div>';
+  });
+
+  const ready = SCIENTISTS_STORY.filter(s => !s.comingSoon).length;
+  html += '<div style="background:rgba(255,255,255,0.7);border:2px solid #2a7a8a;border-radius:14px;padding:10px 14px;text-align:center;color:#1a4a5a;font-family:Klee One;font-size:12px;margin-top:8px;">';
+  html += '👨‍🔬 現在 ' + ready + ' / ' + SCIENTISTS_STORY.length + ' 事件 公開中。残りは 準備中です。';
+  html += '</div>';
+
+  wrapper.innerHTML = html;
+  grid.appendChild(wrapper);
+
+  wrapper.querySelectorAll('.sci-case-card').forEach(card => {
+    card.onclick = () => {
+      const idx = parseInt(card.dataset.idx);
+      const s = SCIENTISTS_STORY[idx];
+      if (s.comingSoon) {
+        sfx('wrong');
+        showModal('🚧', '準備中', 'この 事件は まだ 準備中です。\nもうしばらく お待ちください!',
+          [{text:'OK', cb:closeModal}], 'fail');
+        return;
+      }
+      if (card.classList.contains('locked')) {
+        sfx('wrong');
+        showModal('🔒', '事件 ロック中', '前の 事件を 解決すると 開きます。',
+          [{text:'OK', cb:closeModal}], 'fail');
+        return;
+      }
+      sfx('click');
+      startScientistsCase(idx);
+    };
+  });
+}
+
+function startScientistsCase(idx) {
+  // Placeholder stub — real flow lands with SERIES4_CONTENT_SPEC.
+  // Since every chapter is currently comingSoon, this should never
+  // be reached from the grid. Defensive fallback shows the same
+  // 準備中 modal users would see from a card click.
+  ScientistsState.caseIdx = idx;
+  showModal('🚧', '準備中', 'この 事件は まだ 準備中です。\nもうしばらく お待ちください!',
+    [{text:'OK', cb:closeModal}], 'fail');
+}

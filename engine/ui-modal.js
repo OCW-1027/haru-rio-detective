@@ -38,6 +38,8 @@ function switchTab(tab) {
   document.getElementById('tabWea').classList.toggle('active', tab === 'wea');
   const tabMathEl = document.getElementById('tabMath');
   if (tabMathEl) tabMathEl.classList.toggle('active', tab === 'math');
+  const tabSciEl = document.getElementById('tabScientists');
+  if (tabSciEl) tabSciEl.classList.toggle('active', tab === 'scientists');
   buildChapterGrid();
 }
 
@@ -217,6 +219,9 @@ function buildChapterGrid() {
   } else if (State.currentTab === 'math') {
     // v75: 🔢 算数·数学 탭
     buildMathGrid(grid);
+  } else if (State.currentTab === 'scientists') {
+    // s4: 👨‍🔬 偉人科学者ファイル 탭
+    buildScientistsGrid(grid);
   }
 
   // 리셋 버튼 핸들러
