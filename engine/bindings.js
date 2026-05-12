@@ -130,6 +130,24 @@ if (btnBackLearn) btnBackLearn.onclick = () => { sfx('click'); WeaLearnState.cur
 // v75: 算数·数学 학습 자료 페이지 뒤로가기
 const btnBackMathLearn = document.getElementById('btnBackMathLearn');
 if (btnBackMathLearn) btnBackMathLearn.onclick = () => { sfx('click'); MathLearnState.currentCase = null; buildChapterGrid(); showPage('pageSelect'); };
+// s4: 偉人科学者ファイル 学習資料 페이지 뒤로가기
+// 사건 흐름에서 ending → openScientistsLearn 으로 들어온 경우 (ScientistsState.phase === 'caseQuiz')
+// 사건 페이지로 복귀하여 클리어 퀴즈를 진행. 그 외에는 もくじ로.
+const btnBackScientistsLearn = document.getElementById('btnBackScientistsLearn');
+if (btnBackScientistsLearn) btnBackScientistsLearn.onclick = () => {
+  sfx('click');
+  if (typeof ScientistsLearnState !== 'undefined') ScientistsLearnState.currentCase = null;
+  if (typeof ScientistsState !== 'undefined' && ScientistsState.phase === 'caseQuiz' && typeof renderScientists === 'function') {
+    showPage('pageScientists');
+    renderScientists();
+  } else {
+    buildChapterGrid();
+    showPage('pageSelect');
+  }
+};
+// s4: 偉人科学者ファイル 사건 스토리 음성 토글
+const btnVoiceScientists = document.getElementById('btnVoiceScientists');
+if (btnVoiceScientists) btnVoiceScientists.onclick = toggleVoice;
 updateVoiceButton();
 
 document.getElementById('dialogueArea').onclick = advanceDialogue;
