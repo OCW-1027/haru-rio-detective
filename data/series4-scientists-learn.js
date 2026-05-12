@@ -570,5 +570,288 @@ const SCIENTISTS_LEARN = {
       { title: '⑧  アインシュタイン = 光電効果 で ノーベル賞', body: '意外な 豆知識。 相対性理論 そのもの では ない。 テストの 引っかけ 問題に 注意。' },
     ],
   },
-  // 사건 3~10 은 향후 별도 명세서에서 추가 (scientists_case03 ...).
+  scientists_case03: {
+    title: '放射能と 原子の 世界',
+    subtitle: '事件 3 で 学んだ こと',
+    examScope: '中学 + 比喩 中心 + 安全 メッセージ',
+
+    concept: {
+      title: '放射能と 原子の 世界',
+      paragraphs: [
+        '事件 3 の 光石 — ラジウム は、原子核が 自然に 崩壊しながら エネルギーを 放出 する 元素です。 この 「放射能 (ほうしゃのう)」 という 現象は、マリー·キュリー 夫妻が 1898年 に 発見しました。',
+        'すべての 物は 原子 から できて います。 原子の 中心には 「原子核 (げんしかく)」 が あり、その 周りを 電子が 回って います。 原子核が 不安定だと、自然に 崩壊して 別の 元素に 変わり、その 過程で 放射線を 出します。',
+        '放射線には α 線·β 線·γ 線 の 3種類が あります。 また、放射性 物質は 時間と ともに 半分に なる 周期 — 半減期 (はんげんき) — を 持って います。',
+        '放射線は 強すぎる と 人体に 害が ありますが、医療 (レントゲン·がん 治療)·発電 (原子力)·考古学 (年代測定) など、上手に 使えば 大いに 役立ちます。 安全規制を 守る ことが 大切です。',
+      ],
+      highlight: '原子は 不変では なく、自然に 変化して エネルギーを 放出 する ことが ある。 正しく 知って、慎重に 使う。',
+    },
+
+    diagrams: [
+      {
+        title: '①  原子の 構造 — 原子核と 電子',
+        svg: `
+          <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:380px;height:auto;background:#f0f4ff;border-radius:12px;">
+            <text x="200" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a3a8a">原子の 構造</text>
+            <!-- 전자 궤도 -->
+            <ellipse cx="200" cy="170" rx="140" ry="50" fill="none" stroke="#3498db" stroke-width="1.5" stroke-dasharray="5 4"/>
+            <ellipse cx="200" cy="170" rx="90" ry="32" fill="none" stroke="#3498db" stroke-width="1.5" stroke-dasharray="5 4"/>
+            <!-- 원자핵 (양성자 + 중성자 클러스터) -->
+            <g transform="translate(200,170)">
+              <circle cx="-9" cy="-6" r="9" fill="#e74c3c"/>
+              <circle cx="9" cy="-6" r="9" fill="#7f8c8d"/>
+              <circle cx="-9" cy="6" r="9" fill="#7f8c8d"/>
+              <circle cx="9" cy="6" r="9" fill="#e74c3c"/>
+              <circle cx="0" cy="0" r="9" fill="#e74c3c"/>
+            </g>
+            <!-- 전자 -->
+            <circle cx="340" cy="170" r="6" fill="#3498db"/>
+            <circle cx="60" cy="170" r="6" fill="#3498db"/>
+            <circle cx="290" cy="170" r="6" fill="#3498db"/>
+            <circle cx="110" cy="170" r="6" fill="#3498db"/>
+            <!-- 라벨 -->
+            <text x="200" y="100" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a1a1a">原子核 (げんしかく)</text>
+            <line x1="200" y1="106" x2="200" y2="148" stroke="#7a1a1a" stroke-width="1"/>
+            <text x="60" y="200" font-size="10" text-anchor="middle" fill="#1a4a7a">電子</text>
+            <text x="340" y="200" font-size="10" text-anchor="middle" fill="#1a4a7a">電子</text>
+            <!-- 범례 -->
+            <g transform="translate(40,260)">
+              <circle cx="0" cy="0" r="6" fill="#e74c3c"/>
+              <text x="12" y="4" font-size="10" fill="#1a1a1a">陽子 (ようし)</text>
+              <circle cx="100" cy="0" r="6" fill="#7f8c8d"/>
+              <text x="112" y="4" font-size="10" fill="#1a1a1a">中性子 (ちゅうせいし)</text>
+              <circle cx="240" cy="0" r="6" fill="#3498db"/>
+              <text x="252" y="4" font-size="10" fill="#1a1a1a">電子 (でんし)</text>
+            </g>
+            <text x="200" y="300" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a3a8a">すべての 物は 原子で できて いる</text>
+          </svg>
+        `,
+      },
+      {
+        title: '②  放射線の 3種類 — α·β·γ',
+        svg: `
+          <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#fff0e8;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#8a2a1a">放射線の 透過力</text>
+            <!-- 방사성 원자핵 -->
+            <circle cx="60" cy="160" r="22" fill="#e74c3c" stroke="#7a1a1a" stroke-width="2"/>
+            <text x="60" y="164" font-size="10" text-anchor="middle" fill="#fff" font-weight="bold">原子核</text>
+            <!-- α선 (위) → 종이에 막힘 -->
+            <line x1="84" y1="80" x2="180" y2="80" stroke="#e74c3c" stroke-width="3" marker-end="url(#ah_r2_a)"/>
+            <rect x="180" y="60" width="6" height="40" fill="#fdf0c8" stroke="#7a5a2a" stroke-width="1.5"/>
+            <text x="125" y="72" font-size="11" font-weight="bold" text-anchor="middle" fill="#e74c3c">α 線</text>
+            <text x="220" y="84" font-size="10" fill="#7a5a2a">紙 で 止まる</text>
+            <!-- β선 (중간) → 알루미늄에 막힘 -->
+            <line x1="84" y1="160" x2="260" y2="160" stroke="#3498db" stroke-width="3" marker-end="url(#ah_r2_b)"/>
+            <rect x="260" y="140" width="10" height="40" fill="#bdc3c7" stroke="#5a5a5a" stroke-width="1.5"/>
+            <text x="170" y="152" font-size="11" font-weight="bold" text-anchor="middle" fill="#3498db">β 線</text>
+            <text x="300" y="164" font-size="10" fill="#5a5a5a">アルミ で 止まる</text>
+            <!-- γ선 (아래) → 납으로 약화 -->
+            <line x1="84" y1="240" x2="380" y2="240" stroke="#7c3aed" stroke-width="3" marker-end="url(#ah_r2_c)"/>
+            <rect x="380" y="220" width="20" height="40" fill="#5a5a8a" stroke="#1a1a3a" stroke-width="1.5"/>
+            <text x="220" y="232" font-size="11" font-weight="bold" text-anchor="middle" fill="#7c3aed">γ 線</text>
+            <text x="420" y="244" font-size="10" fill="#1a1a3a">鉛 で 弱まる</text>
+            <text x="250" y="288" font-size="11" font-weight="bold" text-anchor="middle" fill="#8a2a1a">透過力: α &lt; β &lt; γ</text>
+            <defs>
+              <marker id="ah_r2_a" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#e74c3c"/></marker>
+              <marker id="ah_r2_b" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#3498db"/></marker>
+              <marker id="ah_r2_c" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#7c3aed"/></marker>
+            </defs>
+          </svg>
+        `,
+      },
+      {
+        title: '③  半減期 — 時間と ともに 半分に',
+        svg: `
+          <svg viewBox="0 0 450 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#eef8ee;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a6a2a">半減期 (はんげんき)</text>
+            <!-- 축 -->
+            <line x1="60" y1="260" x2="420" y2="260" stroke="#1a1a1a" stroke-width="2" marker-end="url(#ah_r3)"/>
+            <line x1="60" y1="260" x2="60" y2="60" stroke="#1a1a1a" stroke-width="2" marker-end="url(#ah_r3)"/>
+            <text x="240" y="290" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a1a1a">時間 (半減期 T)</text>
+            <text x="30" y="160" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a1a1a" transform="rotate(-90 30 160)">残量 (%)</text>
+            <!-- 지수 감소 곡선 -->
+            <path d="M 60 60 Q 100 100 130 160 Q 180 220 210 230 Q 280 248 350 256 L 410 258" stroke="#1a6a2a" stroke-width="3" fill="none"/>
+            <!-- 점선 + 라벨 -->
+            <line x1="130" y1="260" x2="130" y2="160" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="60" y1="160" x2="130" y2="160" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="130" y="276" font-size="10" text-anchor="middle" fill="#4a2a8a">T</text>
+            <text x="50" y="164" font-size="9" text-anchor="end" fill="#4a2a8a">50</text>
+            <line x1="210" y1="260" x2="210" y2="210" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="60" y1="210" x2="210" y2="210" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="210" y="276" font-size="10" text-anchor="middle" fill="#4a2a8a">2T</text>
+            <text x="50" y="214" font-size="9" text-anchor="end" fill="#4a2a8a">25</text>
+            <line x1="290" y1="260" x2="290" y2="240" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="60" y1="240" x2="290" y2="240" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="290" y="276" font-size="10" text-anchor="middle" fill="#4a2a8a">3T</text>
+            <text x="50" y="244" font-size="9" text-anchor="end" fill="#4a2a8a">12.5</text>
+            <text x="55" y="64" font-size="9" text-anchor="end" fill="#1a1a1a">100</text>
+            <text x="225" y="310" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">ラジウム の T ≈ 1,600 年</text>
+            <defs>
+              <marker id="ah_r3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1a1a1a"/></marker>
+            </defs>
+          </svg>
+        `,
+      },
+      {
+        title: '④  自然 放射線 と 人工 放射線',
+        svg: `
+          <svg viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#fff5f0;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#8a4a1a">私たちの 周りの 放射線</text>
+            <!-- 좌측: 자연 -->
+            <text x="125" y="50" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a6a2a">🌿 自然 放射線</text>
+            <g transform="translate(40,70)">
+              <circle cx="20" cy="20" r="14" fill="#ffd700" stroke="#8a6a00" stroke-width="2"/>
+              <text x="20" y="24" font-size="14" text-anchor="middle">☀</text>
+              <text x="50" y="24" font-size="10" fill="#1a1a1a">宇宙線 (太陽·星)</text>
+            </g>
+            <g transform="translate(40,120)">
+              <rect x="6" y="10" width="28" height="20" fill="#8a5a2a" stroke="#4a3010" stroke-width="2"/>
+              <text x="50" y="24" font-size="10" fill="#1a1a1a">大地·岩石</text>
+            </g>
+            <g transform="translate(40,170)">
+              <ellipse cx="20" cy="20" rx="14" ry="6" fill="#f7c08a" stroke="#7a4a2a" stroke-width="2"/>
+              <text x="50" y="24" font-size="10" fill="#1a1a1a">食品 (バナナ等)</text>
+            </g>
+            <!-- 분리선 -->
+            <line x1="250" y1="50" x2="250" y2="280" stroke="#bdbdbd" stroke-width="2" stroke-dasharray="4 3"/>
+            <!-- 우측: 인공 -->
+            <text x="375" y="50" font-size="13" font-weight="bold" text-anchor="middle" fill="#1a4a8a">🏥 人工 放射線</text>
+            <g transform="translate(290,70)">
+              <rect x="6" y="6" width="28" height="28" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
+              <text x="20" y="26" font-size="14" text-anchor="middle">+</text>
+              <text x="50" y="24" font-size="10" fill="#1a1a1a">レントゲン·CT</text>
+            </g>
+            <g transform="translate(290,120)">
+              <circle cx="20" cy="20" r="14" fill="#7c3aed" stroke="#4a2a7a" stroke-width="2"/>
+              <text x="20" y="24" font-size="11" text-anchor="middle" fill="#fff">⚛</text>
+              <text x="50" y="24" font-size="10" fill="#1a1a1a">原子力 発電</text>
+            </g>
+            <g transform="translate(290,170)">
+              <rect x="6" y="6" width="28" height="28" fill="#bdc3c7" stroke="#5a5a5a" stroke-width="2"/>
+              <text x="20" y="26" font-size="12" text-anchor="middle" fill="#1a1a1a">📷</text>
+              <text x="50" y="24" font-size="10" fill="#1a1a1a">がん 放射線治療</text>
+            </g>
+            <text x="250" y="260" font-size="11" font-weight="bold" text-anchor="middle" fill="#8a4a1a">自然 放射線は どこにでも ある。 量を 知る ことが 大切。</text>
+            <text x="250" y="290" font-size="10" text-anchor="middle" fill="#5a4020">安全 規制を 守れば、医療·発電で 大いに 役立つ。</text>
+          </svg>
+        `,
+      },
+    ],
+
+    formulas: [
+      {
+        name: '半減期の 式',
+        formula: 'N(t) = N₀ × (1/2)^(t/T)',
+        formulaSimple: 'N = N₀ × (1/2)^(t/T)',
+        explanation: '時間 t が 経った 後の 放射性 物質の 残量 N。 N₀ は 最初の 量、 T は 半減期。',
+        note: '中学では 「半減期 ごとに 半分に なる」 という 概念を 覚えれば 十分。',
+      },
+      {
+        name: '放射能の 単位',
+        formula: '1 Bq (ベクレル) = 1 回の 崩壊 / 秒',
+        formulaSimple: '1 Bq = 1 崩壊/秒',
+        explanation: '放射能の 強さを 表す 単位。 ベクレル は 発見者の 名前から 由来。',
+        note: '人体への 影響を 表す 単位は シーベルト (Sv)。 別の 概念なので 注意。',
+      },
+    ],
+
+    unitsTable: {
+      title: '単位の まとめ',
+      rows: [
+        ['量',        '記号', '単位',          '意味'],
+        ['放射能',     'A',   'Bq (ベクレル)',  '1秒 あたりの 崩壊数'],
+        ['吸収線量',   'D',   'Gy (グレイ)',    '物質が 吸収した エネルギー'],
+        ['等価線量',   'H',   'Sv (シーベルト)', '人体への 影響'],
+        ['半減期',     'T',   '時間 (秒·年)',   '放射性物質が 半分に なる 時間'],
+        ['原子番号',   'Z',   '個',             '原子核の 陽子の 数'],
+      ],
+    },
+
+    flashcards: [
+      { front: '放射能 (ほうしゃのう)',  back: '原子核が 自然に 崩壊しながら 放射線を 出す 性質。 マリー·キュリー が 命名。' },
+      { front: '放射線 (ほうしゃせん)',  back: '放射性物質から 出る 高エネルギーの 粒子や 電磁波。 α·β·γ 線が ある。' },
+      { front: '原子核 (げんしかく)',    back: '原子の 中心。 陽子と 中性子から なる。 不安定だと 崩壊する。' },
+      { front: '半減期 (はんげんき)',    back: '放射性物質の 量が 半分に なる 時間。 ラジウム は 約 1,600年。' },
+      { front: 'ラジウム (Ra)',          back: 'キュリー 夫妻が 1898年に 発見した 元素。 強い 放射能を 持つ。 原子番号 88。' },
+      { front: 'ポロニウム (Po)',        back: 'キュリー 夫妻が 発見した 元素。 マリーの 祖国 ポーランド から 命名。' },
+      { front: 'α 線 (アルファせん)',    back: '原子核から 出る ヘリウム核。 紙 一枚で 止められる。 透過力 弱い。' },
+      { front: 'γ 線 (ガンマせん)',      back: '高エネルギーの 電磁波。 透過力が 強く、鉛で 弱める。 医療 (放射線治療) にも 利用。' },
+      { front: 'ベクレル (Bq)',          back: '放射能の 強さの 単位。 1秒間に 1回の 崩壊が 1 Bq。' },
+      { front: 'マリー·キュリー',         back: 'ポーランド出身の 化学者·物理学者 (1867-1934)。 女性 初の ノーベル賞、2回 受賞 (物理·化学)。' },
+    ],
+
+    exercises: [
+      {
+        q: '事件 3 の 「光る石」 の 正体は?',
+        options: ['蓄光 素材', '小さな 電池', 'ラジウム (放射性 元素)', '化学反応'],
+        correct: 2,
+        explanation: '事件 3 の 核心。 キュリー 夫妻が 発見した ラジウム は 自然に 光と 放射線を 出す。',
+      },
+      {
+        q: '放射性 物質が 半分に なる 時間を 何という?',
+        options: ['周期', '半減期', '崩壊時間', '寿命'],
+        correct: 1,
+        explanation: '半減期 (はんげんき)。 ラジウム は 約 1,600年。',
+      },
+      {
+        q: '原子の 中心に ある のは?',
+        options: ['電子', '原子核', '分子', '光子'],
+        correct: 1,
+        explanation: '原子核 = 陽子 + 中性子。 周りを 電子が 回る。',
+      },
+      {
+        q: '次のうち、紙 一枚で 止められる 放射線は?',
+        options: ['α 線', 'β 線', 'γ 線', 'X 線'],
+        correct: 0,
+        explanation: 'α 線は ヘリウム核 (大きい) なので 紙 一枚で 止まる。 透過力 最弱。',
+      },
+      {
+        q: '放射能の 強さの 単位は?',
+        options: ['ボルト', 'アンペア', 'ベクレル', 'カロリー'],
+        correct: 2,
+        explanation: 'ベクレル (Bq)。 1秒間に 1回の 崩壊が 1 Bq。',
+      },
+      {
+        q: 'マリー·キュリーが ノーベル賞を 受賞した 回数は?',
+        options: ['1回', '2回', '3回', '受賞 していない'],
+        correct: 1,
+        explanation: '物理学賞 (1903年) と 化学賞 (1911年)。 女性 初の 2回 受賞者。',
+      },
+      {
+        q: '次のうち、自然 放射線の 例 ではない のは?',
+        options: ['宇宙から 来る 宇宙線', '土壌·岩石から 出る 放射線', '原子力 発電所から 出る 放射線', '食品 (バナナなど) の 微量 放射線'],
+        correct: 2,
+        explanation: '原子力 発電は 人工 放射線。 他は すべて 自然界 に 存在 する 放射線。',
+      },
+      {
+        q: 'ラジウム の 半減期は 約 何年?',
+        options: ['16 年', '160 年', '1,600 年', '16,000 年'],
+        correct: 2,
+        explanation: '約 1,600年。 長い 時間 かけて ゆっくり 崩壊する。',
+      },
+      {
+        q: '放射線の 良い 利用 例は?',
+        options: ['医療の レントゲン·がん 治療', '空気の 浄化', '食品の 冷蔵', '電球の 発光'],
+        correct: 0,
+        explanation: 'レントゲン (X線)·がん 放射線治療·CT 検査 など、医療に 広く 利用。',
+      },
+      {
+        q: 'マリー·キュリーが 発見した 元素は?',
+        options: ['鉄 と 銅', 'ラジウム と ポロニウム', '酸素 と 水素', 'ナトリウム と カリウム'],
+        correct: 1,
+        explanation: 'ラジウム (ラテン語 「光」) と ポロニウム (祖国 ポーランド から)。',
+      },
+    ],
+
+    tips: [
+      { title: '①  原子は 不変 では ない',         body: '不安定な 原子核は 自然に 崩壊する。 これが 放射能の 正体。' },
+      { title: '②  放射線 3種類 を 覚える',         body: 'α (紙で止まる)·β (アルミで止まる)·γ (鉛で弱まる)。 透過力の 順 = α < β < γ。' },
+      { title: '③  半減期 = 半分に なる 時間',     body: '半減期 ごとに 量が 半分に なる。 ラジウム ≈ 1,600年、ヨウ素131 ≈ 8日 など 物質ごとに 違う。' },
+      { title: '④  単位 Bq と Sv を 区別',          body: 'Bq は 「物質が 出す 放射能の 強さ」、 Sv は 「人体への 影響」。 全く 違う 概念。' },
+      { title: '⑤  自然 放射線は 身近に 存在',     body: '宇宙線·地殻·食品 (バナナの カリウム) など。 適量は 安全。 「放射線=即危険」 ではない。' },
+      { title: '⑥  医療·発電 で 広く 活用',         body: 'レントゲン·CT·がん 治療·原子力 発電·年代測定 など。 上手に 使えば 人類に 有益。' },
+      { title: '⑦  キュリー 夫妻 = 元素 2つ 発見', body: 'ラジウム (光) + ポロニウム (ポーランド)。 マリーは 女性 初の ノーベル賞 2回 受賞。' },
+      { title: '⑧  安全 第一 — 距離·遮蔽·時間',    body: '放射線 から 身を 守る 3原則: 離れる·遮る·短時間。 安全 規制が ある 理由。' },
+    ],
+  },
+  // 사건 4~10 은 향후 별도 명세서에서 추가 (scientists_case04 ...).
 };

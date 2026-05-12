@@ -587,16 +587,249 @@ const SCIENTISTS_STORY = [
   {
     id: 3, icon: '✨',
     title: '光る石の秘密',
-    subtitle: '見えない力の発見',
-    theme: '放射能',
+    subtitle: '暗闇に 浮かぶ 不思議な 光',
+    theme: '放射能·原子核·半減期',
     bgm: 'mystery',
     illustration: SCIENTISTS_CASE_IMAGES[3],
     charKey: 'hikari_curie',
     sceneKey: 'bg_ch03_radium',
-    comingSoon: true,
-    intro: [],
-    steps: [],
-    note: null,
+    comingSoon: false,
+    learnRef: 'scientists_case03',
+    intro: {
+      title: '光る石の秘密',
+      subtitle: '暗闇に 浮かぶ 不思議な 光',
+      bg: 'bg_ch03_radium',
+      lines: [
+        { speaker: 'narrator',     text: 'アイン教授の 紹介で、化学者の 研究所を 訪ねた。' },
+        { speaker: 'hinata',       text: 'こちらが キューリィ夫人の 実験室です。地下に あるそうです。' },
+        { speaker: 'rio',          text: 'うわぁ、暗い〜!ちょっと ドキドキする!' },
+        { speaker: 'haru',         text: '光が ほとんど ない… 何の 実験を しているんだろう。' },
+        { speaker: 'hikari_curie', text: 'ようこそ、若き 探偵さんたち。わたくしが キューリィですわ。' },
+        { speaker: 'hikari_curie', text: '暗い 部屋で 驚かせて しまいましたわね。実は、ある 物を 見て いただきたいの。' },
+        { speaker: 'narrator',     text: '夫人が 部屋の 隅の 小さな 木箱を 指さした。' },
+        { speaker: 'rio',          text: 'えっ!? 箱が… 光ってる!?' },
+        { speaker: 'haru',         text: '本当だ… 緑色っぽい、淡い 光…' },
+        { speaker: 'hinata',       text: '電気は… 繋がっていません。ろうそくも、灯油も ない。' },
+        { speaker: 'hikari_curie', text: 'そうなのですわ。この 光は 何日も 何ヶ月も 続いて おります。' },
+        { speaker: 'hikari_curie', text: 'わたくしも、その 仕組みを 完全には 理解 できて いませんの。' },
+        { speaker: 'rio',          text: '魔法…?' },
+        { speaker: 'hikari_curie', text: 'ふふ、自然の 中には 魔法のように 不思議な 現象が ありますの。' },
+        { speaker: 'hikari_curie', text: '皆さんの 力で、この 謎を 解き明かして いただけますか?' },
+        { speaker: 'haru',         text: '挑戦します!' },
+        { speaker: 'penta',        text: 'ペンッ!光の 謎、ペン!' },
+      ],
+      cta: '🔍 調査を 始める',
+    },
+    steps: [
+      {
+        id: 'step1',
+        title: '💡 STEP 1: 光は 電気の せい?',
+        bg: 'bg_ch03_radium',
+        question: 'まず、光の 性質を 調べよう。何を 確認する?',
+        options: [
+          {
+            label: '電気·火が ないか、光が いつから 続いているか 確認',
+            isCorrect: true,
+            response: [
+              { speaker: 'rio',          text: '配線も ろうそくも ない!' },
+              { speaker: 'haru',         text: '夫人、いつから 光って いますか?' },
+              { speaker: 'hikari_curie', text: 'もう 半年以上 続いて いるのですわ。一度も 消えた ことが ありません。' },
+              { speaker: 'hinata',       text: '電気でも 火でも ない… 不思議です。' },
+            ],
+          },
+          {
+            label: '光の 色だけ 確認',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '色 だけでは 原因が わからないよ。もっと 全体を 調べよう。' },
+            ],
+          },
+          {
+            label: '部屋の 温度を 測る',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '温度は 光と 直接 関係 ないかな。先に 光の 出所を 探そう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step2',
+        title: '📦 STEP 2: 木箱の 中を 見る',
+        bg: 'bg_ch03_radium',
+        question: '木箱を 慎重に 開けて 中を 見る。何が ある?',
+        options: [
+          {
+            label: '小さな 灰色の 結晶 (光石) が 入っている',
+            isCorrect: true,
+            response: [
+              { speaker: 'rio',    text: 'うわっ、小さな 石!これが 光って るの!?' },
+              { speaker: 'haru',   text: '灰色っぽい 結晶… 1グラムくらい?でも 強く 光ってる。' },
+              { speaker: 'hinata', text: '石 そのものが 発光している…?こんな 鉱物 知らない。' },
+            ],
+          },
+          {
+            label: '空の 箱',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '何も なければ 光らないはず。 もっと よく 見ましょう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step3',
+        title: '🎞️ STEP 3: 箱の 周りを 観察',
+        bg: 'bg_ch03_radium',
+        question: 'ヒナタが 箱の 周りを 詳しく 調べる。何に 気づく?',
+        options: [
+          {
+            label: '近くの 写真 フィルムが 黒く 変色して いる',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',       text: 'あれ… この 写真 フィルム、黒く 変色 しています。' },
+              { speaker: 'haru',         text: 'フィルムを 変色させる 何かが、光石から 出ている?' },
+              { speaker: 'rio',          text: '光 だけじゃ なくて、見えない 何かも 出てるってこと?' },
+              { speaker: 'hikari_curie', text: 'ふふ、よく 気づきました わ。それが ヒントですの。' },
+            ],
+          },
+          {
+            label: '周りの 温度を 測る',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '温度は 変わって いないみたい。 もっと 違うものを 探そう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step4',
+        title: '📓 STEP 4: 夫人の 実験ノート',
+        bg: 'bg_ch03_radium',
+        question: '実験台の ノートを 開いた。何が 書いてある?',
+        options: [
+          {
+            label: '「ピッチブレンドからの 抽出 — 新元素 発見?」',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',         text: 'ピッチブレンド… ウラン鉱石の 名前だ。そこから 新しい 元素を 取り出した?' },
+              { speaker: 'hinata',       text: '「新元素 発見?」と 書かれて います。夫人、これは…?' },
+              { speaker: 'hikari_curie', text: 'ええ、わたくしが 数年 かけて、ピッチブレンドから 微量の 新元素を 分離したのですわ。' },
+              { speaker: 'rio',          text: '新元素!?すごい!でも、それが この 光と どう 関係?' },
+            ],
+          },
+          {
+            label: 'ノートを 閉じて おく',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '夫人の 研究 ノートに ヒントが あります。 読みましょう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step5',
+        title: '⚖️ STEP 5: 光石の 重さを 測る',
+        bg: 'bg_ch03_radium',
+        question: 'リオが 光石の 重さを 計った。どれくらい?',
+        options: [
+          {
+            label: '0.5 グラム以下 — 1グラムにも 満たない',
+            isCorrect: true,
+            response: [
+              { speaker: 'rio',    text: 'えっ、こんなに 軽いの!?でも 半年以上 光ってるよ!?' },
+              { speaker: 'haru',   text: '極めて 微量で、極めて 強い エネルギー を 出し続けて いる…' },
+              { speaker: 'hinata', text: 'これは… 何か 原子レベルで 起きている 現象 ですね。' },
+            ],
+          },
+          {
+            label: '重くて 測れない',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '小さな 結晶 だから、感度の 高い 天秤を 使おう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step6',
+        title: '🧩 STEP 6: 推理を 組み立てる',
+        bg: 'bg_ch03_radium',
+        question: '全ての 手がかりが 揃った。夫人に どう 伝える?',
+        options: [
+          {
+            label: '「光石は 新元素で、原子から 自然に 光と 放射線が 出ている」',
+            isCorrect: true,
+            response: [
+              { speaker: 'hikari_curie', text: 'まあ、見事 ですわ!まさに 正解 ですの。' },
+              { speaker: 'hikari_curie', text: 'これは わたくしが 発見した 新元素 — ラジウム ですわ。' },
+              { speaker: 'hikari_curie', text: 'ラジウムの 原子核が ゆっくりと 崩壊し、光や 目に 見えない 放射線を 出すのです。これを 「放射能」 と 言いますの。' },
+              { speaker: 'haru',         text: 'だから フィルムが 変色 したり、暗闇でも 光って 見える…' },
+              { speaker: 'hinata',       text: '原子は 私たちが 思っていた より、ずっと 不思議な 存在 だったんですね。' },
+              { speaker: 'rio',          text: '原子の 中で 何かが 起きてる!?' },
+              { speaker: 'hikari_curie', text: 'そうですわ。ただ、放射線は 強すぎると 人体にも 害が ありますの。だから 慎重に 扱う ことが 大切です。' },
+              { speaker: 'hikari_curie', text: '医療や 発電など、上手に 使えば 人類の 役に 立ちますわ。皆さん、一緒に 学びましょう。' },
+            ],
+          },
+          {
+            label: '「光石は 蓄光 素材」',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru',         text: '蓄光は 光を 当てた 後しか 光らない けど、これは 半年以上 暗闇でも 光ってる。' },
+              { speaker: 'hikari_curie', text: 'よく 違いを 見抜きましたわ。' },
+            ],
+          },
+          {
+            label: '「中に 小さな 電池が ある」',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '0.5g 以下の 結晶 です。電池は 入りません。' },
+            ],
+          },
+        ],
+      },
+    ],
+    ending: {
+      bg: 'bg_ch03_radium',
+      lines: [
+        { speaker: 'hikari_curie', text: '皆さんの おかげで、わたくしの 発見が 説明 できましたわ。' },
+        { speaker: 'hikari_curie', text: '放射能の 世界は 不思議で、力強くて、そして 慎重に 扱うべき もの。' },
+        { speaker: 'rio',          text: '原子の 中で、こんな ことが 起きて たんだね!' },
+        { speaker: 'haru',         text: '見えない 力 — でも 確かに 存在する。' },
+        { speaker: 'hinata',       text: '医療の レントゲンも、これと 同じ 原理 ですか?' },
+        { speaker: 'hikari_curie', text: 'ええ、同じ 仲間 ですわ。原子の 世界を、これから 一緒に 学びましょう。' },
+        { speaker: 'penta',        text: 'ペンッ!原子の 勉強、ペン!' },
+      ],
+      cta: '📚 学習資料を 開く',
+    },
+    caseQuiz: [
+      {
+        q: '事件 3 の 「光る石」 の 正体は?',
+        options: ['蓄光 素材', 'ラジウム (放射性 元素)', '小さな 電球', '化学発光 物質'],
+        correct: 1,
+      },
+      {
+        q: '放射性 物質が 半分に なる 時間を 何という?',
+        options: ['崩壊時間', '半減期', '寿命', '周期'],
+        correct: 1,
+      },
+      {
+        q: '原子の 中心に ある のは?',
+        options: ['電子', '原子核', '分子', '光子'],
+        correct: 1,
+      },
+      {
+        q: 'マリー·キュリーが 発見した 元素は?',
+        options: ['鉄·銅', '酸素·水素', 'ラジウム·ポロニウム', 'ナトリウム·カリウム'],
+        correct: 2,
+      },
+      {
+        q: '放射線の 良い 利用 例は?',
+        options: ['空気 浄化', '医療 (レントゲン·がん 治療)', '冷蔵', '電球の 発光'],
+        correct: 1,
+      },
+    ],
+    note: { title: '第3事件 光る 石', desc: 'ラジウム の 放射能 — 原子核が 自然に 崩壊し 光と 放射線を 出す 現象。 キュリー 夫妻の 発見と、放射能の 正しい 理解·活用 を 学んだ 第三歩。' },
   },
   {
     id: 4, icon: '🐦',
