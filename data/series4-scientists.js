@@ -339,16 +339,250 @@ const SCIENTISTS_STORY = [
   {
     id: 2, icon: '⏰',
     title: '時間を操る秘密',
-    subtitle: '光と時間の関係',
-    theme: '相対性理論',
+    subtitle: '動く時計は ゆっくり 進む',
+    theme: '特殊相対性理論·時間の遅れ',
     bgm: 'mystery',
     illustration: SCIENTISTS_CASE_IMAGES[2],
     charKey: 'shiraga_ein',
     sceneKey: 'bg_ch02_blackboard',
-    comingSoon: true,
-    intro: [],
-    steps: [],
-    note: null,
+    comingSoon: false,
+    learnRef: 'scientists_case02',
+    intro: {
+      title: '時間を操る秘密',
+      subtitle: '動く時計は ゆっくり 進む',
+      bg: 'bg_ch02_blackboard',
+      lines: [
+        { speaker: 'narrator',    text: '林檎博士の紹介で、隣町の物理学者を訪ねた。' },
+        { speaker: 'hinata',      text: 'こちらが アイン教授の 研究所です。' },
+        { speaker: 'rio',         text: 'うわぁ、黒板だらけ!数字いっぱい〜!' },
+        { speaker: 'haru',        text: 'これ全部、物理の 公式…?' },
+        { speaker: 'shiraga_ein', text: 'ほっほ、よう来たな、若き探偵たちよ。わしが アイン教授じゃ。' },
+        { speaker: 'haru',        text: 'はじめまして。林檎博士から お話を 聞いて 来ました。' },
+        { speaker: 'shiraga_ein', text: 'ふむふむ、ちょうど 困った 事が あってのう…' },
+        { speaker: 'shiraga_ein', text: '見て おくれ、この 二つの 時計を。' },
+        { speaker: 'narrator',    text: '机の上に、まったく 同じ モデルの 懐中時計が 二つ 並んでいた。' },
+        { speaker: 'shiraga_ein', text: '同じ時計じゃ。同じ日に 同じ工場で 作られた。じゃが…' },
+        { speaker: 'hinata',      text: 'え… 時刻が ずれています!時計Bが 約30秒 遅れている。' },
+        { speaker: 'rio',         text: 'ええっ、なんで!?' },
+        { speaker: 'shiraga_ein', text: 'そうなのじゃ。毎日 30秒から 60秒ずつ 遅れていく。' },
+        { speaker: 'shiraga_ein', text: 'わしは 何も していない。じゃが 時計が 遅れるのじゃ。' },
+        { speaker: 'haru',        text: '不思議だ… 同じ時計なのに、なぜ?' },
+        { speaker: 'shiraga_ein', text: '皆で この謎を 解いて はくれぬか?ふむ、興味深い 問題で あろう。' },
+        { speaker: 'penta',       text: 'ペンッ!時間の 謎、ペン!' },
+      ],
+      cta: '🔍 調査を 始める',
+    },
+    steps: [
+      {
+        id: 'step1',
+        title: '⏰ STEP 1: 二つの 時計を 比べる',
+        bg: 'bg_ch02_blackboard',
+        question: 'まず、二つの時計を よく 比べてみよう。何を 確認する?',
+        options: [
+          {
+            label: '外観·モデル·製造元が 同じか 確認する',
+            isCorrect: true,
+            response: [
+              { speaker: 'rio',    text: 'うん、見た目は 完全に 同じだよ!' },
+              { speaker: 'haru',   text: '同じ メーカー、同じ モデル、同じ 製造日…' },
+              { speaker: 'hinata', text: '物理的な 違いは ありません。じゃあ、なぜ 時刻が ずれる?' },
+            ],
+          },
+          {
+            label: '時計の 重さを 測る',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '重さは 同じだよ。製造元も 同じだから。' },
+            ],
+          },
+          {
+            label: '時計を 分解する',
+            isCorrect: false,
+            response: [
+              { speaker: 'shiraga_ein', text: 'ふむ、分解は 最後の 手段じゃ。まずは 観察を。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step2',
+        title: '👀 STEP 2: 時計の 置き場所を 観察',
+        bg: 'bg_ch02_blackboard',
+        question: 'ハルが 二つの 時計の 置き場所に 注目した。何が 違う?',
+        options: [
+          {
+            label: '時計Bは 円い 板の 上に 置かれている',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',   text: '時計Aは 普通に 机の 上だけど、時計Bは 円い 板の 上に 置いてある。' },
+              { speaker: 'rio',    text: '本当だ!回転 木馬みたいな 板!' },
+              { speaker: 'hinata', text: 'これは… 何かの 装置かもしれません。' },
+            ],
+          },
+          {
+            label: '時計Aの 場所だけ 確認',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '両方を 比べないと 差が わからないよ。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step3',
+        title: '🌀 STEP 3: 円い 板を よく 見る',
+        bg: 'bg_ch02_blackboard',
+        question: 'ヒナタが 円い 板を じっくり 観察した。何に 気づく?',
+        options: [
+          {
+            label: '板が ゆっくり 回転している',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata', text: 'あれ… 板が ゆっくり 回っています!' },
+              { speaker: 'rio',    text: 'ホント!見えない くらい ゆっくりだけど、回ってる!' },
+              { speaker: 'haru',   text: '板の 下に… モーターが ある!' },
+              { speaker: 'hinata', text: '時計Bは 動いている 板の 上に 乗っていることに なります。' },
+            ],
+          },
+          {
+            label: '板の 色を 確認する',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '色は 関係 ないと 思います… もっと 動きに 注目しましょう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step4',
+        title: '📓 STEP 4: 教授の ノートを 読む',
+        bg: 'bg_ch02_blackboard',
+        question: '机の 上の ノートを 開いた。何が 書いてある?',
+        options: [
+          {
+            label: '「時間と 速度の 実験」と 書かれている',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',        text: '「時間と 速度の 実験」… 教授、これは?' },
+              { speaker: 'hinata',      text: '時間と 速度… 速く 動く 時計の 時間が 変わる?' },
+              { speaker: 'shiraga_ein', text: 'ほっほっ、もう ほとんど 見抜いておるな。続けるが よい。' },
+            ],
+          },
+          {
+            label: 'ノートを 閉じて おく',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '手がかりは ノートに ありそう。読んでみよう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step5',
+        title: '📏 STEP 5: 板の 回転速度を 測る',
+        bg: 'bg_ch02_blackboard',
+        question: '板が どれくらいの 速さで 回っているか 測ろう。',
+        options: [
+          {
+            label: '回転計で 測る — RPM=1000',
+            isCorrect: true,
+            response: [
+              { speaker: 'rio',    text: '1分間に 1000回も 回ってる!めっちゃ 速い!' },
+              { speaker: 'haru',   text: '時計Bは 物凄い 速さで 動いていた。これが 30秒の 遅れの 原因?' },
+              { speaker: 'hinata', text: '速く 動く 物の 時間が 遅れる…?ものすごく 不思議な 現象です。' },
+            ],
+          },
+          {
+            label: '回転を 止めて 測る',
+            isCorrect: false,
+            response: [
+              { speaker: 'shiraga_ein', text: '止めて しまっては 観察の 意味が なくなってしまうぞ。回したまま 測るのじゃ。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step6',
+        title: '🧩 STEP 6: 推理を 組み立てる',
+        bg: 'bg_ch02_blackboard',
+        question: '全ての 手がかりが 揃った。教授に どう 伝える?',
+        options: [
+          {
+            label: '「速く 動く 時計は ゆっくり 進む。これが 時間の 遅れ」',
+            isCorrect: true,
+            response: [
+              { speaker: 'shiraga_ein', text: 'ふむ、見事じゃ!まさに 正解で あろう。' },
+              { speaker: 'shiraga_ein', text: 'これが わしの 研究 — 特殊相対性理論じゃ。物が 速く 動くほど、その 時間は ゆっくり 進む。' },
+              { speaker: 'shiraga_ein', text: '時計Bは 板の 上で 高速で 回転していた。だから 時計Aより 時間が ゆっくり 進んだのじゃ。' },
+              { speaker: 'hinata',      text: '時間は 絶対 ではなく、速度によって 変わる…!' },
+              { speaker: 'haru',        text: 'まさに 時間を 操る 秘密だった。' },
+              { speaker: 'rio',         text: 'すごい!じゃあ もし 光の 速さで 動けば?' },
+              { speaker: 'shiraga_ein', text: 'ふむふむ、興味深い 質問じゃ。光の 速さに 近づくほど、時間は 限りなく ゆっくりに なる。それが 宇宙の 秘密じゃ。' },
+            ],
+          },
+          {
+            label: '「時計Bが 古いから」',
+            isCorrect: false,
+            response: [
+              { speaker: 'shiraga_ein', text: 'ふむ、同じ 製造日であろう?それは 違うのう。' },
+            ],
+          },
+          {
+            label: '「板が 磁気を 出している」',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '磁気だったら 一定で ずれるはず。毎日 違うのは おかしい。' },
+            ],
+          },
+        ],
+      },
+    ],
+    ending: {
+      bg: 'bg_ch02_blackboard',
+      lines: [
+        { speaker: 'shiraga_ein', text: '皆の おかげで、わしの 実験も 説明できた。ありがとう のう。' },
+        { speaker: 'shiraga_ein', text: 'では、相対性理論について もう 少し 学んでみるかな?' },
+        { speaker: 'hinata',      text: 'はい!E=mc² の 公式も 気に なります。' },
+        { speaker: 'rio',         text: '光の 速さって どれくらい 速いの?' },
+        { speaker: 'haru',        text: '時間が 変わるって 普段は 感じないけど、宇宙の 真実だね。' },
+        { speaker: 'shiraga_ein', text: 'ふむふむ、興味深い 質問じゃ。さあ、一緒に 学ぼう。' },
+        { speaker: 'penta',       text: 'ペンッ!時間の 勉強、ペン!' },
+      ],
+      cta: '📚 学習資料を 開く',
+    },
+    caseQuiz: [
+      {
+        q: '事件 2 で 時計B が 遅れていた 本当の 理由は?',
+        options: [
+          '時計B が 壊れていた',
+          '高速 回転 する 円盤の 上に 置かれて 時間が 遅れた',
+          'アイン教授 が 針を 動かした',
+          '電池切れ',
+        ],
+        correct: 1,
+      },
+      {
+        q: '速く 動く 物の 時間は どうなる?',
+        options: ['速く 進む', 'ゆっくり 進む', '止まる', '逆に 戻る'],
+        correct: 1,
+      },
+      {
+        q: 'E = mc² の m は 何を 表す?',
+        options: ['時間', '速度', '質量', '長さ'],
+        correct: 2,
+      },
+      {
+        q: '光の 速さ c は 約 何 km/秒?',
+        options: ['3万', '30万', '300万', '3千万'],
+        correct: 1,
+      },
+      {
+        q: 'アインシュタインの 国籍は?',
+        options: ['アメリカ', 'ドイツ', 'スイス', '全部 該当 (生涯で 移った)'],
+        correct: 3,
+      },
+    ],
+    note: { title: '第2事件 時間を 操る 秘密', desc: '高速 回転する 円盤の 上で 遅れた 時計。 アインシュタインの 特殊相対性理論 — 動く 物の 時間は ゆっくり 進む — を 学んだ 第二歩。' },
   },
   {
     id: 3, icon: '✨',
