@@ -2830,13 +2830,18 @@ const ScientistsState = {
 // SPEC speakerKey → (cls, displayName, charKey, pos) for s4 case 1.
 // `cls` feeds speakLine() voice-profile lookup and CSS speaker-bubble class.
 // Unknown cls falls back to narrator voice profile (engine/audio.js).
+// 신규 사건 추가 시 해당 사건의 NPC 키를 반드시 등록할 것.
+// 미등록 키는 narrator 로 fallback 되어 말풍선이 「ナレーター」, 초상화 누락 됨.
 const SCIENTISTS_SPEAKER_MAP = {
-  narrator:     { cls: 'narrator', name: 'ナレーター',  charKey: null,           pos: null },
-  haru:         { cls: 'haru',     name: 'ハル',        charKey: 'haru',         pos: 'left' },
-  rio:          { cls: 'rio',      name: 'リオ',        charKey: 'rio',          pos: 'right' },
-  hinata:       { cls: 'hinata',   name: 'ヒナタ',      charKey: 'hinata',       pos: 'right' },
-  ringo_hakase: { cls: 'sensei',   name: '林檎博士',    charKey: 'ringo_hakase', pos: 'center' },
-  penta:        { cls: 'penta',    name: 'ペンタ',      charKey: 'penta',        pos: 'center' },
+  narrator:          { cls: 'narrator', name: 'ナレーター',     charKey: null,                pos: null },
+  haru:              { cls: 'haru',     name: 'ハル',           charKey: 'haru',              pos: 'left' },
+  rio:               { cls: 'rio',      name: 'リオ',           charKey: 'rio',               pos: 'right' },
+  hinata:            { cls: 'hinata',   name: 'ヒナタ',         charKey: 'hinata',            pos: 'right' },
+  penta:             { cls: 'penta',    name: 'ペンタ',         charKey: 'penta',             pos: 'center' },
+  // 사건 1~10 NPC (case SPEC에 정의된 가상 캐릭터명).
+  ringo_hakase:      { cls: 'sensei',   name: '林檎博士',       charKey: 'ringo_hakase',      pos: 'center' },
+  shiraga_ein:       { cls: 'sensei',   name: 'アイン教授',     charKey: 'shiraga_ein',       pos: 'center' },
+  hikari_curie:      { cls: 'sensei',   name: 'キューリィ夫人', charKey: 'hikari_curie',      pos: 'center' },
 };
 
 function scientistsSpeakerInfo(key) {
@@ -3027,7 +3032,8 @@ function renderScientists() {
       layout.push({ key: 'rio', pos: 'right' });
     } else if (ScientistsState.phase === 'cleared') {
       layout.push({ key: 'haru', pos: 'left' });
-      layout.push({ key: 'ringo_hakase', pos: 'center' });
+      // 현재 사건의 NPC (case 1: ringo_hakase / case 2: shiraga_ein / case 3: hikari_curie / ...)
+      if (c.charKey) layout.push({ key: c.charKey, pos: 'center' });
       layout.push({ key: 'rio', pos: 'right' });
     }
     layout.forEach(ch => {
