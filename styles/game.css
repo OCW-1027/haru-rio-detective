@@ -38,7 +38,7 @@
   width: 180px;
   height: 240px;
   pointer-events: none;
-  filter: drop-shadow(-4px 4px 6px rgba(0,0,0,0.2));
+  filter: drop-shadow(-2px 2px 4px rgba(0,0,0,0.12));
   animation: charIn 0.5s ease;
 }
 .character-cutin.left { left: 12px; }
@@ -1979,7 +1979,7 @@
   background-size: contain;
   background-position: bottom center;
   background-repeat: no-repeat;
-  filter: drop-shadow(-3px 3px 6px rgba(0,0,0,0.25));
+  filter: drop-shadow(-2px 2px 4px rgba(0,0,0,0.12));
   animation: sciCharIn 0.3s ease both;
   opacity: 1;
 }
@@ -1988,7 +1988,7 @@
 .sci-char.center { left: 50%; transform: translateX(-50%); }
 /* v40: 혹시 모를 잔존 dimmed/speaking 클래스 — 강제 숨김/리셋 */
 .sci-char.dimmed { display: none !important; }
-.sci-char.speaking { filter: drop-shadow(-3px 3px 6px rgba(0,0,0,0.25)) !important; opacity: 1 !important; }
+.sci-char.speaking { filter: drop-shadow(-2px 2px 4px rgba(0,0,0,0.12)) !important; opacity: 1 !important; }
 @keyframes sciCharIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
