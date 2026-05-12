@@ -3,3 +3,6 @@
 *.log
 .DS_Store
 Thumbs.db
+
+# 자산 백업 (PNG 알파 변환 등 일회성 처리 전 백업)
+assets/_backup_*/
