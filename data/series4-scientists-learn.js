@@ -2674,5 +2674,326 @@ const SCIENTISTS_LEARN = {
       { title: '⑧  実験で 確かめろ',            body: 'ファラデーは 正規 教育が 少なかったが 粘り強い 実験で 発見。 手で 確認する 姿勢。' },
     ],
   },
-  // 사건 9~10 은 향후 별도 명세서에서 추가 (scientists_case09 ...).
+  scientists_case09: {
+    title: '原子の 模型と とびとびの 光',
+    subtitle: '事件 9 で 学んだ こと',
+    examScope: '中学~高1 理科 (物理·化学 入門) + 比喩 中心',
+
+    concept: {
+      title: '原子の 模型と とびとびの 光',
+      paragraphs: [
+        '事件 9 の とびとびの 光 — その 正体は、 原子の 中の 電子の 動き でした。 ボーア は 1913年、 原子の 中の 電子が 「決まった 層 (軌道)」 にだけ 存在する という 模型を 提案 しました。',
+        '原子は、 中心の 「原子核」 と、 その まわりを まわる 「電子」 で できて います。 電子は どこにでも いられる わけでは なく、 階段の 段の ように、 とびとびの 決まった 層 にだけ います。',
+        '電子が 高い 層から 低い 層へ 移る とき、 その エネルギーの 差の 分 だけ、 決まった 色の 光を 出します。 層の 間隔が 決まって いるので、 出る 光も とびとびの 決まった 色 だけ — これが 「線スペクトル」 の 正体です。',
+        '元素ごとに 層の 構造が 違うので、 出る 光の 色 (線の 位置) も 違います。 これは 元素の 「指紋」 の ようなもので、 遠い 星の 光を 調べれば、 その 星が 何で できているか まで わかります。 目に 見えない 原子の 中にも、 美しい 規則が あるのです。',
+      ],
+      highlight: '電子は とびとびの 「層」 にだけ いる。 層を 移る とき 決まった 色の 光を 出す → とびとびの スペクトル。',
+    },
+
+    diagrams: [
+      {
+        title: '①  連続スペクトル vs 線スペクトル',
+        svg: `
+          <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#1a1a3a;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#fdd58e">太陽の 光 vs 元素の 光</text>
+            <!-- UP: 連続 (태양빛) -->
+            <text x="250" y="55" font-size="12" font-weight="bold" text-anchor="middle" fill="#fdd58e">A: 太陽の 光 → 連続スペクトル</text>
+            <g transform="translate(60,70)">
+              <!-- 連続 무지개 -->
+              <defs>
+                <linearGradient id="rainbow_b1" x1="0" x2="1">
+                  <stop offset="0" stop-color="#e74c3c"/>
+                  <stop offset="0.16" stop-color="#ff8c00"/>
+                  <stop offset="0.33" stop-color="#fdd700"/>
+                  <stop offset="0.5" stop-color="#1a8a3a"/>
+                  <stop offset="0.66" stop-color="#1a5aa8"/>
+                  <stop offset="0.83" stop-color="#5a2a8a"/>
+                  <stop offset="1" stop-color="#7a1aaa"/>
+                </linearGradient>
+              </defs>
+              <rect x="0" y="0" width="380" height="40" fill="url(#rainbow_b1)" stroke="#fff" stroke-width="1.5"/>
+              <text x="0" y="58" font-size="9" fill="#fff">赤</text>
+              <text x="180" y="58" font-size="9" text-anchor="middle" fill="#fff">緑</text>
+              <text x="380" y="58" font-size="9" text-anchor="end" fill="#fff">紫</text>
+            </g>
+            <text x="250" y="142" font-size="10" font-weight="bold" text-anchor="middle" fill="#fdd58e">→ すきまなく つながった 虹</text>
+            <!-- DOWN: 線スペクトル -->
+            <text x="250" y="170" font-size="12" font-weight="bold" text-anchor="middle" fill="#a8d4e8">B: 元素の 光 → 線スペクトル</text>
+            <g transform="translate(60,185)">
+              <!-- 검은 배경 + 띄엄띄엄 색 선 -->
+              <rect x="0" y="0" width="380" height="40" fill="#000" stroke="#fff" stroke-width="1.5"/>
+              <!-- 띄엄띄엄 빛 띠 (수소 등 가상) -->
+              <rect x="40" y="0" width="6" height="40" fill="#e74c3c"/>
+              <rect x="125" y="0" width="6" height="40" fill="#fdd700"/>
+              <rect x="180" y="0" width="6" height="40" fill="#1a8a3a"/>
+              <rect x="255" y="0" width="6" height="40" fill="#1a5aa8"/>
+              <rect x="335" y="0" width="6" height="40" fill="#7a1aaa"/>
+              <text x="0" y="58" font-size="9" fill="#fff">赤</text>
+              <text x="180" y="58" font-size="9" text-anchor="middle" fill="#fff">緑</text>
+              <text x="380" y="58" font-size="9" text-anchor="end" fill="#fff">紫</text>
+            </g>
+            <text x="250" y="260" font-size="11" font-weight="bold" text-anchor="middle" fill="#a8d4e8">→ とびとびの 数本の 線 だけ</text>
+          </svg>
+        `,
+      },
+      {
+        title: '②  ボーアの 原子 模型 — 電子は 決まった 層に',
+        svg: `
+          <svg viewBox="0 0 450 350" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#eef4fa;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a4a7a">電子は 決まった 「層」 にだけ いる</text>
+            <!-- 中心: 原子核 -->
+            <g transform="translate(225,180)">
+              <circle cx="0" cy="0" r="20" fill="#e74c3c" stroke="#7a1a1a" stroke-width="2"/>
+              <text x="0" y="5" font-size="11" font-weight="bold" text-anchor="middle" fill="#fff">核</text>
+              <!-- 層 1 (n=1) -->
+              <circle cx="0" cy="0" r="50" fill="none" stroke="#3498db" stroke-width="2"/>
+              <text x="55" y="-45" font-size="10" font-weight="bold" fill="#1a4a7a">n=1</text>
+              <!-- 層 2 (n=2) -->
+              <circle cx="0" cy="0" r="80" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="6 3"/>
+              <text x="80" y="-65" font-size="10" font-weight="bold" fill="#1a4a7a">n=2</text>
+              <!-- 層 3 (n=3) -->
+              <circle cx="0" cy="0" r="115" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="6 3" opacity="0.7"/>
+              <text x="115" y="-95" font-size="10" font-weight="bold" fill="#1a4a7a">n=3</text>
+              <!-- 電子 in n=1 -->
+              <circle cx="50" cy="0" r="7" fill="#1a4a7a"/>
+              <circle cx="-35" cy="35" r="7" fill="#1a4a7a"/>
+              <!-- 電子 in n=2 -->
+              <circle cx="0" cy="-80" r="7" fill="#1a4a7a"/>
+              <circle cx="65" cy="45" r="7" fill="#1a4a7a"/>
+              <!-- 電子 in n=3 -->
+              <circle cx="-105" cy="-40" r="7" fill="#1a4a7a"/>
+            </g>
+            <!-- 凡例 -->
+            <g transform="translate(40,290)">
+              <circle cx="10" cy="0" r="6" fill="#e74c3c"/>
+              <text x="22" y="4" font-size="10" fill="#1a1a1a">原子核 (中心)</text>
+              <circle cx="160" cy="0" r="6" fill="#1a4a7a"/>
+              <text x="172" y="4" font-size="10" fill="#1a1a1a">電子</text>
+              <line x1="240" y1="0" x2="270" y2="0" stroke="#3498db" stroke-width="2"/>
+              <text x="278" y="4" font-size="10" fill="#1a1a1a">層 (軌道)</text>
+            </g>
+            <text x="225" y="335" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a4a7a">電子は 階段の 段 のように、 とびとびの 層 にだけ いる</text>
+          </svg>
+        `,
+      },
+      {
+        title: '③  電子の 層 移動と 光の 放出',
+        svg: `
+          <svg viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#fff5e8;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#7a3a1a">高い 層 → 低い 層 → 光が 出る</text>
+            <!-- 階段 (왼쪽: 비유) -->
+            <text x="105" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#7a3a1a">電子の 階段</text>
+            <g transform="translate(40,60)">
+              <!-- 階段 그리기 -->
+              <line x1="0" y1="200" x2="130" y2="200" stroke="#5a3a1a" stroke-width="2"/>
+              <line x1="0" y1="160" x2="100" y2="160" stroke="#5a3a1a" stroke-width="2"/>
+              <line x1="100" y1="160" x2="100" y2="200" stroke="#5a3a1a" stroke-width="2"/>
+              <line x1="0" y1="120" x2="70" y2="120" stroke="#5a3a1a" stroke-width="2"/>
+              <line x1="70" y1="120" x2="70" y2="160" stroke="#5a3a1a" stroke-width="2"/>
+              <line x1="0" y1="80" x2="40" y2="80" stroke="#5a3a1a" stroke-width="2"/>
+              <line x1="40" y1="80" x2="40" y2="120" stroke="#5a3a1a" stroke-width="2"/>
+              <!-- 段 라벨 -->
+              <text x="135" y="205" font-size="10" fill="#5a3a1a">n=1</text>
+              <text x="105" y="165" font-size="10" fill="#5a3a1a">n=2</text>
+              <text x="75" y="125" font-size="10" fill="#5a3a1a">n=3</text>
+              <text x="45" y="85" font-size="10" fill="#5a3a1a">n=4</text>
+              <!-- 電子 (높은 곳에서 떨어짐) -->
+              <circle cx="20" cy="75" r="7" fill="#1a4a7a"/>
+              <text x="20" y="60" font-size="9" font-weight="bold" text-anchor="middle" fill="#1a4a7a">電子</text>
+              <!-- 화살표: 떨어짐 -->
+              <line x1="20" y1="82" x2="20" y2="195" stroke="#e74c3c" stroke-width="2.5" stroke-dasharray="4 3" marker-end="url(#ah_b1)"/>
+              <text x="-10" y="135" font-size="10" font-weight="bold" fill="#e74c3c">落ちる</text>
+            </g>
+            <!-- 빛 방출 -->
+            <text x="305" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#7a3a1a">光が 出る</text>
+            <g transform="translate(220,80)">
+              <!-- 파동선 (光) -->
+              <path d="M 0 60 Q 15 40 30 60 T 60 60 T 90 60 T 120 60 T 150 60" fill="none" stroke="#fdd700" stroke-width="3"/>
+              <text x="75" y="40" font-size="10" font-weight="bold" text-anchor="middle" fill="#7a3a1a">決まった 色の 光</text>
+              <text x="75" y="85" font-size="9" text-anchor="middle" fill="#5a3a1a">(段差の 分 だけ)</text>
+              <!-- 큰 점프 = 다른 색 -->
+              <path d="M 0 130 Q 10 110 20 130 T 40 130 T 60 130 T 80 130 T 100 130 T 120 130 T 140 130 T 160 130" fill="none" stroke="#3498db" stroke-width="2.5"/>
+              <text x="80" y="155" font-size="9" text-anchor="middle" fill="#5a3a1a">段差が 大きい → 別の 色</text>
+            </g>
+            <defs>
+              <marker id="ah_b1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#e74c3c"/></marker>
+            </defs>
+            <text x="250" y="285" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a3a1a">段差が 決まっている → 出る 光の 色も 決まっている</text>
+            <text x="250" y="305" font-size="10" text-anchor="middle" fill="#5a4a2a">だから 元素の 光は 連続 ではなく とびとび</text>
+          </svg>
+        `,
+      },
+      {
+        title: '④  元素の 指紋 — 星の 成分まで わかる',
+        svg: `
+          <svg viewBox="0 0 450 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#0a0a2a;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#fdd58e">線の 位置 = 元素の 指紋</text>
+            <!-- 3 元素 비교 -->
+            <text x="40" y="60" font-size="11" font-weight="bold" fill="#a8d4e8">水素 (H)</text>
+            <g transform="translate(120,48)">
+              <rect x="0" y="0" width="280" height="20" fill="#000" stroke="#fff" stroke-width="1"/>
+              <rect x="40" y="0" width="4" height="20" fill="#e74c3c"/>
+              <rect x="155" y="0" width="4" height="20" fill="#1a8a3a"/>
+              <rect x="200" y="0" width="4" height="20" fill="#3498db"/>
+              <rect x="240" y="0" width="4" height="20" fill="#7a1aaa"/>
+            </g>
+            <text x="40" y="105" font-size="11" font-weight="bold" fill="#a8d4e8">ヘリウム (He)</text>
+            <g transform="translate(120,93)">
+              <rect x="0" y="0" width="280" height="20" fill="#000" stroke="#fff" stroke-width="1"/>
+              <rect x="80" y="0" width="4" height="20" fill="#fdd700"/>
+              <rect x="125" y="0" width="4" height="20" fill="#ff8c00"/>
+              <rect x="190" y="0" width="4" height="20" fill="#1a5aa8"/>
+            </g>
+            <text x="40" y="150" font-size="11" font-weight="bold" fill="#a8d4e8">ネオン (Ne)</text>
+            <g transform="translate(120,138)">
+              <rect x="0" y="0" width="280" height="20" fill="#000" stroke="#fff" stroke-width="1"/>
+              <rect x="20" y="0" width="4" height="20" fill="#e74c3c"/>
+              <rect x="50" y="0" width="4" height="20" fill="#ff8c00"/>
+              <rect x="95" y="0" width="4" height="20" fill="#ff8c00"/>
+              <rect x="160" y="0" width="4" height="20" fill="#fdd700"/>
+              <rect x="220" y="0" width="4" height="20" fill="#1a8a3a"/>
+            </g>
+            <!-- 별빛 분석 -->
+            <g transform="translate(40,185)">
+              <text x="0" y="0" font-size="11" font-weight="bold" fill="#fdd58e">★ 遠い 星の 光</text>
+              <!-- 별 -->
+              <text x="160" y="3" font-size="20" text-anchor="middle">⭐</text>
+              <!-- 화살표 -->
+              <line x1="180" y1="0" x2="220" y2="0" stroke="#fdd58e" stroke-width="2" marker-end="url(#ah_b2)"/>
+              <!-- 프리즘+선스펙트럼 -->
+              <rect x="225" y="-8" width="80" height="18" fill="#000" stroke="#fff" stroke-width="1"/>
+              <rect x="240" y="-8" width="3" height="18" fill="#e74c3c"/>
+              <rect x="265" y="-8" width="3" height="18" fill="#fdd700"/>
+              <rect x="285" y="-8" width="3" height="18" fill="#1a5aa8"/>
+              <!-- 결과 -->
+              <text x="320" y="3" font-size="11" font-weight="bold" fill="#a8d4e8">→ 「水素 + ヘリウム」</text>
+            </g>
+            <defs>
+              <marker id="ah_b2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#fdd58e"/></marker>
+            </defs>
+            <text x="225" y="235" font-size="11" font-weight="bold" text-anchor="middle" fill="#fdd58e">遠い 星の 光を 調べれば、 その 星の 成分まで わかる</text>
+            <text x="225" y="258" font-size="10" text-anchor="middle" fill="#a8d4e8">「見えない 世界」 と 「見える 宇宙」 が、 光で つながる</text>
+          </svg>
+        `,
+      },
+    ],
+
+    formulas: [
+      {
+        name: '電子の 層 (軌道)',
+        formula: '電子は とびとびの 決まった 層にだけ 存在',
+        formulaSimple: '電子 = 階段の 段',
+        explanation: '電子は どこの 位置にも いる ではなく、 階段の 段の ように 決まった 層 (軌道) にだけ 存在。 ボーア 原子模型の 核心。',
+        note: '中間 位置には ない。 「とびとび (不連続)」 が 鍵。',
+      },
+      {
+        name: '層 移動と 光',
+        formula: '高い 層 → 低い 層へ 移る とき 「差の 分」 だけ 決まった 色の 光を 放出',
+        formulaSimple: '段差 = 光の 色',
+        explanation: '電子が 層を 移る とき その エネルギー差の 分 だけ 決まった 色の 光を 出す。 層 間隔が 決まって いる ので 光も とびとび。',
+        note: '元素ごとに 層 構造が 違って 光の 色 (線 位置) も 違う = 元素の 指紋。',
+      },
+    ],
+
+    unitsTable: {
+      title: '原子 キーワード まとめ',
+      rows: [
+        ['用語',                    '意味',                                       '例·備考'],
+        ['原子 (げんし)',            '物質を 作る 小さな 粒',                       '核 + 電子で 構成'],
+        ['原子核 (げんしかく)',      '原子 中心の 重い 部分',                       '陽子·中性子'],
+        ['電子 (でんし)',            '核の まわりを まわる 軽い 粒',                 '決まった 層にだけ 存在'],
+        ['層·軌道',                 '電子が 存在できる 決まった 位置',               '階段の 段の ようなもの'],
+        ['線スペクトル',             '元素が 出す とびとびの 色の 線',               '元素の 指紋'],
+        ['ボーア模型',              '電子が 決まった 層に いる という 原子 模型',    'ボーアが 1913年 提案'],
+      ],
+    },
+
+    flashcards: [
+      { front: '原子 (げんし)',           back: '物質を 作る 小さな 粒。 中心の 核と まわりを まわる 電子で 構成。' },
+      { front: '原子核 (げんしかく)',     back: '原子 中心の 重く 小さな 部分。 陽子·中性子で できて いる。' },
+      { front: '電子 (でんし)',           back: '核の まわりを まわる 軽い 粒。 決まった 層 (軌道) にだけ 存在。' },
+      { front: '層·軌道 (そう·きどう)',   back: '電子が いられる 決まった 位置。 階段の 段の ように とびとび。' },
+      { front: '線スペクトル',            back: '元素が 出す とびとびの 色の 線。 連続 虹 とは 違って 決まった 色だけ。' },
+      { front: '連続スペクトル',          back: '太陽光の ように 赤~紫まで 連続した 虹の 帯。' },
+      { front: 'ボーア模型',             back: '電子が 決まった 層にだけ いて、 層 移動 時 決まった 光を 出す という 原子 模型 (1913)。' },
+      { front: '元素の 指紋',            back: '元素ごとに 違う 線スペクトル。 星の 光を 分析して 星の 成分も わかる。' },
+      { front: '光の 放出',              back: '電子が 高い 層→低い 層へ 移る とき エネルギー 差の 分だけ 光を 出す。' },
+      { front: 'ニールス·ボーア',         back: 'デンマークの 物理学者 (1885-1962)。 原子模型 提案。 量子力学の 基礎を 築いた。' },
+    ],
+
+    exercises: [
+      {
+        q: '事件 9 で 元素の 光が とびとび だった 理由は?',
+        options: ['偶然', '電子が 決まった 層にだけ いて 層 移動 時 決まった 光だけ 出す から', 'プリズムが 壊れて', '光が 弱いから'],
+        correct: 1,
+        explanation: '事件 9 の 核心。 電子は 決まった 層にだけ 存在 → 層 移動 時 決まった 色の 光だけ → とびとび。',
+      },
+      {
+        q: '原子の 構造は?',
+        options: ['空っぽ', '中心に 核、 まわりに 電子', '電子だけ', '核だけ'],
+        correct: 1,
+        explanation: '中心の 原子核と その まわりを まわる 電子で 構成。',
+      },
+      {
+        q: 'ボーア 模型で 電子は?',
+        options: ['どこにでも いる', '決まった 層 (軌道) にだけ いる', '核の 中に ある', '原子の 外に ある'],
+        correct: 1,
+        explanation: '階段の 段の ように 決まった 層にだけ 存在。 中間 位置には ない。',
+      },
+      {
+        q: '原子 模型を 提案した 人は?',
+        options: ['ファラデー', 'ボーア', 'ガリレオ', 'メンデル'],
+        correct: 1,
+        explanation: 'ニールス·ボーア。 1913年 電子が 決まった 層に ある という 模型を 提案。',
+      },
+      {
+        q: '太陽光を プリズムに 通すと?',
+        options: ['とびとびの 線', '連続の 虹', '黒い まま', '一色だけ'],
+        correct: 1,
+        explanation: '連続 スペクトル (虹)。 元素の 線 スペクトル と 対照される。',
+      },
+      {
+        q: '元素ごとに 線スペクトル 位置が 違う ことを 何に たとえる?',
+        options: ['声', '指紋', '身長', '体重'],
+        correct: 1,
+        explanation: '元素の 「指紋」。 星の 光を 分析して 星の 成分も 判別できる。',
+      },
+      {
+        q: '電子が 光を 出す ときは?',
+        options: ['止まって いる とき', '高い 層から 低い 層へ 移る とき', '核に 入る とき', '原子を 離れる ときだけ'],
+        correct: 1,
+        explanation: '層 移動 時 エネルギー 差の 分の 決まった 色の 光を 放出。',
+      },
+      {
+        q: '線スペクトルで わかる ことは?',
+        options: ['何も わからない', 'その 光を 出した 元素の 種類', '温度だけ', '距離だけ'],
+        correct: 1,
+        explanation: '元素の 指紋なので 光だけで どの 元素か 判別。 星の 成分も わかる。',
+      },
+      {
+        q: '「電子が 決まった 層にだけ いる」 が 意味する ことは?',
+        options: ['電子は 自由', '電子の 位置は 不連続 (とびとび)', '電子は 止まって いる', '電子は 核'],
+        correct: 1,
+        explanation: '階段の 段の ように 不連続。 中間 位置に いない から 光も とびとび。',
+      },
+      {
+        q: 'ボーアの 発見が 示した のは?',
+        options: ['原子は 単純だ', '目に 見えない 原子の 中にも 規則が ある', '光は 意味が ない', '元素は 皆 同じ'],
+        correct: 1,
+        explanation: '見えない ミクロ 世界にも 美しい 法則が 存在する ことを 示した。',
+      },
+    ],
+
+    tips: [
+      { title: '①  電子は 「階段の 段」',           body: '電子は どこでも なく 決まった 層にだけ 存在。 中間 位置には ない (とびとび)。' },
+      { title: '②  とびとびの 光 = 線スペクトル',  body: '電子が 決まった 層を 移る とき 決まった 色だけ 放出。 だから 連続 ではなく とびとび。' },
+      { title: '③  元素の 指紋',                  body: '元素ごとに 線の 位置が 違う。 星の 光を 分析して 星の 成分まで わかる。' },
+      { title: '④  原子 = 核 + 電子',             body: '中心に 重い 核、 まわりに 軽い 電子。 太陽·惑星の 比喩と 似て いる (事件 7と 通じる)。' },
+      { title: '⑤  段差 = 光の 色',               body: '電子が 移る 層の 差の 分の 決まった 色の 光。 差が 大きいと 別の 色。' },
+      { title: '⑥  ボーア 模型 (1913)',           body: 'ニールス·ボーアが 電子 層 模型を 提案。 量子力学の 出発点 (高1 以後 さらに 深く 学ぶ)。' },
+      { title: '⑦  見えなくても 規則が ある',     body: '原子の 中は 見えない が 光と いう 証拠で 規則を 突き止めた (事件 5·8と 通じる)。' },
+      { title: '⑧  科学者たちは つながる',        body: 'キュリー (放射能)·ボーア (原子)·アイン (エネルギー) — 原子の 世界に つながる 科学の 流れ。' },
+    ],
+  },
+  // 사건 10 은 향후 별도 명세서에서 추가 (scientists_case10 ...).
 };

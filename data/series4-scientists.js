@@ -2060,16 +2060,243 @@ const SCIENTISTS_STORY = [
   {
     id: 9, icon: '⚛️',
     title: '原子の中の世界',
-    subtitle: '電子の軌道',
-    theme: '原子模型',
+    subtitle: 'とびとびの 光の 謎',
+    theme: '原子模型·電子軌道·スペクトル',
     bgm: 'mystery',
     illustration: SCIENTISTS_CASE_IMAGES[9],
     charKey: 'bohr_atom',
     sceneKey: 'bg_ch09_physics',
-    comingSoon: true,
-    intro: [],
-    steps: [],
-    note: null,
+    comingSoon: false,
+    learnRef: 'scientists_case09',
+    intro: {
+      title: '原子の中の世界',
+      subtitle: 'とびとびの 光の 謎',
+      bg: 'bg_ch09_physics',
+      lines: [
+        { speaker: 'narrator',  text: 'ファラデーの 紹介で、 光の 実験を する 物理学者を 訪ねた。' },
+        { speaker: 'hinata',    text: 'こちらが ボーアさんの 実験室 です。 プリズムや 光る 管が…' },
+        { speaker: 'rio',       text: 'うわぁ、 ガラス管が 色とりどりに 光ってる! きれい!' },
+        { speaker: 'haru',      text: 'プリズムで 光を 分けて いるんだ… 何を 調べて いるんだろう。' },
+        { speaker: 'bohr_atom', text: 'ようこそ。 私が ボーアです。 不思議な 光の 謎が あってね。' },
+        { speaker: 'bohr_atom', text: 'まず これを 見て ください。 太陽の 光を プリズムに 通すと…' },
+        { speaker: 'rio',       text: 'わぁ、 虹! 赤から 紫まで、 ぜんぶ つながってる!' },
+        { speaker: 'bohr_atom', text: 'そう、 連続した 虹に なります。 では、 この 元素の 光は どうでしょう。' },
+        { speaker: 'narrator',  text: '光る 管の 光を プリズムに 通すと — 虹では なく、 とびとびの 数本の 色の 線 だけが 現れた。' },
+        { speaker: 'haru',      text: 'えっ、 連続して ない! 数本の 線 だけ…?' },
+        { speaker: 'hinata',    text: '太陽は 虹なのに、 これは とびとび… 不思議です。' },
+        { speaker: 'bohr_atom', text: 'しかも、 元素を 変えると 線の 位置も 変わるのです。 まるで 指紋の ように。' },
+        { speaker: 'rio',       text: '光に 指紋? どういう こと?' },
+        { speaker: 'bohr_atom', text: 'ふふ、 目に 見えない 原子の 中に、 答えが 隠れて いるのでしょう。' },
+        { speaker: 'bohr_atom', text: 'なぜ 光は とびとび なのか — 皆さんで 解いて くれますか?' },
+        { speaker: 'haru',      text: 'はい! 原子の 中を 想像して みます。' },
+        { speaker: 'penta',     text: 'ペンッ! とびとびの 光、 調べるペン!' },
+      ],
+      cta: '🔬 調査を 始める',
+    },
+    steps: [
+      {
+        id: 'step1',
+        title: '🌈 STEP 1: 太陽の 光を 調べる',
+        bg: 'bg_ch09_physics',
+        question: 'まず 太陽の 光を プリズムに 通す。 どう 見える?',
+        options: [
+          {
+            label: '赤から 紫まで、 連続した 虹に なる',
+            isCorrect: true,
+            response: [
+              { speaker: 'rio',       text: '赤・橙・黄・緑・青・藍・紫… 全部 つながった 虹!' },
+              { speaker: 'haru',      text: '色と 色の 間に すき間が ない。 「連続」 している。' },
+              { speaker: 'hinata',    text: '普通の 光は こうやって 連続の 虹に なるんですね。' },
+              { speaker: 'bohr_atom', text: 'その通り。 これが 「連続スペクトル」 です。 比べる 基準に なります。' },
+            ],
+          },
+          {
+            label: '白い まま 変わらない',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: 'プリズムを 通すと 虹に 分かれるよ。 もう一度 見てみよう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step2',
+        title: '📏 STEP 2: 元素の 光を 調べる',
+        bg: 'bg_ch09_physics',
+        question: '光る 管(元素)の 光を プリズムに 通す。 太陽と どう 違う?',
+        options: [
+          {
+            label: '連続の 虹では なく、 とびとびの 数本の 線 だけ',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',      text: '虹じゃ ない! 何もない 黒い 中に、 数本の 線 だけ 光ってる!' },
+              { speaker: 'rio',       text: 'すき間 だらけ! とびとびだ!' },
+              { speaker: 'hinata',    text: '同じ 光なのに、 こんなに 違う… なぜ とびとび なんでしょう。' },
+              { speaker: 'bohr_atom', text: 'これが 「線スペクトル」。 連続では なく、 決まった 色 だけ なのです。' },
+            ],
+          },
+          {
+            label: '太陽と 同じ 連続の 虹',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: 'いや、 元素の 光は とびとびの 線 だけ だよ。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step3',
+        title: '🔖 STEP 3: 元素を 変えて 比べる',
+        bg: 'bg_ch09_physics',
+        question: '違う 元素の 光も 調べた。 線の 位置は?',
+        options: [
+          {
+            label: '元素ごとに 線の 位置が 違う — 指紋の よう',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',    text: '水素は ここ、 別の 元素は 違う 場所に 線が… 元素ごとに 違います!' },
+              { speaker: 'rio',       text: '光の 指紋だ! どの 元素か 見分けられる!' },
+              { speaker: 'haru',      text: '位置が 決まってる… 原子の 種類で 決まる 何か が ある。' },
+              { speaker: 'bohr_atom', text: 'お見事。 線の 位置は 元素の 「指紋」。 これで 星の 成分も わかるのです。' },
+            ],
+          },
+          {
+            label: 'どの 元素も 同じ 位置',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '元素を 変えると 線の 位置も 変わります。 比べてみて。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step4',
+        title: '⚛️ STEP 4: 原子の 構造を 考える',
+        bg: 'bg_ch09_physics',
+        question: 'ボーアが 原子の 模型を 見せた。 原子は どんな 構造?',
+        options: [
+          {
+            label: '中心に 核、 その まわりを 電子が まわっている',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',      text: '真ん中に 「核」、 その まわりを 小さな 「電子」 が まわってる…' },
+              { speaker: 'rio',       text: '太陽の まわりの 惑星 みたい! ガリレオの 話 とも 似てる!' },
+              { speaker: 'hinata',    text: '光は きっと、 この 電子と 関係が あるんですね。' },
+              { speaker: 'bohr_atom', text: 'その通り。 光の 秘密は、 電子の 動きに あるのです。' },
+            ],
+          },
+          {
+            label: '原子は 何もない 空っぽ',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '原子の 中には 核と 電子が あるよ。 模型を よく 見よう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step5',
+        title: '📓 STEP 5: ボーアの 仮説ノート',
+        bg: 'bg_ch09_physics',
+        question: 'ボーアの ノートを 開いた。 何が 書いてある?',
+        options: [
+          {
+            label: '「電子は どこにでも いるのでは なく、 決まった 『層(軌道)』 にだけ いる」',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',    text: '「電子は 決まった 層 にだけ いる」… 階段の 段 みたいに!' },
+              { speaker: 'haru',      text: '間の 中途半端な 場所には いない… だから 光も とびとび?' },
+              { speaker: 'rio',       text: '電子の 階段! 段と 段の 間は ないんだ!' },
+              { speaker: 'bohr_atom', text: 'その通り。 電子は とびとびの 「層」 に だけ いる。 ここが 鍵です。' },
+            ],
+          },
+          {
+            label: 'ノートを 閉じる',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: 'ボーアさんの 仮説に ヒントが あります。 読みましょう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step6',
+        title: '🧩 STEP 6: 推理を 組み立てる',
+        bg: 'bg_ch09_physics',
+        question: '全ての 手がかりが 揃った。 ボーアに どう 伝える?',
+        options: [
+          {
+            label: '「電子が 決まった 層を 移る とき、 その 差の 分 だけ 決まった 色の 光を 出す。 だから とびとび」',
+            isCorrect: true,
+            response: [
+              { speaker: 'bohr_atom', text: 'お見事です! まさに 私が 考えた 原子の 模型 なのです。' },
+              { speaker: 'bohr_atom', text: '電子は 決まった 「層」 にだけ いる。 階段の 段の ように、 とびとび です。' },
+              { speaker: 'bohr_atom', text: '電子が 高い 層から 低い 層へ 移る とき、 その 差の 分 だけ 光を 出します。' },
+              { speaker: 'bohr_atom', text: '層の 間隔が 決まって いるから、 出る 光の 色も 決まった ものだけ — だから とびとび なのです。' },
+              { speaker: 'hinata',    text: '段差が 決まってるから、 出る 光の 色も 決まってる… すっきりしました!' },
+              { speaker: 'haru',      text: '元素ごとに 層の 構造が 違うから、 線の 位置も 違うんですね。' },
+              { speaker: 'rio',       text: '目に 見えない 原子の 中に、 こんな 階段が あったなんて!' },
+              { speaker: 'bohr_atom', text: 'その通り。 見えない 世界にも、 美しい 規則が ある。 さあ、 一緒に 学びましょう。' },
+            ],
+          },
+          {
+            label: '「光が とびとびなのは 偶然」',
+            isCorrect: false,
+            response: [
+              { speaker: 'bohr_atom', text: '偶然 では ありません。 元素ごとに 決まって いる。 規則が あるのです。' },
+            ],
+          },
+          {
+            label: '「電子は どこにでも 自由に いる」',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: 'どこにでも いるなら 光は 連続に なるはず。 とびとびなのは 層が あるから だよ。' },
+            ],
+          },
+        ],
+      },
+    ],
+    ending: {
+      bg: 'bg_ch09_physics',
+      lines: [
+        { speaker: 'bohr_atom', text: '皆の おかげで、 原子の 模型を きちんと 説明 できました。 ありがとう。' },
+        { speaker: 'bohr_atom', text: '目に 見えない 原子の 中にも、 階段の ような 美しい 規則が ある。 不思議でしょう?' },
+        { speaker: 'rio',       text: 'とびとびの 光が、 原子の 階段を 教えてくれたんだ!' },
+        { speaker: 'haru',      text: '光の 線で 星の 成分まで わかる… 宇宙と 原子が つながってる。' },
+        { speaker: 'hinata',    text: 'キューリィ夫人の 放射能とも、 どこか つながって ますね。' },
+        { speaker: 'bohr_atom', text: 'その通り。 原子の 世界を、 もう 少し 学んで みましょう。' },
+        { speaker: 'penta',     text: 'ペンッ! 原子の 勉強、 ペン!' },
+      ],
+      cta: '📚 学習資料を 開く',
+    },
+    caseQuiz: [
+      {
+        q: '事件 9 で 元素の 光が とびとび だった 理由は?',
+        options: ['偶然', '電子が 決まった 層にだけ いる から', 'プリズムの 故障', '光が 弱いから'],
+        correct: 1,
+      },
+      {
+        q: '原子の 構造は?',
+        options: ['空っぽ', '核 + まわりの 電子', '電子だけ', '核だけ'],
+        correct: 1,
+      },
+      {
+        q: 'ボーア 模型で 電子は?',
+        options: ['どこにでも', '決まった 層にだけ', '核の 中に', '原子の 外に'],
+        correct: 1,
+      },
+      {
+        q: '原子 模型の 提案者は?',
+        options: ['ファラデー', 'ボーア', 'ガリレオ', 'メンデル'],
+        correct: 1,
+      },
+      {
+        q: '事件 9 の 核心 メッセージは?',
+        options: ['原子は 単純だ', '見えない 原子の 中にも 規則が ある', '光は 意味が ない', '元素は 皆 同じ'],
+        correct: 1,
+      },
+    ],
+    note: { title: '第9事件 原子の 中の 世界', desc: 'とびとびの 光 — 電子が 決まった 「層」 にだけ 存在し、 層を 移る とき 決まった 色の 光を 出す。 目に 見えない 原子の 中にも 美しい 規則が ある ことを 示した ボーアの 原子模型を 学んだ 第九歩。' },
   },
   {
     id: 10, icon: '🌌',
