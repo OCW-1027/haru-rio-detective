@@ -834,16 +834,250 @@ const SCIENTISTS_STORY = [
   {
     id: 4, icon: '🐦',
     title: '島々の鳥たち',
-    subtitle: '進化を辿る航海',
-    theme: '進化論',
+    subtitle: '似ているけれど 違う鳥たちの 謎',
+    theme: '進化論·自然選択·適應·変異·遺伝',
     bgm: 'mystery',
     illustration: SCIENTISTS_CASE_IMAGES[4],
     charKey: 'darwin_voyager',
     sceneKey: 'bg_ch04_beagle',
-    comingSoon: true,
-    intro: [],
-    steps: [],
-    note: null,
+    comingSoon: false,
+    learnRef: 'scientists_case04',
+    intro: {
+      title: '島々の鳥たち',
+      subtitle: '似ているけれど 違う鳥たちの 謎',
+      bg: 'bg_ch04_beagle',
+      lines: [
+        { speaker: 'narrator',       text: 'キューリィ夫人の 紹介で、博物館に 停泊する 古い 帆船を 訪ねた。' },
+        { speaker: 'hinata',         text: 'こちらが 航海者 ダーリン教授の 「ビーグル号」 です。' },
+        { speaker: 'rio',            text: 'うわぁ、本物の 船!甲板に 上がれるの!?' },
+        { speaker: 'haru',           text: 'たくさんの 標本ケースが ある… 鳥、貝、化石…' },
+        { speaker: 'darwin_voyager', text: 'やぁ、若き 探偵さんたち!私が ダーリン だよ。よく 来てくれた。' },
+        { speaker: 'darwin_voyager', text: 'ちょうど 困った 事を 考えていてね — 観察 結果が、私の 頭を 悩ませて いるんだ。' },
+        { speaker: 'narrator',       text: '教授が 机に 並べた 5つの 鳥の 標本を 指さした。' },
+        { speaker: 'rio',            text: 'えっ?全部 同じ 鳥に 見えるよ。フィンチ?' },
+        { speaker: 'darwin_voyager', text: 'そう、皆 フィンチだ。でも、よく 見て ごらん。' },
+        { speaker: 'hinata',         text: 'あ… くちばし の 形が、全部 違います!' },
+        { speaker: 'haru',           text: '一つは 太くて 大きい、 一つは 細い、 一つは 鋭く 尖ってる…' },
+        { speaker: 'darwin_voyager', text: 'そう なんだよ。 ガラ諸島 という 5つの 島 で、それぞれ 違う フィンチを 見つけた。' },
+        { speaker: 'darwin_voyager', text: '同じ 種類の 鳥なのに、なぜ こんなに 違うのか — それが 謎なんだ。' },
+        { speaker: 'rio',            text: '魔法?それとも… 偶然?' },
+        { speaker: 'darwin_voyager', text: 'ふふ、自然は 偶然 だけでは 説明 できないんだよ。 観察すれば 必ず 答えが あるはずだ。' },
+        { speaker: 'darwin_voyager', text: '皆で この 謎を 解いて くれないかね?' },
+        { speaker: 'penta',          text: 'ペンッ!鳥の 謎、ペン!' },
+      ],
+      cta: '🔍 調査を 始める',
+    },
+    steps: [
+      {
+        id: 'step1',
+        title: '🐦 STEP 1: 5つの くちばしを 比べる',
+        bg: 'bg_ch04_beagle',
+        question: 'まず、5つの フィンチの くちばしを 詳しく 比べよう。何を 確認する?',
+        options: [
+          {
+            label: 'くちばしの 形·太さ·長さを 一つずつ 記録 する',
+            isCorrect: true,
+            response: [
+              { speaker: 'rio',            text: 'A は すごく 太くて 大きい!ナッツ 割り みたいだね!' },
+              { speaker: 'haru',           text: 'B は 細くて 真っ直ぐ、 C は 鋭く 尖って いる…' },
+              { speaker: 'hinata',         text: 'D は 長くて 細い、 E は 普通の 大きさ。 5種類 全部 違います。' },
+              { speaker: 'darwin_voyager', text: 'よく 観察した ね。記録は 科学の 基本だよ。' },
+            ],
+          },
+          {
+            label: 'くちばしの 色を 比べる',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '色は 似て いるよ。形が 違うところ から 調べよう。' },
+            ],
+          },
+          {
+            label: '全部 同じ だと 結論 する',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: 'よく 見ると 形が 違います。 違いを 見つける ことから 始めましょう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step2',
+        title: '🏝️ STEP 2: 5つの 島の 環境を 調べる',
+        bg: 'bg_ch04_beagle',
+        question: '教授の 航海日誌を 開いた。各島の 環境は どう?',
+        options: [
+          {
+            label: '島ごとの 主な 食べ物·植物を 確認 する',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',           text: '島1: 大きく 硬い 種子の 木が 多い。' },
+              { speaker: 'rio',            text: '島2: 細い 種子の 草原!' },
+              { speaker: 'hinata',         text: '島3: 昆虫が たくさん いる 森。 島4: 花の 蜜が 豊富。 島5: 様々な 果物。' },
+              { speaker: 'darwin_voyager', text: 'よく 整理した ね。 環境の 違い と 鳥の 違い … 何か 見えて こないかい?' },
+            ],
+          },
+          {
+            label: '島の 温度だけ 確認',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '温度より 食べ物の 違いの 方が ヒント に なりそう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step3',
+        title: '🔗 STEP 3: くちばし と 食べ物 を つなげる',
+        bg: 'bg_ch04_beagle',
+        question: 'ヒナタが くちばし と 食べ物 を 一つずつ 結びつけた。 何が 見える?',
+        options: [
+          {
+            label: '太い くちばし=硬い 種子、 細い くちばし=細い 種子、 尖った くちばし=昆虫…',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',         text: 'A の 太い くちばし は 硬い 種子を 割る ため!' },
+              { speaker: 'rio',            text: 'B は 細い 種子、 C は 昆虫を 捕まえる ため!' },
+              { speaker: 'haru',           text: 'D の 長い くちばし は 花の 蜜を 吸う ため、 E は 果物を 食べる ため…' },
+              { speaker: 'darwin_voyager', text: 'まさに!くちばし の 形は、その 鳥が 食べる 物に ぴったり 合って いるんだ。' },
+            ],
+          },
+          {
+            label: '全部 偶然 だと 思う',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '5つ 全部 食べ物と 形が 一致してる… 偶然 では ないと 思う。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step4',
+        title: '🦴 STEP 4: 古い 化石を 調べる',
+        bg: 'bg_ch04_beagle',
+        question: '教授が 古い 地層から 集めた 化石を 見せてくれた。 何が 分かる?',
+        options: [
+          {
+            label: '昔は 1種類だった フィンチが、 時間と ともに 5種類に 分かれた',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',           text: '化石は… 昔の フィンチ は 1種類 だった!' },
+              { speaker: 'hinata',         text: '時間が 経つに つれて、 だんだん 分かれて いった …' },
+              { speaker: 'rio',            text: 'すごい!一つの 種から 5種類に なったって こと?' },
+              { speaker: 'darwin_voyager', text: 'その 通りだ。 何万年 何十万年 という 長い 時間を かけて、 ね。' },
+            ],
+          },
+          {
+            label: '化石は 今の 鳥と 関係 ない',
+            isCorrect: false,
+            response: [
+              { speaker: 'darwin_voyager', text: '化石は 過去の 証拠なんだよ。 慎重に 観察 すると、 つながりが 見えるんだ。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step5',
+        title: '🥚 STEP 5: ひなと 親鳥を 観察',
+        bg: 'bg_ch04_beagle',
+        question: 'ヒナと 親鳥を 比べた。 何が 分かる?',
+        options: [
+          {
+            label: 'ひなの くちばし も 親と 似て いる — 形が 受け継がれる',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',         text: '太い くちばしの 親 から 生まれた ひなも、 太い くちばし!' },
+              { speaker: 'rio',            text: 'えっ、ひなって 親に 似るの!?' },
+              { speaker: 'haru',           text: '形が 親から 子に 受け継がれる … これは 「遺伝」 だ。' },
+              { speaker: 'darwin_voyager', text: 'その 通り。 形質は 遺伝 する。 これが 進化の 鍵 なんだよ。' },
+            ],
+          },
+          {
+            label: 'ひなは 親と 全く 違う',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: 'よく 観察 すると、 ひなも 親と 似た くちばしを して います。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step6',
+        title: '🧩 STEP 6: 推理を 組み立てる',
+        bg: 'bg_ch04_beagle',
+        question: '全ての 手がかりが 揃った。 教授に どう 伝える?',
+        options: [
+          {
+            label: '「同じ 祖先から、 環境に 合う 個体が 生き残り、 5種に 分かれた」',
+            isCorrect: true,
+            response: [
+              { speaker: 'darwin_voyager', text: 'まさに!君たちは 答えに たどり着いた!' },
+              { speaker: 'darwin_voyager', text: '昔、 1種の フィンチが 5つの 島に 渡った。 それぞれ 違う 食べ物の 環境で…' },
+              { speaker: 'darwin_voyager', text: '偶然 食べ物に 合う くちばしを 持つ 個体が 生き残り、 次の 世代に 受け継ぐ。' },
+              { speaker: 'darwin_voyager', text: '世代を 重ねる うちに、 だんだん 環境に 合う 形に 変わって いく。 これが 「自然選択」 だ。' },
+              { speaker: 'hinata',         text: '生き残るのは 「強い」 個体 では なく 「環境に 合う」 個体 ですね。' },
+              { speaker: 'haru',           text: '長い 時間の 中で、 種は ゆっくり 変化 する … それが 「進化」。' },
+              { speaker: 'rio',            text: '私たち 人間も そう なの?' },
+              { speaker: 'darwin_voyager', text: 'そう、すべての 生き物が 進化の 物語の 中に いる。 君たちも、 私も、 ね。' },
+            ],
+          },
+          {
+            label: '「5種類は 神様が 別々に 作った」',
+            isCorrect: false,
+            response: [
+              { speaker: 'darwin_voyager', text: '化石は 1種から 始まった 事を 示しているよ。 観察に 基づいて 考えよう。' },
+            ],
+          },
+          {
+            label: '「環境に 関係なく 変わった」',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '食べ物と くちばしが ピッタリ 合って いる。 偶然 じゃ ないよ。' },
+            ],
+          },
+        ],
+      },
+    ],
+    ending: {
+      bg: 'bg_ch04_beagle',
+      lines: [
+        { speaker: 'darwin_voyager', text: '皆の おかげで、 私の 観察が 説明 できた。 ありがとう。' },
+        { speaker: 'darwin_voyager', text: '進化は 過去の 物語 では ない。 今も、 これからも 続く、 命の 物語 なんだ。' },
+        { speaker: 'rio',            text: '生き物って すごい!' },
+        { speaker: 'haru',           text: '長い 時間が、 こんな 多様な 命を 作って きたんだね。' },
+        { speaker: 'hinata',         text: '私たち 人間も、 進化の 一部 ですね。' },
+        { speaker: 'darwin_voyager', text: 'その 通り。 さあ、 進化の 仕組みを もう 少し 学んで みよう。' },
+        { speaker: 'penta',          text: 'ペンッ!進化の 勉強、 ペン!' },
+      ],
+      cta: '📚 学習資料を 開く',
+    },
+    caseQuiz: [
+      {
+        q: '事件 4 で 5種の フィンチの くちばしが 違う 理由は?',
+        options: ['偶然', '各島の 食べ物に 自然選択で 適応した', '人間が 作った', '不思議な 力'],
+        correct: 1,
+      },
+      {
+        q: '自然選択を 発見した 人は?',
+        options: ['ニュートン', 'ダーウィン', 'アインシュタイン', 'パスカル'],
+        correct: 1,
+      },
+      {
+        q: '進化の 3条件 ではない のは?',
+        options: ['変異', '遺伝', '環境圧力', '目的'],
+        correct: 3,
+      },
+      {
+        q: 'ダーウィンが フィンチを 観察した 諸島は?',
+        options: ['ハワイ', 'ガラパゴス', 'カナリア', 'マダガスカル'],
+        correct: 1,
+      },
+      {
+        q: '進化論の 核心 メッセージは?',
+        options: ['強い 個体だけ 生き残る', '環境に 合う 個体が 生き残り 子孫を 残す', '進化には 目的が ある', '生物は 変化 しない'],
+        correct: 1,
+      },
+    ],
+    note: { title: '第4事件 島々の 鳥たち', desc: 'ガラ諸島 5種の フィンチ — 同じ 祖先から 環境に 合う くちばしへ 進化。 ダーウィンの 自然選択説 — 「強い 個体」 ではなく 「適応した 個体」 が 生き残る 自然の 法則 — を 学んだ 第四歩。' },
   },
   {
     id: 5, icon: '🦠',

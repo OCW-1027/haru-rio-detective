@@ -853,5 +853,390 @@ const SCIENTISTS_LEARN = {
       { title: '⑧  安全 第一 — 距離·遮蔽·時間',    body: '放射線 から 身を 守る 3原則: 離れる·遮る·短時間。 安全 規制が ある 理由。' },
     ],
   },
-  // 사건 4~10 은 향후 별도 명세서에서 추가 (scientists_case04 ...).
+  scientists_case04: {
+    title: '進化論と 自然選択',
+    subtitle: '事件 4 で 学んだ こと',
+    examScope: '中学 生物 + 比喩 中心 (정성적 이해)',
+
+    concept: {
+      title: '進化論と 自然選択',
+      paragraphs: [
+        '事件 4 の 5種の フィンチ — 全部 同じ 祖先 から 分かれた 兄弟 たちです。 環境に 合った 個体が 生き残り、 子孫に その 形質を 残す ことで、 長い 時間を かけて 少しずつ 形が 変わって いきます。 これを 「進化 (しんか)」 と 言います。',
+        '進化を 起こす 仕組みの 一つが 「自然選択 (しぜんせんたく)」 です。 ダーウィン が 1859年 に 発表した 『種の 起源』 で 詳しく 説明しました。',
+        '生物は 親から 子へ、 形質を 「遺伝 (いでん)」 します。 たまに 少しだけ 違う 子 (変異, へんい) が 生まれます。 環境に 合う 変異を 持った 個体が より 多く 子孫を 残し、 世代を 重ねる うちに 集団 全体の 形が 変わって いきます。',
+        'これは 「弱肉強食」 ではなく 「環境への 適応」 です。 大きい·速い·強い 個体だけが 生き残るのでは なく、 その 環境で 暮らす のに ぴったり な 個体が 生き残ります。 すべての 生物 (細菌から 人間まで) が、 この 進化の 物語の 一部です。',
+      ],
+      highlight: '進化 = 環境に 合う 個体が 生き残り、 形質が 子孫に 受け継がれる。 長い 時間が 多様な 生命を 作る。',
+    },
+
+    diagrams: [
+      {
+        title: '①  5種の フィンチ — くちばしと 食べ物',
+        svg: `
+          <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#f4f8e8;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#3a6a1a">環境に 合った くちばしの 形</text>
+            <!-- A: 太い (큰 씨앗) -->
+            <g transform="translate(50,70)">
+              <ellipse cx="20" cy="20" rx="18" ry="14" fill="#c8c8c8" stroke="#5a5a5a" stroke-width="1.5"/>
+              <polygon points="38,16 60,20 38,24" fill="#8a5a2a" stroke="#5a3010" stroke-width="2"/>
+              <circle cx="14" cy="16" r="2" fill="#1a1a1a"/>
+              <text x="30" y="60" font-size="10" font-weight="bold" text-anchor="middle" fill="#7a3a1a">A: 太い</text>
+              <circle cx="30" cy="85" r="8" fill="#8a5a2a"/>
+              <text x="30" y="108" font-size="9" text-anchor="middle" fill="#1a1a1a">大きい 種子</text>
+            </g>
+            <!-- B: 細い (가는 씨앗) -->
+            <g transform="translate(140,70)">
+              <ellipse cx="20" cy="20" rx="16" ry="13" fill="#d8d8d8" stroke="#5a5a5a" stroke-width="1.5"/>
+              <polygon points="36,18 56,20 36,22" fill="#a0691a" stroke="#5a3010" stroke-width="2"/>
+              <circle cx="14" cy="16" r="2" fill="#1a1a1a"/>
+              <text x="30" y="60" font-size="10" font-weight="bold" text-anchor="middle" fill="#7a3a1a">B: 細い</text>
+              <ellipse cx="30" cy="85" rx="3" ry="6" fill="#a0691a"/>
+              <text x="30" y="108" font-size="9" text-anchor="middle" fill="#1a1a1a">細い 種子</text>
+            </g>
+            <!-- C: 尖った (곤충) -->
+            <g transform="translate(230,70)">
+              <ellipse cx="20" cy="20" rx="16" ry="13" fill="#cdcdcd" stroke="#5a5a5a" stroke-width="1.5"/>
+              <polygon points="36,20 58,16 58,24" fill="#5a3a1a" stroke="#2a1a08" stroke-width="2"/>
+              <circle cx="14" cy="16" r="2" fill="#1a1a1a"/>
+              <text x="30" y="60" font-size="10" font-weight="bold" text-anchor="middle" fill="#7a3a1a">C: 尖った</text>
+              <ellipse cx="30" cy="85" rx="6" ry="4" fill="#3a6a1a"/>
+              <line x1="24" y1="83" x2="20" y2="78" stroke="#3a6a1a" stroke-width="1"/>
+              <line x1="36" y1="83" x2="40" y2="78" stroke="#3a6a1a" stroke-width="1"/>
+              <text x="30" y="108" font-size="9" text-anchor="middle" fill="#1a1a1a">昆虫</text>
+            </g>
+            <!-- D: 長く 細い (꽃꿀) -->
+            <g transform="translate(320,70)">
+              <ellipse cx="20" cy="20" rx="15" ry="12" fill="#d8d8d8" stroke="#5a5a5a" stroke-width="1.5"/>
+              <path d="M 35 20 Q 50 22 65 24" fill="none" stroke="#8a5a2a" stroke-width="2.5"/>
+              <circle cx="14" cy="16" r="2" fill="#1a1a1a"/>
+              <text x="30" y="60" font-size="10" font-weight="bold" text-anchor="middle" fill="#7a3a1a">D: 長く 細い</text>
+              <ellipse cx="30" cy="85" rx="8" ry="3" fill="#e74c3c"/>
+              <ellipse cx="30" cy="85" rx="3" ry="6" fill="#e74c3c"/>
+              <text x="30" y="108" font-size="9" text-anchor="middle" fill="#1a1a1a">花の 蜜</text>
+            </g>
+            <!-- E: 中間 (과일) -->
+            <g transform="translate(410,70)">
+              <ellipse cx="20" cy="20" rx="16" ry="13" fill="#d0d0d0" stroke="#5a5a5a" stroke-width="1.5"/>
+              <polygon points="36,17 52,20 36,23" fill="#8a5a2a" stroke="#5a3010" stroke-width="2"/>
+              <circle cx="14" cy="16" r="2" fill="#1a1a1a"/>
+              <text x="30" y="60" font-size="10" font-weight="bold" text-anchor="middle" fill="#7a3a1a">E: 中間</text>
+              <circle cx="30" cy="85" r="7" fill="#e74c3c"/>
+              <text x="30" y="108" font-size="9" text-anchor="middle" fill="#1a1a1a">果物</text>
+            </g>
+            <text x="250" y="200" font-size="11" font-weight="bold" text-anchor="middle" fill="#3a6a1a">同じ 祖先 → 5つの 島 で 違う 食べ物 → 違う くちばし に 進化</text>
+            <text x="250" y="225" font-size="10" text-anchor="middle" fill="#5a4a2a">これが 「適応 (てきおう)」 の 結果</text>
+            <text x="250" y="252" font-size="10" font-weight="bold" text-anchor="middle" fill="#8a2a1a">事件 4 の 5種は 偶然 では ない — 自然選択 の 証拠</text>
+          </svg>
+        `,
+      },
+      {
+        title: '②  自然選択の 3段階 — 変異·選択·遺伝',
+        svg: `
+          <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#fff5e8;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#7a3a1a">自然選択 の 3段階</text>
+            <!-- Stage 1: 変異 -->
+            <g transform="translate(40,80)">
+              <rect x="0" y="0" width="120" height="140" fill="#fff" stroke="#7a3a1a" stroke-width="2" rx="8"/>
+              <text x="60" y="20" font-size="12" font-weight="bold" text-anchor="middle" fill="#7a3a1a">1. 変異</text>
+              <!-- 다양한 부리 -->
+              <g transform="translate(20,38)">
+                <ellipse cx="14" cy="12" rx="10" ry="8" fill="#cdcdcd" stroke="#5a5a5a"/>
+                <polygon points="24,10 36,12 24,14" fill="#8a5a2a"/>
+              </g>
+              <g transform="translate(20,68)">
+                <ellipse cx="14" cy="12" rx="10" ry="8" fill="#cdcdcd" stroke="#5a5a5a"/>
+                <polygon points="24,10 32,12 24,14" fill="#a0691a"/>
+              </g>
+              <g transform="translate(20,98)">
+                <ellipse cx="14" cy="12" rx="10" ry="8" fill="#cdcdcd" stroke="#5a5a5a"/>
+                <polygon points="24,11 38,8 38,15" fill="#5a3a1a"/>
+              </g>
+              <text x="60" y="135" font-size="9" text-anchor="middle" fill="#5a3a1a">個体ごと 違う 形質</text>
+            </g>
+            <!-- 矢印 1→2 -->
+            <polygon points="170,150 195,140 195,160" fill="#7a3a1a"/>
+            <!-- Stage 2: 選択 -->
+            <g transform="translate(200,80)">
+              <rect x="0" y="0" width="120" height="140" fill="#fff" stroke="#7a3a1a" stroke-width="2" rx="8"/>
+              <text x="60" y="20" font-size="12" font-weight="bold" text-anchor="middle" fill="#7a3a1a">2. 選択</text>
+              <!-- 환경 (큰 씨앗) + 큰 부리만 살아남음 -->
+              <circle cx="30" cy="50" r="10" fill="#8a5a2a" stroke="#5a3010"/>
+              <circle cx="60" cy="48" r="11" fill="#8a5a2a" stroke="#5a3010"/>
+              <circle cx="92" cy="52" r="10" fill="#8a5a2a" stroke="#5a3010"/>
+              <text x="60" y="80" font-size="9" text-anchor="middle" fill="#5a3a1a">環境: 大きい 種子</text>
+              <!-- 큰 부리 ✓ -->
+              <g transform="translate(20,90)">
+                <ellipse cx="14" cy="12" rx="10" ry="8" fill="#a8c8a8" stroke="#3a6a1a"/>
+                <polygon points="24,10 36,12 24,14" fill="#8a5a2a"/>
+                <text x="50" y="15" font-size="14" font-weight="bold" fill="#1a7a1a">✓</text>
+              </g>
+              <!-- 작은 부리 ✗ -->
+              <g transform="translate(20,118)">
+                <ellipse cx="14" cy="12" rx="10" ry="8" fill="#f0c8c8" stroke="#7a3a3a"/>
+                <polygon points="24,10 30,12 24,14" fill="#a0691a"/>
+                <text x="50" y="15" font-size="14" font-weight="bold" fill="#7a1a1a">✗</text>
+              </g>
+            </g>
+            <!-- 矢印 2→3 -->
+            <polygon points="330,150 355,140 355,160" fill="#7a3a1a"/>
+            <!-- Stage 3: 遺伝 -->
+            <g transform="translate(360,80)">
+              <rect x="0" y="0" width="120" height="140" fill="#fff" stroke="#7a3a1a" stroke-width="2" rx="8"/>
+              <text x="60" y="20" font-size="12" font-weight="bold" text-anchor="middle" fill="#7a3a1a">3. 遺伝</text>
+              <!-- 親 (큰 부리) -->
+              <g transform="translate(30,40)">
+                <ellipse cx="14" cy="12" rx="11" ry="9" fill="#cdcdcd" stroke="#5a5a5a"/>
+                <polygon points="25,10 38,12 25,14" fill="#8a5a2a"/>
+                <text x="60" y="14" font-size="9" fill="#1a1a1a">親</text>
+              </g>
+              <line x1="40" y1="68" x2="40" y2="90" stroke="#7a3a1a" stroke-width="1.5" stroke-dasharray="2 2"/>
+              <!-- 子 (큰 부리) -->
+              <g transform="translate(20,95)">
+                <ellipse cx="14" cy="12" rx="9" ry="7" fill="#e0e0e0" stroke="#5a5a5a"/>
+                <polygon points="23,10 33,12 23,14" fill="#8a5a2a"/>
+              </g>
+              <g transform="translate(55,95)">
+                <ellipse cx="14" cy="12" rx="9" ry="7" fill="#e0e0e0" stroke="#5a5a5a"/>
+                <polygon points="23,10 33,12 23,14" fill="#8a5a2a"/>
+              </g>
+              <g transform="translate(85,95)">
+                <ellipse cx="14" cy="12" rx="9" ry="7" fill="#e0e0e0" stroke="#5a5a5a"/>
+                <polygon points="23,10 33,12 23,14" fill="#8a5a2a"/>
+              </g>
+              <text x="60" y="135" font-size="9" text-anchor="middle" fill="#5a3a1a">子に 受け継がれる</text>
+            </g>
+            <text x="250" y="252" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a3a1a">変異 + 選択 + 遺伝 = 進化</text>
+            <text x="250" y="278" font-size="10" text-anchor="middle" fill="#5a4a2a">この 3条件が 全て 揃うと、 種は 環境に 適応 して 変わって いく</text>
+          </svg>
+        `,
+      },
+      {
+        title: '③  ビーグル号の 航海 (1831-1836)',
+        svg: `
+          <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#cfe8f0;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a4a7a">5年の 航海 — 自然選択 発見の 旅</text>
+            <!-- 바다 배경 + 대륙 -->
+            <rect x="0" y="40" width="500" height="220" fill="#a8d4e8"/>
+            <!-- 영국 -->
+            <path d="M 220 70 L 240 60 L 250 80 L 235 95 Z" fill="#8ab070" stroke="#3a5a2a" stroke-width="1.5"/>
+            <text x="235" y="55" font-size="10" font-weight="bold" text-anchor="middle" fill="#1a3a1a">英国</text>
+            <!-- 남미 -->
+            <path d="M 130 110 Q 145 130 150 170 Q 145 210 130 230 L 115 220 Q 110 175 120 140 Z" fill="#8ab070" stroke="#3a5a2a" stroke-width="1.5"/>
+            <text x="135" y="190" font-size="10" font-weight="bold" text-anchor="middle" fill="#1a3a1a">南米</text>
+            <!-- 갈라파고스 (강조) -->
+            <circle cx="90" cy="160" r="6" fill="#e74c3c" stroke="#7a1a1a" stroke-width="2"/>
+            <circle cx="85" cy="155" r="3" fill="#e74c3c"/>
+            <circle cx="95" cy="158" r="3" fill="#e74c3c"/>
+            <text x="40" y="155" font-size="9" font-weight="bold" fill="#7a1a1a">ガラパゴス</text>
+            <text x="40" y="167" font-size="9" font-weight="bold" fill="#7a1a1a">諸島 ★</text>
+            <!-- 호주 -->
+            <ellipse cx="400" cy="190" rx="40" ry="22" fill="#8ab070" stroke="#3a5a2a" stroke-width="1.5"/>
+            <text x="400" y="195" font-size="10" font-weight="bold" text-anchor="middle" fill="#1a3a1a">豪州</text>
+            <!-- 항해 경로 (점선) -->
+            <path d="M 232 90 Q 200 100 160 130 Q 130 160 120 200" fill="none" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ah_voy1)"/>
+            <path d="M 120 200 Q 105 175 90 165" fill="none" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ah_voy2)"/>
+            <path d="M 90 165 Q 200 220 360 195" fill="none" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ah_voy3)"/>
+            <path d="M 400 180 Q 380 130 280 90 Q 250 80 240 80" fill="none" stroke="#e74c3c" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ah_voy4)"/>
+            <!-- 배 아이콘 -->
+            <g transform="translate(245,85)">
+              <polygon points="0,5 14,5 12,0 2,0" fill="#fff"/>
+              <rect x="6" y="-8" width="2" height="8" fill="#5a3a18"/>
+              <polygon points="8,-8 14,-2 8,-2" fill="#fff"/>
+            </g>
+            <defs>
+              <marker id="ah_voy1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#e74c3c"/></marker>
+              <marker id="ah_voy2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#e74c3c"/></marker>
+              <marker id="ah_voy3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#e74c3c"/></marker>
+              <marker id="ah_voy4" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#e74c3c"/></marker>
+            </defs>
+            <text x="250" y="258" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a4a7a">英国 → 南米 → ガラパゴス → 豪州 → 英国 (5年間)</text>
+          </svg>
+        `,
+      },
+      {
+        title: '④  共通祖先と 種の 分化 — 生命の 木',
+        svg: `
+          <svg viewBox="0 0 450 350" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#eef8ee;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a6a2a">同じ 祖先 → 環境 適応 → 5種に 分化</text>
+            <!-- 공통조상 (하단) -->
+            <g transform="translate(200,290)">
+              <ellipse cx="25" cy="15" rx="22" ry="14" fill="#a8c8a8" stroke="#3a6a1a" stroke-width="2"/>
+              <polygon points="45,13 60,15 45,17" fill="#8a5a2a"/>
+              <circle cx="18" cy="11" r="2" fill="#1a1a1a"/>
+              <text x="25" y="50" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a4a1a">共通祖先 (1種)</text>
+            </g>
+            <!-- 분기 줄기 -->
+            <line x1="225" y1="280" x2="225" y2="220" stroke="#5a3a1a" stroke-width="3"/>
+            <line x1="225" y1="220" x2="80" y2="170" stroke="#5a3a1a" stroke-width="2.5"/>
+            <line x1="225" y1="220" x2="150" y2="160" stroke="#5a3a1a" stroke-width="2.5"/>
+            <line x1="225" y1="220" x2="225" y2="155" stroke="#5a3a1a" stroke-width="2.5"/>
+            <line x1="225" y1="220" x2="300" y2="160" stroke="#5a3a1a" stroke-width="2.5"/>
+            <line x1="225" y1="220" x2="370" y2="170" stroke="#5a3a1a" stroke-width="2.5"/>
+            <!-- 5종 핀치 (상단) -->
+            <g transform="translate(50,100)">
+              <ellipse cx="20" cy="20" rx="18" ry="13" fill="#cdcdcd" stroke="#5a5a5a" stroke-width="1.5"/>
+              <polygon points="36,18 60,20 36,22" fill="#8a5a2a" stroke="#5a3010" stroke-width="1.5"/>
+              <circle cx="14" cy="16" r="2" fill="#1a1a1a"/>
+              <text x="30" y="55" font-size="9" font-weight="bold" text-anchor="middle" fill="#7a3a1a">A 太い</text>
+              <text x="30" y="68" font-size="8" text-anchor="middle" fill="#5a3a1a">島1·大種子</text>
+            </g>
+            <g transform="translate(120,90)">
+              <ellipse cx="20" cy="20" rx="16" ry="12" fill="#d8d8d8" stroke="#5a5a5a" stroke-width="1.5"/>
+              <polygon points="34,18 52,20 34,22" fill="#a0691a" stroke="#5a3010" stroke-width="1.5"/>
+              <circle cx="14" cy="16" r="2" fill="#1a1a1a"/>
+              <text x="28" y="50" font-size="9" font-weight="bold" text-anchor="middle" fill="#7a3a1a">B 細い</text>
+              <text x="28" y="63" font-size="8" text-anchor="middle" fill="#5a3a1a">島2·小種子</text>
+            </g>
+            <g transform="translate(195,85)">
+              <ellipse cx="20" cy="20" rx="16" ry="12" fill="#cdcdcd" stroke="#5a5a5a" stroke-width="1.5"/>
+              <polygon points="34,20 54,16 54,24" fill="#5a3a1a" stroke="#2a1a08" stroke-width="1.5"/>
+              <circle cx="14" cy="16" r="2" fill="#1a1a1a"/>
+              <text x="30" y="50" font-size="9" font-weight="bold" text-anchor="middle" fill="#7a3a1a">C 尖った</text>
+              <text x="30" y="63" font-size="8" text-anchor="middle" fill="#5a3a1a">島3·昆虫</text>
+            </g>
+            <g transform="translate(270,90)">
+              <ellipse cx="20" cy="20" rx="15" ry="11" fill="#d8d8d8" stroke="#5a5a5a" stroke-width="1.5"/>
+              <path d="M 33 20 Q 48 22 60 24" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <circle cx="14" cy="16" r="2" fill="#1a1a1a"/>
+              <text x="30" y="50" font-size="9" font-weight="bold" text-anchor="middle" fill="#7a3a1a">D 長い</text>
+              <text x="30" y="63" font-size="8" text-anchor="middle" fill="#5a3a1a">島4·花蜜</text>
+            </g>
+            <g transform="translate(340,100)">
+              <ellipse cx="20" cy="20" rx="16" ry="12" fill="#d0d0d0" stroke="#5a5a5a" stroke-width="1.5"/>
+              <polygon points="34,18 50,20 34,22" fill="#8a5a2a" stroke="#5a3010" stroke-width="1.5"/>
+              <circle cx="14" cy="16" r="2" fill="#1a1a1a"/>
+              <text x="30" y="55" font-size="9" font-weight="bold" text-anchor="middle" fill="#7a3a1a">E 中間</text>
+              <text x="30" y="68" font-size="8" text-anchor="middle" fill="#5a3a1a">島5·果物</text>
+            </g>
+            <!-- 시간축 -->
+            <line x1="40" y1="240" x2="410" y2="240" stroke="#5a3a1a" stroke-width="1" stroke-dasharray="2 2"/>
+            <text x="40" y="255" font-size="9" fill="#5a3a1a">何万年 前</text>
+            <text x="410" y="255" font-size="9" text-anchor="end" fill="#5a3a1a">現在</text>
+            <line x1="225" y1="245" x2="225" y2="235" stroke="#5a3a1a" stroke-width="1"/>
+            <!-- 화살표 시간 흐름 -->
+            <polygon points="405,237 415,240 405,243" fill="#5a3a1a"/>
+            <text x="225" y="335" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">全ての 生き物は 共通祖先から 分かれた 「生命の 木」 の 枝</text>
+          </svg>
+        `,
+      },
+    ],
+
+    formulas: [
+      {
+        name: '自然選択の 3原則',
+        formula: '変異 + 環境圧力 + 遺伝 = 進化',
+        formulaSimple: '変異 + 選択 + 遺伝',
+        explanation: '1) 個体ごとに 少し 違う 変異が ある, 2) 環境に 合う 個体が より 多く 生き残る, 3) 形質が 子に 受け継がれる。 この 3つが 全て 揃うと 進化 発生。',
+        note: '式 ではなく 「条件」。 全ての 生物に 当てはまる 普遍 原理。',
+      },
+      {
+        name: '適応の 結果',
+        formula: '「環境に ぴったり 合う 形質」 が 集団の 多数に なる',
+        formulaSimple: '適応 = 環境 ↔ 形質 一致',
+        explanation: '「強い」 より 「合う」 が 大切。 環境が 変われば 昨日 有利だった 形質が 今日は 不利に なる ことも ある。',
+        note: '進化に 「目的」 は ない。 ただ 「結果」 として 環境に 合う 形質が 残る だけ。',
+      },
+    ],
+
+    unitsTable: {
+      title: '進化 キーワード まとめ',
+      rows: [
+        ['用語',                  '意味',                                          '例'],
+        ['進化 (しんか)',          '世代を 経て 種が 変化 する 過程',                 '5種 フィンチの 分化'],
+        ['自然選択',              '環境に 合う 個体が 生き残り 子孫を 残す こと',     '大きい くちばし → 大きい 種子の 島で 優勢'],
+        ['変異 (へんい)',          '同じ 種でも 個体ごとに 形質が 少しずつ 違う こと', '同じ フィンチでも くちばし サイズ が 違う'],
+        ['遺伝 (いでん)',          '形質が 親から 子へ 受け継がれる こと',           '大きい くちばし 親 → 大きい くちばし 子'],
+        ['適応 (てきおう)',        '環境に 合うように 形質が 変わる こと',          '島ごと 違う 食べ物に 合う くちばし'],
+        ['共通祖先',              '複数の 種が 共有する 昔の 祖先',                  '5種 フィンチ = 1種 フィンチ の 子孫'],
+      ],
+    },
+
+    flashcards: [
+      { front: '進化 (しんか)',             back: '世代を 経て 生物の 形質が 変化 する 過程。 ダーウィン が 1859年 『種の 起源』 で 体系化。' },
+      { front: '自然選択 (しぜんせんたく)', back: '環境に 合う 個体が より 多く 生き残り 子孫を 残す 仕組み。 進化の 主な 原動力。' },
+      { front: '変異 (へんい)',             back: '同じ 種でも 個体ごとに 形質が 少しずつ 違う こと。 進化の 出発点。' },
+      { front: '遺伝 (いでん)',             back: '親の 形質が 子に 伝わる こと。 進化が 起こる ための 必須 条件。' },
+      { front: '適応 (てきおう)',           back: '生物が 環境に 合う 形質を 持つように なる こと。 自然選択の 結果。' },
+      { front: '共通祖先 (きょうつうそせん)', back: '複数の 種が 共有する 昔の 祖先。 5種 フィンチ = 1種 祖先 から 分化。' },
+      { front: 'フィンチ (Finch)',          back: 'ガラパゴス諸島の 小さな 鳥。 ダーウィン 進化論の 核心 証拠。 13~14種 存在。' },
+      { front: 'ガラパゴス 諸島',           back: 'エクアドル 西の 太平洋 火山島群。 ダーウィン が 約 5週間 滞在し フィンチを 観察。' },
+      { front: 'ビーグル号',                back: 'ダーウィン が 5年間 (1831-1836) 世界一周した 英国 海軍 測量船。' },
+      { front: 'チャールズ·ダーウィン',     back: '英国 自然主義者 (1809-1882)。 ビーグル号 航海 後 自然選択説 発表。 『種の 起源』 (1859) 著者。' },
+    ],
+
+    exercises: [
+      {
+        q: '事件 4 の 5種の フィンチの くちばしが 違う 理由は?',
+        options: ['神様が 別々に 作った', '各島の 食べ物に 自然選択で 適応した', '偶然 違う 種が 集まった', '人間が 人工的に 変えた'],
+        correct: 1,
+        explanation: '事件 4 の 核心。 1種から 始まり → 各島の 食べ物に 適応 → 5種に 分化。',
+      },
+      {
+        q: '自然選択の 3条件 ではない のは?',
+        options: ['変異', '環境圧力 (選択)', '遺伝', '目的'],
+        correct: 3,
+        explanation: '進化に 「目的」 は ない。 ただ 結果として 環境に 合う 形質が 生き残る だけ。',
+      },
+      {
+        q: '進化論を 体系化した 人は?',
+        options: ['ニュートン', 'アインシュタイン', 'ダーウィン', 'ガリレオ'],
+        correct: 2,
+        explanation: 'チャールズ·ダーウィン (1809-1882)。 ビーグル号 5年 航海 後 1859年 『種の 起源』 発表。',
+      },
+      {
+        q: 'ダーウィンが フィンチを 観察した 諸島の 名前は?',
+        options: ['ハワイ', 'ガラパゴス', 'マダガスカル', 'カナリア'],
+        correct: 1,
+        explanation: 'ガラパゴス 諸島 (エクアドル 西)。 ダーウィン が 1835年 約 5週間 滞在。',
+      },
+      {
+        q: '同じ 種の 個体が 少しずつ 違う 形質を 持つ ことを 何と いう?',
+        options: ['遺伝', '変異', '進化', '適応'],
+        correct: 1,
+        explanation: '変異 (へんい)。 進化の 出発点。 変異が なければ 進化も ない。',
+      },
+      {
+        q: '大きい 種子しか ない 島 では、 どんな くちばしの フィンチが 最も よく 生き残る?',
+        options: ['細い くちばし', '太く 大きい くちばし', '長く 細い くちばし', '尖った くちばし'],
+        correct: 1,
+        explanation: '大きい 種子を 割る には 強い くちばし が 必要。 自然選択の 直接 例。',
+      },
+      {
+        q: '次の うち、 進化の 結果 と 言え ない のは?',
+        options: ['北極熊の 白い 毛', 'カメレオン の 色 変化', '人工的に 品種改良 した 犬', 'キリン の 長い 首'],
+        correct: 2,
+        explanation: '品種改良は 「人工選択」。 自然進化とは 別の 仕組み (ただし 原理は 似ている)。',
+      },
+      {
+        q: 'ダーウィンが ビーグル号で 航海した 期間は?',
+        options: ['1年', '3年', '5年', '10年'],
+        correct: 2,
+        explanation: '1831-1836年、 約 5年間 世界一周。 ガラパゴスは その 一つの 寄港地。',
+      },
+      {
+        q: '「自然選択」 を 正しく 説明した のは?',
+        options: ['強い 個体だけ 生き残る', '環境に 合う 個体が より 多く 子孫を 残す', '神様が 生き残る 個体を 決める', '全ての 個体が 平等に 生き残る'],
+        correct: 1,
+        explanation: '「適者生存」 は 「強者生存」 では ない。 環境 適合度が 核心。',
+      },
+      {
+        q: '5種 フィンチが 全て 1種の 共通祖先から 分化した 証拠 ではない のは?',
+        options: ['古い 化石が 1種だけ 残って いる', 'DNA 分析 結果 とても 似て いる', '5種 全て 同じ 色の 羽', '5種 全て 似た 鳴き声'],
+        correct: 2,
+        explanation: '羽の 色は 環境 適応の 結果で、 共通祖先の 証拠 では ない。 他 3つは 全て 有効な 証拠。',
+      },
+    ],
+
+    tips: [
+      { title: '①  進化 = 「強者」 より 「適者」',     body: '進化は 「強い 個体」 ではなく 「環境に 合う 個体」 が 生き残る 過程。 「適者生存」。' },
+      { title: '②  自然選択 = 変異 + 選択 + 遺伝',   body: 'この 3つが 全て 揃うと 進化 発生。 どれか 一つでも 欠ければ ダメ。' },
+      { title: '③  進化に 「目的」 は ない',           body: '未来の ために 進化する のでは なく、 環境 適合 個体が 生き残った 「結果」。' },
+      { title: '④  時間が 鍵 — 何万年·何百万年',     body: '短期間 では 進化は ほぼ 観察 不可。 化石 記録·DNA 分析で 追跡。' },
+      { title: '⑤  共通祖先 — 全ての 生物は 親戚',   body: '人間·ゴリラ·魚·植物 すべて 遡れば 共通祖先。 「生命の 木」。' },
+      { title: '⑥  ガラパゴス フィンチ = 進化論の 象徴', body: '5種の くちばしの 違い = 自然選択の 直接 証拠。 ダーウィン が 『種の 起源』 核心 事例で 使用。' },
+      { title: '⑦  人工選択も 進化の 一種',           body: '犬の 品種改良·小麦 などの 農作物。 人間が 環境の 役割を する。 原理は 自然選択と 同じ。' },
+      { title: '⑧  進化は 今も 進行中',               body: '抗生物質 耐性菌·都市 環境 適応 生物 など。 私たちの 目の 前でも 進化 観察 可能。' },
+    ],
+  },
+  // 사건 5~10 은 향후 별도 명세서에서 추가 (scientists_case05 ...).
 };
