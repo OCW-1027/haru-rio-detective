@@ -1974,5 +1974,329 @@ const SCIENTISTS_LEARN = {
       { title: '⑧  メモリ — 君の 形質も 遺伝',        body: '目の 色·耳の 形 なども 親から 1個 ずつ 受けた 因子の 組み合わせ。 メンデル 法則は 私たちの 体にも。' },
     ],
   },
-  // 사건 7~10 은 향후 별도 명세서에서 추가 (scientists_case07 ...).
+  scientists_case07: {
+    title: '天体観測と 地動説',
+    subtitle: '事件 7 で 学んだ こと',
+    examScope: '中学 理科 (地学) + 比喩 中心',
+
+    concept: {
+      title: '天体観測と 地動説',
+      paragraphs: [
+        '事件 7 で 木星の そばに 見えた 4つの 点 — それは 木星を まわる 「衛星 (えいせい)」 でした。 ガリレオ は 1610年、 自作の 望遠鏡で これを 発見 しました。 木星の 4大 衛星は 今も 「ガリレオ 衛星」 と 呼ばれて います。',
+        'それまで 多くの 人は 「地球が 宇宙の 中心で、 すべての 天体が 地球を まわる」 という 「天動説 (てんどうせつ)」 を 信じて いました。 ですが、 木星を まわる 衛星が ある なら、 「すべてが 地球を まわる」 とは 言えません。',
+        'これは 「地球も 太陽の まわりを まわる 惑星の 一つだ」 という 「地動説 (ちどうせつ)」 を 支える 観測でした。 地動説は コペルニクス が 唱え、 ガリレオ の 観測が 力強い 証拠を 与えたのです。',
+        'ガリレオ の 発見が 大切なのは、 「権威や 常識」 ではなく 「自分の 目で 見た 観測」 を 根拠に した ことです。 望遠鏡という 新しい 道具が、 人類の 宇宙観を 大きく 変えました。 観測と 証拠を 重んじる — これは 今の 科学の 土台です。',
+      ],
+      highlight: '木星の 衛星 = 「すべてが 地球を まわる」 の 反証。 観測と 証拠が、 古い 常識を 更新する。',
+    },
+
+    diagrams: [
+      {
+        title: '①  天動説 vs 地動説 — 中心は どっち?',
+        svg: `
+          <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#1a1a3a;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#fdd58e">中心は 地球か、 太陽か</text>
+            <!-- 좌측: 天動説 -->
+            <text x="125" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#e74c3c">天動説 (地球 中心)</text>
+            <g transform="translate(125,160)">
+              <!-- 지구 (중심) -->
+              <circle cx="0" cy="0" r="14" fill="#6ba8c4" stroke="#fff" stroke-width="1.5"/>
+              <text x="0" y="35" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">地球</text>
+              <!-- 궤도 -->
+              <circle cx="0" cy="0" r="40" fill="none" stroke="#fdd58e" stroke-width="1" stroke-dasharray="3 2" opacity="0.7"/>
+              <circle cx="0" cy="0" r="60" fill="none" stroke="#fdd58e" stroke-width="1" stroke-dasharray="3 2" opacity="0.7"/>
+              <circle cx="0" cy="0" r="80" fill="none" stroke="#fdd58e" stroke-width="1" stroke-dasharray="3 2" opacity="0.7"/>
+              <!-- 태양 (외곽 궤도) -->
+              <circle cx="0" cy="-80" r="10" fill="#ffd700" stroke="#fdd58e" stroke-width="1"/>
+              <text x="0" y="-92" font-size="9" font-weight="bold" text-anchor="middle" fill="#fdd58e">太陽</text>
+              <!-- 다른 행성 -->
+              <circle cx="40" cy="0" r="5" fill="#e74c3c"/>
+              <circle cx="-60" cy="0" r="5" fill="#7a8a6a"/>
+              <circle cx="0" cy="60" r="5" fill="#9b87bc"/>
+            </g>
+            <text x="125" y="280" font-size="10" font-weight="bold" text-anchor="middle" fill="#e74c3c">すべてが 地球を まわる</text>
+            <!-- 분리선 -->
+            <line x1="250" y1="55" x2="250" y2="270" stroke="#fdd58e" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+            <!-- 우측: 地動説 -->
+            <text x="375" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#a8d4e8">地動説 (太陽 中心)</text>
+            <g transform="translate(375,160)">
+              <!-- 태양 (중심) -->
+              <circle cx="0" cy="0" r="16" fill="#ffd700" stroke="#fff" stroke-width="1.5"/>
+              <text x="0" y="35" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">太陽</text>
+              <!-- 궤도 -->
+              <circle cx="0" cy="0" r="40" fill="none" stroke="#a8d4e8" stroke-width="1" stroke-dasharray="3 2" opacity="0.7"/>
+              <circle cx="0" cy="0" r="60" fill="none" stroke="#a8d4e8" stroke-width="1" stroke-dasharray="3 2" opacity="0.7"/>
+              <circle cx="0" cy="0" r="80" fill="none" stroke="#a8d4e8" stroke-width="1" stroke-dasharray="3 2" opacity="0.7"/>
+              <!-- 지구 (제3궤도) -->
+              <circle cx="0" cy="-60" r="9" fill="#6ba8c4" stroke="#a8d4e8" stroke-width="1.5"/>
+              <text x="0" y="-72" font-size="9" font-weight="bold" text-anchor="middle" fill="#a8d4e8">地球</text>
+              <!-- 다른 행성 -->
+              <circle cx="40" cy="0" r="4" fill="#e74c3c"/>
+              <circle cx="-40" cy="0" r="4" fill="#7a8a6a"/>
+              <circle cx="0" cy="80" r="6" fill="#9b87bc"/>
+            </g>
+            <text x="375" y="280" font-size="10" font-weight="bold" text-anchor="middle" fill="#a8d4e8">地球も 太陽を まわる 惑星</text>
+          </svg>
+        `,
+      },
+      {
+        title: '②  木星と ガリレオ 衛星 — 4つの 月',
+        svg: `
+          <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#0a0a2a;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#fdd58e">木星を まわる 4つの 衛星 (ガリレオ衛星)</text>
+            <!-- 별 -->
+            <g fill="#fff" opacity="0.6">
+              <circle cx="40" cy="60" r="1"/>
+              <circle cx="80" cy="40" r="1"/>
+              <circle cx="120" cy="70" r="1.2"/>
+              <circle cx="380" cy="50" r="1"/>
+              <circle cx="430" cy="80" r="1.2"/>
+              <circle cx="60" cy="200" r="1"/>
+              <circle cx="450" cy="220" r="1"/>
+            </g>
+            <!-- 목성 -->
+            <g transform="translate(250,140)">
+              <circle cx="0" cy="0" r="40" fill="#d4a070" stroke="#8a5a2a" stroke-width="2"/>
+              <ellipse cx="0" cy="-10" rx="35" ry="4" fill="#a8754a" opacity="0.7"/>
+              <ellipse cx="0" cy="5" rx="38" ry="4" fill="#8a5a2a" opacity="0.7"/>
+              <ellipse cx="0" cy="18" rx="32" ry="3" fill="#a8754a" opacity="0.7"/>
+              <text x="0" y="60" font-size="11" font-weight="bold" text-anchor="middle" fill="#fdd58e">木星</text>
+            </g>
+            <!-- 위성 궤도 -->
+            <ellipse cx="250" cy="140" rx="60" ry="12" fill="none" stroke="#a8d4e8" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+            <ellipse cx="250" cy="140" rx="80" ry="16" fill="none" stroke="#a8d4e8" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+            <ellipse cx="250" cy="140" rx="105" ry="20" fill="none" stroke="#a8d4e8" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+            <ellipse cx="250" cy="140" rx="130" ry="24" fill="none" stroke="#a8d4e8" stroke-width="1" stroke-dasharray="3 2" opacity="0.5"/>
+            <!-- 4 위성 -->
+            <circle cx="190" cy="140" r="4" fill="#fff"/>
+            <text x="190" y="120" font-size="8" text-anchor="middle" fill="#a8d4e8">イオ</text>
+            <circle cx="170" cy="140" r="4" fill="#a8d4e8"/>
+            <text x="170" y="170" font-size="8" text-anchor="middle" fill="#a8d4e8">エウロパ</text>
+            <circle cx="355" cy="140" r="5" fill="#c8c8a8"/>
+            <text x="355" y="120" font-size="8" text-anchor="middle" fill="#a8d4e8">ガニメデ</text>
+            <circle cx="380" cy="140" r="5" fill="#a8a8a8"/>
+            <text x="380" y="170" font-size="8" text-anchor="middle" fill="#a8d4e8">カリスト</text>
+            <!-- 횡단면 -->
+            <text x="250" y="225" font-size="11" font-weight="bold" text-anchor="middle" fill="#fdd58e">横から 見ると、 円運動が 左右の 往復に 見える</text>
+            <line x1="80" y1="245" x2="420" y2="245" stroke="#a8d4e8" stroke-width="1" stroke-dasharray="2 2"/>
+            <circle cx="180" cy="245" r="3" fill="#fff"/>
+            <circle cx="220" cy="245" r="3" fill="#a8d4e8"/>
+            <rect x="245" y="241" width="10" height="8" fill="#d4a070"/>
+            <circle cx="290" cy="245" r="3" fill="#c8c8a8"/>
+            <circle cx="330" cy="245" r="3" fill="#a8a8a8"/>
+            <text x="250" y="265" font-size="9" text-anchor="middle" fill="#a8d4e8">毎晩 位置が 変わる = 木星を まわる 証拠</text>
+          </svg>
+        `,
+      },
+      {
+        title: '③  望遠鏡 — 人の 目を 宇宙へ 広げる',
+        svg: `
+          <svg viewBox="0 0 450 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#fff5e8;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#7a3a1a">望遠鏡 — 遠くを 大きく 見る</text>
+            <!-- 望遠鏡 본체 -->
+            <g transform="translate(80,90)">
+              <rect x="0" y="20" width="180" height="30" fill="#5a3a1a" stroke="#2a1a08" stroke-width="2" rx="3"/>
+              <!-- 대물 렌즈 -->
+              <ellipse cx="180" cy="35" rx="6" ry="18" fill="#a8d4e8" stroke="#1a4a7a" stroke-width="1.5" opacity="0.7"/>
+              <!-- 접안 렌즈 -->
+              <ellipse cx="0" cy="35" rx="4" ry="10" fill="#a8d4e8" stroke="#1a4a7a" stroke-width="1.5" opacity="0.7"/>
+              <!-- 받침대 -->
+              <line x1="90" y1="50" x2="90" y2="100" stroke="#5a3a1a" stroke-width="3"/>
+              <polygon points="60,100 120,100 100,120 80,120" fill="#5a3a1a"/>
+            </g>
+            <!-- 좌측: 맨눈 -->
+            <text x="50" y="65" font-size="11" font-weight="bold" text-anchor="middle" fill="#5a3a1a">肉眼</text>
+            <circle cx="50" cy="120" r="8" fill="#fff" stroke="#1a1a1a" stroke-width="1.5"/>
+            <circle cx="50" cy="120" r="3" fill="#1a1a1a"/>
+            <!-- 우측: 보이는 것 -->
+            <text x="350" y="50" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a3a1a">望遠鏡で 見える</text>
+            <!-- 맨눈 시야 (작은 점) -->
+            <g transform="translate(290,80)">
+              <text x="0" y="0" font-size="9" text-anchor="end" fill="#5a3a1a">肉眼:</text>
+              <circle cx="20" cy="-3" r="3" fill="#d4a070"/>
+              <text x="35" y="0" font-size="9" fill="#5a3a1a">木星 だけ</text>
+            </g>
+            <!-- 망원경 시야 (큰 + 4점) -->
+            <g transform="translate(290,120)">
+              <text x="0" y="0" font-size="9" text-anchor="end" fill="#7a3a1a">望遠鏡:</text>
+              <circle cx="35" cy="-3" r="10" fill="#d4a070" stroke="#8a5a2a" stroke-width="1"/>
+              <ellipse cx="35" cy="-7" rx="8" ry="1" fill="#a8754a"/>
+              <ellipse cx="35" cy="0" rx="9" ry="1" fill="#8a5a2a"/>
+              <!-- 4 위성 -->
+              <circle cx="20" cy="-3" r="1.5" fill="#fff"/>
+              <circle cx="25" cy="-3" r="1.5" fill="#a8d4e8"/>
+              <circle cx="50" cy="-3" r="1.5" fill="#c8c8a8"/>
+              <circle cx="55" cy="-3" r="1.5" fill="#a8a8a8"/>
+              <text x="40" y="20" font-size="9" text-anchor="middle" fill="#7a3a1a">木星 + 4衛星!</text>
+            </g>
+            <text x="225" y="220" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a3a1a">新しい 道具 = 新しい 発見</text>
+            <text x="225" y="240" font-size="10" text-anchor="middle" fill="#5a4a2a">事件 5 の 顕微鏡 (パスト博士) と 同じ 原理</text>
+          </svg>
+        `,
+      },
+      {
+        title: '④  観測が 常識を 更新する',
+        svg: `
+          <svg viewBox="0 0 450 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#eef8ee;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a6a2a">証拠が、 古い 常識を 更新する</text>
+            <!-- 좌: 常識 (天動説) -->
+            <g transform="translate(40,70)">
+              <rect x="0" y="0" width="130" height="100" fill="#fff" stroke="#e74c3c" stroke-width="2" rx="8"/>
+              <text x="65" y="22" font-size="11" font-weight="bold" text-anchor="middle" fill="#e74c3c">常識</text>
+              <text x="65" y="42" font-size="10" text-anchor="middle" fill="#1a1a1a">「すべて 地球を</text>
+              <text x="65" y="58" font-size="10" text-anchor="middle" fill="#1a1a1a">まわる」</text>
+              <text x="65" y="80" font-size="9" text-anchor="middle" fill="#5a4a2a">(天動説)</text>
+              <text x="65" y="95" font-size="10" font-weight="bold" text-anchor="middle" fill="#e74c3c">✗</text>
+            </g>
+            <!-- 衝突 -->
+            <text x="200" y="125" font-size="18" font-weight="bold" text-anchor="middle" fill="#7a3a1a">⚡</text>
+            <!-- 중: 観測 -->
+            <g transform="translate(160,70)">
+              <rect x="0" y="0" width="130" height="100" fill="#fff" stroke="#1a6a2a" stroke-width="2" rx="8"/>
+              <text x="65" y="22" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">観測</text>
+              <text x="65" y="42" font-size="10" text-anchor="middle" fill="#1a1a1a">「木星を まわる</text>
+              <text x="65" y="58" font-size="10" text-anchor="middle" fill="#1a1a1a">4つの 衛星」</text>
+              <text x="65" y="80" font-size="9" text-anchor="middle" fill="#5a4a2a">(望遠鏡)</text>
+              <text x="65" y="95" font-size="10" font-weight="bold" text-anchor="middle" fill="#1a6a2a">✓</text>
+            </g>
+            <!-- 矢印 -->
+            <line x1="300" y1="120" x2="345" y2="120" stroke="#1a6a2a" stroke-width="2" marker-end="url(#ah_g7)"/>
+            <!-- 우: 新理解 -->
+            <g transform="translate(350,70)">
+              <rect x="0" y="0" width="90" height="100" fill="#fff" stroke="#1a4a7a" stroke-width="2" rx="8"/>
+              <text x="45" y="22" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a4a7a">新 理解</text>
+              <text x="45" y="42" font-size="10" text-anchor="middle" fill="#1a1a1a">「地球は</text>
+              <text x="45" y="58" font-size="10" text-anchor="middle" fill="#1a1a1a">中心では ない」</text>
+              <text x="45" y="80" font-size="9" text-anchor="middle" fill="#5a4a2a">(地動説)</text>
+              <text x="45" y="95" font-size="10" font-weight="bold" text-anchor="middle" fill="#1a4a7a">✓</text>
+            </g>
+            <defs>
+              <marker id="ah_g7" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1a6a2a"/></marker>
+            </defs>
+            <text x="225" y="210" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">権威 ではなく 観測·証拠が 真実を 決める</text>
+            <text x="225" y="232" font-size="10" text-anchor="middle" fill="#5a4a2a">古い 常識でも、 観測と 合わなければ 疑い 直す</text>
+            <text x="225" y="258" font-size="10" font-weight="bold" text-anchor="middle" fill="#7a1a1a">これが 「近代 科学」 の 基本 態度</text>
+          </svg>
+        `,
+      },
+    ],
+
+    formulas: [
+      {
+        name: '観測 > 権威',
+        formula: '自分の 目で 見た 証拠 > 古い 常識·権威',
+        formulaSimple: '証拠 優先',
+        explanation: '真実は 多数決や 権威 ではなく 観測·証拠で 決まる。 ガリレオの 態度であり 科学の 基本。',
+        note: '木星 衛星 という 一つの 観測が 「すべてが 地球 中心」 を 反証。',
+      },
+      {
+        name: '地動説',
+        formula: '地球 = 太陽を まわる 惑星の 一つ',
+        formulaSimple: '太陽 中心',
+        explanation: '地球は 宇宙の 中心 ではなく 太陽を まわる 惑星。 コペルニクス 提唱、 ガリレオ 観測で 裏付け。',
+        note: '天動説 (地球 中心) から 地動説 (太陽 中心) への 転換。',
+      },
+    ],
+
+    unitsTable: {
+      title: '天体観測 キーワード まとめ',
+      rows: [
+        ['用語',                    '意味',                                       '例·備考'],
+        ['天動説 (てんどうせつ)',    '地球が 中心、 全 天体が 地球を まわる 旧説', 'ガリレオ 以前の 常識'],
+        ['地動説 (ちどうせつ)',      '地球が 太陽を まわる 惑星 という 説',         'コペルニクス·ガリレオ'],
+        ['衛星 (えいせい)',          '惑星の 周りを まわる 天体',                  '木星の 4大 衛星·地球の 月'],
+        ['望遠鏡 (ぼうえんきょう)',  '遠い 天体を 大きく 見る 道具',                'ガリレオが 天体観測に 使用'],
+        ['観測 (かんそく)',          '直接 観察·記録 する こと',                    '毎晩 衛星 位置を 記録'],
+        ['証拠 (しょうこ)',          '主張を 裏付ける 事実',                        '権威 より 優先する 根拠'],
+      ],
+    },
+
+    flashcards: [
+      { front: '天動説 (てんどうせつ)', back: '地球が 宇宙 中心で 全 天体が 地球を まわる 旧説。 ガリレオ 観測で 揺らぐ。' },
+      { front: '地動説 (ちどうせつ)',   back: '地球が 太陽を まわる 惑星の 一つ という 説。 コペルニクス 提唱、 ガリレオが 証拠 提供。' },
+      { front: '衛星 (えいせい)',       back: '惑星の 周りを まわる 天体。 木星の 4大 衛星、 地球の 月。' },
+      { front: 'ガリレオ衛星',          back: 'ガリレオが 1610年に 発見した 木星の 4大 衛星。 イオ·エウロパ·ガニメデ·カリスト。' },
+      { front: '望遠鏡 (ぼうえんきょう)', back: 'レンズで 遠い 天体を 大きく 見る 道具。 ガリレオが 天体観測に 本格的に 初使用。' },
+      { front: '木星 (もくせい)',       back: '太陽系 最大の 惑星。 ガリレオが その 衛星を 観測し 地動説の 証拠と した。' },
+      { front: 'コペルニクス',          back: '地動説を 初めて 体系的に 主張した 天文学者。 ガリレオが 観測で 裏付け。' },
+      { front: '観測 (かんそく)',       back: '直接 観察し 記録する こと。 ガリレオは 「権威より 観測」 を 重視。' },
+      { front: '証拠 (しょうこ)',       back: '主張を 裏付ける 事実。 真実は 多数決 ではなく 証拠で 決まる。' },
+      { front: 'ガリレオ·ガリレイ',     back: 'イタリアの 天文学者·物理学者 (1564-1642)。 望遠鏡 天体観測·地動説 擁護。 「近代 科学の 父」。' },
+    ],
+
+    exercises: [
+      {
+        q: '事件 7 で 木星の そばの 4つの 点の 正体は?',
+        options: ['遠い 星', '木星を まわる 衛星', '彗星', '人工衛星'],
+        correct: 1,
+        explanation: '事件 7 の 核心。 木星を まわる 4大 衛星。 「すべてが 地球を まわる」 を 反証。',
+      },
+      {
+        q: '「すべての 天体が 地球を まわる」 という 旧説は?',
+        options: ['地動説', '天動説', '進化論', '相対性理論'],
+        correct: 1,
+        explanation: '天動説 (地球 中心説)。 ガリレオの 木星 衛星 観測が これを 揺るがす。',
+      },
+      {
+        q: 'ガリレオが 天体観測に 使った 道具は?',
+        options: ['顕微鏡', '望遠鏡', '温度計', '羅針盤'],
+        correct: 1,
+        explanation: '望遠鏡。 肉眼では 見えなかった 木星 衛星を 発見。',
+      },
+      {
+        q: '地動説を 初めて 体系的に 主張した 人は?',
+        options: ['ガリレオ', 'コペルニクス', 'ニュートン', 'ケプラー'],
+        correct: 1,
+        explanation: 'コペルニクス。 ガリレオが 観測で 強力な 証拠を 提供。',
+      },
+      {
+        q: '惑星の 周りを まわる 天体を 何という?',
+        options: ['恒星', '衛星', '彗星', '流星'],
+        correct: 1,
+        explanation: '衛星。 木星の 4大 衛星、 地球の 月が その 例。',
+      },
+      {
+        q: '木星の 衛星が 毎晩 位置が 違って 見える 理由は?',
+        options: ['星が 瞬くから', '木星の 周りを まわっているから', '地球が 揺れるから', '望遠鏡の 故障'],
+        correct: 1,
+        explanation: '木星を まわる 円運動を 横から 見ると 左右の 往復に 見える。',
+      },
+      {
+        q: 'ガリレオが 最も 重視した 科学的 態度は?',
+        options: ['権威に 従う', '自分の 目で 観測·確認 する', '多数決で 決める', '伝統を 守る'],
+        correct: 1,
+        explanation: '「権威が 何と 言おうと 自分の 目で 確かめる」。 観測·証拠 重視が 科学の 基本。',
+      },
+      {
+        q: '地動説で 地球は?',
+        options: ['宇宙の 中心', '太陽を まわる 惑星', '動かない', '太陽より 大きい'],
+        correct: 1,
+        explanation: '地球は 中心 ではなく 太陽を まわる 惑星の 一つ。',
+      },
+      {
+        q: '望遠鏡が 天文学に もたらした 変化は?',
+        options: ['変化 なし', '肉眼で 見えなかった 天体を 観測 可能に', '星を より 小さく 見る', '昼にだけ 観測 可能'],
+        correct: 1,
+        explanation: '望遠鏡で 木星 衛星·月の 表面 など 新 天体 観測 → 宇宙観の 変化。',
+      },
+      {
+        q: 'ガリレオが 「近代 科学の 父」 と 呼ばれる 理由は?',
+        options: ['本を たくさん 書いた', '観測·実験·証拠 中心の 科学 方法を 確立', '王だった', '望遠鏡を 発明した'],
+        correct: 1,
+        explanation: '権威 ではなく 観測·実験·証拠に 基づく 科学 方法を 確立。',
+      },
+    ],
+
+    tips: [
+      { title: '①  観測 > 権威',                body: '真実は 権威·多数決 ではなく 観測·証拠で 決まる。 ガリレオの 中心 態度。' },
+      { title: '②  木星の 4大 衛星',            body: 'ガリレオが 1610年 発見。 「すべてが 地球を まわる」 を 反証した 決定的 観測。' },
+      { title: '③  天動説 → 地動説',            body: '地球 中心から 太陽 中心へ。 コペルニクス 提唱、 ガリレオ 観測で 裏付け。' },
+      { title: '④  道具が 発見を 生む',          body: '望遠鏡 という 新道具が 新天体を 見せる。 事件 5 の 顕微鏡と 同じ 原理。' },
+      { title: '⑤  円を 横から = 往復',          body: '衛星の 円運動を 横から 見ると 左右の 往復に 見える。 観測の 幾何学。' },
+      { title: '⑥  常識も 疑える',              body: '観測と 合わなければ 常識も 疑う。 科学は 絶えず 検証·更新。' },
+      { title: '⑦  地球は 特別 ではない',        body: '木星にも 衛星が ある = 地球だけが 中心 ではない。 人間 中心 宇宙観の 転換。' },
+      { title: '⑧  証拠を 記録せよ',            body: 'ガリレオは 毎晩 位置を 記録。 地道な 観測 記録が 法則を 浮かび上がらせる (メンデルと 通じる)。' },
+    ],
+  },
+  // 사건 8~10 은 향후 별도 명세서에서 추가 (scientists_case08 ...).
 };

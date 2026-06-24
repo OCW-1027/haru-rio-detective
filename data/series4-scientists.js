@@ -1578,16 +1578,243 @@ const SCIENTISTS_STORY = [
   {
     id: 7, icon: '🔭',
     title: '天空の真実',
-    subtitle: '望遠鏡が映した宇宙',
-    theme: '天体観測',
+    subtitle: '動いているのは どっち?',
+    theme: '天体観測·地動説·望遠鏡·衛星',
     bgm: 'mystery',
     illustration: SCIENTISTS_CASE_IMAGES[7],
     charKey: 'galileo_telescope',
     sceneKey: 'bg_ch07_observatory',
-    comingSoon: true,
-    intro: [],
-    steps: [],
-    note: null,
+    comingSoon: false,
+    learnRef: 'scientists_case07',
+    intro: {
+      title: '天空の真実',
+      subtitle: '動いているのは どっち?',
+      bg: 'bg_ch07_observatory',
+      lines: [
+        { speaker: 'narrator',          text: 'メンデルの 紹介で、 丘の 上の 天文台を 訪ねた。 夜空が 一面に 広がる。' },
+        { speaker: 'hinata',            text: 'こちらが ガリレオさんの 天文台 です。 大きな 望遠鏡が…' },
+        { speaker: 'rio',               text: 'うわぁ、 星が こんなに! 望遠鏡 のぞいて みたい!' },
+        { speaker: 'haru',              text: '観測ノートが 山ほど ある… 毎晩 記録 してるんだ。' },
+        { speaker: 'galileo_telescope', text: 'よく 来た! 私が ガリレオだ。 ちょうど 不思議な ものを 見つけてな。' },
+        { speaker: 'galileo_telescope', text: 'この 望遠鏡で 木星を 見ると — そばに 小さな 星が 4つ 見えるのだ。' },
+        { speaker: 'rio',               text: '木星の そば? 見せて 見せて!' },
+        { speaker: 'narrator',          text: '望遠鏡を のぞくと、 明るい 木星の 横に、 小さな 光の 点が 4つ 並んでいた。' },
+        { speaker: 'haru',              text: 'ほんとだ、 4つ 並んでる… でも これが どうして 謎なの?' },
+        { speaker: 'galileo_telescope', text: 'それがな、 毎晩 位置が 変わるのだ。 昨日は 左、 今日は 右…' },
+        { speaker: 'hinata',            text: '星は 動かない はず なのに… 変なんですね。' },
+        { speaker: 'galileo_telescope', text: '当時の 常識では 「すべての 天体は 地球を 中心に まわる」 と されていた。' },
+        { speaker: 'galileo_telescope', text: 'だが この 4つは… どうも 地球を まわって いる ようには 見えないのだ。' },
+        { speaker: 'rio',               text: 'えっ、 じゃあ 何を まわってるの?' },
+        { speaker: 'galileo_telescope', text: 'ふふ。 権威が どう 言おうと、 自分の 目で 確かめる ことだ。' },
+        { speaker: 'galileo_telescope', text: '皆の 力で、 この 謎を 解いて くれるか?' },
+        { speaker: 'penta',             text: 'ペンッ! 動く 星の 謎、 見るペン!' },
+      ],
+      cta: '🔭 観測を 始める',
+    },
+    steps: [
+      {
+        id: 'step1',
+        title: '🔭 STEP 1: 望遠鏡で 木星を 見る',
+        bg: 'bg_ch07_observatory',
+        question: 'まず 望遠鏡で 木星を 観察しよう。 何が 見える?',
+        options: [
+          {
+            label: '木星の そばに、 肉眼では 見えない 小さな 点が 4つ',
+            isCorrect: true,
+            response: [
+              { speaker: 'rio',               text: 'わぁ! 木星の 横に 小さな 点が 4つ! 肉眼じゃ 見えなかった!' },
+              { speaker: 'haru',              text: '望遠鏡が あるから 見える んだね。 道具が 新しい 発見を 生む。' },
+              { speaker: 'hinata',            text: 'この 4つの 点が、 謎の 鍵 みたいですね。' },
+              { speaker: 'galileo_telescope', text: 'そうだ。 望遠鏡は、 人の 目を 宇宙へ 広げる 道具なのだ。' },
+            ],
+          },
+          {
+            label: '月の クレーターを 数える',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '今は 木星の そばの 点に 注目しよう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step2',
+        title: '📓 STEP 2: 数日間の 記録を 比べる',
+        bg: 'bg_ch07_observatory',
+        question: '何日分かの 観測記録を 並べた。 4つの 点は どうなってる?',
+        options: [
+          {
+            label: '毎日 位置が 変わっている',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',              text: '1日目は 左に 3つ・右に 1つ… 2日目は 配置が 違う!' },
+              { speaker: 'rio',               text: 'ほんとだ、 毎日 並び方が 変わってる!' },
+              { speaker: 'hinata',            text: '固定された 星 なら、 こんなに 動かない はず…' },
+              { speaker: 'galileo_telescope', text: 'その通り。 動く という ことが、 何かを 物語って いるのだ。' },
+            ],
+          },
+          {
+            label: 'ずっと 同じ 位置',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '記録を 見ると、 毎日 位置が 変わってるよ。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step3',
+        title: '↔️ STEP 3: 動きの パターンを 探る',
+        bg: 'bg_ch07_observatory',
+        question: 'ヒナタが 点の 動きを 図に した。 どんな パターン?',
+        options: [
+          {
+            label: '木星を 中心に、 左右を 行ったり 来たり している',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',            text: '点は 木星の 左右を 往復 しています — まるで 木星を まわる みたいに。' },
+              { speaker: 'rio',               text: '木星の まわりを グルグル! だから 左右に 見えるんだ!' },
+              { speaker: 'haru',              text: '横から 見てるから、 円運動が 左右の 往復に 見える のか…' },
+              { speaker: 'galileo_telescope', text: '鋭い! 円を 横から 見れば、 往復に 見える。 その通りなのだ。' },
+            ],
+          },
+          {
+            label: 'バラバラで 規則が ない',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: 'よく 見ると、 木星を 中心に 往復する 規則が あります。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step4',
+        title: '🤔 STEP 4: 当時の 常識と 比べる',
+        bg: 'bg_ch07_observatory',
+        question: '「すべての 天体は 地球を まわる」 という 常識と 照らすと?',
+        options: [
+          {
+            label: 'この 4つは 地球では なく 木星を まわっている — 常識と 矛盾する',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',              text: '「すべてが 地球を まわる」 なら、 木星を まわる 星は 説明 できない…' },
+              { speaker: 'hinata',            text: '少なくとも この 4つは 地球 中心 じゃ ない…!' },
+              { speaker: 'rio',               text: '常識が 間違ってる かもって こと?' },
+              { speaker: 'galileo_telescope', text: '観測が 常識と 合わない とき — 疑うべきは 観測か、 常識か。 私は 自分の 目を 信じる。' },
+            ],
+          },
+          {
+            label: '常識は 絶対 正しい',
+            isCorrect: false,
+            response: [
+              { speaker: 'galileo_telescope', text: '常識でも、 観測と 合わなければ 疑う べきなのだ。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step5',
+        title: '📖 STEP 5: ガリレオの 仮説ノート',
+        bg: 'bg_ch07_observatory',
+        question: 'ガリレオの ノートを 開いた。 何が 書いてある?',
+        options: [
+          {
+            label: '「地球が 宇宙の 中心 では ないかも しれない」',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',            text: '「地球は 宇宙の 中心では ないかも」…! 大胆な 考えです。' },
+              { speaker: 'haru',              text: '木星にも 「まわる 星」 が ある なら、 地球だけが 特別 じゃ ない…' },
+              { speaker: 'rio',               text: 'みんなが 信じてた ことと 違う! 勇気 いるね。' },
+              { speaker: 'galileo_telescope', text: '真実は、 多数決では 決まらぬ。 証拠が 決めるのだ。' },
+            ],
+          },
+          {
+            label: 'ノートを 閉じる',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: 'ガリレオさんの 仮説に ヒントが あります。 読みましょう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step6',
+        title: '🧩 STEP 6: 推理を 組み立てる',
+        bg: 'bg_ch07_observatory',
+        question: '全ての 手がかりが 揃った。 ガリレオに どう 伝える?',
+        options: [
+          {
+            label: '「4つは 木星を まわる 衛星。 だから 『すべてが 地球を まわる』 は 誤り」',
+            isCorrect: true,
+            response: [
+              { speaker: 'galileo_telescope', text: 'お見事だ! まさに 私が 望遠鏡で 確かめた 真実なのだ。' },
+              { speaker: 'galileo_telescope', text: 'この 4つは 星では ない。 木星を まわる 「衛星」 — 木星の 月 なのだ。' },
+              { speaker: 'galileo_telescope', text: 'もし すべてが 地球を まわる なら、 木星を まわる 星など あり得ない。' },
+              { speaker: 'galileo_telescope', text: 'つまり 「すべてが 地球 中心」 という 常識は、 正しくない かも しれぬ。' },
+              { speaker: 'hinata',            text: '自分の 目で 見た 証拠が、 古い 常識を 揺るがせた んですね。' },
+              { speaker: 'haru',              text: '望遠鏡という 新しい 道具が、 新しい 真実を 見せてくれた…' },
+              { speaker: 'rio',               text: 'みんなと 違っても、 ちゃんと 見て 確かめるのが 大事 なんだ!' },
+              { speaker: 'galileo_telescope', text: 'その通り。 観測が 真実を 教える。 さあ、 宇宙の 話を もっと しよう。' },
+            ],
+          },
+          {
+            label: '「4つは ただの 偶然の 光」',
+            isCorrect: false,
+            response: [
+              { speaker: 'galileo_telescope', text: '毎晩 規則的に 動く。 偶然 では 説明 できないのだ。' },
+            ],
+          },
+          {
+            label: '「やっぱり すべて 地球を まわっている」',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '木星を まわる 4つは、 それでは 説明 できないよ。' },
+            ],
+          },
+        ],
+      },
+    ],
+    ending: {
+      bg: 'bg_ch07_observatory',
+      lines: [
+        { speaker: 'galileo_telescope', text: '皆の おかげで、 私の 観測を きちんと 説明 できた。 感謝するぞ。' },
+        { speaker: 'galileo_telescope', text: '真実は 多数決では なく、 証拠が 決める。 自分の 目で 確かめる ことを 忘れるな。' },
+        { speaker: 'rio',               text: '望遠鏡で 見た 4つの 星が、 宇宙の 見方を 変えたんだ!' },
+        { speaker: 'haru',              text: '新しい 道具が、 新しい 発見を 生む… ニュートンや アインの 話 とも つながるね。' },
+        { speaker: 'hinata',            text: '観測と 証拠を 大切に する — 科学の 基本 ですね。' },
+        { speaker: 'galileo_telescope', text: 'その通り。 宇宙の 仕組みを、 もう 少し 学んで みよう。' },
+        { speaker: 'penta',             text: 'ペンッ! 宇宙の 勉強、 ペン!' },
+      ],
+      cta: '📚 学習資料を 開く',
+    },
+    caseQuiz: [
+      {
+        q: '事件 7 で 木星の そばの 4つの 点の 正体は?',
+        options: ['遠い 星', '木星を まわる 衛星', '彗星', '人工衛星'],
+        correct: 1,
+      },
+      {
+        q: '「すべての 天体が 地球を まわる」 という 旧説は?',
+        options: ['地動説', '天動説', '進化論', '万有引力'],
+        correct: 1,
+      },
+      {
+        q: 'ガリレオが 使った 観測 道具は?',
+        options: ['顕微鏡', '望遠鏡', '温度計', '羅針盤'],
+        correct: 1,
+      },
+      {
+        q: 'ガリレオが 重視した のは?',
+        options: ['権威', '自分の 目の 観測·証拠', '多数決', '伝統'],
+        correct: 1,
+      },
+      {
+        q: '事件 7 の 核心 メッセージは?',
+        options: ['常識は いつも 正しい', '観測·証拠が 常識を 更新する', '空は 変わらない', '道具は 不要'],
+        correct: 1,
+      },
+    ],
+    note: { title: '第7事件 天空の 真実', desc: '木星 そばの 4つの 点 — 木星を まわる 衛星。 「すべてが 地球を まわる」 を 反証し 地動説を 支えた 観測。 権威 ではなく 「自分の 目の 証拠」 を 重んじた ガリレオの 科学的 態度を 学んだ 第七歩。' },
   },
   {
     id: 8, icon: '⚡',
