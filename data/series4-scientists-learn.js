@@ -1640,5 +1640,339 @@ const SCIENTISTS_LEARN = {
       { title: '⑧  「見えない = 無い」 ではない',  body: '目に 見えなくても 存在する。 観察 (顕微鏡) と 実験で 証明 する のが 科学の 態度。' },
     ],
   },
-  // 사건 6~10 은 향후 별도 명세서에서 추가 (scientists_case06 ...).
+  scientists_case06: {
+    title: '遺伝の 法則',
+    subtitle: '事件 6 で 学んだ こと',
+    examScope: '中学 生物 + 比喩 中心 (정성적 이해)',
+
+    concept: {
+      title: '遺伝の 法則',
+      paragraphs: [
+        '事件 6 の 消えた 白い 花 — その 正体は、 親から 子へ 受け継がれる 「遺伝子 (いでんし)」 の 組み合わせ でした。 メンデル は 8年間、 修道院の 庭で 何万 株もの エンドウ豆を 育てて 数え、 1865年に 「遺伝の 法則」 を 発表 しました。',
+        '生物の 形質 (花の 色など) を 決める 因子 (遺伝子) は、 ふつう 2個 ずつ ペアで あります。 親から 1個 ずつ 受け継ぎます。 2個の 因子が 違う とき、 強く 現れる 方を 「優性 (顕性)」、 隠れる 方を 「劣性 (潜性)」 と 言います。',
+        '紫×白 の 子が 全部 紫に なったのは、 紫が 優性 だから。 でも 白の 因子は 消えず、 子の 中に 隠れて います。 孫の 代で 白同士が 出会うと、 また 白い 花が 咲きます。 因子が ペアから 1個 ずつ 分かれて 伝わる — これが 「分離の 法則」 です。',
+        'その 結果、 孫世代は 紫:白 = 約 3:1 に なります。 これは 偶然 ではなく、 因子の 組み合わせ (紫紫·紫白·白紫·白白 の 4通り) から 計算で 出る 数 なのです。 メンデル の 発見は、 後に 「遺伝子」 「DNA」 の 研究へと つながりました。',
+      ],
+      highlight: '形質は 2個 ペアの 遺伝子で 決まる。 優性が 劣性を 隠すが、 劣性も 消えず 伝わる → 孫で 約 3:1。',
+    },
+
+    diagrams: [
+      {
+        title: '①  3世代の 流れ — 親 → 子 → 孫',
+        svg: `
+          <svg viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#f4e8f4;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#5a2a7a">親 → 子 → 孫 の 3世代</text>
+            <!-- 親 -->
+            <text x="40" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#5a2a7a">親</text>
+            <g transform="translate(15,60)">
+              <circle cx="25" cy="20" r="14" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="2"/>
+              <text x="25" y="25" font-size="11" font-weight="bold" text-anchor="middle" fill="#fff">BB</text>
+              <text x="25" y="55" font-size="10" text-anchor="middle" fill="#3a0a5a">純紫</text>
+            </g>
+            <text x="65" y="80" font-size="14" font-weight="bold" fill="#3a3a3a">×</text>
+            <g transform="translate(75,60)">
+              <circle cx="25" cy="20" r="14" fill="#fff" stroke="#3a3a3a" stroke-width="2"/>
+              <text x="25" y="25" font-size="11" font-weight="bold" text-anchor="middle" fill="#3a3a3a">bb</text>
+              <text x="25" y="55" font-size="10" text-anchor="middle" fill="#3a3a3a">純白</text>
+            </g>
+            <!-- 矢印 親→子 -->
+            <line x1="135" y1="80" x2="175" y2="80" stroke="#5a2a7a" stroke-width="2" marker-end="url(#ah_g1)"/>
+            <!-- 子 (全部 紫, Bb) -->
+            <text x="225" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#5a2a7a">子 (F1)</text>
+            <g transform="translate(190,60)">
+              <circle cx="20" cy="20" r="13" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="2"/>
+              <text x="20" y="25" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">Bb</text>
+            </g>
+            <g transform="translate(225,60)">
+              <circle cx="20" cy="20" r="13" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="2"/>
+              <text x="20" y="25" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">Bb</text>
+            </g>
+            <g transform="translate(260,60)">
+              <circle cx="20" cy="20" r="13" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="2"/>
+              <text x="20" y="25" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">Bb</text>
+            </g>
+            <text x="225" y="105" font-size="10" font-weight="bold" text-anchor="middle" fill="#5a2a7a">全部 紫</text>
+            <text x="225" y="120" font-size="9" text-anchor="middle" fill="#3a3a3a">(白が 隠れている)</text>
+            <!-- 矢印 子→孫 -->
+            <line x1="320" y1="80" x2="360" y2="80" stroke="#5a2a7a" stroke-width="2" marker-end="url(#ah_g2)"/>
+            <!-- 孫 -->
+            <text x="425" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#5a2a7a">孫 (F2)</text>
+            <g transform="translate(370,60)">
+              <circle cx="18" cy="20" r="12" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="1.5"/>
+              <text x="18" y="24" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">BB</text>
+            </g>
+            <g transform="translate(400,60)">
+              <circle cx="18" cy="20" r="12" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="1.5"/>
+              <text x="18" y="24" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">Bb</text>
+            </g>
+            <g transform="translate(430,60)">
+              <circle cx="18" cy="20" r="12" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="1.5"/>
+              <text x="18" y="24" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">Bb</text>
+            </g>
+            <g transform="translate(460,60)">
+              <circle cx="18" cy="20" r="12" fill="#fff" stroke="#3a3a3a" stroke-width="1.5"/>
+              <text x="18" y="24" font-size="9" font-weight="bold" text-anchor="middle" fill="#3a3a3a">bb</text>
+            </g>
+            <text x="425" y="110" font-size="10" font-weight="bold" text-anchor="middle" fill="#7a1a1a">紫 : 白 = 3 : 1</text>
+            <text x="425" y="125" font-size="9" text-anchor="middle" fill="#3a3a3a">白い 花が 復活!</text>
+            <defs>
+              <marker id="ah_g1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5a2a7a"/></marker>
+              <marker id="ah_g2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5a2a7a"/></marker>
+            </defs>
+            <!-- 설명 박스 -->
+            <rect x="40" y="170" width="420" height="130" fill="#fff" stroke="#5a2a7a" stroke-width="1.5" rx="8"/>
+            <text x="250" y="195" font-size="11" font-weight="bold" text-anchor="middle" fill="#5a2a7a">なぜ 白い 花が 戻ってくるのか?</text>
+            <text x="60" y="220" font-size="10" fill="#1a1a1a">• 子 (Bb) は 見た目 紫 でも 白の 因子 b を 隠して 持つ</text>
+            <text x="60" y="240" font-size="10" fill="#1a1a1a">• Bb × Bb の 交配 → 孫は BB·Bb·bB·bb の 4通り</text>
+            <text x="60" y="260" font-size="10" fill="#1a1a1a">• 紫(BB·Bb·bB) 3 個 : 白(bb) 1 個 = 3:1</text>
+            <text x="250" y="288" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a1a1a">白は 消えて いない — 隠れて 待って いた のじゃ</text>
+          </svg>
+        `,
+      },
+      {
+        title: '②  パネット 方格 — 因子の 組み合わせ',
+        svg: `
+          <svg viewBox="0 0 450 350" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#eef4fa;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a4a7a">子 (Bb) × 子 (Bb) → 孫の 4通り</text>
+            <!-- 좌측 부모 (위쪽 라벨) -->
+            <text x="150" y="65" font-size="12" font-weight="bold" text-anchor="middle" fill="#1a4a7a">子 (父)</text>
+            <text x="110" y="100" font-size="14" font-weight="bold" text-anchor="middle" fill="#5a2a7a">B</text>
+            <text x="190" y="100" font-size="14" font-weight="bold" text-anchor="middle" fill="#3a3a3a">b</text>
+            <!-- 우측 부모 (좌측 라벨) -->
+            <text x="50" y="165" font-size="12" font-weight="bold" text-anchor="middle" fill="#1a4a7a" transform="rotate(-90 50 165)">子 (母)</text>
+            <text x="80" y="145" font-size="14" font-weight="bold" text-anchor="middle" fill="#5a2a7a">B</text>
+            <text x="80" y="225" font-size="14" font-weight="bold" text-anchor="middle" fill="#3a3a3a">b</text>
+            <!-- 2×2 격자 -->
+            <rect x="95" y="115" width="80" height="65" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="2"/>
+            <rect x="175" y="115" width="80" height="65" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="2"/>
+            <rect x="95" y="180" width="80" height="65" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="2"/>
+            <rect x="175" y="180" width="80" height="65" fill="#fff" stroke="#3a3a3a" stroke-width="2"/>
+            <!-- 라벨 -->
+            <text x="135" y="145" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">BB</text>
+            <text x="135" y="165" font-size="10" text-anchor="middle" fill="#fff">純紫</text>
+            <text x="215" y="145" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">Bb</text>
+            <text x="215" y="165" font-size="10" text-anchor="middle" fill="#fff">紫 (b 隠す)</text>
+            <text x="135" y="210" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">bB</text>
+            <text x="135" y="230" font-size="10" text-anchor="middle" fill="#fff">紫 (b 隠す)</text>
+            <text x="215" y="210" font-size="14" font-weight="bold" text-anchor="middle" fill="#3a3a3a">bb</text>
+            <text x="215" y="230" font-size="10" text-anchor="middle" fill="#3a3a3a">白</text>
+            <!-- 결과 박스 -->
+            <rect x="280" y="115" width="150" height="130" fill="#fff" stroke="#1a4a7a" stroke-width="2" rx="6"/>
+            <text x="355" y="140" font-size="12" font-weight="bold" text-anchor="middle" fill="#1a4a7a">結果</text>
+            <rect x="295" y="155" width="20" height="20" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="1.5"/>
+            <text x="325" y="170" font-size="11" fill="#1a1a1a">紫 × 3</text>
+            <rect x="295" y="185" width="20" height="20" fill="#fff" stroke="#3a3a3a" stroke-width="1.5"/>
+            <text x="325" y="200" font-size="11" fill="#1a1a1a">白 × 1</text>
+            <text x="355" y="230" font-size="13" font-weight="bold" text-anchor="middle" fill="#7a1a1a">紫 : 白 = 3 : 1</text>
+            <text x="225" y="280" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a4a7a">4 通りの 組み合わせ → 紫 3 : 白 1</text>
+            <text x="225" y="305" font-size="10" text-anchor="middle" fill="#5a4a2a">「3:1」は 偶然 では なく、 計算で 出る 結果</text>
+            <text x="225" y="328" font-size="10" font-weight="bold" text-anchor="middle" fill="#1a6a2a">これが 「分離の 法則」 (メンデル 第1法則)</text>
+          </svg>
+        `,
+      },
+      {
+        title: '③  優性·劣性 — 強い 方が 見える、 弱い 方は 隠れる',
+        svg: `
+          <svg viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#fff5e8;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#7a3a1a">優性 と 劣性 (強い 方が 見える)</text>
+            <!-- 子 (Bb) 큰 원 -->
+            <g transform="translate(220,55)">
+              <circle cx="30" cy="40" r="34" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="2.5"/>
+              <text x="30" y="46" font-size="18" font-weight="bold" text-anchor="middle" fill="#fff">Bb</text>
+              <text x="30" y="100" font-size="11" font-weight="bold" text-anchor="middle" fill="#5a2a7a">見た目: 紫</text>
+            </g>
+            <!-- 좌측: B 강함 -->
+            <g transform="translate(80,80)">
+              <circle cx="25" cy="20" r="22" fill="#7a3aa0" stroke="#3a0a5a" stroke-width="2"/>
+              <text x="25" y="26" font-size="14" font-weight="bold" text-anchor="middle" fill="#fff">B</text>
+              <text x="25" y="60" font-size="11" font-weight="bold" text-anchor="middle" fill="#5a2a7a">優性</text>
+              <text x="25" y="75" font-size="9" text-anchor="middle" fill="#3a0a5a">(強い)</text>
+              <text x="25" y="93" font-size="9" text-anchor="middle" fill="#3a0a5a">見える</text>
+            </g>
+            <line x1="125" y1="100" x2="195" y2="100" stroke="#5a2a7a" stroke-width="2" marker-end="url(#ah_dom)"/>
+            <!-- 우측: b 약함 -->
+            <g transform="translate(360,80)">
+              <circle cx="25" cy="20" r="22" fill="#e8d8e8" stroke="#7a3a1a" stroke-width="2" stroke-dasharray="3 2"/>
+              <text x="25" y="26" font-size="14" font-weight="bold" text-anchor="middle" fill="#3a3a3a">b</text>
+              <text x="25" y="60" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a3a1a">劣性</text>
+              <text x="25" y="75" font-size="9" text-anchor="middle" fill="#5a3a1a">(弱い)</text>
+              <text x="25" y="93" font-size="9" text-anchor="middle" fill="#5a3a1a">隠れる</text>
+            </g>
+            <line x1="310" y1="100" x2="375" y2="100" stroke="#7a3a1a" stroke-width="2" stroke-dasharray="3 2" marker-end="url(#ah_rec)"/>
+            <text x="345" y="92" font-size="9" font-style="italic" text-anchor="middle" fill="#5a3a1a">(隠れる)</text>
+            <defs>
+              <marker id="ah_dom" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#5a2a7a"/></marker>
+              <marker id="ah_rec" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#7a3a1a"/></marker>
+            </defs>
+            <!-- 注意 박스 -->
+            <rect x="40" y="190" width="420" height="55" fill="#fff" stroke="#7a3a1a" stroke-width="1.5" rx="6"/>
+            <text x="250" y="212" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a3a1a">⚠ 注意!</text>
+            <text x="250" y="230" font-size="10" text-anchor="middle" fill="#1a1a1a">「優性」= 強くて 先に 見える という 意味。</text>
+            <text x="250" y="244" font-size="10" text-anchor="middle" fill="#7a1a1a">「数が 多い」「良い 形質」 という 意味では ない!</text>
+          </svg>
+        `,
+      },
+      {
+        title: '④  メモリ — 私たちの 体にも 遺伝',
+        svg: `
+          <svg viewBox="0 0 450 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#eef8ee;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a6a2a">遺伝の 法則は、 私たちの 体にも</text>
+            <!-- 부모 -->
+            <text x="225" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#1a6a2a">親</text>
+            <g transform="translate(120,60)">
+              <ellipse cx="25" cy="25" rx="20" ry="22" fill="#fdd5b3" stroke="#5a3a18" stroke-width="2"/>
+              <ellipse cx="20" cy="22" rx="2.5" ry="3" fill="#3a2a18"/>
+              <ellipse cx="30" cy="22" rx="2.5" ry="3" fill="#3a2a18"/>
+              <path d="M 20 32 Q 25 35 30 32" fill="none" stroke="#5a3a18" stroke-width="1.5"/>
+              <text x="25" y="68" font-size="10" text-anchor="middle" fill="#3a3a3a">父</text>
+            </g>
+            <g transform="translate(285,60)">
+              <ellipse cx="25" cy="25" rx="20" ry="22" fill="#fdd5b3" stroke="#5a3a18" stroke-width="2"/>
+              <ellipse cx="20" cy="22" rx="2.5" ry="3" fill="#1a4a7a"/>
+              <ellipse cx="30" cy="22" rx="2.5" ry="3" fill="#1a4a7a"/>
+              <path d="M 20 32 Q 25 35 30 32" fill="none" stroke="#5a3a18" stroke-width="1.5"/>
+              <text x="25" y="68" font-size="10" text-anchor="middle" fill="#3a3a3a">母</text>
+            </g>
+            <!-- 因子 1개씩 -->
+            <text x="145" y="145" font-size="14" font-weight="bold" text-anchor="middle" fill="#3a2a18">因子 1個</text>
+            <line x1="145" y1="125" x2="200" y2="180" stroke="#5a3a18" stroke-width="1.5" stroke-dasharray="3 2" marker-end="url(#ah_h1)"/>
+            <text x="310" y="145" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a4a7a">因子 1個</text>
+            <line x1="310" y1="125" x2="250" y2="180" stroke="#1a4a7a" stroke-width="1.5" stroke-dasharray="3 2" marker-end="url(#ah_h2)"/>
+            <!-- 자녀 -->
+            <text x="225" y="170" font-size="12" font-weight="bold" text-anchor="middle" fill="#1a6a2a">子 (君·私)</text>
+            <g transform="translate(200,185)">
+              <ellipse cx="25" cy="25" rx="22" ry="25" fill="#fdd5b3" stroke="#5a3a18" stroke-width="2"/>
+              <ellipse cx="19" cy="22" rx="3" ry="3.5" fill="#3a2a18"/>
+              <ellipse cx="31" cy="22" rx="3" ry="3.5" fill="#1a4a7a"/>
+              <path d="M 19 34 Q 25 38 31 34" fill="none" stroke="#5a3a18" stroke-width="1.5"/>
+            </g>
+            <defs>
+              <marker id="ah_h1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5a3a18"/></marker>
+              <marker id="ah_h2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#1a4a7a"/></marker>
+            </defs>
+            <text x="225" y="248" font-size="10" font-weight="bold" text-anchor="middle" fill="#1a6a2a">目の 色·髪の 色·耳の 形 など も、</text>
+            <text x="225" y="265" font-size="10" font-weight="bold" text-anchor="middle" fill="#5a2a7a">親から 1個 ずつ 受け継いだ 「因子」 の 組み合わせ</text>
+          </svg>
+        `,
+      },
+    ],
+
+    formulas: [
+      {
+        name: '分離の 法則 (メンデル 第1法則)',
+        formula: 'ペアの 因子 → 子に 1個 ずつ 分かれて 伝わる',
+        formulaSimple: '2個 → 1個 ずつ 分離',
+        explanation: '一つの 個体が 持つ 2個の 因子 (遺伝子) が、 子孫に 1個 ずつ 分かれて 伝わる。 だから 隠れて いた 劣性も 再び 現れる ことが ある。',
+        note: 'メンデル 第1法則。 分離の 法則。 全ての 遺伝の 基本。',
+      },
+      {
+        name: '優性·劣性 + 3:1',
+        formula: '優性(紫) 3 : 劣性(白) 1',
+        formulaSimple: '顕性 3 : 潜性 1',
+        explanation: '子 (Bb) 同士の 交配 → 孫は BB·Bb·bB·bb = 1:1:1:1。 見た目は 紫 (BB·Bb·bB) 3 : 白 (bb) 1。',
+        note: '「優性 = 多い」 では なく 「優性 = 強くて 先に 現れる」。 3:1 は 組み合わせ 計算の 結果。',
+      },
+    ],
+
+    unitsTable: {
+      title: '遺伝 キーワード まとめ',
+      rows: [
+        ['用語',                    '意味',                                          '例·備考'],
+        ['遺伝子 (いでんし)',        '形質を 決める 因子',                            '花の 色·目の 色を 決める'],
+        ['優性 (顕性)',             'ペアで 強く 現れる 形質',                        '紫の 花'],
+        ['劣性 (潜性)',             'ペアで 隠れる 形質 (消えない)',                  '白い 花'],
+        ['分離の 法則',             '因子 ペアが 子に 1個 ずつ 分かれて 伝わる',      'メンデル 第1法則'],
+        ['3:1',                    '孫世代 優性:劣性 の 比率',                       '紫 3 : 白 1'],
+        ['純系 (じゅんけい)',        '同じ 形質が 続けて 出る 純粋種',                  '純白·純紫の 親'],
+      ],
+    },
+
+    flashcards: [
+      { front: '遺伝 (いでん)',         back: '親の 形質が 子に 伝わる こと。 メンデル が エンドウ豆で 法則 発見。' },
+      { front: '遺伝子 (いでんし)',     back: '形質を 決める 因子。 普通 2個 ずつ ペア。 親から 1個 ずつ 受け継ぐ。' },
+      { front: '優性 (顕性, ゆうせい)', back: 'ペアで 強く 現れる 形質。 紫の 花 のように 見た目に 現れる。' },
+      { front: '劣性 (潜性, れっせい)', back: 'ペアで 隠れる 形質。 白い 花 のように 見えなくても 消えずに 伝わる。' },
+      { front: '分離の 法則',           back: '因子 ペアが 子孫に 1個 ずつ 分かれて 伝わる 法則。 メンデル 第1法則。' },
+      { front: '3:1 の 比',            back: '子 (雑種) 同士の 交配 → 孫世代の 優性:劣性 比率。 組み合わせ 計算の 結果。' },
+      { front: '純系 (じゅんけい)',     back: '同じ 形質だけが 続けて 出る 純粋種。 メンデル 実験の 出発点 (純白·純紫)。' },
+      { front: 'エンドウ豆',           back: 'メンデルが 実験に 使った 豆。 形質が 明瞭で 栽培·交配が 簡単で 適合。' },
+      { front: 'メンデル',             back: 'オーストリア の 修道士 (1822-1884)。 8年間 エンドウ豆 交配で 遺伝法則 発見 (1865)。' },
+      { front: 'DNA·染色体',          back: '後に 明らかに なった 遺伝子の 実体。 メンデル の 「因子」 が DNA に つながる。' },
+    ],
+
+    exercises: [
+      {
+        q: '事件 6 で 白い 花が 子世代では 見えず 孫世代で 再び 現れた 理由は?',
+        options: ['魔法で 戻った', '白の 因子が 子に 隠れて 伝わり 孫で 発現', '新しく 生まれた', '紫が 白に 変わった'],
+        correct: 1,
+        explanation: '事件 6 の 核心。 白 (劣性) の 因子は 消えず 子に 隠れていて、 孫で 白同士が 出会うと 発現。',
+      },
+      {
+        q: '孫世代 紫:白 の 比率は?',
+        options: ['1:1', '2:1', '3:1', '4:1'],
+        correct: 2,
+        explanation: '約 3:1。 因子 組み合わせ (BB·Bb·bB·bb) で 紫 3 : 白 1。',
+      },
+      {
+        q: 'ペアで 強く 現れる 形質を 何という?',
+        options: ['劣性 (潜性)', '優性 (顕性)', '純系', '分離'],
+        correct: 1,
+        explanation: '優性 (顕性)。 紫の 花 のように 見た目に 現れる 形質。',
+      },
+      {
+        q: '遺伝法則を 発見した 人は?',
+        options: ['ダーウィン', 'メンデル', 'パスツール', 'ニュートン'],
+        correct: 1,
+        explanation: 'グレゴール·メンデル。 修道院で 8年間 エンドウ豆 交配 実験。',
+      },
+      {
+        q: '因子 ペアが 子孫に 1個 ずつ 分かれて 伝わる 法則は?',
+        options: ['優性の 法則', '分離の 法則', '進化の 法則', '自然選択'],
+        correct: 1,
+        explanation: '分離の 法則 (メンデル 第1法則)。 だから 隠れた 劣性も 再び 現れる ことが ある。',
+      },
+      {
+        q: 'メンデルが 実験に エンドウ豆を 使った 理由として 適切なのは?',
+        options: ['美味しいから', '形質が 明瞭で 交配が 簡単だから', '高価だから', '花が きれい だから'],
+        correct: 1,
+        explanation: 'エンドウ豆は 形質 区分が 明確 (紫/白·丸/しわ) で 栽培·交配が 簡単。 実験に 理想的。',
+      },
+      {
+        q: '紫の 花の 子 (Bb) が 白の 因子を 持って いるのに 紫色 なのは?',
+        options: ['白の 因子が ないから', '紫が 優性で 先に 現れるから', '白が 弱くて 消えたから', '日光の せい'],
+        correct: 1,
+        explanation: '紫が 優性。 紫+白 因子を 持って いても 強い 紫が 見た目に 現れる。 白は 隠れる。',
+      },
+      {
+        q: 'メンデル が 「因子」 と 呼んだ ものの 現代の 名前は?',
+        options: ['細胞', '遺伝子 (DNA)', 'タンパク質', 'ウイルス'],
+        correct: 1,
+        explanation: 'メンデル の 「因子」 = 今日の 遺伝子 (DNA)。 メンデル 死後に その 実体が 明らかに。',
+      },
+      {
+        q: '「優性」 を 正しく 理解した のは?',
+        options: ['数が 多い', '強くて 先に 現れる', '常に 良い 形質', 'より 早く 育つ'],
+        correct: 1,
+        explanation: '優性 = 「強くて 先に 現れる」。 「多い」 や 「良い」 は 誤解。 劣性も 同じく 伝わる。',
+      },
+      {
+        q: '純白の エンドウ豆 同士を 交配 し続けると 子孫は?',
+        options: ['全部 白', '全部 紫', '3:1', '半分 ずつ'],
+        correct: 0,
+        explanation: '純系 (純粋種) は 同じ 形質だけが 続けて 出る。 白の 因子 (bb) だけ なら 子孫も 全部 白。',
+      },
+    ],
+
+    tips: [
+      { title: '①  消えた 形質は 「隠れた もの」',     body: '白い 花は 消えたのでは なく 子に 隠れて 伝わり 孫で 再発現。 劣性は 消滅 しない。' },
+      { title: '②  遺伝子は 2個 ペア',                body: '形質を 決める 因子は 普通 ペア。 親から 1個 ずつ 受け取って 子は 2個 持つ。' },
+      { title: '③  優性 = 「強さ」、 「多さ」 ではない', body: '優性は 強くて 先に 現れる こと。 数が 多い·より 良い という 意味では ない。' },
+      { title: '④  分離の 法則',                     body: 'ペアが 子孫に 1個 ずつ 分かれて 伝わる。 だから 孫で 劣性が 再び 現れる ことが ある。' },
+      { title: '⑤  3:1 は 計算の 結果',              body: 'Bb × Bb → BB·Bb·bB·bb。 紫 3 : 白 1。 偶然 では なく 組み合わせ 確率。' },
+      { title: '⑥  数える ことの 力',                body: 'メンデル は 何万 株を 8年 間 数えた。 大量を 数えてこそ 3:1 のような 法則が 見える。' },
+      { title: '⑦  エンドウ豆 = 良い 実験材料',       body: '形質が 明瞭で 交配が 簡単。 良い 実験は 良い 材料 選びから 始まる。' },
+      { title: '⑧  メモリ — 君の 形質も 遺伝',        body: '目の 色·耳の 形 なども 親から 1個 ずつ 受けた 因子の 組み合わせ。 メンデル 法則は 私たちの 体にも。' },
+    ],
+  },
+  // 사건 7~10 은 향후 별도 명세서에서 추가 (scientists_case07 ...).
 };

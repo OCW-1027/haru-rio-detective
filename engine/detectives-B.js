@@ -2844,6 +2844,7 @@ const SCIENTISTS_SPEAKER_MAP = {
   hikari_curie:      { cls: 'sensei',   name: 'キューリィ夫人', charKey: 'hikari_curie',      pos: 'center' },
   darwin_voyager:    { cls: 'sensei',   name: 'ダーリン教授',   charKey: 'darwin_voyager',    pos: 'center' },
   pasteur_micro:     { cls: 'sensei',   name: 'パスト博士',     charKey: 'pasteur_micro',     pos: 'center' },
+  mendel_pea:        { cls: 'sensei',   name: 'メンデル',       charKey: 'mendel_pea',        pos: 'center' },
 };
 
 function scientistsSpeakerInfo(key) {

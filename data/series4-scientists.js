@@ -1328,18 +1328,252 @@ const SCIENTISTS_STORY = [
     note: { title: '第5事件 見えない 敵の 正体', desc: '白鳥の 首 フラスコ — 空気は 通すが 微生物は 遮断。 腐敗と 病気の 原因が 「自然発生」 では なく 目に 見えない 微生物 である ことを 証明した パスツールの 細菌学。 衛生·ワクチン·殺菌の 出発点を 学んだ 第五歩。' },
   },
   {
-    id: 6, icon: '🌱',
+    id: 6, icon: '🌸',
     title: 'エンドウ豆の法則',
-    subtitle: '受け継がれる特徴',
-    theme: '遺伝法則',
+    subtitle: '消えた 白い 花は どこへ?',
+    theme: '遺伝法則·優性劣性·分離の法則·遺伝子',
     bgm: 'mystery',
     illustration: SCIENTISTS_CASE_IMAGES[6],
     charKey: 'mendel_pea',
     sceneKey: 'bg_ch06_monastery',
-    comingSoon: true,
-    intro: [],
-    steps: [],
-    note: null,
+    comingSoon: false,
+    learnRef: 'scientists_case06',
+    intro: {
+      title: 'エンドウ豆の法則',
+      subtitle: '消えた 白い 花は どこへ?',
+      bg: 'bg_ch06_monastery',
+      lines: [
+        { speaker: 'narrator',   text: 'パスト博士の 紹介で、 静かな 修道院の 庭を 訪ねた。' },
+        { speaker: 'hinata',     text: 'こちらが メンデルさんの 庭 です。 エンドウ豆が ずらり…' },
+        { speaker: 'rio',        text: 'うわぁ、 すごい 数の 鉢! 何千 個も ある!' },
+        { speaker: 'haru',       text: '紫の 花、 白い 花… それぞれ 札に 記録が ついてる。' },
+        { speaker: 'mendel_pea', text: 'ようこそ。 私が メンデル じゃ。 ちょうど 不思議な 事が あってのう。' },
+        { speaker: 'mendel_pea', text: 'この 記録を 見て ほしい。 私を ずっと 悩ませて いる 謎なのじゃ。' },
+        { speaker: 'narrator',   text: 'メンデルが 古い 観察ノートを 開いた。' },
+        { speaker: 'mendel_pea', text: '白い 花の 豆と、 紫の 花の 豆を かけ合わせた。 すると…' },
+        { speaker: 'rio',        text: '子どもは… 全部 紫!? 白が 一つも ない!' },
+        { speaker: 'haru',       text: '白い 花が 消えて しまった みたいだ…' },
+        { speaker: 'mendel_pea', text: 'そう。 だが、 もっと 不思議な ことが 起きたのじゃ。' },
+        { speaker: 'mendel_pea', text: 'その 紫の 子ども 同士を かけ合わせると — 孫の 代に、 白い 花が また 現れた!' },
+        { speaker: 'hinata',     text: 'えっ、 消えた はずの 白が 戻ってきた…?' },
+        { speaker: 'rio',        text: '魔法みたい! 白は どこに 隠れてたの?' },
+        { speaker: 'mendel_pea', text: 'ふむ。 自然には 隠れた 法則が ある。 数えれば、 必ず 見えてくるのじゃ。' },
+        { speaker: 'mendel_pea', text: '皆の 力で、 この 謎を 解いて くれるかのう?' },
+        { speaker: 'penta',      text: 'ペンッ! 消えた 白い 花、 探すペン!' },
+      ],
+      cta: '🔍 調査を 始める',
+    },
+    steps: [
+      {
+        id: 'step1',
+        title: '🌱 STEP 1: 親の 世代を 確認',
+        bg: 'bg_ch06_monastery',
+        question: 'まず、 最初の 親の 豆を 確認しよう。 何が わかる?',
+        options: [
+          {
+            label: '純粋な 白い 花 と 純粋な 紫の 花 — 混じり気の ない 親',
+            isCorrect: true,
+            response: [
+              { speaker: 'rio',        text: '親は きれいに 分かれてる! こっちは 真っ白、 こっちは 真っ紫!' },
+              { speaker: 'haru',       text: '何代も 同じ 色 だった 純粋な 豆 だね。 混じってない。' },
+              { speaker: 'hinata',     text: '出発点は 「純粋な 白」 と 「純粋な 紫」。 ここから 始まる…' },
+              { speaker: 'mendel_pea', text: 'その通り。 純粋な 親から 始めるのが 大事 なのじゃ。' },
+            ],
+          },
+          {
+            label: '豆の 大きさを 測る',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '今は 大きさ より 「花の 色」 の 謎を 追おう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step2',
+        title: '🟣 STEP 2: 子の 世代を 見る',
+        bg: 'bg_ch06_monastery',
+        question: '白×紫 の 子ども(子世代)を 調べた。 何色?',
+        options: [
+          {
+            label: '全部 紫 — 白が 一つも 出ない',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',       text: '子どもは… 数えても 数えても、 全部 紫!' },
+              { speaker: 'rio',        text: '白が ゼロ! ほんとに 消えちゃった の?' },
+              { speaker: 'hinata',     text: '白い 花の 性質は どこへ いったんでしょう…?' },
+              { speaker: 'mendel_pea', text: 'ふむ。 紫が 白を 「隠して」 いる のかも しれぬのう。' },
+            ],
+          },
+          {
+            label: '半分 紫、 半分 白',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: 'いや、 記録では 子世代は 全部 紫 だよ。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step3',
+        title: '⚪ STEP 3: 孫の 世代を 見る',
+        bg: 'bg_ch06_monastery',
+        question: '紫の 子ども 同士を かけ合わせた 孫世代。 何が 起きた?',
+        options: [
+          {
+            label: '白い 花が また 現れた — 消えて いなかった',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',     text: '見て! 孫の 代に、 白い 花が また 咲いて います!' },
+              { speaker: 'rio',        text: '白が 復活した! やっぱり 消えてなかったんだ!' },
+              { speaker: 'haru',       text: '紫の 子ども は、 白を 「隠して 持っていた」 という ことか…' },
+              { speaker: 'mendel_pea', text: 'そう。 白は 消えたのでは ない。 隠れて いた のじゃ。' },
+            ],
+          },
+          {
+            label: '孫も 全部 紫の まま',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: 'いいえ、 孫の 代では 白い 花が 戻って きて います。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step4',
+        title: '🔢 STEP 4: 孫の 数を 数える',
+        bg: 'bg_ch06_monastery',
+        question: 'メンデルと 一緒に 孫世代の 花を 数えた。 紫と 白の 割合は?',
+        options: [
+          {
+            label: '紫 : 白 = 約 3 : 1',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',       text: '数えると… 紫が 約 3、 白が 約 1。 きれいに 3対1!' },
+              { speaker: 'rio',        text: 'いつも 同じ 割合に なるの? すごい!' },
+              { speaker: 'hinata',     text: '偶然 じゃ なくて、 何度 やっても 3:1… 法則が ある!' },
+              { speaker: 'mendel_pea', text: 'その通り。 何千 個 数えても、 いつも 3:1 に 近づくのじゃ。' },
+            ],
+          },
+          {
+            label: '紫 : 白 = 1 : 1',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: 'もう一度 数えよう。 記録では 3対1 に 近い よ。' },
+            ],
+          },
+          {
+            label: '割合は バラバラ',
+            isCorrect: false,
+            response: [
+              { speaker: 'mendel_pea', text: 'たくさん 数えると、 必ず 3:1 に 近づくのじゃ。 数が 鍵じゃ。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step5',
+        title: '📓 STEP 5: 「隠れた 因子」 の ノート',
+        bg: 'bg_ch06_monastery',
+        question: 'メンデルの 仮説ノートを 開いた。 何が 書いてある?',
+        options: [
+          {
+            label: '花の 色を 決める 「因子」 が、 1つの 豆に 2個 ずつ ペアで ある',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',     text: '「色を 決める 因子は、 2個 ずつ ペアで ある」…!' },
+              { speaker: 'haru',       text: '親から 1個 ずつ もらうから、 子は 2個 持つ — 紫と 白を 1個 ずつ!' },
+              { speaker: 'rio',        text: 'だから 紫の 子も、 白の 因子を こっそり 持ってたんだ!' },
+              { speaker: 'mendel_pea', text: 'その通りじゃ。 見えない 因子が、 親から 子へ 受け継がれるのじゃ。' },
+            ],
+          },
+          {
+            label: '因子は 1個 だけ',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '2個 ペアで ないと、 孫で 白が 戻る 説明が できないよ。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step6',
+        title: '🧩 STEP 6: 推理を 組み立てる',
+        bg: 'bg_ch06_monastery',
+        question: '全ての 手がかりが 揃った。 メンデルに どう 伝える?',
+        options: [
+          {
+            label: '「紫が 優性で 白を 隠すが、 白の 因子は 消えず 伝わり、 孫で また 出る — だから 3:1」',
+            isCorrect: true,
+            response: [
+              { speaker: 'mendel_pea', text: 'お見事じゃ! まさに 私が 8年 かけて 見つけた 法則 なのじゃ。' },
+              { speaker: 'mendel_pea', text: '色を 決める 因子は 2個 ペア。 紫の 因子は 強く (優性)、 白は 弱い (劣性)。' },
+              { speaker: 'mendel_pea', text: '子は 紫と 白を 1個 ずつ 持つ。 紫が 強いから 見た目は 紫 — でも 白は 隠れて いる。' },
+              { speaker: 'mendel_pea', text: '孫の 代で 白同士が 出会うと、 また 白い 花。 因子が 分かれて 伝わる — これが 「分離の 法則」 じゃ。' },
+              { speaker: 'hinata',     text: '見える 形(紫)の 裏に、 見えない 因子(白)が 隠れていたんですね。' },
+              { speaker: 'haru',       text: '3:1 は 偶然 じゃ なくて、 因子の 組み合わせの 結果 だった…' },
+              { speaker: 'rio',        text: '白い 花は 消えてなかった! ずっと 隠れて 待ってたんだ!' },
+              { speaker: 'mendel_pea', text: 'その通り。 数えれば、 自然の 隠れた 法則が 見えてくる。 さあ、 一緒に 学ぼうかのう。' },
+            ],
+          },
+          {
+            label: '「白は 魔法で 消えて、 魔法で 戻った」',
+            isCorrect: false,
+            response: [
+              { speaker: 'mendel_pea', text: '魔法 では ない。 数を 数えれば、 ちゃんと 法則が あるのじゃ。' },
+            ],
+          },
+          {
+            label: '「紫と 白が 混ざって 薄紫に なった」',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '混ざってないよ。 孫は はっきり 紫か 白。 中間色は 出てない。' },
+            ],
+          },
+        ],
+      },
+    ],
+    ending: {
+      bg: 'bg_ch06_monastery',
+      lines: [
+        { speaker: 'mendel_pea', text: '皆の おかげで、 私の 発見を きちんと 説明 できた。 礼を 言うぞ。' },
+        { speaker: 'mendel_pea', text: '見える 形の 裏に、 見えない 法則が ある。 数えれば、 自然は 答えを 教えてくれるのじゃ。' },
+        { speaker: 'rio',        text: '小さな 豆の 中に、 こんな 秘密が 隠れてたなんて!' },
+        { speaker: 'haru',       text: '親から 子へ 伝わる 「因子」… 今で いう 遺伝子 だね。' },
+        { speaker: 'hinata',     text: '私たちの 目の 色や 髪の 色も、 きっと 同じ 法則 ですね。' },
+        { speaker: 'mendel_pea', text: 'その通り。 遺伝の 法則を、 もう 少し 学んで みようかのう。' },
+        { speaker: 'penta',      text: 'ペンッ! 遺伝の 勉強、 ペン!' },
+      ],
+      cta: '📚 学習資料を 開く',
+    },
+    caseQuiz: [
+      {
+        q: '事件 6 で 白い 花が 孫世代で 再び 現れた 理由は?',
+        options: ['新しく できた', '白の 因子が 隠れて 伝わり 発現', '紫が 変わった', '魔法'],
+        correct: 1,
+      },
+      {
+        q: '孫世代 紫:白 の 割合は?',
+        options: ['1:1', '2:1', '3:1', '1:3'],
+        correct: 2,
+      },
+      {
+        q: '強く 現れる 形質を 何という?',
+        options: ['劣性', '優性', '純系', '分離'],
+        correct: 1,
+      },
+      {
+        q: '遺伝法則の 発見者は?',
+        options: ['ダーウィン', 'メンデル', 'パスツール', 'キュリー'],
+        correct: 1,
+      },
+      {
+        q: '事件 6 の 核心 メッセージは?',
+        options: ['形質は 消える', '隠れた 形質も 消えずに 伝わる', '全ての 子孫は 同じ', '色は 混ざる'],
+        correct: 1,
+      },
+    ],
+    note: { title: '第6事件 エンドウ豆の 法則', desc: '消えた 白い 花の 謎 — 優性の 裏に 隠れた 劣性の 因子は 消えずに 孫世代で 3:1で 復活。 8年間 何万 株を 数えて 発見した メンデルの 遺伝法則 を 学んだ 第六歩。' },
   },
   {
     id: 7, icon: '🔭',
