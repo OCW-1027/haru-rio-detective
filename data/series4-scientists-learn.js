@@ -1238,5 +1238,407 @@ const SCIENTISTS_LEARN = {
       { title: '⑧  進化は 今も 進行中',               body: '抗生物質 耐性菌·都市 環境 適応 生物 など。 私たちの 目の 前でも 進化 観察 可能。' },
     ],
   },
-  // 사건 5~10 은 향후 별도 명세서에서 추가 (scientists_case05 ...).
+  scientists_case05: {
+    title: '微生物と 細菌の 世界',
+    subtitle: '事件 5 で 学んだ こと',
+    examScope: '中学 生物 + 比喩 中心 (정성적 이해)',
+
+    concept: {
+      title: '微生物と 細菌の 世界',
+      paragraphs: [
+        '事件 5 の 腐った スープ — その 原因は、 空気中に 漂う 目に 見えない 小さな 生き物 「微生物 (びせいぶつ)」 でした。 パスツール は 1861年 ごろ、 有名な 「白鳥の 首 フラスコ」 実験で これを 証明 しました。',
+        'それまで 人々は 「腐敗や 生命は 物質から 自然に 生まれる (自然発生説)」 と 信じて いました。 パスツール は、 空気は 通すが 微生物は 通さない 曲がった 首の フラスコ を 使い、 微生物が 入らなければ スープは 腐らない ことを 示したのです。',
+        '微生物には 細菌 (バクテリア)・ウイルス・カビ など が あります。 多くは 無害 または 有益 (発酵·分解) ですが、 一部は 病気を 引き起こします。 これを 「病原菌」 と 言います。',
+        'パスツール の 発見は 医学を 大きく 変えました。 殺菌·消毒で 病気を 防ぎ、 弱めた 病原菌で 作る 「ワクチン」 で 免疫を つける — 今 私たちが 健康に 暮らせる のは、 この 「見えない 世界」 の 発見の おかげ なのです。',
+      ],
+      highlight: '腐敗も 病気も、 目に 見えない 微生物が 原因。 清潔·殺菌·ワクチン で 防げる。',
+    },
+
+    diagrams: [
+      {
+        title: '①  白鳥の 首 フラスコ — 対照 実験',
+        svg: `
+          <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#eef4f8;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a4a7a">白鳥の 首 フラスコ — 対照 実験</text>
+            <!-- LEFT: 真っ直ぐな 首 (썩음) -->
+            <text x="125" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#7a1a1a">A: 真っ直ぐな 首</text>
+            <g transform="translate(85,55)">
+              <line x1="40" y1="10" x2="40" y2="90" stroke="#5a8a9a" stroke-width="3" fill="none"/>
+              <ellipse cx="40" cy="125" rx="42" ry="32" fill="#8a4a2a" stroke="#5a2a18" stroke-width="2"/>
+              <ellipse cx="40" cy="125" rx="36" ry="28" fill="#a8623a" opacity="0.7"/>
+            </g>
+            <!-- 공기 + 미생물 (좌측 직진) -->
+            <text x="125" y="80" font-size="10" text-anchor="middle" fill="#1a4a7a">空気 ↓</text>
+            <line x1="125" y1="85" x2="125" y2="115" stroke="#1a4a7a" stroke-width="1.5" stroke-dasharray="3 2" marker-end="url(#ah_p1)"/>
+            <!-- 미생물 점 (좌측 도달) -->
+            <g fill="#7a1a1a">
+              <circle cx="118" cy="92" r="2.5"/>
+              <circle cx="130" cy="96" r="2"/>
+              <circle cx="124" cy="105" r="2.5"/>
+              <circle cx="115" cy="118" r="2"/>
+              <circle cx="135" cy="135" r="2"/>
+              <circle cx="120" cy="145" r="2.5"/>
+              <circle cx="142" cy="148" r="2"/>
+            </g>
+            <text x="125" y="195" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a1a1a">微生物 直行 → 腐る</text>
+            <!-- RIGHT: S字 首 (안 썩음) -->
+            <text x="375" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#1a6a2a">B: S字に 曲がった 首</text>
+            <g transform="translate(335,55)">
+              <!-- S자 목 -->
+              <path d="M 40 10 Q 40 30 60 38 Q 80 46 60 56 Q 40 64 40 80" stroke="#5a8a9a" stroke-width="3" fill="none"/>
+              <ellipse cx="40" cy="125" rx="42" ry="32" fill="#a8d4e8" stroke="#1a4a7a" stroke-width="2"/>
+              <ellipse cx="40" cy="125" rx="36" ry="28" fill="#cfe8f0" opacity="0.8"/>
+            </g>
+            <!-- 공기 (우측 통과) -->
+            <text x="375" y="76" font-size="10" text-anchor="middle" fill="#1a4a7a">空気 ↓</text>
+            <line x1="375" y1="82" x2="375" y2="92" stroke="#1a4a7a" stroke-width="1.5" stroke-dasharray="3 2" marker-end="url(#ah_p1b)"/>
+            <line x1="385" y1="125" x2="400" y2="135" stroke="#1a4a7a" stroke-width="1.5" stroke-dasharray="3 2" marker-end="url(#ah_p1c)"/>
+            <!-- 미생물 점 (S자 골에 갇힘) -->
+            <g fill="#7a1a1a">
+              <circle cx="372" cy="91" r="2.5"/>
+              <circle cx="378" cy="100" r="2"/>
+              <circle cx="392" cy="103" r="2"/>
+              <circle cx="394" cy="111" r="2.5"/>
+              <circle cx="388" cy="108" r="2"/>
+            </g>
+            <!-- 水滴 마크 -->
+            <ellipse cx="395" cy="105" rx="4" ry="3" fill="#3498db" opacity="0.6"/>
+            <text x="425" y="105" font-size="9" fill="#4a2a8a">微生物</text>
+            <text x="425" y="116" font-size="9" fill="#4a2a8a">捕まる</text>
+            <text x="375" y="195" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">空気だけ 通る → 腐らない</text>
+            <defs>
+              <marker id="ah_p1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#1a4a7a"/></marker>
+              <marker id="ah_p1b" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#1a4a7a"/></marker>
+              <marker id="ah_p1c" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#1a4a7a"/></marker>
+            </defs>
+            <text x="250" y="240" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a4a7a">空気は 通る、 微生物は 曲がった 首で 止まる</text>
+            <text x="250" y="265" font-size="10" text-anchor="middle" fill="#5a4a2a">「腐敗の 原因は 空気 自体 ではなく、 空気中の 微生物」 を 証明</text>
+            <text x="250" y="288" font-size="10" font-weight="bold" text-anchor="middle" fill="#7a1a1a">パスツール 1861年 — 自然発生説 を 否定</text>
+          </svg>
+        `,
+      },
+      {
+        title: '②  微生物 3種類 — 細菌·ウイルス·カビ',
+        svg: `
+          <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#fff5e8;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#7a3a1a">目に 見えない 小さな 生き物たち</text>
+            <!-- 細菌 (バクテリア) -->
+            <text x="90" y="60" font-size="12" font-weight="bold" text-anchor="middle" fill="#1a6a2a">細菌 (バクテリア)</text>
+            <g transform="translate(30,75)">
+              <!-- 막대형 -->
+              <rect x="0" y="20" width="40" height="14" rx="7" fill="#a8d4a8" stroke="#3a6a1a" stroke-width="1.5"/>
+              <rect x="20" y="50" width="40" height="14" rx="7" fill="#a8d4a8" stroke="#3a6a1a" stroke-width="1.5"/>
+              <!-- 구형 -->
+              <circle cx="80" cy="32" r="10" fill="#8ac88a" stroke="#3a6a1a" stroke-width="1.5"/>
+              <circle cx="100" cy="60" r="9" fill="#8ac88a" stroke="#3a6a1a" stroke-width="1.5"/>
+              <circle cx="115" cy="35" r="8" fill="#8ac88a" stroke="#3a6a1a" stroke-width="1.5"/>
+            </g>
+            <text x="90" y="170" font-size="10" text-anchor="middle" fill="#5a3a1a">1~10 μm</text>
+            <text x="90" y="185" font-size="9" text-anchor="middle" fill="#5a3a1a">細胞 あり</text>
+            <text x="90" y="200" font-size="9" text-anchor="middle" fill="#1a6a2a">例: 乳酸菌·大腸菌</text>
+            <!-- 분리선 -->
+            <line x1="180" y1="40" x2="180" y2="230" stroke="#bdbdbd" stroke-width="1" stroke-dasharray="3 2"/>
+            <!-- ウイルス -->
+            <text x="250" y="60" font-size="12" font-weight="bold" text-anchor="middle" fill="#7a1a1a">ウイルス</text>
+            <g transform="translate(210,75)">
+              <!-- 정20면체형 -->
+              <polygon points="40,15 60,30 55,55 25,55 20,30" fill="#e8a8a8" stroke="#7a1a1a" stroke-width="1.5"/>
+              <polygon points="40,15 60,30 55,55 25,55 20,30" fill="none" stroke="#7a1a1a" stroke-width="1" opacity="0.5"/>
+              <line x1="40" y1="15" x2="40" y2="55" stroke="#7a1a1a" stroke-width="0.8" opacity="0.5"/>
+              <line x1="20" y1="30" x2="55" y2="55" stroke="#7a1a1a" stroke-width="0.8" opacity="0.5"/>
+              <line x1="60" y1="30" x2="25" y2="55" stroke="#7a1a1a" stroke-width="0.8" opacity="0.5"/>
+              <!-- 작은 점 -->
+              <circle cx="20" cy="80" r="4" fill="#e8a8a8" stroke="#7a1a1a" stroke-width="1"/>
+              <circle cx="55" cy="85" r="4" fill="#e8a8a8" stroke="#7a1a1a" stroke-width="1"/>
+              <circle cx="35" cy="100" r="4" fill="#e8a8a8" stroke="#7a1a1a" stroke-width="1"/>
+            </g>
+            <text x="250" y="170" font-size="10" text-anchor="middle" fill="#5a3a1a">20~300 nm (細菌 より 小)</text>
+            <text x="250" y="185" font-size="9" text-anchor="middle" fill="#5a3a1a">細胞 なし</text>
+            <text x="250" y="200" font-size="9" text-anchor="middle" fill="#7a1a1a">例: 風邪·インフル·コロナ</text>
+            <!-- 분리선 -->
+            <line x1="340" y1="40" x2="340" y2="230" stroke="#bdbdbd" stroke-width="1" stroke-dasharray="3 2"/>
+            <!-- カビ -->
+            <text x="410" y="60" font-size="12" font-weight="bold" text-anchor="middle" fill="#4a2a7a">カビ</text>
+            <g transform="translate(360,70)">
+              <!-- 실 모양 + 포자 -->
+              <path d="M 10 80 Q 30 50 50 80 Q 70 50 90 80" stroke="#7a5a2a" stroke-width="2" fill="none"/>
+              <line x1="20" y1="65" x2="20" y2="40" stroke="#7a5a2a" stroke-width="1.5"/>
+              <line x1="50" y1="65" x2="50" y2="30" stroke="#7a5a2a" stroke-width="1.5"/>
+              <line x1="80" y1="65" x2="80" y2="42" stroke="#7a5a2a" stroke-width="1.5"/>
+              <!-- 포자 -->
+              <circle cx="20" cy="35" r="6" fill="#4a2a7a" stroke="#1a0a3a" stroke-width="1"/>
+              <circle cx="20" cy="25" r="5" fill="#4a2a7a" stroke="#1a0a3a" stroke-width="1"/>
+              <circle cx="50" cy="25" r="6" fill="#4a2a7a" stroke="#1a0a3a" stroke-width="1"/>
+              <circle cx="50" cy="15" r="5" fill="#4a2a7a" stroke="#1a0a3a" stroke-width="1"/>
+              <circle cx="80" cy="35" r="6" fill="#4a2a7a" stroke="#1a0a3a" stroke-width="1"/>
+            </g>
+            <text x="410" y="170" font-size="10" text-anchor="middle" fill="#5a3a1a">数十 μm (大きい)</text>
+            <text x="410" y="185" font-size="9" text-anchor="middle" fill="#5a3a1a">糸状 + 胞子</text>
+            <text x="410" y="200" font-size="9" text-anchor="middle" fill="#4a2a7a">例: パン·コウジ·青カビ</text>
+            <text x="250" y="245" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a3a1a">大きさ: ウイルス &lt; 細菌 &lt; カビ</text>
+            <text x="250" y="268" font-size="10" text-anchor="middle" fill="#5a4a2a">多くは 無害·有益、 一部だけが 病原菌</text>
+          </svg>
+        `,
+      },
+      {
+        title: '③  ワクチンの 原理 — 弱めた 敵で 練習',
+        svg: `
+          <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#eef8ee;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a6a2a">ワクチン の 3段階</text>
+            <!-- Stage 1 : 약한 병원균 주입 -->
+            <g transform="translate(30,60)">
+              <rect x="0" y="0" width="135" height="180" fill="#fff" stroke="#1a6a2a" stroke-width="2" rx="8"/>
+              <text x="67" y="22" font-size="12" font-weight="bold" text-anchor="middle" fill="#1a6a2a">1. 弱毒 注射</text>
+              <!-- 주사기 -->
+              <g transform="translate(20,40)">
+                <rect x="0" y="10" width="50" height="10" fill="#c0c0c0" stroke="#5a5a5a" stroke-width="1.5"/>
+                <rect x="-8" y="8" width="8" height="14" fill="#5a5a5a"/>
+                <polygon points="50,15 75,15 80,18 50,18" fill="#7a8a9a"/>
+                <line x1="80" y1="16.5" x2="95" y2="16.5" stroke="#7a8a9a" stroke-width="1.5"/>
+                <!-- 액체 -->
+                <rect x="2" y="11" width="46" height="8" fill="#a8d4e8" opacity="0.8"/>
+              </g>
+              <!-- 약한 병원균 -->
+              <g transform="translate(30,90)">
+                <circle cx="10" cy="10" r="6" fill="#e8a8a8" stroke="#7a1a1a" stroke-width="1" opacity="0.7"/>
+                <circle cx="40" cy="14" r="5" fill="#e8a8a8" stroke="#7a1a1a" stroke-width="1" opacity="0.7"/>
+                <circle cx="70" cy="8" r="6" fill="#e8a8a8" stroke="#7a1a1a" stroke-width="1" opacity="0.7"/>
+                <text x="40" y="40" font-size="10" text-anchor="middle" fill="#5a3a1a">弱めた 病原菌</text>
+              </g>
+              <text x="67" y="165" font-size="9" text-anchor="middle" fill="#5a3a1a">体に 入れる</text>
+            </g>
+            <!-- 矢印 -->
+            <polygon points="175,150 200,138 200,162" fill="#1a6a2a"/>
+            <!-- Stage 2: 항체 만듦 -->
+            <g transform="translate(205,60)">
+              <rect x="0" y="0" width="135" height="180" fill="#fff" stroke="#1a6a2a" stroke-width="2" rx="8"/>
+              <text x="67" y="22" font-size="12" font-weight="bold" text-anchor="middle" fill="#1a6a2a">2. 免疫 獲得</text>
+              <!-- 면역 세포 + 항체 -->
+              <g transform="translate(20,40)">
+                <circle cx="45" cy="35" r="20" fill="#a8c8e8" stroke="#1a4a7a" stroke-width="1.5"/>
+                <text x="45" y="40" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a3a5a">免疫</text>
+                <!-- 항체 Y자 -->
+                <g transform="translate(10,75) rotate(-30)" stroke="#1a4a7a" stroke-width="1.8" fill="none">
+                  <line x1="0" y1="6" x2="6" y2="0"/>
+                  <line x1="12" y1="6" x2="6" y2="0"/>
+                  <line x1="6" y1="0" x2="6" y2="-10"/>
+                </g>
+                <g transform="translate(40,80)" stroke="#1a4a7a" stroke-width="1.8" fill="none">
+                  <line x1="0" y1="6" x2="6" y2="0"/>
+                  <line x1="12" y1="6" x2="6" y2="0"/>
+                  <line x1="6" y1="0" x2="6" y2="-10"/>
+                </g>
+                <g transform="translate(70,75) rotate(30)" stroke="#1a4a7a" stroke-width="1.8" fill="none">
+                  <line x1="0" y1="6" x2="6" y2="0"/>
+                  <line x1="12" y1="6" x2="6" y2="0"/>
+                  <line x1="6" y1="0" x2="6" y2="-10"/>
+                </g>
+                <text x="45" y="115" font-size="10" text-anchor="middle" fill="#1a3a5a">抗体 (Y字)</text>
+              </g>
+              <text x="67" y="165" font-size="9" text-anchor="middle" fill="#5a3a1a">体が 「敵」 を 覚える</text>
+            </g>
+            <!-- 矢印 -->
+            <polygon points="350,150 375,138 375,162" fill="#1a6a2a"/>
+            <!-- Stage 3: 진짜 병원균 격퇴 -->
+            <g transform="translate(380,60)">
+              <rect x="0" y="0" width="105" height="180" fill="#fff" stroke="#1a6a2a" stroke-width="2" rx="8"/>
+              <text x="52" y="22" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">3. 本物 撃退</text>
+              <!-- 진짜 병원균 -->
+              <g transform="translate(15,40)">
+                <circle cx="20" cy="10" r="8" fill="#e74c3c" stroke="#7a1a1a" stroke-width="1.5"/>
+                <circle cx="55" cy="14" r="7" fill="#e74c3c" stroke="#7a1a1a" stroke-width="1.5"/>
+                <text x="35" y="35" font-size="9" text-anchor="middle" fill="#7a1a1a">本物 病原菌</text>
+              </g>
+              <!-- 항체가 격퇴 -->
+              <line x1="20" y1="75" x2="35" y2="95" stroke="#1a4a7a" stroke-width="2"/>
+              <line x1="60" y1="75" x2="50" y2="95" stroke="#1a4a7a" stroke-width="2"/>
+              <text x="52" y="115" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a4a7a">×</text>
+              <text x="52" y="140" font-size="10" font-weight="bold" text-anchor="middle" fill="#1a6a2a">撃退!</text>
+              <text x="52" y="165" font-size="9" text-anchor="middle" fill="#5a3a1a">免疫が 守る</text>
+            </g>
+            <text x="250" y="270" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">弱めた 敵で 練習 → 本物が 来ても 勝てる</text>
+            <text x="250" y="290" font-size="10" text-anchor="middle" fill="#5a4a2a">パスツール が 광견병·탄저병 백신을 개발 (1880년대)</text>
+          </svg>
+        `,
+      },
+      {
+        title: '④  衛生 3原則 — 清潔が 命を 守る',
+        svg: `
+          <svg viewBox="0 0 450 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#fff5f0;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#8a4a1a">衛生 3原則 — パスツールの 教え</text>
+            <!-- 手洗い -->
+            <g transform="translate(40,60)">
+              <rect x="0" y="0" width="115" height="170" fill="#fff" stroke="#8a4a1a" stroke-width="2" rx="8"/>
+              <text x="57" y="22" font-size="12" font-weight="bold" text-anchor="middle" fill="#8a4a1a">① 手洗い</text>
+              <!-- 손 -->
+              <g transform="translate(25,40)">
+                <path d="M 10 40 L 10 15 Q 10 5 20 5 Q 30 5 30 15 L 30 35" fill="#fdd5b3" stroke="#8a5a2a" stroke-width="1.5"/>
+                <path d="M 30 40 L 30 10 Q 30 0 40 0 Q 50 0 50 10 L 50 35" fill="#fdd5b3" stroke="#8a5a2a" stroke-width="1.5"/>
+                <path d="M 50 40 L 50 12 Q 50 2 60 2 Q 70 2 70 12 L 70 35" fill="#fdd5b3" stroke="#8a5a2a" stroke-width="1.5"/>
+                <rect x="5" y="35" width="65" height="35" fill="#fdd5b3" stroke="#8a5a2a" stroke-width="1.5" rx="3"/>
+              </g>
+              <!-- 거품 -->
+              <circle cx="55" cy="125" r="6" fill="#a8d4e8" stroke="#1a4a7a" stroke-width="1" opacity="0.6"/>
+              <circle cx="70" cy="120" r="5" fill="#a8d4e8" stroke="#1a4a7a" stroke-width="1" opacity="0.6"/>
+              <circle cx="45" cy="118" r="4" fill="#a8d4e8" stroke="#1a4a7a" stroke-width="1" opacity="0.6"/>
+              <text x="57" y="155" font-size="9" text-anchor="middle" fill="#5a3a1a">石鹸で 洗う</text>
+            </g>
+            <!-- 加熱·殺菌 -->
+            <g transform="translate(170,60)">
+              <rect x="0" y="0" width="115" height="170" fill="#fff" stroke="#8a4a1a" stroke-width="2" rx="8"/>
+              <text x="57" y="22" font-size="12" font-weight="bold" text-anchor="middle" fill="#8a4a1a">② 加熱·殺菌</text>
+              <!-- 냄비 -->
+              <g transform="translate(20,50)">
+                <ellipse cx="37" cy="50" rx="32" ry="8" fill="#8a8a8a" stroke="#3a3a3a" stroke-width="1.5"/>
+                <rect x="5" y="20" width="64" height="32" fill="#a8a8a8" stroke="#3a3a3a" stroke-width="1.5"/>
+                <ellipse cx="37" cy="20" rx="32" ry="6" fill="#7a8a9a" stroke="#3a3a3a" stroke-width="1.5"/>
+                <ellipse cx="37" cy="22" rx="28" ry="3" fill="#a8c4e8"/>
+              </g>
+              <!-- 김 -->
+              <path d="M 195 95 Q 200 85 195 78 Q 190 70 195 60" stroke="#cdcdcd" stroke-width="2" fill="none" transform="translate(-180,-5)"/>
+              <path d="M 210 95 Q 215 85 210 78 Q 205 70 210 60" stroke="#cdcdcd" stroke-width="2" fill="none" transform="translate(-180,-5)"/>
+              <path d="M 225 95 Q 230 85 225 78 Q 220 70 225 60" stroke="#cdcdcd" stroke-width="2" fill="none" transform="translate(-180,-5)"/>
+              <text x="57" y="148" font-size="9" text-anchor="middle" fill="#5a3a1a">煮沸·低温殺菌</text>
+              <text x="57" y="160" font-size="8" text-anchor="middle" fill="#7a1a1a">微生物 ✗</text>
+            </g>
+            <!-- 消毒 -->
+            <g transform="translate(300,60)">
+              <rect x="0" y="0" width="115" height="170" fill="#fff" stroke="#8a4a1a" stroke-width="2" rx="8"/>
+              <text x="57" y="22" font-size="12" font-weight="bold" text-anchor="middle" fill="#8a4a1a">③ 消毒</text>
+              <!-- 알코올 병 -->
+              <g transform="translate(35,40)">
+                <rect x="6" y="20" width="34" height="60" fill="#a8d4e8" stroke="#1a4a7a" stroke-width="1.5" rx="3"/>
+                <rect x="12" y="14" width="22" height="10" fill="#5a8a9a" stroke="#1a4a7a" stroke-width="1.5"/>
+                <rect x="18" y="6" width="10" height="10" fill="#5a8a9a" stroke="#1a4a7a" stroke-width="1.5"/>
+                <text x="23" y="55" font-size="9" font-weight="bold" text-anchor="middle" fill="#1a3a5a">アル</text>
+                <text x="23" y="68" font-size="9" font-weight="bold" text-anchor="middle" fill="#1a3a5a">コール</text>
+              </g>
+              <!-- 미생물 X -->
+              <text x="57" y="145" font-size="14" font-weight="bold" text-anchor="middle" fill="#7a1a1a">微生物 ✗</text>
+              <text x="57" y="162" font-size="9" text-anchor="middle" fill="#5a3a1a">アルコール·薬品</text>
+            </g>
+            <text x="225" y="258" font-size="11" font-weight="bold" text-anchor="middle" fill="#8a4a1a">清潔が 命を 守る — パスツールの 教え</text>
+          </svg>
+        `,
+      },
+    ],
+
+    formulas: [
+      {
+        name: '自然発生説の 否定',
+        formula: '腐敗 = 外から 入った 微生物 (≠ 自然に 発生)',
+        formulaSimple: '腐敗 = 外来 微生物',
+        explanation: '生命·腐敗は 物質から 勝手に 生まれません。 必ず 既存の 生命 (微生物) から 由来。 白鳥の 首 フラスコ が これを 証明。',
+        note: '「生命は 生命から (生物発生説)」 — パスツール が 自然発生説 を 覆した。',
+      },
+      {
+        name: 'ワクチン の 原理',
+        formula: '弱い 病原菌 → 免疫 獲得 → 本物 撃退',
+        formulaSimple: '弱毒 → 免疫 → 防御',
+        explanation: '弱めた 病原菌を 先に 入れて 体が 抗体を 作るように する。 本物の 病原菌が 来ても 免疫が 撃退。',
+        note: 'ジェンナー の 種痘法を パスツール が 狂犬病·炭疽病で 拡張·理論化。',
+      },
+    ],
+
+    unitsTable: {
+      title: '微生物 キーワード まとめ',
+      rows: [
+        ['用語',                    '意味',                                       '例·備考'],
+        ['微生物 (びせいぶつ)',      '目に 見えない 小さな 生き物',                 '細菌·ウイルス·カビ'],
+        ['細菌 (さいきん)',          '単細胞 微生物 (バクテリア)',                 '乳酸菌·大腸菌·結核菌'],
+        ['病原菌 (びょうげんきん)',  '病気を 引き起こす 微生物',                   '結核菌·コレラ菌'],
+        ['自然発生説',              '生命が 物質から 勝手に 生まれる という 旧説', 'パスツール が 否定'],
+        ['殺菌·消毒',                '微生物を 殺す·減らす こと',                   '加熱·アルコール·煮沸'],
+        ['ワクチン',                '弱い 病原菌で 免疫を 作る 薬',                '狂犬病·天然痘 ワクチン'],
+      ],
+    },
+
+    flashcards: [
+      { front: '微生物 (びせいぶつ)',           back: '目に 見えない 小さな 生き物。 細菌·ウイルス·カビ など。 腐敗·発酵·病気の 原因。' },
+      { front: '細菌 (さいきん)',               back: '単細胞 微生物 (バクテリア)。 棒型·球型 など。 有益な もの (乳酸菌) も 多い。' },
+      { front: '自然発生説',                   back: '生命·腐敗が 物質から 勝手に 生まれる という 旧説。 パスツール が 白鳥の 首 フラスコ で 否定。' },
+      { front: '白鳥の 首 フラスコ',            back: 'パスツール の 実験装置。 空気は 通すが 微生物は 曲がった 首に 閉じ込められ スープが 腐らない。' },
+      { front: 'ワクチン',                     back: '弱めた 病原菌で 免疫を 作る 薬。 パスツール が 狂犬病·炭疽病 ワクチンを 開発。' },
+      { front: '低温殺菌 (ていおんさっきん)',    back: 'パスツール が 開発。 牛乳 などを 適温で 温めて 有害菌だけ 殺す。 「パスチャライゼーション」。' },
+      { front: '病原菌 (びょうげんきん)',       back: '病気を 引き起こす 微生物。 結核菌·コレラ菌 など。 衛生·消毒で 遮断。' },
+      { front: '殺菌·消毒',                    back: '微生物を 殺す·減らす こと。 加熱·煮沸·アルコール など。' },
+      { front: '免疫 (めんえき)',               back: '体が 病原菌と 戦う 防御 システム。 ワクチンで 事前に 訓練 可能。' },
+      { front: 'ルイ·パスツール',               back: 'フランスの 化学者·微生物学者 (1822-1895)。 自然発生説 否定·低温殺菌·ワクチン 開発。' },
+    ],
+
+    exercises: [
+      {
+        q: '事件 5 で スープA だけ 腐った 理由は?',
+        options: ['スープが 古かったから', '空気中の 微生物が 入って 繁殖したから', 'フラスコの ガラスが 違ったから', '温度が 高かったから'],
+        correct: 1,
+        explanation: '事件 5 の 核心。 空気中の 微生物が スープに 入って 繁殖 → 腐敗。 曲がった 首の フラスコは 微生物を 遮断。',
+      },
+      {
+        q: '白鳥の 首 フラスコ 実験が 否定した 旧説は?',
+        options: ['進化論', '自然発生説', '相対性理論', '万有引力'],
+        correct: 1,
+        explanation: '自然発生説 (生命が 物質から 勝手に 生まれる という 説) を パスツール が 否定。',
+      },
+      {
+        q: '微生物 に 当たらない のは?',
+        options: ['細菌', 'ウイルス', 'カビ', '岩石'],
+        correct: 3,
+        explanation: '岩石は 生物 ではない。 細菌·ウイルス·カビは 全て 微生物。',
+      },
+      {
+        q: 'ワクチン の 原理は?',
+        options: ['強い 病原菌を 注射', '弱めた 病原菌で 免疫を 作る', '抗生物質を 事前に 飲む', '微生物を 全て 殺す'],
+        correct: 1,
+        explanation: '弱毒化した 病原菌で 体が 抗体 (免疫) を 作るように する。 本物の 病原菌が 来ても 撃退。',
+      },
+      {
+        q: '白鳥の 首 フラスコ で 空気は?',
+        options: ['両方 通る', '曲がった 方だけ 塞がれる', '真っ直ぐな 方だけ 塞がれる', '両方 塞がれる'],
+        correct: 0,
+        explanation: '空気は 両方 通る。 違いは 微生物 — 曲がった 首が 微生物だけ 捕まえる。',
+      },
+      {
+        q: 'パスツール が 開発した 牛乳 殺菌法は?',
+        options: ['冷凍法', '低温殺菌 (パスチャライゼーション)', '乾燥法', '塩漬け'],
+        correct: 1,
+        explanation: '低温殺菌。 適温で 温めて 有害菌だけ 殺し 味は 保つ。 彼の 名前から 由来。',
+      },
+      {
+        q: '次の うち 微生物の 有益な 作用は?',
+        options: ['発酵 (ヨーグルト·パン)', '食中毒', '虫歯', '伝染病'],
+        correct: 0,
+        explanation: '発酵 (ヨーグルト·パン·チーズ·味噌) は 微生物の 有益な 作用。 全ての 微生物が 害な わけ ではない。',
+      },
+      {
+        q: '病原菌を 遮断する 衛生 習慣 ではない のは?',
+        options: ['手洗い', '加熱·殺菌', '消毒', '部屋を 暗くする'],
+        correct: 3,
+        explanation: '部屋を 暗くする ことは 衛生と 無関係。 手洗い·加熱·消毒が 微生物 遮断の 核心。',
+      },
+      {
+        q: 'パスツール が ワクチンを 開発した 病気は?',
+        options: ['風邪', '狂犬病·炭疽病', '骨折', '近視'],
+        correct: 1,
+        explanation: '狂犬病·炭疽病 ワクチン 開発。 ジェンナー の 種痘法を 理論的に 拡張。',
+      },
+      {
+        q: '「生命は 生命から」 という 原理を 何と いう?',
+        options: ['自然発生説', '生物発生説', '進化論', '細胞説'],
+        correct: 1,
+        explanation: '生物発生説。 生命は 既存の 生命からのみ 生まれる。 パスツール が 自然発生説を 覆して 確立。',
+      },
+    ],
+
+    tips: [
+      { title: '①  腐敗 = 外来 微生物',            body: 'スープが 腐るのは 勝手 ではなく 空気中の 微生物が 入って 繁殖する から。 「自然発生説」 は 間違い。' },
+      { title: '②  白鳥の 首 フラスコ',            body: '空気は 通すが 微生物は 曲がった 首に 閉じ込められる。 「空気 自体 ではなく 微生物が 原因」 を 証明した 名実験。' },
+      { title: '③  微生物 = 細菌·ウイルス·カビ',   body: '目に 見えない 小さな 生き物たち。 大部分は 無害·有益 (発酵)、 一部だけが 病原菌。' },
+      { title: '④  発酵 — 微生物の 贈り物',        body: 'ヨーグルト·パン·チーズ·味噌·酒 全て 微生物の 発酵。 微生物 = 「敵」 だけ ではない。' },
+      { title: '⑤  ワクチン = 弱い 敵で 練習',     body: '弱毒化した 病原菌で 免疫を 事前に 作る。 本物が 来ても 撃退。 パスツール が 理論化。' },
+      { title: '⑥  低温殺菌 = パスツール の 発明', body: '牛乳 などを 適度に 温めて 有害菌だけ 殺す。 英語で pasteurization — 彼の 名前。' },
+      { title: '⑦  清潔が 命を 守る',              body: '手洗い·消毒·加熱で 病原菌を 遮断。 微生物の 発見が 医学を 変えた。' },
+      { title: '⑧  「見えない = 無い」 ではない',  body: '目に 見えなくても 存在する。 観察 (顕微鏡) と 実験で 証明 する のが 科学の 態度。' },
+    ],
+  },
+  // 사건 6~10 은 향후 별도 명세서에서 추가 (scientists_case06 ...).
 };

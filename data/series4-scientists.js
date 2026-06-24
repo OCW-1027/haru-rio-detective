@@ -1082,16 +1082,250 @@ const SCIENTISTS_STORY = [
   {
     id: 5, icon: '🦠',
     title: '見えない敵の正体',
-    subtitle: '微生物との戦い',
-    theme: '細菌学',
+    subtitle: 'スープは なぜ 腐るのか?',
+    theme: '細菌·微生物·ワクチン·殺菌',
     bgm: 'mystery',
     illustration: SCIENTISTS_CASE_IMAGES[5],
     charKey: 'pasteur_micro',
     sceneKey: 'bg_ch05_microbiology',
-    comingSoon: true,
-    intro: [],
-    steps: [],
-    note: null,
+    comingSoon: false,
+    learnRef: 'scientists_case05',
+    intro: {
+      title: '見えない敵の正体',
+      subtitle: 'スープは なぜ 腐るのか?',
+      bg: 'bg_ch05_microbiology',
+      lines: [
+        { speaker: 'narrator',      text: 'ダーリン教授の 紹介で、 微生物を 研究する 化学者を 訪ねた。' },
+        { speaker: 'hinata',        text: 'こちらが パスト博士の 実験室 です。 顕微鏡が たくさん…' },
+        { speaker: 'rio',           text: 'うわぁ、 フラスコだらけ! 理科室 みたい!' },
+        { speaker: 'haru',          text: '机の 上に、 同じ スープの フラスコが 二つ…?' },
+        { speaker: 'pasteur_micro', text: 'ようこそ、 若き 探偵さん。 私が パスト です。 ちょうど 困った 事が あってね。' },
+        { speaker: 'pasteur_micro', text: 'この 二つの フラスコを 見て ください。 中身は 同じ 肉の スープです。' },
+        { speaker: 'narrator',      text: '一方は 濁って 腐り、 もう 一方は 透き通って 澄んで いた。' },
+        { speaker: 'rio',           text: 'えっ、 片方だけ 腐ってる! こっちは ピカピカ!' },
+        { speaker: 'haru',          text: '同じ 日に 同じ 鍋で 煮た のに… なぜ 違うんだろう。' },
+        { speaker: 'pasteur_micro', text: 'そう、 それが 謎です。 何週間 経っても、 片方は 腐らないのです。' },
+        { speaker: 'hinata',        text: '何か 違いが ある はず です…' },
+        { speaker: 'pasteur_micro', text: '昔の 人は 「スープから 自然に 生命が 生まれて 腐る」 と 信じて いました。' },
+        { speaker: 'pasteur_micro', text: 'でも 私は、 それは 違うと 思うのです。 観察と 実験が すべて です。' },
+        { speaker: 'rio',           text: 'スープから 生命が…? 本当に?' },
+        { speaker: 'pasteur_micro', text: '目に 見えない から と いって、 存在しない わけでは ないのです。' },
+        { speaker: 'pasteur_micro', text: '皆さんの 力で、 この 謎を 解いて くれますか?' },
+        { speaker: 'penta',         text: 'ペンッ! 見えない 敵、 探すペン!' },
+      ],
+      cta: '🔍 調査を 始める',
+    },
+    steps: [
+      {
+        id: 'step1',
+        title: '🧪 STEP 1: 二つの フラスコを 比べる',
+        bg: 'bg_ch05_microbiology',
+        question: 'まず、 二つの フラスコを よく 比べよう。 何を 確認する?',
+        options: [
+          {
+            label: '中身·状態を 比べる — 同じ スープか、 どう 違うか',
+            isCorrect: true,
+            response: [
+              { speaker: 'rio',           text: 'A は 濁って 茶色く なってる… うわ、 腐ってる!' },
+              { speaker: 'haru',          text: 'B は 透明で 澄んでる。 でも 中身は 同じ 肉スープ。' },
+              { speaker: 'hinata',        text: '同じ 中身 なのに、 片方だけ 腐った… 違いは どこに?' },
+              { speaker: 'pasteur_micro', text: 'よく 観察 しました。 では、 次は どこを 見ますか?' },
+            ],
+          },
+          {
+            label: 'フラスコの 色を 比べる',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: 'ガラスの 色は 同じ だよ。 中身と 形を 見よう。' },
+            ],
+          },
+          {
+            label: 'すぐに 飲んで みる',
+            isCorrect: false,
+            response: [
+              { speaker: 'pasteur_micro', text: '腐った ものを 飲んでは いけません! まずは 観察 です。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step2',
+        title: '🔍 STEP 2: フラスコの 首を 観察',
+        bg: 'bg_ch05_microbiology',
+        question: 'ハルが フラスコの 形に 注目した。 何が 違う?',
+        options: [
+          {
+            label: 'A は 真っ直ぐな 首、 B は S字に 曲がった 首',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',          text: 'A の 首は 真っ直ぐ。 でも B の 首は… S字に グニャッと 曲がってる!' },
+              { speaker: 'rio',           text: '白鳥の 首 みたい! なんで こんな 形?' },
+              { speaker: 'hinata',        text: '腐らない 方 だけ 首が 曲がってる… これが ヒント かも。' },
+              { speaker: 'pasteur_micro', text: 'ふふ、 良い ところに 気づきました。' },
+            ],
+          },
+          {
+            label: 'フラスコの 大きさを 測る',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '大きさは 同じ。 首の 形の 違いが 大事そう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step3',
+        title: '💧 STEP 3: 曲がった 首を よく 見る',
+        bg: 'bg_ch05_microbiology',
+        question: 'ヒナタが S字の 首を じっくり 観察した。 何に 気づく?',
+        options: [
+          {
+            label: '曲がった 部分に 水滴と 埃が たまっている',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',        text: '曲がった 谷の 部分に、 水滴と 埃が たまって います。' },
+              { speaker: 'rio',           text: 'ホコリが 引っかかってる! 通れない んだ!' },
+              { speaker: 'haru',          text: '空気は 通っても、 何か が この 谷で 止められてる…?' },
+              { speaker: 'pasteur_micro', text: 'その 通り。 空気は 通り抜けます。 でも、 何か が 止まるのです。' },
+            ],
+          },
+          {
+            label: '首の 長さを 測る',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '長さ より、 谷に 何が 溜まって いるか が 大事です。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step4',
+        title: '📓 STEP 4: 博士の 実験ノート',
+        bg: 'bg_ch05_microbiology',
+        question: '博士の ノートを 開いた。 何が 書いてある?',
+        options: [
+          {
+            label: '「空気は 両方 通る — 空気 自体は 原因では ない」',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',          text: '「空気は 両方の フラスコに 通る」… 空気 自体は 犯人 じゃ ない?' },
+              { speaker: 'hinata',        text: 'でも A は 腐って B は 腐らない。 空気 以外の 何か が 違う…' },
+              { speaker: 'pasteur_micro', text: 'そうです。 空気は どちらにも 入ります。 では、 何が 違うのか。' },
+              { speaker: 'rio',           text: '空気じゃ ない なら… 空気に 混じってる 何か?' },
+            ],
+          },
+          {
+            label: 'ノートを 閉じる',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '博士の 記録に ヒントが あります。 読みましょう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step5',
+        title: '🔬 STEP 5: 顕微鏡で 観察',
+        bg: 'bg_ch05_microbiology',
+        question: '腐った スープA を 顕微鏡で 見た。 何が 見える?',
+        options: [
+          {
+            label: '小さな 生き物 (微生物) が たくさん 動いている',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',        text: 'うわっ… 小さな 生き物が、 たくさん 動いて います!' },
+              { speaker: 'rio',           text: 'ちっちゃい のが ウヨウヨ してる! これ なに!?' },
+              { speaker: 'haru',          text: '澄んだ スープB には いない… 腐った A だけに いる。' },
+              { speaker: 'pasteur_micro', text: 'それが 微生物 — 細菌 です。 目には 見えない、 小さな 生き物 です。' },
+            ],
+          },
+          {
+            label: '澄んだ スープB だけ 見る',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '腐った 方と 比べないと 違いが わからないよ。 両方 見よう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step6',
+        title: '🧩 STEP 6: 推理を 組み立てる',
+        bg: 'bg_ch05_microbiology',
+        question: '全ての 手がかりが 揃った。 博士に どう 伝える?',
+        options: [
+          {
+            label: '「空気中の 微生物が スープに 入って 腐らせる。 曲がった 首が それを 防いだ」',
+            isCorrect: true,
+            response: [
+              { speaker: 'pasteur_micro', text: 'お見事です! まさに 私の 実験の 結論 です。' },
+              { speaker: 'pasteur_micro', text: '腐敗は スープから 自然に 生まれるのでは ありません。 空気中の 微生物が 入る から なのです。' },
+              { speaker: 'pasteur_micro', text: 'S字の 首は、 空気は 通しても 微生物を 谷に 閉じ込めます。 だから B は 腐らなかった。' },
+              { speaker: 'hinata',        text: '「自然に 生命が 生まれる」 のでは なく、 外から 入る んですね!' },
+              { speaker: 'haru',          text: '目に 見えない 微生物が、 腐敗の 正体 だった…' },
+              { speaker: 'rio',           text: 'じゃあ 病気も、 この 微生物の せい?' },
+              { speaker: 'pasteur_micro', text: '鋭い 質問 です。 そう、 多くの 病気も 微生物が 原因。 だから 清潔さ が 命を 守るのです。' },
+              { speaker: 'pasteur_micro', text: 'この 発見から、 ワクチンや 消毒が 生まれました。 さあ、 一緒に 学びましょう。' },
+            ],
+          },
+          {
+            label: '「スープが 古いから 腐った」',
+            isCorrect: false,
+            response: [
+              { speaker: 'pasteur_micro', text: '同じ 日に 作りました。 古さ では 説明 できません。' },
+            ],
+          },
+          {
+            label: '「曲がった 首の ガラスが 特別な 物質を 出す」',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: 'ガラスは 同じ 材質 だよ。 谷に 溜まった ものが ヒント。' },
+            ],
+          },
+        ],
+      },
+    ],
+    ending: {
+      bg: 'bg_ch05_microbiology',
+      lines: [
+        { speaker: 'pasteur_micro', text: '皆の おかげで、 私の 実験が 証明 できました。 ありがとう。' },
+        { speaker: 'pasteur_micro', text: '見えない から と いって、 無い わけでは ない。 観察と 実験が、 真実を 教えて くれます。' },
+        { speaker: 'rio',           text: '小さな 生き物が、 こんなに 大きな 謎の 答え だったなんて!' },
+        { speaker: 'haru',          text: '清潔に する ことが、 病気を 防ぐ 第一歩 なんだね。' },
+        { speaker: 'hinata',        text: 'ワクチンも、 この 発見から 生まれたんですね。' },
+        { speaker: 'pasteur_micro', text: 'その 通り。 微生物の 世界を、 もう 少し 学んで みましょう。' },
+        { speaker: 'penta',         text: 'ペンッ! 微生物の 勉強、 ペン!' },
+      ],
+      cta: '📚 学習資料を 開く',
+    },
+    caseQuiz: [
+      {
+        q: '事件 5 で 片方の スープだけ 腐った 理由は?',
+        options: ['古かったから', '空気中の 微生物が 入ったから', 'ガラスが 違ったから', '塩が なかったから'],
+        correct: 1,
+      },
+      {
+        q: '白鳥の 首 フラスコが 否定した 古い 学説は?',
+        options: ['進化論', '自然発生説', '万有引力', '相対性理論'],
+        correct: 1,
+      },
+      {
+        q: 'ワクチンの 原理は?',
+        options: ['強い 病原菌を 注射', '弱めた 病原菌で 免疫を 作る', '微生物を 全滅', '抗生物質を 飲む'],
+        correct: 1,
+      },
+      {
+        q: '微生物 ではない のは?',
+        options: ['細菌', 'カビ', 'ウイルス', '石'],
+        correct: 3,
+      },
+      {
+        q: '細菌学の 父と 呼ばれる 人は?',
+        options: ['ダーウィン', 'パスツール', 'ニュートン', 'キュリー'],
+        correct: 1,
+      },
+    ],
+    note: { title: '第5事件 見えない 敵の 正体', desc: '白鳥の 首 フラスコ — 空気は 通すが 微生物は 遮断。 腐敗と 病気の 原因が 「自然発生」 では なく 目に 見えない 微生物 である ことを 証明した パスツールの 細菌学。 衛生·ワクチン·殺菌の 出発点を 学んだ 第五歩。' },
   },
   {
     id: 6, icon: '🌱',
