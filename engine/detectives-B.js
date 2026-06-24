@@ -2846,6 +2846,7 @@ const SCIENTISTS_SPEAKER_MAP = {
   pasteur_micro:     { cls: 'sensei',   name: 'パスト博士',     charKey: 'pasteur_micro',     pos: 'center' },
   mendel_pea:        { cls: 'sensei',   name: 'メンデル',       charKey: 'mendel_pea',        pos: 'center' },
   galileo_telescope: { cls: 'sensei',   name: 'ガリレオ',       charKey: 'galileo_telescope', pos: 'center' },
+  faraday_coil:      { cls: 'sensei',   name: 'ファラデー',     charKey: 'faraday_coil',      pos: 'center' },
 };
 
 function scientistsSpeakerInfo(key) {

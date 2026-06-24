@@ -1818,17 +1818,244 @@ const SCIENTISTS_STORY = [
   },
   {
     id: 8, icon: '⚡',
-    title: '電気と磁気の関係',
-    subtitle: '見えない力の正体',
-    theme: '電磁気学',
+    title: '見えない力の正体',
+    subtitle: '磁石で 電気が 生まれる?',
+    theme: '電磁誘導·磁場·電流·発電',
     bgm: 'mystery',
     illustration: SCIENTISTS_CASE_IMAGES[8],
     charKey: 'faraday_coil',
     sceneKey: 'bg_ch08_electricity',
-    comingSoon: true,
-    intro: [],
-    steps: [],
-    note: null,
+    comingSoon: false,
+    learnRef: 'scientists_case08',
+    intro: {
+      title: '見えない力の正体',
+      subtitle: '磁石で 電気が 生まれる?',
+      bg: 'bg_ch08_electricity',
+      lines: [
+        { speaker: 'narrator',     text: 'ガリレオの 紹介で、 不思議な 装置だらけの 実験室を 訪ねた。' },
+        { speaker: 'hinata',       text: 'こちらが ファラデーさんの 実験室 です。 コイルと 磁石が たくさん…' },
+        { speaker: 'rio',          text: 'うわぁ、 グルグル 巻いた 電線! 何に 使うの?' },
+        { speaker: 'haru',         text: '針の ついた 装置… 電流計 かな。 でも 電池が 見当たらない。' },
+        { speaker: 'faraday_coil', text: 'よく 来たね! 私が ファラデーだ。 面白い 謎が あってね。' },
+        { speaker: 'faraday_coil', text: 'この コイルと 電流計。 電池は 繋いで いない。 なのに…' },
+        { speaker: 'narrator',     text: 'ファラデーが 磁石を 手に 取ると、 時々 電流計の 針が ピクッと 動いた。' },
+        { speaker: 'rio',          text: 'あっ、 針が 動いた! 電池ないのに なんで!?' },
+        { speaker: 'haru',         text: '電気を 作る 電池が ない のに、 電流が 流れてる…?' },
+        { speaker: 'faraday_coil', text: 'そう、 それが 謎なんだ。 でも、 いつも 動く わけじゃ ない。' },
+        { speaker: 'hinata',       text: '動く ときと 動かない とき が ある… 何が 違うんでしょう。' },
+        { speaker: 'faraday_coil', text: 'よく 気づいた。 そこに 答えが 隠れて いるんだよ。' },
+        { speaker: 'rio',          text: '魔法で 電気が 出てるの?' },
+        { speaker: 'faraday_coil', text: 'ふふ、 魔法じゃ ない。 目に 見えない 力 でも、 実験すれば 見えてくるんだ。' },
+        { speaker: 'faraday_coil', text: '電池なしで 電流が 流れる — その 秘密を 解いて くれるか?' },
+        { speaker: 'haru',         text: 'はい! いつ 針が 動くのか、 調べて みます。' },
+        { speaker: 'penta',        text: 'ペンッ! 見えない 電気、 探すペン!' },
+      ],
+      cta: '⚡ 実験を 始める',
+    },
+    steps: [
+      {
+        id: 'step1',
+        title: '🔌 STEP 1: 装置を 確認する',
+        bg: 'bg_ch08_electricity',
+        question: 'まず 装置を よく 見よう。 何が ある?',
+        options: [
+          {
+            label: 'コイル(巻いた 電線)・電流計・磁石。 でも 電池は ない',
+            isCorrect: true,
+            response: [
+              { speaker: 'rio',          text: 'グルグル 電線(コイル)と、 針の 装置(電流計)、 そして 磁石!' },
+              { speaker: 'haru',         text: 'でも 電池は どこにも ない… 電源 なしで 電流?' },
+              { speaker: 'hinata',       text: '電池が ない のに 電流が 流れる… ここが 謎の 核心 ですね。' },
+              { speaker: 'faraday_coil', text: 'その通り。 電源なしで 電流を 生む — それが この 実験の 不思議さだ。' },
+            ],
+          },
+          {
+            label: '電池を 探して 繋ぐ',
+            isCorrect: false,
+            response: [
+              { speaker: 'faraday_coil', text: '電池は 使わないんだ。 それでも 電流が 流れる 理由を 探そう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step2',
+        title: '🧲 STEP 2: 磁石を 止めて おく',
+        bg: 'bg_ch08_electricity',
+        question: '磁石を コイルの 中に 入れた まま、 動かさずに 置く。 針は?',
+        options: [
+          {
+            label: '針は 動かない — 止まっている と 電流は 流れない',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',         text: '磁石を 入れた まま 止めると… 針は ピクリとも しない。' },
+              { speaker: 'rio',          text: '磁石が あるのに 電流ゼロ? じっとしてると ダメなんだ。' },
+              { speaker: 'hinata',       text: '「磁石が ある」 だけでは 足りない… 何かが 必要 ですね。' },
+              { speaker: 'faraday_coil', text: 'いい 観察だ。 「ある」 だけでは 電流は 生まれない。' },
+            ],
+          },
+          {
+            label: '針は ずっと 動き続ける',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '止めて おくと 針は 動かないよ。 もう一度 見てみよう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step3',
+        title: '➡️ STEP 3: 磁石を 動かして 入れる',
+        bg: 'bg_ch08_electricity',
+        question: '今度は 磁石を コイルに スッと 入れて みる。 針は?',
+        options: [
+          {
+            label: '入れる 瞬間に 針が 動く — 動かす と 電流が 流れる',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',       text: '磁石を 入れる 瞬間、 針が グイッと 動きました!' },
+              { speaker: 'rio',          text: '動かすと 出た! さっきと 全然 違う!' },
+              { speaker: 'haru',         text: '「止まってる」 と ダメで、 「動かす」 と 電流… 動きが 鍵だ!' },
+              { speaker: 'faraday_coil', text: 'そう! 磁石を 動かす — そこに 秘密が あるんだよ。' },
+            ],
+          },
+          {
+            label: '入れても 何も 起きない',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: 'いいえ、 入れる 瞬間に 針が 動きます。 よく 見て。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step4',
+        title: '⬅️ STEP 4: 磁石を 抜いて みる',
+        bg: 'bg_ch08_electricity',
+        question: '磁石を コイルから 抜く とき、 針は どうなる?',
+        options: [
+          {
+            label: '抜く ときは 針が 反対 方向に 動く',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',         text: '抜く ときは… 針が さっきと 逆 方向に 振れた!' },
+              { speaker: 'rio',          text: '入れると こっち、 抜くと あっち! 方向が 逆!' },
+              { speaker: 'hinata',       text: '動かす 向きで、 電流の 向きも 変わるんですね。' },
+              { speaker: 'faraday_coil', text: 'お見事。 「変化の 向き」 が 電流の 向きを 決めるんだ。' },
+            ],
+          },
+          {
+            label: '抜く ときも 同じ 方向',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '抜く ときは 逆 方向に 動くよ。 入れる ときと 比べてみて。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step5',
+        title: '📓 STEP 5: ファラデーの 実験ノート',
+        bg: 'bg_ch08_electricity',
+        question: 'ファラデーの ノートを 開いた。 何が 書いてある?',
+        options: [
+          {
+            label: '「磁石が 動く=磁場が 変化する とき だけ 電流が 生まれる」',
+            isCorrect: true,
+            response: [
+              { speaker: 'hinata',       text: '「磁場が 変化する とき だけ 電流が 生まれる」…!' },
+              { speaker: 'haru',         text: '磁石が 動く = コイルを 通る 磁力(磁場)が 変わる… その 変化が 電流を 作る!' },
+              { speaker: 'rio',          text: 'だから 止めてると ダメで、 動かすと 出るんだ!' },
+              { speaker: 'faraday_coil', text: 'その通り。 「変化」 こそが 電気を 生む 源 なんだよ。' },
+            ],
+          },
+          {
+            label: 'ノートを 閉じる',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: 'ファラデーさんの 記録に ヒントが あります。 読みましょう。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step6',
+        title: '🧩 STEP 6: 推理を 組み立てる',
+        bg: 'bg_ch08_electricity',
+        question: '全ての 手がかりが 揃った。 ファラデーに どう 伝える?',
+        options: [
+          {
+            label: '「磁石を 動かして 磁場が 変化する とき、 コイルに 電流が 生まれる」',
+            isCorrect: true,
+            response: [
+              { speaker: 'faraday_coil', text: 'お見事だよ! まさに 私が 見つけた 「電磁誘導」 なんだ。' },
+              { speaker: 'faraday_coil', text: '磁石が 動くと、 コイルを 通る 磁場が 変わる。 その 変化が 電流を 生むんだ。' },
+              { speaker: 'faraday_coil', text: '止まって いると 磁場は 一定。 だから 電流は 流れない。 「変化」 が 鍵 なんだ。' },
+              { speaker: 'faraday_coil', text: '入れる·抜く で 向きが 逆に なるのも、 変化の 向きが 違う から だよ。' },
+              { speaker: 'hinata',       text: '目に 見えない 磁場の 変化が、 電気を 生んでいた んですね。' },
+              { speaker: 'haru',         text: 'これって… 動かし続ければ、 電気を 作り続けられる?' },
+              { speaker: 'faraday_coil', text: '鋭い! それが まさに 「発電機」 の 原理だ。 今の 世界の 電気は、 ほとんど これで 作られる。' },
+              { speaker: 'rio',          text: 'すごい! 磁石を 動かすだけで 世界を 明るく できるんだ!' },
+            ],
+          },
+          {
+            label: '「磁石が ある だけで 電流が 流れる」',
+            isCorrect: false,
+            response: [
+              { speaker: 'faraday_coil', text: '止めて おくと 流れないよ。 「動かす(変化)」 が 必要なんだ。' },
+            ],
+          },
+          {
+            label: '「コイルが 勝手に 電気を 作る」',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: 'コイルだけ じゃ ダメ。 磁石の 動き(磁場の 変化)が いるよ。' },
+            ],
+          },
+        ],
+      },
+    ],
+    ending: {
+      bg: 'bg_ch08_electricity',
+      lines: [
+        { speaker: 'faraday_coil', text: '皆の おかげで、 電磁誘導を きちんと 説明 できた。 ありがとう。' },
+        { speaker: 'faraday_coil', text: '目に 見えない 力 でも、 実験すれば 必ず 見えてくる。 それが 科学の 面白さだ。' },
+        { speaker: 'rio',          text: '磁石を 動かすだけで 電気! 発電所も これなんだね!' },
+        { speaker: 'haru',         text: '磁場の 変化が 電流を 生む… 見えない 力 だけど、 確かに ある。' },
+        { speaker: 'hinata',       text: 'スマホも 電車も、 この 発見の おかげ ですね。' },
+        { speaker: 'faraday_coil', text: 'その通り。 電気と 磁気の 話を、 もう 少し 学んで みよう。' },
+        { speaker: 'penta',        text: 'ペンッ! 電気の 勉強、 ペン!' },
+      ],
+      cta: '📚 学習資料を 開く',
+    },
+    caseQuiz: [
+      {
+        q: '事件 8 で 電池 なしで 電流が 流れた 理由は?',
+        options: ['コイルが ひとりでに', '磁石を 動かして 磁場が 変化したから', '電線が 特別だから', '偶然'],
+        correct: 1,
+      },
+      {
+        q: '磁石を じっと 止めて おくと 電流は?',
+        options: ['流れる', '流れない', '大きくなる', '逆に なる'],
+        correct: 1,
+      },
+      {
+        q: '磁場の 変化で 電流が 生まれる 現象は?',
+        options: ['電磁誘導', '万有引力', '自然選択', '放射能'],
+        correct: 0,
+      },
+      {
+        q: '電磁誘導の 発見者は?',
+        options: ['ニュートン', 'ファラデー', 'ガリレオ', 'メンデル'],
+        correct: 1,
+      },
+      {
+        q: '事件 8 の 核心 メッセージは?',
+        options: ['磁石だけ あれば 良い', '磁場の 変化が 電流を 作る', '電気は 電池からだけ', 'コイルは 不要'],
+        correct: 1,
+      },
+    ],
+    note: { title: '第8事件 見えない 力の 正体', desc: '電池 なしで 流れた 電流 — 磁石を 動かして 磁場が 変化する とき コイルに 電流が 生まれる 電磁誘導。 すべての 発電の 原理であり、 「ある」 ではなく 「変わる」 が 鍵 である ことを 学んだ 第八歩。' },
   },
   {
     id: 9, icon: '⚛️',

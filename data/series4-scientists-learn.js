@@ -2298,5 +2298,381 @@ const SCIENTISTS_LEARN = {
       { title: '⑧  証拠を 記録せよ',            body: 'ガリレオは 毎晩 位置を 記録。 地道な 観測 記録が 法則を 浮かび上がらせる (メンデルと 通じる)。' },
     ],
   },
-  // 사건 8~10 은 향후 별도 명세서에서 추가 (scientists_case08 ...).
+  scientists_case08: {
+    title: '電磁誘導と 発電の 原理',
+    subtitle: '事件 8 で 学んだ こと',
+    examScope: '中学 理科 (物理) + 比喩 中心',
+
+    concept: {
+      title: '電磁誘導と 発電の 原理',
+      paragraphs: [
+        '事件 8 で 電池も ないのに 流れた 電流 — その 正体は 「電磁誘導 (でんじゆうどう)」 でした。 ファラデー は 1831年、 コイルの 中で 磁石を 動かすと 電流が 生まれる ことを 発見 しました。',
+        '磁石の まわりには、 目に 見えない 「磁場 (じば)」 が あります。 磁石を コイルに 近づけたり 遠ざけたり すると、 コイルを 通る 磁場が 「変化」 します。 この 変化が、 コイルに 電流を 生み出すのです。',
+        '大切なのは 「変化」 です。 磁石を 止めて おくと 磁場は 一定で、 電流は 流れません。 動かす とき だけ 電流が 生まれ、 入れる·抜く で 向きが 逆に なります。 「変化の 速さ·大きさ」 が 電流の 強さを 決めます。',
+        'この 発見が、 私たちの 暮らしを 一変させました。 磁石と コイルを 回し続けて 電気を 作る 装置が 「発電機」 です。 火力·水力·風力·原子力 — どんな 発電所も、 最後は この 電磁誘導で 電気を 作って います。 目に 見えない 力の 発見が、 世界を 電気で 照らしたのです。',
+      ],
+      highlight: '磁場の 「変化」 が 電流を 生む (電磁誘導)。 これが あらゆる 発電の 原理。',
+    },
+
+    diagrams: [
+      {
+        title: '①  止まると 0、 動かすと 電流',
+        svg: `
+          <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#eef4fa;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a4a7a">磁石が 動く ときだけ 電流が 流れる</text>
+            <!-- LEFT: 정지 -->
+            <text x="125" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#7a3a1a">A: 磁石 停止</text>
+            <g transform="translate(60,80)">
+              <!-- 코일 (가로 막대로 표현) -->
+              <rect x="0" y="40" width="130" height="40" fill="none" stroke="#8a5a2a" stroke-width="2.5" rx="4"/>
+              <line x1="10" y1="40" x2="10" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <line x1="30" y1="40" x2="30" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <line x1="50" y1="40" x2="50" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <line x1="70" y1="40" x2="70" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <line x1="90" y1="40" x2="90" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <line x1="110" y1="40" x2="110" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <!-- 자석 (정지) -->
+              <rect x="40" y="50" width="50" height="20" fill="#e74c3c" stroke="#7a1a1a" stroke-width="1.5"/>
+              <rect x="40" y="50" width="25" height="20" fill="#3a5a9a" stroke="#1a3a5a" stroke-width="1.5"/>
+              <text x="52" y="64" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">N</text>
+              <text x="78" y="64" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">S</text>
+              <text x="65" y="105" font-size="14" font-weight="bold" text-anchor="middle" fill="#7a3a1a">停止</text>
+              <!-- 전류계 (바늘 중앙) -->
+              <circle cx="65" cy="150" r="22" fill="#fff" stroke="#1a4a7a" stroke-width="2"/>
+              <line x1="65" y1="150" x2="65" y2="135" stroke="#1a4a7a" stroke-width="2"/>
+              <text x="65" y="180" font-size="9" font-weight="bold" text-anchor="middle" fill="#1a4a7a">針: 0</text>
+              <!-- 코일-전류계 연결선 -->
+              <line x1="10" y1="80" x2="10" y2="100" stroke="#5a3a1a" stroke-width="1.5"/>
+              <line x1="120" y1="80" x2="120" y2="100" stroke="#5a3a1a" stroke-width="1.5"/>
+              <line x1="10" y1="100" x2="45" y2="150" stroke="#5a3a1a" stroke-width="1.5"/>
+              <line x1="120" y1="100" x2="85" y2="150" stroke="#5a3a1a" stroke-width="1.5"/>
+            </g>
+            <text x="125" y="280" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a3a1a">磁場 一定 → 電流 なし</text>
+            <!-- 분리선 -->
+            <line x1="250" y1="55" x2="250" y2="265" stroke="#bdbdbd" stroke-width="1" stroke-dasharray="3 2"/>
+            <!-- RIGHT: 運動 -->
+            <text x="375" y="50" font-size="12" font-weight="bold" text-anchor="middle" fill="#1a6a2a">B: 磁石 運動</text>
+            <g transform="translate(310,80)">
+              <!-- 코일 -->
+              <rect x="0" y="40" width="130" height="40" fill="none" stroke="#8a5a2a" stroke-width="2.5" rx="4"/>
+              <line x1="10" y1="40" x2="10" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <line x1="30" y1="40" x2="30" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <line x1="50" y1="40" x2="50" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <line x1="70" y1="40" x2="70" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <line x1="90" y1="40" x2="90" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <line x1="110" y1="40" x2="110" y2="80" stroke="#8a5a2a" stroke-width="2"/>
+              <!-- 자석 (움직임 화살표) -->
+              <rect x="40" y="50" width="50" height="20" fill="#e74c3c" stroke="#7a1a1a" stroke-width="1.5"/>
+              <rect x="40" y="50" width="25" height="20" fill="#3a5a9a" stroke="#1a3a5a" stroke-width="1.5"/>
+              <text x="52" y="64" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">N</text>
+              <text x="78" y="64" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">S</text>
+              <!-- 운동 화살표 -->
+              <line x1="95" y1="60" x2="125" y2="60" stroke="#1a6a2a" stroke-width="2.5" marker-end="url(#ah_f1)"/>
+              <text x="65" y="105" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a6a2a">運動 →</text>
+              <!-- 전류계 (바늘 흔들림) -->
+              <circle cx="65" cy="150" r="22" fill="#fff" stroke="#1a4a7a" stroke-width="2"/>
+              <line x1="65" y1="150" x2="80" y2="138" stroke="#1a6a2a" stroke-width="2.5"/>
+              <text x="65" y="180" font-size="9" font-weight="bold" text-anchor="middle" fill="#1a6a2a">針: 動く!</text>
+              <line x1="10" y1="80" x2="10" y2="100" stroke="#5a3a1a" stroke-width="1.5"/>
+              <line x1="120" y1="80" x2="120" y2="100" stroke="#5a3a1a" stroke-width="1.5"/>
+              <line x1="10" y1="100" x2="45" y2="150" stroke="#5a3a1a" stroke-width="1.5"/>
+              <line x1="120" y1="100" x2="85" y2="150" stroke="#5a3a1a" stroke-width="1.5"/>
+            </g>
+            <defs>
+              <marker id="ah_f1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#1a6a2a"/></marker>
+            </defs>
+            <text x="375" y="280" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">磁場 変化 → 電流 発生!</text>
+          </svg>
+        `,
+      },
+      {
+        title: '②  磁場と その 変化 — 目に 見えない 力',
+        svg: `
+          <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#fff5e8;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#7a3a1a">磁石の まわりの 磁場 (磁力線)</text>
+            <!-- 자석 -->
+            <g transform="translate(220,110)">
+              <rect x="0" y="0" width="60" height="30" fill="#e74c3c" stroke="#7a1a1a" stroke-width="2"/>
+              <rect x="0" y="0" width="30" height="30" fill="#3a5a9a" stroke="#1a3a5a" stroke-width="2"/>
+              <text x="15" y="20" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">N</text>
+              <text x="45" y="20" font-size="13" font-weight="bold" text-anchor="middle" fill="#fff">S</text>
+            </g>
+            <!-- 자기력선 (N에서 S로 곡선) -->
+            <g fill="none" stroke="#1a4a7a" stroke-width="1.5">
+              <path d="M 235 110 Q 250 60 280 60 Q 310 60 325 110" stroke-width="1.8" marker-end="url(#ah_f2)"/>
+              <path d="M 230 105 Q 245 45 280 45 Q 315 45 330 105" marker-end="url(#ah_f2)"/>
+              <path d="M 235 140 Q 250 190 280 190 Q 310 190 325 140" stroke-width="1.8" marker-end="url(#ah_f2)"/>
+              <path d="M 230 145 Q 245 205 280 205 Q 315 205 330 145" marker-end="url(#ah_f2)"/>
+            </g>
+            <defs>
+              <marker id="ah_f2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#1a4a7a"/></marker>
+            </defs>
+            <!-- 좌측 코일 -->
+            <g transform="translate(40,100)">
+              <ellipse cx="0" cy="0" rx="12" ry="25" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <ellipse cx="15" cy="0" rx="12" ry="25" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <ellipse cx="30" cy="0" rx="12" ry="25" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <ellipse cx="45" cy="0" rx="12" ry="25" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <text x="22" y="50" font-size="10" font-weight="bold" text-anchor="middle" fill="#5a3a1a">コイル</text>
+            </g>
+            <!-- 近づける 화살표 -->
+            <line x1="115" y1="100" x2="200" y2="115" stroke="#e74c3c" stroke-width="2.5" stroke-dasharray="4 3" marker-end="url(#ah_f3)"/>
+            <text x="155" y="92" font-size="10" font-weight="bold" text-anchor="middle" fill="#e74c3c">近づける</text>
+            <text x="155" y="138" font-size="9" text-anchor="middle" fill="#7a1a1a">磁場 増える</text>
+            <defs>
+              <marker id="ah_f3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#e74c3c"/></marker>
+            </defs>
+            <!-- 우측 코일 -->
+            <g transform="translate(410,100)">
+              <ellipse cx="0" cy="0" rx="12" ry="25" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <ellipse cx="15" cy="0" rx="12" ry="25" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <ellipse cx="30" cy="0" rx="12" ry="25" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <ellipse cx="45" cy="0" rx="12" ry="25" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <text x="22" y="50" font-size="10" font-weight="bold" text-anchor="middle" fill="#5a3a1a">コイル</text>
+            </g>
+            <!-- 遠ざける -->
+            <line x1="385" y1="115" x2="295" y2="100" stroke="#3498db" stroke-width="2.5" stroke-dasharray="4 3" marker-end="url(#ah_f4)"/>
+            <text x="345" y="92" font-size="10" font-weight="bold" text-anchor="middle" fill="#3498db">遠ざける</text>
+            <text x="345" y="138" font-size="9" text-anchor="middle" fill="#1a3a5a">磁場 減る</text>
+            <defs>
+              <marker id="ah_f4" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#3498db"/></marker>
+            </defs>
+            <text x="250" y="245" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a3a1a">コイルを 通る 磁場が 「変わる」 ことで 電流 発生</text>
+            <text x="250" y="265" font-size="10" text-anchor="middle" fill="#5a4a2a">磁場は 見えない けど、 電流計が その 変化を 教えて くれる</text>
+          </svg>
+        `,
+      },
+      {
+        title: '③  入れる ↔ 抜く — 電流 の 向きも 逆',
+        svg: `
+          <svg viewBox="0 0 450 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#eef8ee;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a6a2a">変化の 向き が 電流の 向きを 決める</text>
+            <!-- LEFT: 入れる -->
+            <text x="110" y="55" font-size="12" font-weight="bold" text-anchor="middle" fill="#7a1a1a">入れる</text>
+            <g transform="translate(50,75)">
+              <ellipse cx="60" cy="20" rx="50" ry="14" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <ellipse cx="60" cy="35" rx="50" ry="14" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <ellipse cx="60" cy="50" rx="50" ry="14" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <!-- 자석 -->
+              <rect x="35" y="25" width="50" height="20" fill="#e74c3c" stroke="#7a1a1a" stroke-width="1.5"/>
+              <rect x="35" y="25" width="25" height="20" fill="#3a5a9a" stroke="#1a3a5a" stroke-width="1.5"/>
+              <text x="47" y="39" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">N</text>
+              <text x="73" y="39" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">S</text>
+              <!-- 화살표 → -->
+              <line x1="92" y1="35" x2="125" y2="35" stroke="#e74c3c" stroke-width="2.5" marker-end="url(#ah_f5)"/>
+            </g>
+            <!-- 전류 흐름 → -->
+            <g transform="translate(50,160)">
+              <rect x="0" y="0" width="120" height="22" fill="#fff" stroke="#7a1a1a" stroke-width="2" rx="3"/>
+              <text x="20" y="15" font-size="10" font-weight="bold" fill="#7a1a1a">電流</text>
+              <line x1="55" y1="11" x2="100" y2="11" stroke="#7a1a1a" stroke-width="2.5" marker-end="url(#ah_f6)"/>
+            </g>
+            <text x="110" y="220" font-size="10" text-anchor="middle" fill="#7a1a1a">磁場 増える → 電流 →</text>
+            <!-- 분리선 -->
+            <line x1="225" y1="50" x2="225" y2="280" stroke="#bdbdbd" stroke-width="1" stroke-dasharray="3 2"/>
+            <!-- RIGHT: 抜く -->
+            <text x="340" y="55" font-size="12" font-weight="bold" text-anchor="middle" fill="#1a3a5a">抜く</text>
+            <g transform="translate(280,75)">
+              <ellipse cx="60" cy="20" rx="50" ry="14" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <ellipse cx="60" cy="35" rx="50" ry="14" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <ellipse cx="60" cy="50" rx="50" ry="14" fill="none" stroke="#8a5a2a" stroke-width="2"/>
+              <rect x="35" y="25" width="50" height="20" fill="#e74c3c" stroke="#7a1a1a" stroke-width="1.5"/>
+              <rect x="35" y="25" width="25" height="20" fill="#3a5a9a" stroke="#1a3a5a" stroke-width="1.5"/>
+              <text x="47" y="39" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">N</text>
+              <text x="73" y="39" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">S</text>
+              <!-- 화살표 ← -->
+              <line x1="30" y1="35" x2="-3" y2="35" stroke="#3498db" stroke-width="2.5" marker-end="url(#ah_f7)"/>
+            </g>
+            <!-- 전류 흐름 ← -->
+            <g transform="translate(280,160)">
+              <rect x="0" y="0" width="120" height="22" fill="#fff" stroke="#1a3a5a" stroke-width="2" rx="3"/>
+              <text x="100" y="15" font-size="10" font-weight="bold" fill="#1a3a5a">電流</text>
+              <line x1="65" y1="11" x2="20" y2="11" stroke="#1a3a5a" stroke-width="2.5" marker-end="url(#ah_f8)"/>
+            </g>
+            <text x="340" y="220" font-size="10" text-anchor="middle" fill="#1a3a5a">磁場 減る → 電流 ←</text>
+            <defs>
+              <marker id="ah_f5" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#e74c3c"/></marker>
+              <marker id="ah_f6" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#7a1a1a"/></marker>
+              <marker id="ah_f7" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#3498db"/></marker>
+              <marker id="ah_f8" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#1a3a5a"/></marker>
+            </defs>
+            <text x="225" y="265" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">入れる ↔ 抜く で 電流の 向きも 反対</text>
+            <text x="225" y="285" font-size="10" text-anchor="middle" fill="#5a4a2a">変化の 「速さ」 が 大きいほど 強い 電流</text>
+          </svg>
+        `,
+      },
+      {
+        title: '④  発電機の 原理 — すべての 発電所が 同じ',
+        svg: `
+          <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#fff5f0;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#8a4a1a">回し続ければ 電気が できる = 発電機</text>
+            <!-- 中央: 発電機 -->
+            <g transform="translate(180,60)">
+              <rect x="0" y="0" width="140" height="120" fill="#fff" stroke="#8a4a1a" stroke-width="2.5" rx="8"/>
+              <text x="70" y="22" font-size="11" font-weight="bold" text-anchor="middle" fill="#8a4a1a">発電機</text>
+              <!-- 회전 자석 -->
+              <circle cx="70" cy="70" r="35" fill="none" stroke="#5a3a1a" stroke-width="1.5"/>
+              <g transform="translate(70,70) rotate(45)">
+                <rect x="-20" y="-10" width="40" height="20" fill="#e74c3c" stroke="#7a1a1a" stroke-width="1.5"/>
+                <rect x="-20" y="-10" width="20" height="20" fill="#3a5a9a" stroke="#1a3a5a" stroke-width="1.5"/>
+                <text x="-10" y="3" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">N</text>
+                <text x="10" y="3" font-size="9" font-weight="bold" text-anchor="middle" fill="#fff">S</text>
+              </g>
+              <!-- 회전 화살표 -->
+              <path d="M 100 50 A 35 35 0 0 1 100 90" fill="none" stroke="#1a6a2a" stroke-width="2" marker-end="url(#ah_f9)"/>
+              <text x="70" y="115" font-size="9" text-anchor="middle" fill="#5a3a1a">磁石を 回転</text>
+            </g>
+            <!-- 左: エネルギー源 -->
+            <text x="80" y="80" font-size="10" font-weight="bold" text-anchor="middle" fill="#7a1a1a">エネルギー源</text>
+            <g transform="translate(30,90)" font-size="9" fill="#5a3a1a">
+              <text x="0" y="0">🔥 火力</text>
+              <text x="0" y="18">💧 水力</text>
+              <text x="0" y="36">💨 風力</text>
+              <text x="0" y="54">⚛ 原子力</text>
+            </g>
+            <line x1="120" y1="120" x2="175" y2="120" stroke="#7a3a1a" stroke-width="2" marker-end="url(#ah_fa)"/>
+            <text x="148" y="112" font-size="9" font-style="italic" text-anchor="middle" fill="#7a3a1a">回転 力</text>
+            <!-- 右: 電気 出力 -->
+            <line x1="325" y1="120" x2="385" y2="120" stroke="#fdd58e" stroke-width="3" marker-end="url(#ah_fb)"/>
+            <text x="355" y="110" font-size="9" font-weight="bold" text-anchor="middle" fill="#7a1a1a">電気</text>
+            <!-- 가정 (전구) -->
+            <g transform="translate(390,90)">
+              <ellipse cx="20" cy="20" rx="14" ry="16" fill="#fdd58e" stroke="#7a5a00" stroke-width="2"/>
+              <rect x="14" y="34" width="12" height="8" fill="#888"/>
+              <text x="20" y="60" font-size="10" font-weight="bold" text-anchor="middle" fill="#7a5a00">家庭·街</text>
+            </g>
+            <defs>
+              <marker id="ah_f9" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#1a6a2a"/></marker>
+              <marker id="ah_fa" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#7a3a1a"/></marker>
+              <marker id="ah_fb" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#fdd58e"/></marker>
+            </defs>
+            <!-- 설명 박스 -->
+            <rect x="40" y="210" width="420" height="80" fill="#fff" stroke="#8a4a1a" stroke-width="1.5" rx="8"/>
+            <text x="250" y="232" font-size="11" font-weight="bold" text-anchor="middle" fill="#8a4a1a">どんな 発電所も、 最後は 同じ 仕組み</text>
+            <text x="60" y="252" font-size="10" fill="#1a1a1a">• エネルギー源で 何かを 回す</text>
+            <text x="60" y="270" font-size="10" fill="#1a1a1a">• 磁石/コイルが 回転 → 磁場が 絶えず 変化 → 電磁誘導</text>
+            <text x="60" y="286" font-size="10" font-weight="bold" fill="#7a1a1a">• ファラデーの 発見が、 世界の すべての 電気を 支えている</text>
+          </svg>
+        `,
+      },
+    ],
+
+    formulas: [
+      {
+        name: '電磁誘導の 条件',
+        formula: '磁場の 変化 → コイルに 電流 発生',
+        formulaSimple: '変化 = 電流',
+        explanation: 'コイルを 通る 磁場が 変わる ときだけ 電流 発生。 変わらなければ (磁石 停止) 電流は 流れない。',
+        note: '「ある」 ではなく 「変わる」 が 鍵。 ファラデーの 電磁誘導。',
+      },
+      {
+        name: '誘導電流の 性質',
+        formula: '変化 速いほど·大きいほど → 強い 電流 / 変化 方向 ↔ 電流 方向',
+        formulaSimple: '速い 変化 = 強い 電流',
+        explanation: '磁石を 速く 動かしたり 強い 磁石を 使えば 電流が 大きい。 入れる ときと 抜く ときで 電流 方向が 反対。',
+        note: '発電機は この 原理で 磁石/コイルを 回し続けて 電気を 生産。',
+      },
+    ],
+
+    unitsTable: {
+      title: '電磁気 キーワード まとめ',
+      rows: [
+        ['用語',                       '意味',                                            '例·備考'],
+        ['電磁誘導 (でんじゆうどう)',   '磁場 変化で 電流が 生まれる 現象',                 'ファラデー 発見 (1831)'],
+        ['磁場 (じば)',                 '磁石 周囲の 目に 見えない 力の 領域',              '磁力線で 表現'],
+        ['コイル',                     '電線を 何回も 巻いた もの',                       '巻数が 多いほど 電流 大'],
+        ['電流 (でんりゅう)',           '電気の 流れ',                                     '電流計の 針で 測定'],
+        ['発電機 (はつでんき)',         '磁場 変化で 電気を 作る 装置',                    '発電所の 核心'],
+        ['変化 (へんか)',               '磁場が 変わる こと (電磁誘導の 条件)',             '磁石を 動かして 作る'],
+      ],
+    },
+
+    flashcards: [
+      { front: '電磁誘導 (でんじゆうどう)', back: '磁場の 変化で コイルに 電流が 生まれる 現象。 ファラデーが 1831年 発見。' },
+      { front: '磁場 (じば)',               back: '磁石 周囲の 目に 見えない 力の 領域。 変われば 電流を 生む。' },
+      { front: 'コイル',                   back: '電線を 何回も 巻いた もの。 巻数が 多いほど 誘導 電流が 大きい。' },
+      { front: '電流 (でんりゅう)',         back: '電気の 流れ。 磁場 変化で 電池 なしでも 作れる。' },
+      { front: '発電機 (はつでんき)',       back: '磁石·コイルを 動かし続けて (回転) 電気を 作る 装置。 電磁誘導の 応用。' },
+      { front: '「変化」 が 鍵',            back: '磁石が ある だけでは ダメ。 動かして 磁場が 変わら なければ 電流は 生まれない。' },
+      { front: '誘導電流の 向き',           back: '磁石を 入れる ときと 抜く ときで 電流 方向が 反対。 変化の 向きが 決める。' },
+      { front: '発電所',                   back: '火力·水力·風力·原子力 全て 最終的に 電磁誘導で 発電。 何かを 回して 磁場 変化を 生む。' },
+      { front: 'モーター',                 back: '電磁誘導の 逆 応用。 電流で 回転力を 作る (発電機の 対)。' },
+      { front: 'マイケル·ファラデー',       back: 'イギリスの 物理学者·化学者 (1791-1867)。 電磁誘導 発見。 発電機·モーター 原理の 基礎。' },
+    ],
+
+    exercises: [
+      {
+        q: '事件 8 で 電池 なしで 電流が 流れた 理由は?',
+        options: ['コイルが 自分で 作る', '磁石を 動かして 磁場が 変化したから', '電線が 特別だから', '偶然'],
+        correct: 1,
+        explanation: '事件 8 の 核心。 磁石を 動かすと 磁場が 変わり、 その 変化が 電流を 生む (電磁誘導)。',
+      },
+      {
+        q: '磁石を コイルの 中に じっと 置くと 電流は?',
+        options: ['流れ続ける', '流れない', 'だんだん 大きくなる', '逆に 流れる'],
+        correct: 1,
+        explanation: '停止 = 磁場 不変 = 電流 なし。 「ある」 ではなく 「変わる」 が 条件。',
+      },
+      {
+        q: '磁場の 変化で 電流が 生まれる 現象は?',
+        options: ['電磁誘導', '万有引力', '自然選択', '進化'],
+        correct: 0,
+        explanation: '電磁誘導。 ファラデーが 1831年 発見。',
+      },
+      {
+        q: '電磁誘導を 発見した 人は?',
+        options: ['ニュートン', 'ファラデー', 'ガリレオ', 'メンデル'],
+        correct: 1,
+        explanation: 'マイケル·ファラデー。 発電機·モーターの 基礎 原理を 確立。',
+      },
+      {
+        q: '磁石を 入れる ときと 抜く ときで 電流の 向きは?',
+        options: ['同じ', '反対', 'どちらも なし', '無作為'],
+        correct: 1,
+        explanation: '変化の 方向が 反対 なので 電流の 方向も 反対。',
+      },
+      {
+        q: '誘導 電流を より 大きく するには?',
+        options: ['磁石を ゆっくり 動かす', '磁石を 速く 動かす·強い 磁石を 使う', 'コイルを 解く', '電池を 追加'],
+        correct: 1,
+        explanation: '変化が 速いほど·大きいほど (強い 磁石·巻数 多い コイル) 電流が 大きい。',
+      },
+      {
+        q: '発電所が 電気を 作る 最終 原理は?',
+        options: ['燃料を 燃やして 直接 電気に', '電磁誘導 (磁石·コイルを 回す)', '太陽光を 集めるだけ', '水を 沸かすだけ'],
+        correct: 1,
+        explanation: '火力·水力·風力·原子力 全て 結局 何かを 回して 磁場 変化 → 電磁誘導で 発電。',
+      },
+      {
+        q: 'コイルの 巻数を 増やすと?',
+        options: ['電流が 小さくなる', '誘導 電流が 大きくなる', '変化 なし', '磁石が 止まる'],
+        correct: 1,
+        explanation: 'コイルを 多く 巻くほど 誘導 電流が 大きくなる。',
+      },
+      {
+        q: '「磁場」 を 正しく 説明した のは?',
+        options: ['目に 見える 光', '磁石 周囲の 目に 見えない 力の 領域', '音の 一種', '電池の 中の 液体'],
+        correct: 1,
+        explanation: '磁石 周囲に 形成される 見えない 力の 領域。 磁力線で 表現。',
+      },
+      {
+        q: '電磁誘導が 私たちの 生活に 与えた 影響は?',
+        options: ['影響 なし', '発電·モーター など 電気 文明の 基礎', '磁石を 無くした', '電気を 減らした'],
+        correct: 1,
+        explanation: '発電機·モーター·変圧器 など 現代 電気 文明 全体の 基礎。',
+      },
+    ],
+
+    tips: [
+      { title: '①  「ある」 ではなく 「変わる」',  body: '磁石が ある だけでは 電流 なし。 磁場が 変わる ときだけ 電流 発生。 電磁誘導の 核心。' },
+      { title: '②  電磁誘導 = ファラデー 発見',  body: '1831年。 コイルの 中で 磁石を 動かすと 電流 発生。 発電の 基礎 原理。' },
+      { title: '③  方向が 反対',                body: '入れる ときと 抜く ときで 電流の 向きが 反対。 変化の 方向が 電流の 方向を 決める。' },
+      { title: '④  速いほど·強いほど 大電流',    body: '変化が 速いか 磁石が 強いか コイルが 多く 巻かれているほど 電流が 大きい。' },
+      { title: '⑤  発電機の 原理',              body: '磁石/コイルを 回し続け → 絶え間ない 磁場 変化 → 持続 電流。 すべての 発電所の 核心。' },
+      { title: '⑥  全ての 発電所が 同じ 原理',   body: '火力·水力·風力·原子力 全て 何かを 回して 発電。 エネルギー源は 違うが 原理は 電磁誘導。' },
+      { title: '⑦  目に 見えなくても 実在',     body: '磁場は 見えないが 実験で その 効果を 確認 可能 (事件 5·7と 通じる 科学的 態度)。' },
+      { title: '⑧  実験で 確かめろ',            body: 'ファラデーは 正規 教育が 少なかったが 粘り強い 実験で 発見。 手で 確認する 姿勢。' },
+    ],
+  },
+  // 사건 9~10 은 향후 별도 명세서에서 추가 (scientists_case09 ...).
 };
