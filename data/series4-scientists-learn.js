@@ -2995,5 +2995,344 @@ const SCIENTISTS_LEARN = {
       { title: '⑧  科学者たちは つながる',        body: 'キュリー (放射能)·ボーア (原子)·アイン (エネルギー) — 原子の 世界に つながる 科学の 流れ。' },
     ],
   },
-  // 사건 10 은 향후 별도 명세서에서 추가 (scientists_case10 ...).
+  scientists_case10: {
+    title: '9人の 科学者 — 知恵の 総まとめ',
+    subtitle: '事件 10 (보스) で 振り返る',
+    examScope: '사건 1~9 종합 복습',
+
+    concept: {
+      title: '9人の 科学者 — 知恵の 総まとめ',
+      paragraphs: [
+        'シリーズ 4 「偉人科学者ファイル」 で、 君は 9人の 偉大な 科学者に 出会い、 その 知恵を 学びました。 ニュートンの 万有引力、 アインシュタインの 相対性理論、 キュリーの 放射能、 ダーウィンの 進化論、 パスツールの 細菌学 — 物理から 生物まで、 世界の 仕組みを 探る 旅でした。',
+        'さらに メンデルの 遺伝法則、 ガリレオの 天体観測、 ファラデーの 電磁誘導、 ボーアの 原子模型。 大きな 宇宙から、 目に 見えない ほど 小さな 原子まで — 科学は あらゆる スケールの 謎に 挑んで きました。',
+        '9つの 物語に 共通する 大切な 教えが あります。 それは 「目に 見えない ものを、 観察·実験·証拠で 明らかに する」 という 姿勢です。 権威や 思い込みでは なく、 自分の 目と 頭で 確かめる — それが 科学の 心です。',
+        'そして もう 一つ。 進化で 学んだ ように、 大切なのは 「強さ」 ではなく 「学ぼうと する 心」 です。 メンデルは 8年 数え続け、 ファラデーは 何度も 実験を 重ねました。 知ろうと する 心が ある かぎり、 世界の 謎は いつか 解ける のです。 君も、 もう 立派な 小さき 科学者です。',
+      ],
+      highlight: '9人の 共通点 = 「見えない ものを 観察·証拠で 明らかに する 心」。 強さ より 「知ろうと する 心」。',
+    },
+
+    diagrams: [
+      {
+        title: '①  9人の 科学者と その 発見',
+        svg: `
+          <svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#f4e8f4;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#5a2a7a">9人の 科学者と その 発見</text>
+            <!-- 9개 카드 그리드 (3x3) -->
+            <g transform="translate(30,40)">
+              <!-- Row 1 -->
+              <rect x="0" y="0" width="140" height="85" fill="#fff" stroke="#e74c3c" stroke-width="2" rx="6"/>
+              <text x="70" y="20" font-size="20" text-anchor="middle">🍎</text>
+              <text x="70" y="45" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a1a1a">① ニュートン</text>
+              <text x="70" y="62" font-size="10" text-anchor="middle" fill="#1a1a1a">万有引力</text>
+              <text x="70" y="77" font-size="9" text-anchor="middle" fill="#5a3a1a">重さ 無関係に 落下</text>
+
+              <rect x="150" y="0" width="140" height="85" fill="#fff" stroke="#3498db" stroke-width="2" rx="6"/>
+              <text x="220" y="20" font-size="20" text-anchor="middle">⏰</text>
+              <text x="220" y="45" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a4a7a">② アイン</text>
+              <text x="220" y="62" font-size="10" text-anchor="middle" fill="#1a1a1a">相対性理論</text>
+              <text x="220" y="77" font-size="9" text-anchor="middle" fill="#5a3a1a">速いほど 時間 遅く</text>
+
+              <rect x="300" y="0" width="140" height="85" fill="#fff" stroke="#7c3aed" stroke-width="2" rx="6"/>
+              <text x="370" y="20" font-size="20" text-anchor="middle">✨</text>
+              <text x="370" y="45" font-size="11" font-weight="bold" text-anchor="middle" fill="#4a1a7a">③ キュリー</text>
+              <text x="370" y="62" font-size="10" text-anchor="middle" fill="#1a1a1a">放射能</text>
+              <text x="370" y="77" font-size="9" text-anchor="middle" fill="#5a3a1a">原子の エネルギー</text>
+
+              <!-- Row 2 -->
+              <rect x="0" y="100" width="140" height="85" fill="#fff" stroke="#1a6a2a" stroke-width="2" rx="6"/>
+              <text x="70" y="120" font-size="20" text-anchor="middle">🐦</text>
+              <text x="70" y="145" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a4a1a">④ ダーリン</text>
+              <text x="70" y="162" font-size="10" text-anchor="middle" fill="#1a1a1a">進化論</text>
+              <text x="70" y="177" font-size="9" text-anchor="middle" fill="#5a3a1a">強者 ではなく 適者</text>
+
+              <rect x="150" y="100" width="140" height="85" fill="#fff" stroke="#8a5a2a" stroke-width="2" rx="6"/>
+              <text x="220" y="120" font-size="20" text-anchor="middle">🦠</text>
+              <text x="220" y="145" font-size="11" font-weight="bold" text-anchor="middle" fill="#5a3a1a">⑤ パスト</text>
+              <text x="220" y="162" font-size="10" text-anchor="middle" fill="#1a1a1a">細菌学</text>
+              <text x="220" y="177" font-size="9" text-anchor="middle" fill="#5a3a1a">見えない 微生物</text>
+
+              <rect x="300" y="100" width="140" height="85" fill="#fff" stroke="#5a2a7a" stroke-width="2" rx="6"/>
+              <text x="370" y="120" font-size="20" text-anchor="middle">🌸</text>
+              <text x="370" y="145" font-size="11" font-weight="bold" text-anchor="middle" fill="#4a1a5a">⑥ メンデル</text>
+              <text x="370" y="162" font-size="10" text-anchor="middle" fill="#1a1a1a">遺伝法則</text>
+              <text x="370" y="177" font-size="9" text-anchor="middle" fill="#5a3a1a">優性·劣性 3:1</text>
+
+              <!-- Row 3 -->
+              <rect x="0" y="200" width="140" height="85" fill="#fff" stroke="#1a4a7a" stroke-width="2" rx="6"/>
+              <text x="70" y="220" font-size="20" text-anchor="middle">🔭</text>
+              <text x="70" y="245" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a3a5a">⑦ ガリレオ</text>
+              <text x="70" y="262" font-size="10" text-anchor="middle" fill="#1a1a1a">天体観測</text>
+              <text x="70" y="277" font-size="9" text-anchor="middle" fill="#5a3a1a">観測 > 権威</text>
+
+              <rect x="150" y="200" width="140" height="85" fill="#fff" stroke="#fdd700" stroke-width="2" rx="6"/>
+              <text x="220" y="220" font-size="20" text-anchor="middle">⚡</text>
+              <text x="220" y="245" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a5a00">⑧ ファラデー</text>
+              <text x="220" y="262" font-size="10" text-anchor="middle" fill="#1a1a1a">電磁誘導</text>
+              <text x="220" y="277" font-size="9" text-anchor="middle" fill="#5a3a1a">変化が 電流を 生む</text>
+
+              <rect x="300" y="200" width="140" height="85" fill="#fff" stroke="#7a3a1a" stroke-width="2" rx="6"/>
+              <text x="370" y="220" font-size="20" text-anchor="middle">⚛️</text>
+              <text x="370" y="245" font-size="11" font-weight="bold" text-anchor="middle" fill="#5a2a1a">⑨ ボーア</text>
+              <text x="370" y="262" font-size="10" text-anchor="middle" fill="#1a1a1a">原子模型</text>
+              <text x="370" y="277" font-size="9" text-anchor="middle" fill="#5a3a1a">電子は 決まった 層</text>
+            </g>
+            <text x="250" y="340" font-size="11" font-weight="bold" text-anchor="middle" fill="#5a2a7a">9人の 偉大な 知恵が、 君の 中に 受け継がれた</text>
+          </svg>
+        `,
+      },
+      {
+        title: '②  宇宙から 原子まで — スケールの 科学',
+        svg: `
+          <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;height:auto;background:#0a0a2a;border-radius:12px;">
+            <text x="250" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#fdd58e">あらゆる スケールの 謎</text>
+            <!-- 좌측: 우주 -->
+            <text x="80" y="55" font-size="11" font-weight="bold" text-anchor="middle" fill="#a8d4e8">🌌 宇宙</text>
+            <g transform="translate(40,65)">
+              <circle cx="40" cy="40" r="14" fill="#ffd700" opacity="0.9"/>
+              <circle cx="65" cy="30" r="4" fill="#6ba8c4"/>
+              <circle cx="75" cy="50" r="3" fill="#e74c3c"/>
+              <circle cx="20" cy="55" r="3" fill="#a8c8a8"/>
+              <ellipse cx="40" cy="40" rx="35" ry="12" fill="none" stroke="#a8d4e8" stroke-width="1" stroke-dasharray="2 2" opacity="0.5"/>
+              <text x="40" y="100" font-size="9" font-weight="bold" text-anchor="middle" fill="#a8d4e8">🔭 ガリレオ</text>
+              <text x="40" y="115" font-size="9" text-anchor="middle" fill="#a8d4e8">🍎 ニュートン</text>
+              <text x="40" y="130" font-size="9" text-anchor="middle" fill="#a8d4e8">⏰ アイン</text>
+            </g>
+            <!-- 矢印 1 -->
+            <line x1="135" y1="100" x2="180" y2="100" stroke="#fdd58e" stroke-width="2" marker-end="url(#ah_k1)"/>
+            <!-- 중앙: 지구 (생물) -->
+            <text x="250" y="55" font-size="11" font-weight="bold" text-anchor="middle" fill="#a8d4e8">🌍 地球·生命</text>
+            <g transform="translate(210,65)">
+              <circle cx="40" cy="40" r="32" fill="#6ba8c4" stroke="#a8d4e8" stroke-width="1.5"/>
+              <ellipse cx="35" cy="35" rx="8" ry="4" fill="#a8c8a8"/>
+              <ellipse cx="50" cy="45" rx="10" ry="5" fill="#a8c8a8"/>
+              <ellipse cx="30" cy="50" rx="6" ry="3" fill="#a8c8a8"/>
+              <text x="40" y="100" font-size="9" font-weight="bold" text-anchor="middle" fill="#a8d4e8">🐦 ダーリン</text>
+              <text x="40" y="115" font-size="9" text-anchor="middle" fill="#a8d4e8">🦠 パスト</text>
+              <text x="40" y="130" font-size="9" text-anchor="middle" fill="#a8d4e8">🌸 メンデル</text>
+            </g>
+            <!-- 矢印 2 -->
+            <line x1="305" y1="100" x2="350" y2="100" stroke="#fdd58e" stroke-width="2" marker-end="url(#ah_k2)"/>
+            <!-- 우측: 원자 -->
+            <text x="420" y="55" font-size="11" font-weight="bold" text-anchor="middle" fill="#a8d4e8">⚛ 原子</text>
+            <g transform="translate(380,65)">
+              <circle cx="40" cy="40" r="8" fill="#e74c3c"/>
+              <circle cx="40" cy="40" r="22" fill="none" stroke="#3498db" stroke-width="1.5"/>
+              <circle cx="40" cy="40" r="32" fill="none" stroke="#3498db" stroke-width="1.5" stroke-dasharray="3 2"/>
+              <circle cx="62" cy="40" r="3" fill="#3498db"/>
+              <circle cx="40" cy="8" r="3" fill="#3498db"/>
+              <circle cx="18" cy="55" r="3" fill="#3498db"/>
+              <text x="40" y="100" font-size="9" font-weight="bold" text-anchor="middle" fill="#a8d4e8">⚛ ボーア</text>
+              <text x="40" y="115" font-size="9" text-anchor="middle" fill="#a8d4e8">⚡ ファラデー</text>
+              <text x="40" y="130" font-size="9" text-anchor="middle" fill="#a8d4e8">✨ キュリー</text>
+            </g>
+            <defs>
+              <marker id="ah_k1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#fdd58e"/></marker>
+              <marker id="ah_k2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#fdd58e"/></marker>
+            </defs>
+            <text x="250" y="225" font-size="11" font-weight="bold" text-anchor="middle" fill="#fdd58e">巨大な 宇宙から 目に 見えない 原子まで</text>
+            <text x="250" y="250" font-size="10" text-anchor="middle" fill="#a8d4e8">科学は あらゆる スケールの 謎に 挑む</text>
+          </svg>
+        `,
+      },
+      {
+        title: '③  全ての 科学者に 共通する 姿勢',
+        svg: `
+          <svg viewBox="0 0 450 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#eef8ee;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#1a6a2a">観察 → 実験 → 証拠 → 規則 発見</text>
+            <!-- 順환 흐름 4단계 -->
+            <g transform="translate(40,60)">
+              <rect x="0" y="0" width="80" height="60" fill="#fff" stroke="#1a6a2a" stroke-width="2" rx="6"/>
+              <text x="40" y="22" font-size="20" text-anchor="middle">👁</text>
+              <text x="40" y="48" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">観察</text>
+            </g>
+            <line x1="120" y1="90" x2="155" y2="90" stroke="#1a6a2a" stroke-width="2" marker-end="url(#ah_k3)"/>
+            <g transform="translate(160,60)">
+              <rect x="0" y="0" width="80" height="60" fill="#fff" stroke="#1a6a2a" stroke-width="2" rx="6"/>
+              <text x="40" y="22" font-size="20" text-anchor="middle">🧪</text>
+              <text x="40" y="48" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">実験</text>
+            </g>
+            <line x1="240" y1="90" x2="275" y2="90" stroke="#1a6a2a" stroke-width="2" marker-end="url(#ah_k4)"/>
+            <g transform="translate(280,60)">
+              <rect x="0" y="0" width="80" height="60" fill="#fff" stroke="#1a6a2a" stroke-width="2" rx="6"/>
+              <text x="40" y="22" font-size="20" text-anchor="middle">📋</text>
+              <text x="40" y="48" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">証拠</text>
+            </g>
+            <line x1="320" y1="125" x2="320" y2="170" stroke="#1a6a2a" stroke-width="2" marker-end="url(#ah_k5)"/>
+            <g transform="translate(160,180)">
+              <rect x="0" y="0" width="120" height="60" fill="#a8d4e8" stroke="#1a4a7a" stroke-width="2.5" rx="6"/>
+              <text x="60" y="22" font-size="20" text-anchor="middle">💡</text>
+              <text x="60" y="48" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a4a7a">規則 発見!</text>
+            </g>
+            <defs>
+              <marker id="ah_k3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1a6a2a"/></marker>
+              <marker id="ah_k4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1a6a2a"/></marker>
+              <marker id="ah_k5" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1a6a2a"/></marker>
+            </defs>
+            <!-- ✗ 권위·思い込み -->
+            <g transform="translate(40,180)">
+              <rect x="0" y="0" width="100" height="60" fill="#fff" stroke="#e74c3c" stroke-width="2" stroke-dasharray="4 3" rx="6"/>
+              <text x="50" y="20" font-size="10" text-anchor="middle" fill="#7a1a1a">権威</text>
+              <text x="50" y="36" font-size="10" text-anchor="middle" fill="#7a1a1a">思い込み</text>
+              <text x="50" y="55" font-size="16" font-weight="bold" text-anchor="middle" fill="#7a1a1a">✗</text>
+            </g>
+            <text x="225" y="265" font-size="11" font-weight="bold" text-anchor="middle" fill="#1a6a2a">権威や 思い込み では なく、 自分の 目で 確かめる</text>
+            <text x="225" y="288" font-size="10" text-anchor="middle" fill="#5a4a2a">これが 9人 全員に 共通する 「科学の 心」</text>
+          </svg>
+        `,
+      },
+      {
+        title: '④  物理·化学·生物 — つながる 科学',
+        svg: `
+          <svg viewBox="0 0 450 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;height:auto;background:#fff5e8;border-radius:12px;">
+            <text x="225" y="22" font-size="14" font-weight="bold" text-anchor="middle" fill="#7a3a1a">物理·化学·生物 は つながる</text>
+            <!-- 三 분야 원 -->
+            <g transform="translate(225,150)">
+              <!-- 物理 (좌상) -->
+              <circle cx="-60" cy="-30" r="70" fill="#a8d4e8" stroke="#1a4a7a" stroke-width="2" opacity="0.55"/>
+              <text x="-90" y="-65" font-size="12" font-weight="bold" fill="#1a3a5a">物理</text>
+              <text x="-95" y="-50" font-size="9" fill="#1a3a5a">ニュートン</text>
+              <text x="-95" y="-38" font-size="9" fill="#1a3a5a">アイン</text>
+              <text x="-95" y="-26" font-size="9" fill="#1a3a5a">ガリレオ</text>
+              <text x="-95" y="-14" font-size="9" fill="#1a3a5a">ファラデー</text>
+              <!-- 化学·原子 (우상) -->
+              <circle cx="60" cy="-30" r="70" fill="#e8a8a8" stroke="#7a1a1a" stroke-width="2" opacity="0.55"/>
+              <text x="80" y="-65" font-size="12" font-weight="bold" fill="#7a1a1a">化学·原子</text>
+              <text x="80" y="-50" font-size="9" fill="#7a1a1a">キュリー</text>
+              <text x="80" y="-38" font-size="9" fill="#7a1a1a">ボーア</text>
+              <text x="50" y="-15" font-size="8" font-style="italic" fill="#5a2a2a">★ アイン</text>
+              <text x="50" y="-3" font-size="8" font-style="italic" fill="#5a2a2a">★ ファラデー</text>
+              <!-- 生物 (하단 中央) -->
+              <circle cx="0" cy="50" r="70" fill="#a8d4a8" stroke="#1a6a2a" stroke-width="2" opacity="0.55"/>
+              <text x="-20" y="85" font-size="12" font-weight="bold" fill="#1a4a1a">生物</text>
+              <text x="-30" y="100" font-size="9" fill="#1a4a1a">ダーリン</text>
+              <text x="-30" y="112" font-size="9" fill="#1a4a1a">パスト</text>
+              <text x="-30" y="124" font-size="9" fill="#1a4a1a">メンデル</text>
+            </g>
+            <text x="225" y="265" font-size="11" font-weight="bold" text-anchor="middle" fill="#7a3a1a">分野は 違っても、 科学の 姿勢は 一つ</text>
+            <text x="225" y="288" font-size="10" text-anchor="middle" fill="#5a4a2a">★ = 複数の 分野に またがる 発見 (アイン·ファラデー など)</text>
+          </svg>
+        `,
+      },
+    ],
+
+    formulas: [
+      {
+        name: '科学의 공통 자세',
+        formula: '観察 + 実験 + 証拠 → 規則 発見',
+        formulaSimple: '観察·実験·証拠',
+        explanation: '9人 全員が 目に 見えない ものを 観察·実験·証拠で 明らかに した。 権威や 思い込み ではなく 直接 確認。',
+        note: 'シリーズ 4 全体を 貫く 核心 メッセージ。',
+      },
+      {
+        name: '学ぶ 姿勢',
+        formula: '「強さ」 < 「知ろうと する 心」',
+        formulaSimple: '好奇心 > 力',
+        explanation: '進化の 適者の ように、 メンデルの 8年 粘り強さの ように — 学ぼうと する 心と 粘り強さが 真の 力。',
+        note: '子供に 伝える シリーズ 4 の メッセージ。',
+      },
+    ],
+
+    unitsTable: {
+      title: '9事件 核心 キーワード 総まとめ',
+      rows: [
+        ['事件', '科学者',          '核心 概念'],
+        ['1',    'ニュートン',       '万有引力 — 重さが 違っても 同じ 速さで 落ちる'],
+        ['2',    'アインシュタイン', '相対性理論 — 速いほど 時間が ゆっくり'],
+        ['3',    'キュリー',         '放射能 — 原子が ひとりでに エネルギーを 出す'],
+        ['4',    'ダーウィン',       '進化論 — 適者 (環境 適合) が 生存'],
+        ['5',    'パスツール',       '細菌学 — 見えない 微生物が 原因'],
+        ['6',    'メンデル',         '遺伝法則 — 優性·劣性、 3:1'],
+        ['7',    'ガリレオ',         '天体観測 — 観測·証拠が 常識を 更新'],
+        ['8',    'ファラデー',       '電磁誘導 — 磁場 変化が 電流を 生む'],
+        ['9',    'ボーア',           '原子模型 — 電子は 決まった 層にだけ'],
+      ],
+    },
+
+    flashcards: [
+      { front: '万有引力 (ニュートン)',     back: '全ての 物体は 互いに 引き合う。 空気が なければ 重さに 関係なく 同時に 落ちる。 事件 1。' },
+      { front: '相対性理論 (アイン)',       back: '速く 動くほど 時間が ゆっくり 進む。 時間は 絶対 ではない。 事件 2。' },
+      { front: '放射能 (キュリー)',         back: '原子が ひとりでに エネルギー (光·放射線) を 出す。 外部 刺激 不要。 事件 3。' },
+      { front: '進化論 (ダーリン)',         back: '環境に 適者が 生き残り 子孫を 残す。 「強者」 ではなく 「適者」。 事件 4。' },
+      { front: '細菌学 (パスト)',           back: '腐敗·病気の 原因は 見えない 微生物。 自然発生説の 否定。 事件 5。' },
+      { front: '遺伝法則 (メンデル)',       back: '形質は 因子 ペアで 伝わる。 優性·劣性、 孫世代 3:1。 事件 6。' },
+      { front: '天体観測 (ガリレオ)',       back: '木星 衛星 発見 → 天動説 反証。 権威 より 観測·証拠。 事件 7。' },
+      { front: '電磁誘導 (ファラデー)',     back: '磁場が 変わる とき 電流 発生。 全ての 発電の 原理。 事件 8。' },
+      { front: '原子模型 (ボーア)',         back: '電子は 決まった 層にだけ 存在。 層 移動 時 決まった 光を 放出。 事件 9。' },
+      { front: '9人の 共通点',              back: '見えない ものを 観察·実験·証拠で 明らかに した。 「知ろうと する 心」 こそ 真の 力。' },
+    ],
+
+    exercises: [
+      {
+        q: '空気が ない 所で 重い 球と 軽い 羽根を 同時に 落とすと? (事件 1)',
+        options: ['重い ものが 先', '同時に', '軽い ものが 先', '落ちない'],
+        correct: 1,
+        explanation: '万有引力 — 重さに 関係なく 同じ 速さで 落ちる (空気 抵抗 なし の とき)。',
+      },
+      {
+        q: '光に 近い 速さで 飛ぶ 宇宙船の 時間は? (事件 2)',
+        options: ['速くなる', 'ゆっくり 進む', '同じ', '止まる'],
+        correct: 1,
+        explanation: '相対性理論 — 速いほど 時間が ゆっくり 進む。',
+      },
+      {
+        q: '暗闇で ひとりでに 光る 石の 力は? (事件 3)',
+        options: ['電気', '放射能', '太陽光 蓄光', '磁気'],
+        correct: 1,
+        explanation: '放射能 — 原子が ひとりでに エネルギーを 放出。',
+      },
+      {
+        q: '島で 生き残る 生き物は? (事件 4)',
+        options: ['一番 強い', '環境に 適者', '一番 大きい', '一番 速い'],
+        correct: 1,
+        explanation: '進化 — 「強者」 ではなく 「環境に 適応した 適者」。',
+      },
+      {
+        q: '食べ物が 腐る 本当の 原因は? (事件 5)',
+        options: ['自然 発生', '空気中の 微生物', '時間だけ', '温度だけ'],
+        correct: 1,
+        explanation: '細菌学 — 見えない 微生物が 外から 入って 繁殖。',
+      },
+      {
+        q: '白×紫の 孫世代 比率は? (事件 6)',
+        options: ['1:1', '3:1', '2:1', '全部 紫'],
+        correct: 1,
+        explanation: '遺伝法則 — 優性 (紫) : 劣性 (白) ≈ 3:1。',
+      },
+      {
+        q: 'ガリレオが 天動説を 反証した 観測は? (事件 7)',
+        options: ['太陽 黒点', '木星の 衛星', '月の 形', '彗星'],
+        correct: 1,
+        explanation: '木星を まわる 衛星 発見 → 「全てが 地球を まわる」 を 反証。',
+      },
+      {
+        q: 'コイルに 電流が 生まれる ときは? (事件 8)',
+        options: ['磁石 停止', '磁石を 動かして 磁場が 変化する とき', '電池 接続 だけ', '常に'],
+        correct: 1,
+        explanation: '電磁誘導 — 磁場が 変わる ときだけ 電流 発生。',
+      },
+      {
+        q: '元素の 光が とびとび の 理由は? (事件 9)',
+        options: ['偶然', '電子が 決まった 層にだけ いる から', 'プリズム', '光が 弱いから'],
+        correct: 1,
+        explanation: '原子模型 — 電子が 決まった 層 間を 移動 し 決まった 光を 放出。',
+      },
+      {
+        q: '9人の 科学者に 共通する 最も 大切な 姿勢は?',
+        options: ['賢さ', '観察·実験·証拠で 見えない ものを 明らかに する', '有名さ', '運'],
+        correct: 1,
+        explanation: 'シリーズ 4 の 核心 メッセージ — 権威 ではなく 観察·証拠の 科学的 態度。',
+      },
+    ],
+
+    tips: [
+      { title: '①  9人の 旅を 振り返って',     body: 'ニュートンから ボーアまで — 物理·化学·生物の 偉大な 発見を 一緒に 探検しました。' },
+      { title: '②  共通点 = 観察·証拠',         body: '9人 全員が 目に 見えない ものを 観察·実験·証拠で 明らかに した。 これが 科学の 核心。' },
+      { title: '③  「強さ」 より 「知る 心」',   body: '進化の 適者の ように、 メンデルの 8年の 粘り強さの ように — 知ろうと する 心が 真の 力。' },
+      { title: '④  巨大から 極小まで',          body: '天体 (ガリレオ) から 原子 (ボーア) まで — 科学は 全ての スケールの 謎に 挑む。' },
+      { title: '⑤  科学者たちは つながる',      body: 'キュリー·アイン·ボーアは 原子で、 ダーリン·パスト·メンデルは 生命で — 知識は つながる。' },
+      { title: '⑥  疑って 確かめる',            body: 'ガリレオの ように 常識も 疑い、 ファラデーの ように 自分の 手で 実験で 確かめる。' },
+      { title: '⑦  見えなくても 規則が ある',   body: '微生物·磁場·電子·遺伝子 — 見えなくても 証拠で その 規則を 知る ことが できる。' },
+      { title: '⑧  君も 小さき 科学者',         body: '不思議に 思い、 観察し、 確かめる 心が あれば、 君も もう 科学者です。' },
+    ],
+  },
 };

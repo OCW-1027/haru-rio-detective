@@ -2299,18 +2299,276 @@ const SCIENTISTS_STORY = [
     note: { title: '第9事件 原子の 中の 世界', desc: 'とびとびの 光 — 電子が 決まった 「層」 にだけ 存在し、 層を 移る とき 決まった 色の 光を 出す。 目に 見えない 原子の 中にも 美しい 規則が ある ことを 示した ボーアの 原子模型を 学んだ 第九歩。' },
   },
   {
-    id: 10, icon: '🌌',
-    title: '偉人たちの調和',
-    subtitle: 'すべての発見を繋ぐ謎',
-    theme: '종합 (보스)',
+    id: 10, icon: '🏆',
+    title: '賢者の 最後の 試練',
+    subtitle: '6人の 科学者の 知恵を 集めて',
+    theme: '総合·復習 (사건 1~9)',
     bgm: 'mystery',
     illustration: SCIENTISTS_CASE_IMAGES[10],
     charKey: 'togo_kenja',
     sceneKey: 'bg_ch10_boss',
-    isBoss: true,
-    comingSoon: true,
-    intro: [],
-    steps: [],
-    note: null,
+    comingSoon: false,
+    learnRef: 'scientists_case10',
+    intro: {
+      title: '賢者の 最後の 試練',
+      subtitle: '6人の 科学者の 知恵を 集めて',
+      bg: 'bg_ch10_boss',
+      lines: [
+        { speaker: 'narrator',   text: 'ボーアの 紹介で、 古い 塔の 最上階を 訪ねた。 壁一面に 本が 並ぶ。' },
+        { speaker: 'hinata',     text: 'ここが 最後の 場所… 「知識の 守り手」 が いると 聞きました。' },
+        { speaker: 'rio',        text: 'うわぁ、 本が 天井まで! すごい 数…' },
+        { speaker: 'haru',       text: '誰か いる… 杖を 持った、 長い ローブの 人。' },
+        { speaker: 'togo_kenja', text: 'よくぞ ここまで 来た、 若き 探偵たち。 わしは 知識の 守り手 — 賢者じゃ。' },
+        { speaker: 'togo_kenja', text: 'お主たちは 9人の 偉大な 科学者に 会い、 多くを 学んだ そうじゃな。' },
+        { speaker: 'rio',        text: 'はい! ニュートンさん、 アインさん、 キューリィさん…!' },
+        { speaker: 'togo_kenja', text: 'ふむ。 だが、 本当に 「理解」 した かのう? 覚えた だけ では ないか?' },
+        { speaker: 'haru',       text: '理解… ちゃんと できてるか、 試したい です。' },
+        { speaker: 'togo_kenja', text: 'よい 心がけじゃ。 では、 6つの 試練を 用意した。 学んだ 知恵で 解いて みせよ。' },
+        { speaker: 'hinata',     text: '今までの 事件で 学んだ ことが、 試されるんですね。' },
+        { speaker: 'togo_kenja', text: 'そうじゃ。 ただ 覚えた こと では なく、 新しい 場面で 使えるか — それが 「理解」 じゃ。' },
+        { speaker: 'rio',        text: 'ドキドキする… でも やってみる!' },
+        { speaker: 'togo_kenja', text: '知識は 力では ない。 知ろうと する 心こそ、 真の 力 なのじゃ。' },
+        { speaker: 'togo_kenja', text: 'さあ、 最初の 試練じゃ。 心を 落ち着けて、 よく 考えるのじゃ。' },
+        { speaker: 'haru',       text: 'みんなで 力を 合わせよう。 きっと できる!' },
+        { speaker: 'penta',      text: 'ペンッ! 最後の 試練、 がんばるペン!' },
+      ],
+      cta: '⚔️ 試練に 挑む',
+    },
+    steps: [
+      {
+        id: 'step1',
+        title: '🍎 試練 1: 落ちる 二つの もの',
+        bg: 'bg_ch10_boss',
+        question: '賢者の 問い: 「重い 鉄球と 軽い 羽根、 空気が ない ところで 同時に 落とすと?」',
+        options: [
+          {
+            label: '同時に 落ちる — 重さに 関係なく 同じ 速さ',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',       text: '空気の 抵抗が なければ、 重さに 関係なく 同時に 落ちる!' },
+              { speaker: 'rio',        text: 'ニュートンさんの 万有引力だ! 林檎博士の 事件!' },
+              { speaker: 'togo_kenja', text: 'お見事。 重さが 違っても、 引力による 落ち方は 同じ。 よく 理解して おる。' },
+            ],
+          },
+          {
+            label: '重い 鉄球が 先に 落ちる',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '空気が なければ 同時 だよ。 事件 1 を 思い出して。' },
+            ],
+          },
+          {
+            label: '軽い 羽根が 先に 落ちる',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '空気が ない 場所では、 重さに 関係なく 同時 です。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step2',
+        title: '🚀 試練 2: 速い 宇宙船の 時間',
+        bg: 'bg_ch10_boss',
+        question: '賢者の 問い: 「光に 近い 速さで 飛ぶ 宇宙船の 時計は、 地球の 時計と 比べて?」',
+        options: [
+          {
+            label: 'ゆっくり 進む — 速いほど 時間は 遅くなる',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',       text: '速く 動くほど、 時間は ゆっくり 進む… アイン教授の 相対性理論!' },
+              { speaker: 'rio',        text: '宇宙船の 中の 時間が 遅くなるんだ! 不思議だけど 本当!' },
+              { speaker: 'togo_kenja', text: 'その通り。 時間さえ 一定では ない。 難しい 概念を よく つかんで おる。' },
+            ],
+          },
+          {
+            label: '速く 進む',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '逆だよ。 速いほど 時間は ゆっくり。 事件 2 を 思い出して。' },
+            ],
+          },
+          {
+            label: '全く 同じ',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '速さで 時間の 進み方が 変わります。 アイン教授の 話です。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step3',
+        title: '💎 試練 3: 光る 謎の 石',
+        bg: 'bg_ch10_boss',
+        question: '賢者の 問い: 「暗闇で ひとりでに 光り、 エネルギーを 出し続ける 石。 何の 力?」',
+        options: [
+          {
+            label: '放射能 — 原子が ひとりでに エネルギーを 出す',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',       text: '外から 何も しなくても エネルギーを 出す… キューリィ夫人の 放射能!' },
+              { speaker: 'rio',        text: '石の 中の 原子が、 自分から 光を 出すんだ!' },
+              { speaker: 'togo_kenja', text: 'お見事。 原子の 中に 秘められた 力。 よく 覚えて おる。' },
+            ],
+          },
+          {
+            label: '電気の 力',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '電池も ないのに 光る… これは 放射能だよ。 事件 3。' },
+            ],
+          },
+          {
+            label: '太陽の 光を ためた だけ',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '暗闇でも 出し続けます。 ためた 光では なく 放射能です。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step4',
+        title: '🐦 試練 4: 島の 生き物',
+        bg: 'bg_ch10_boss',
+        question: '賢者の 問い: 「島で 生き残るのは、 どんな 生き物 じゃ?」',
+        options: [
+          {
+            label: 'その 環境に 合った (適した) 生き物',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',       text: '「強い」 生き物 では なく、 「環境に 合った」 生き物… ダーリン教授の 進化論!' },
+              { speaker: 'rio',        text: '適者生存! 強さ じゃ なくて 環境に 合うか どうか!' },
+              { speaker: 'togo_kenja', text: 'その通り。 「強者」 では なく 「適者」。 大切な ところを よく 理解して おる。' },
+            ],
+          },
+          {
+            label: '一番 強くて 大きい 生き物',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '「強い」 じゃ なくて 「環境に 合う」 だよ。 事件 4 の 大事な 点。' },
+            ],
+          },
+          {
+            label: '一番 速く 走る 生き物',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '速さ では なく、 その 環境への 適応 です。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step5',
+        title: '🦠 試練 5: 腐った 食べ物',
+        bg: 'bg_ch10_boss',
+        question: '賢者の 問い: 「食べ物が 腐る 本当の 原因は?」',
+        options: [
+          {
+            label: '空気中の 目に 見えない 微生物 (細菌)',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',       text: '自然に 腐るんじゃ ない。 空気中の 微生物が 入る から… パスト博士の 細菌学!' },
+              { speaker: 'rio',        text: '見えない 微生物の しわざ! だから 清潔が 大事!' },
+              { speaker: 'togo_kenja', text: 'お見事。 見えない ものを 見抜く 目。 パストの 知恵を 受け継いで おる。' },
+            ],
+          },
+          {
+            label: '食べ物から 自然に 生命が 生まれる',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: 'それは 昔の 間違った 考え(自然発生説)だよ。 微生物が 原因。' },
+            ],
+          },
+          {
+            label: '時間が 経つと 勝手に 腐る',
+            isCorrect: false,
+            response: [
+              { speaker: 'hinata', text: '原因は 外から 入る 微生物 です。 事件 5 を 思い出して。' },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'step6',
+        title: '🧩 試練 6: 科学者たちの 共通点',
+        bg: 'bg_ch10_boss',
+        question: '賢者の 最後の 問い: 「メンデル·ガリレオ·ファラデー·ボーア — そして 全ての 科学者に 共通する ことは 何じゃ?」',
+        options: [
+          {
+            label: '「目に 見えない ものを、 観察·実験·証拠で 明らかに した」 こと',
+            isCorrect: true,
+            response: [
+              { speaker: 'haru',       text: 'メンデルは 見えない 「遺伝の 因子」 を、 数えて 見つけた…' },
+              { speaker: 'hinata',     text: 'ガリレオは 望遠鏡で、 ファラデーは 実験で、 見えない ものを 確かめた…' },
+              { speaker: 'rio',        text: 'ボーアは 見えない 原子の 中の 規則を 見つけた!' },
+              { speaker: 'haru',       text: '皆 「目に 見えない もの」 を、 観察と 証拠で 明らかに したんだ!' },
+              { speaker: 'togo_kenja', text: '…お見事じゃ。 まさに それが、 全ての 科学者に 共通する 知恵。' },
+              { speaker: 'togo_kenja', text: '権威や 思い込み では なく、 自分の 目と 頭で 確かめる。 それが 科学なのじゃ。' },
+              { speaker: 'hinata',     text: '9つの 事件が、 一つの 大きな 教えに つながりました。' },
+              { speaker: 'togo_kenja', text: 'よくぞ たどり着いた。 お主たちは、 もう 立派な 小さき 科学者じゃ。' },
+            ],
+          },
+          {
+            label: '「皆 とても 頭が 良かった」 こと',
+            isCorrect: false,
+            response: [
+              { speaker: 'togo_kenja', text: '頭の 良さ では ない。 もっと 大切な、 共通の 「姿勢」 が あるのじゃ。' },
+            ],
+          },
+          {
+            label: '「皆 有名に なった」 こと',
+            isCorrect: false,
+            response: [
+              { speaker: 'haru', text: '有名さ じゃ なくて… 観察と 証拠を 大切に した ことだと 思う。' },
+            ],
+          },
+        ],
+      },
+    ],
+    ending: {
+      bg: 'bg_ch10_boss',
+      lines: [
+        { speaker: 'togo_kenja', text: '見事じゃ。 6つの 試練、 全て 突破した。 お主たちの 知恵を 認めよう。' },
+        { speaker: 'togo_kenja', text: 'ニュートン、 アイン、 キューリィ、 ダーリン、 パスト、 メンデル、 ガリレオ、 ファラデー、 ボーア…' },
+        { speaker: 'togo_kenja', text: '9人の 偉大な 知恵を、 お主たちは 確かに 受け継いだ のじゃ。' },
+        { speaker: 'rio',        text: 'やったー! 全部 クリア!' },
+        { speaker: 'haru',       text: 'みんなで 力を 合わせたから… ヒナタも ペンタも、 ありがとう。' },
+        { speaker: 'hinata',     text: '科学者たちの 「知ろうと する 心」、 私も 受け継ぎたい です。' },
+        { speaker: 'togo_kenja', text: '知ろうと する 心が ある かぎり、 世界の 謎は いつか 解ける のじゃ。' },
+        { speaker: 'togo_kenja', text: 'さあ、 学んだ 全てを、 もう一度 振り返って みよう。 9つの 物語の 総まとめじゃ。' },
+        { speaker: 'penta',      text: 'ペンッ! 全部 クリア、 ペン! みんな すごいペン!' },
+      ],
+      cta: '📚 総まとめを 開く',
+    },
+    caseQuiz: [
+      {
+        q: '空気が ない とき 重い ものと 軽い ものを 落とすと? (事件 1)',
+        options: ['重い ものが 先', '同時に', '軽い ものが 先', '落ちない'],
+        correct: 1,
+      },
+      {
+        q: '島で 生き残る 生き物は? (事件 4)',
+        options: ['一番 強い もの', '環境に 適者', '一番 大きい もの', '一番 速い もの'],
+        correct: 1,
+      },
+      {
+        q: '食べ物が 腐る 原因は? (事件 5)',
+        options: ['自然 発生', '目に 見えない 微生物', '時間', '温度だけ'],
+        correct: 1,
+      },
+      {
+        q: 'コイルに 電流が 生まれる ときは? (事件 8)',
+        options: ['磁石 停止', '磁場が 変化する とき', '電池だけ', '常に'],
+        correct: 1,
+      },
+      {
+        q: '9人の 科学者に 共通する 姿勢は?',
+        options: ['頭の 良さ', '観察·実験·証拠で 見えない ものを 明らかに する 心', '有名さ', '運'],
+        correct: 1,
+      },
+    ],
+    note: { title: '第10事件 賢者の 最後の 試練', desc: '9人の 科学者 — ニュートン·アイン·キューリィ·ダーリン·パスト·メンデル·ガリレオ·ファラデー·ボーア。 彼らの 知恵を 総合する 最終 試練。 共通点は 「見えない ものを 観察·証拠で 明らかに する 心」。 シリーズ 4 の 最後、 小さき 科学者と して 卒業する 試験。' },
   },
 ];
