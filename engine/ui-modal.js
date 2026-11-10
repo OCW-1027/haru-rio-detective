@@ -16,6 +16,9 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById(id);
   if (target) target.classList.add('active');
+  // 배경음은 미니게임에서만: 다른 화면으로 가면 정지, 게임 화면이면 재생
+  if (typeof stopBGM === 'function' && id !== 'pageGame') stopBGM();
+  if (typeof playBGM === 'function' && id === 'pageGame' && !State.bgmInterval) playBGM('happy');
   sfx('page');
 }
 

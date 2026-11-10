@@ -182,8 +182,11 @@ function updateVoiceButton() {
 }
 
 
+// v2: 배경음은 미니게임 화면(pageGame)에서만 재생 — 사건·학습·英検道場(리스닝)에서는 울리지 않음
+function bgmAllowed() { const g = document.getElementById('pageGame'); return !!(g && g.classList.contains('active')); }
 function playBGM(mood) {
   if (!State.audioCtx || !State.audioOn) return;
+  if (!bgmAllowed()) { stopBGM(); return; }
   stopBGM();
   const patterns = {
     title:[392,440,523,659,587,523,440,392],
@@ -210,6 +213,7 @@ function playBGM(mood) {
   let i = 0;
   State.bgmInterval = setInterval(() => {
     if (!State.audioOn || !State.audioCtx) return;
+    if (!bgmAllowed()) { stopBGM(); return; }
     const o = State.audioCtx.createOscillator();
     const g = State.audioCtx.createGain();
     o.frequency.value = notes[i % notes.length];
