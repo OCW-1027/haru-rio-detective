@@ -129,3 +129,15 @@
 .ek-sit-q { font-family: Georgia, serif; font-weight: bold; color: #1f5f6c; }
 .ek-lq { margin-top: 12px; }
 .ek-card.real { border-color: #2a7a8a; box-shadow: 0 3px 0 #2a7a8a; }
+/* 模擬試験 */
+.ek-mock-ul { font-family: 'Klee One'; font-size: 14px; line-height: 1.8; color: #3a4a5c; padding-left: 18px; }
+.ek-mock-sec { font-family: 'RocknRoll One'; font-size: 15px; color: #fff; background: #1f5f6c; border-radius: 10px; padding: 8px 12px; margin: 18px 0 10px; }
+.ek-mq { position: relative; }
+.ek-mq-n { font-family: 'RocknRoll One'; font-size: 13px; color: #2a7a8a; margin-bottom: 4px; }
+.ek-opt.sel { background: #dff0f3; border-color: #2a7a8a; box-shadow: inset 0 0 0 1px #2a7a8a; }
+.ek-mres { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center; }
+.ek-mres div { background: #f3faf8; border-radius: 14px; padding: 14px 8px; }
+.ek-mres b { font-family: 'RocknRoll One'; font-size: 30px; color: #1f5f6c; }
+.ek-mres span { display: block; font-family: 'Klee One'; font-size: 13px; color: #3a4a5c; margin-top: 4px; }
+.ek-mine { background: #fffdf5; border: 1px dashed #e0d4b4; border-radius: 10px; padding: 8px 10px; white-space: pre-wrap; font-family: Georgia, serif; }
+.ek-mw .ek-fb-en { font-size: 15px; margin: 4px 0; }

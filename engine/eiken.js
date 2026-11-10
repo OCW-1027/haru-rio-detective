@@ -120,7 +120,7 @@ const Eiken = (function () {
   function bindGo(root) {
     root.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { sfx('click'); stopSpeak(); go(b.dataset.go); });
   }
-  function go(v) { view = v; ({ home: home, vocab: vocab, quiz: quiz, wlist: wlist, p1: part1, listen: listen, write: writeList, read: readList }[v] || home)(); const p = document.getElementById('pageEiken'); if (p) p.scrollTop = 0; }
+  function go(v) { view = v; ({ home: home, vocab: vocab, quiz: quiz, wlist: wlist, p1: part1, listen: listen, write: writeList, read: readList, mock: mockIntro }[v] || home)(); const p = document.getElementById('pageEiken'); if (p) p.scrollTop = 0; }
 
   // ---------- 홈 ----------
   let pos = 'all';
@@ -160,7 +160,7 @@ const Eiken = (function () {
       { go: 'write', icon: '📝', name: 'ライティング', sub: n('write') ? '要約 · 意見論述 ' + n('write') + '題' : '準備中', ok: n('write') > 0 },
       { go: 'read', icon: '📖', name: '長文読解', sub: n('read') ? '空所補充 · 内容一致 ' + n('read') + '題' : '準備中', ok: n('read') > 0 },
       { icon: '🎤', name: '面接 (二次)', sub: '準備中', ok: false },
-      { icon: '⏱', name: '模擬試験', sub: '準備中', ok: false },
+      { go: 'mock', icon: '⏱', name: '模擬試験 (本番形式)', sub: (level === 'p1' ? '筆記31問 + 作文2題 + リスニング29問' : '筆記31問 + 作文2題 + リスニング30問'), ok: true },
     ];
     h += '<div class="ek-grid">';
     C.forEach(c => { h += '<button class="ek-card' + (c.ok ? '' : ' off') + '"' + (c.ok ? ' data-go="' + c.go + '"' : ' disabled') + '><span class="ek-card-icon">' + c.icon + '</span><span class="ek-card-name">' + c.name + '</span><span class="ek-card-sub">' + c.sub + '</span></button>'; });
@@ -471,6 +471,165 @@ const Eiken = (function () {
         }
       });
     });
+  }
+
+
+  // ---------- 模擬試験 (本番と 同じ 問題数・順番) ----------
+  // 2級: 大問1 17 / 大問2 2題×3 / 大問3 2題×4 / 作文 要約+意見 / リスニング Part1 15 + Part2 15
+  // 準1級: 大問1 18 / 大問2 2題×3 / 大問3 3問+4問 / 作文 要約+意見 / リスニング Part1 12 + Part2 6題×2 + Part3 5
+  let mk = null;
+  const MOCK = {
+    g2: { p1: { '語彙': 10, '熟語': 4, '文法': 3 }, cloze: 2, content: [4, 4], L: [[1, 15, 1], [2, 15, 1]], min: 85, lmin: 25 },
+    p1: { p1: { '語彙': 14, '熟語': 4 }, cloze: 2, content: [3, 4], L: [[1, 12, 1], [2, 6, 2], [3, 5, 1]], min: 90, lmin: 30 },
+  };
+  function pickReading(type, nq) {
+    const all = SET('read').filter(r => r.type === type && (type === 'cloze' || r.questions.length >= nq));
+    const real = shuffle(all.filter(r => r.real)), mini = shuffle(all.filter(r => !r.real));
+    return real.concat(mini);
+  }
+  function buildMock() {
+    const C = MOCK[level], set = P1SET();
+    const p1 = [];
+    Object.keys(C.p1).forEach(t => { p1.push(...shuffle(set.map((q, i) => i).filter(i => set[i].tag === t)).slice(0, C.p1[t])); });
+    const clz = pickReading('cloze', 3).slice(0, C.cloze);
+    const used = new Set(); const cnt = [];
+    C.content.forEach(nq => { const r = pickReading('content', nq).find(x => !used.has(x.id) && x.questions.length >= nq) || pickReading('content', 3).find(x => !used.has(x.id)); if (r) { used.add(r.id); cnt.push(r); } });
+    const LS = SET('listen').map((x, i) => [x, i]);
+    const lis = [];
+    C.L.forEach(([part, n, nq]) => {
+      const pool = shuffle(LS.filter(([x]) => x.part === part && ((x.qs ? x.qs.length : 1) === nq)));
+      const fallback = shuffle(LS.filter(([x]) => x.part === part));
+      (pool.length >= n ? pool : pool.concat(fallback.filter(f => !pool.includes(f)))).slice(0, n).forEach(([x, i]) => lis.push(i));
+    });
+    const W = SET('write');
+    const wsum = shuffle(W.filter(w => w.type === 'summary'))[0], wop = shuffle(W.filter(w => w.type === 'opinion'))[0];
+    return { level: level, p1: p1.map(i => ({ i: i, order: shuffle([0, 1, 2, 3]) })), cloze: clz, content: cnt, lis: lis, wsum: wsum, wop: wop,
+      ans: {}, lans: {}, li: 0, t0: Date.now(), stage: 'read', rscore: null };
+  }
+  function mockIntro() {
+    const C = MOCK[level];
+    let h = header('⏱ 模擬試験', (level === 'p1' ? '準1級' : '2級') + ' 一次試験 (本番形式)');
+    h += '<div class="ek-box"><p class="ek-passage">本番と 同じ 問題数・順番で 解きます。途中で 答えは 出ません (最後に まとめて 採点)。</p><ul class="ek-mock-ul">';
+    const nP1 = Object.values(C.p1).reduce((a, b) => a + b, 0);
+    h += '<li>📝 筆記 (目安 ' + C.min + '分): 大問1 短文空所補充 ' + nP1 + '問 → 大問2 長文空所補充 2題 → 大問3 長文内容一致 ' + C.content.join('問 + ') + '問</li>';
+    h += '<li>✍ 作文: 要約 1題 + 意見論述 1題 (筆記の 時間内)</li>';
+    h += '<li>🎧 リスニング (約' + C.lmin + '分): ' + C.L.map(l => 'Part' + l[0] + ' ' + l[1] + (l[2] > 1 ? '題×' + l[2] + '問' : '問')).join(' / ') + ' — 音声は 1回だけ</li></ul>';
+    h += '<button class="ek-primary" id="mkStart">▶ 試験 開始</button><p class="ek-small">※ 問題は すべて この道場の オリジナル問題から 本番の 割合で 選びます。</p></div>';
+    area().innerHTML = h; bindGo(area());
+    document.getElementById('mkStart').onclick = () => { sfx('click'); mk = buildMock(); mockRead(); };
+  }
+  function mins() { return Math.floor((Date.now() - mk.t0) / 60000); }
+  function optBtns(name, opts, order, sel) {
+    let h = '<div class="ek-opts two">';
+    order.forEach((o, k) => { h += '<button class="ek-opt ek-mopt' + (sel === o ? ' sel' : '') + '" data-name="' + name + '" data-o="' + o + '">' + (k + 1) + '. ' + esc(opts[o]) + '</button>'; });
+    return h + '</div>';
+  }
+  function mockRead() {
+    const set = P1SET();
+    let n = 0;
+    let h = header('⏱ 模擬試験 ・ 筆記', '経過 ' + mins() + '分 / 目安 ' + MOCK[mk.level].min + '分');
+    h += '<div class="ek-mock-sec">大問1 次の (　) に 入れるのに 最も 適切な ものを 選びなさい。</div>';
+    mk.p1.forEach((it, k) => {
+      const q = set[it.i]; n++;
+      h += '<div class="ek-box ek-mq"><div class="ek-mq-n">(' + n + ')</div><div class="ek-q">' + esc(q.q).replace('( )', '<span class="ek-blank">(　　)</span>') + '</div>' + optBtns('p1_' + k, q.options, it.order, mk.ans['p1_' + k]) + '</div>';
+    });
+    mk.ro = mk.ro || {};
+    const pas = (r, sec) => {
+      let x = '<div class="ek-box ek-read"><div class="ek-fb-h">' + esc(r.title) + '</div>';
+      r.paragraphs.forEach(p => { x += '<p class="ek-passage">' + esc(p).replace(/\((\d)\)/g, (m, d) => '<span class="ek-blank">( ' + (n + +d) + ' )</span>') + '</p>'; });
+      x += '</div>';
+      r.questions.forEach((q, qi) => {
+        const key = sec + '_' + r.id + '_' + qi; mk.ro[key] = mk.ro[key] || shuffle([0, 1, 2, 3]);
+        x += '<div class="ek-box ek-mq"><div class="ek-mq-n">(' + (n + qi + 1) + ')</div>' + (r.type === 'content' ? '<div class="ek-fb-h">' + esc(q.q) + '</div>' : '') + optBtns(key, q.options, mk.ro[key], mk.ans[key]).replace('ek-opts two', 'ek-opts') + '</div>';
+      });
+      n += r.questions.length;
+      return x;
+    };
+    h += '<div class="ek-mock-sec">大問2 次の 英文を 読み、( ) に 入る 最も 適切な ものを 選びなさい。</div>';
+    mk.cloze.forEach(r => { h += pas(r, 'c'); });
+    h += '<div class="ek-mock-sec">大問3 次の 英文の 内容に 関して、質問に 対する 最も 適切な 答えを 選びなさい。</div>';
+    mk.content.forEach(r => { h += pas(r, 't'); });
+    h += '<div class="ek-mock-sec">作文 (要約・意見論述)</div>' + mockWriteHtml();
+    h += '<div class="ek-box ek-center"><p id="mkLeft"></p><button class="ek-primary" id="mkToL">筆記を 終えて リスニングへ →</button></div>';
+    area().innerHTML = h; bindGo(area());
+    const left = () => { const total = document.querySelectorAll('.ek-mq').length; const done = Object.keys(mk.ans).length; document.getElementById('mkLeft').textContent = '解答済み ' + done + ' / ' + total; };
+    area().querySelectorAll('.ek-mopt').forEach(b => b.onclick = () => {
+      const name = b.dataset.name; mk.ans[name] = +b.dataset.o;
+      area().querySelectorAll('.ek-mopt[data-name="' + name + '"]').forEach(x => x.classList.toggle('sel', x === b)); left();
+    });
+    ['mkSum', 'mkOp'].forEach(id => { const ta = document.getElementById(id); if (!ta) return; const c = document.getElementById(id + 'C'); const w = id === 'mkSum' ? mk.wsum : mk.wop;
+      const u = () => { mk[id] = ta.value; const k = wordCount(ta.value); c.textContent = k + ' 語 (目安 ' + w.min + '〜' + w.max + ')'; c.className = 'ek-count ' + (k < w.min ? 'low' : k > w.max ? 'high' : 'good'); }; ta.oninput = u; u(); });
+    left();
+    document.getElementById('mkToL').onclick = () => {
+      const total = document.querySelectorAll('.ek-mq').length, done = Object.keys(mk.ans).length;
+      if (done < total && !confirm('未解答が ' + (total - done) + '問 あります。リスニングに 進みますか?')) return;
+      mk.rmin = mins(); mk.stage = 'listen'; mk.li = 0; mk.lt0 = Date.now(); mockListen();
+    };
+  }
+  function mockWriteHtml() {
+    let h = '';
+    [[mk.wsum, 'mkSum'], [mk.wop, 'mkOp']].forEach(([w, id]) => {
+      if (!w) return;
+      h += '<div class="ek-box"><div class="ek-fb-h">' + (w.type === 'summary' ? '要約' : '意見論述') + '</div>';
+      if (w.type === 'summary') w.passage.forEach(p => { h += '<p class="ek-passage">' + esc(p) + '</p>'; });
+      else h += '<p class="ek-passage"><b>TOPIC</b><br>' + esc(w.question) + '</p><p class="ek-points"><b>POINTS</b> ' + w.points.map(esc).join(' ・ ') + '</p>';
+      h += '<p class="ek-instr">' + esc(w.instruction) + '</p><textarea class="ek-text" id="' + id + '" spellcheck="false" placeholder="ここに 英語で 書こう…">' + esc(mk[id] || '') + '</textarea><div class="ek-count" id="' + id + 'C"></div></div>';
+    });
+    return h;
+  }
+  function mockListen() {
+    const root = area();
+    if (mk.li >= mk.lis.length) return mockResult();
+    const idx = mk.lis[mk.li], it = normListen(SET('listen')[idx]);
+    const partName = it.part === 1 ? '会話' : it.part === 3 ? 'Real-Life' : '説明文';
+    let h = header('⏱ 模擬試験 ・ リスニング', 'No. ' + (mk.li + 1) + ' / ' + mk.lis.length + ' ・ Part ' + it.part + ' ' + partName);
+    if (it.situation) h += '<div class="ek-box ek-situation"><div class="ek-script-h">📄 Situation</div><p>' + esc(it.situation) + '</p><div class="ek-sit-q">' + esc(it.qs[0].q) + '</div></div>';
+    mk.lo = mk.lo || {};
+    it.qs.forEach((q, qi) => {
+      const key = idx + '.' + qi; mk.lo[key] = mk.lo[key] || shuffle([0, 1, 2, 3]);
+      h += '<div class="ek-box ek-mq">' + (it.qs.length > 1 ? '<div class="ek-mq-n">No.' + (qi + 1) + '</div>' : '') + (it.situation ? '' : '') + optBtns('L_' + key, q.options, mk.lo[key], mk.lans[key]).replace('ek-opts two', 'ek-opts') + '</div>';
+    });
+    h += '<div class="ek-box ek-center"><div class="ek-listen-ico" id="ekWave">🎧</div><p class="ek-small" id="ekStatus">' + (it.situation ? '10秒で Situation と 質問を 読もう' : '選択肢に 目を 通そう') + '</p><button class="ek-primary" id="mkNextL" disabled>次へ →</button></div>';
+    root.innerHTML = h; bindGo(root);
+    root.querySelectorAll('.ek-mopt').forEach(b => b.onclick = () => {
+      const key = b.dataset.name.slice(2); mk.lans[key] = +b.dataset.o;
+      root.querySelectorAll('.ek-mopt[data-name="' + b.dataset.name + '"]').forEach(x => x.classList.toggle('sel', x === b));
+    });
+    const next = document.getElementById('mkNextL');
+    next.onclick = () => { stopSpeak(); mk.li++; mockListen(); };
+    const status = t => { const el = document.getElementById('ekStatus'); if (el) el.textContent = t; };
+    const g = speakGen;
+    setTimeout(() => {
+      if (g !== speakGen || !document.getElementById('mkNextL')) return;
+      const wave = document.getElementById('ekWave'); if (wave) wave.classList.add('on');
+      status('🔊 放送中… (1回のみ)');
+      const seq = it.lines.concat(it.qs.map((q, k) => ['N', (it.qs.length > 1 ? 'Number ' + (k + 1) + '. ' : 'Question. ') + q.q]));
+      speakSeq(seq, () => { const w = document.getElementById('ekWave'); if (w) w.classList.remove('on'); status('答えを 選んで 次へ'); const n2 = document.getElementById('mkNextL'); if (n2) n2.disabled = false; });
+    }, it.situation ? 10000 : 2500);
+  }
+  function mockResult() {
+    stopSpeak();
+    const set = P1SET(), wrong = [];
+    let r1 = 0, rTotal = 0;
+    mk.p1.forEach((it, k) => { rTotal++; const q = set[it.i]; if (mk.ans['p1_' + k] === q.answer) r1++; else wrong.push({ sec: '大問1', q: q.q, a: q.options[q.answer], exp: q.exp }); });
+    let r23 = 0;
+    [['c', mk.cloze, '大問2'], ['t', mk.content, '大問3']].forEach(([sec, L, nm]) => L.forEach(r => r.questions.forEach((q, qi) => { rTotal++; if (mk.ans[sec + '_' + r.id + '_' + qi] === q.answer) r23++; else wrong.push({ sec: nm, q: r.title + ' — ' + q.q, a: q.options[q.answer], exp: q.exp }); })));
+    let lc = 0, lTotal = 0;
+    mk.lis.forEach(idx => { const it = normListen(SET('listen')[idx]); it.qs.forEach((q, qi) => { lTotal++; if (mk.lans[idx + '.' + qi] === q.answer) lc++; else wrong.push({ sec: 'リスニング Part' + it.part, q: q.q, a: q.options[q.answer], exp: q.exp }); }); });
+    const rr = r1 + r23, pr = Math.round(rr * 100 / rTotal), pl = Math.round(lc * 100 / lTotal);
+    const e = data(); e.mock = e.mock || []; e.mock.push({ lv: mk.level, d: today(), r: [rr, rTotal], l: [lc, lTotal] }); save();
+    const judge = p => p >= 75 ? '🟢 合格圏' : p >= 60 ? '🟡 あと少し' : '🔴 要復習';
+    let h = header('⏱ 模擬試験 ・ 結果', (mk.level === 'p1' ? '準1級' : '2級') + ' ・ 筆記 ' + (mk.rmin || 0) + '分');
+    h += '<div class="ek-box"><div class="ek-mres"><div><b>' + rr + '</b> / ' + rTotal + '<span>リーディング ' + pr + '% ' + judge(pr) + '</span></div><div><b>' + lc + '</b> / ' + lTotal + '<span>リスニング ' + pl + '% ' + judge(pl) + '</span></div></div>';
+    h += '<p class="ek-small">※ 英検の 合否は CSE スコア (技能ごとの 換算) で 決まります。正答率 7〜8割が 一次合格の おおよその 目安です。作文は 下の モデル解答と 比べて 自己採点しよう。</p></div>';
+    [[mk.wsum, 'mkSum'], [mk.wop, 'mkOp']].forEach(([w, id]) => { if (!w) return; h += '<div class="ek-box ek-model"><div class="ek-fb-h">✍ ' + (w.type === 'summary' ? '要約' : '意見論述') + ' — あなた ' + wordCount(mk[id] || '') + '語</div><p class="ek-mine">' + esc(mk[id] || '(未記入)') + '</p><div class="ek-fb-h">📖 モデル解答</div><p>' + esc(w.model) + '</p></div>'; });
+    if (wrong.length) {
+      h += '<div class="ek-mock-sec">❗ まちがえた 問題 (' + wrong.length + ')</div>';
+      wrong.forEach(w => { h += '<div class="ek-box ek-mw"><div class="ek-small">' + esc(w.sec) + '</div><div class="ek-fb-en">' + esc(w.q) + '</div><div class="ek-fb-h">正解: ' + esc(w.a) + '</div><div class="ek-fb-exp">💡 ' + esc(w.exp) + '</div></div>'; });
+    }
+    h += '<button class="ek-primary" data-go="mock">もう一度 受ける</button><button class="ek-secondary" data-go="home">道場に もどる</button>';
+    area().innerHTML = h; bindGo(area());
+    const p = document.getElementById('pageEiken'); if (p) p.scrollTop = 0;
   }
 
   // ---------- ライティング ----------
