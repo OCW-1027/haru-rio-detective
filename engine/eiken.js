@@ -262,18 +262,39 @@ const Eiken = (function () {
   function REC(kind) { const e = data(); const k = level === 'p1' ? 'p_' + kind : kind; return e[k] || (e[k] = {}); }
   function P1SET() { return level === 'p1' ? (typeof EIKEN_P1_PART1 !== 'undefined' ? EIKEN_P1_PART1 : []) : EIKEN_G2_PART1; }
   function P1REC() { const e = data(); return level === 'p1' ? (e.pp1 || (e.pp1 = {})) : e.p1; }
+  let p1opt = { tag: 'all' };
   function part1() {
-    const rec = P1REC();
-    const idx = P1SET().map((q, i) => i);
-    const score = i => { const r = rec[i]; return r ? (r[1] * 2 - r[0]) : 5; };   // 미풀이·오답 우선
-    const pick = shuffle(idx).sort((a, b) => score(b) - score(a)).slice(0, 10);
-    pq = { list: shuffle(pick), i: 0, ok: 0 };
-    part1Q();
+    const set = P1SET(), rec = P1REC();
+    const tags = ['all'].concat([...new Set(set.map(q => q.tag))]);
+    const cnt = t => set.filter(q => t === 'all' || q.tag === t).length;
+    const solved = Object.keys(rec).length;
+    const wrong = Object.keys(rec).filter(i => rec[i][1] > 0 && rec[i][1] >= rec[i][0]).length;
+    let h = header('✏️ 大問1 語句空所補充', (level === 'p1' ? '準1級' : '2級') + ' · 全 ' + set.length + '問');
+    h += '<div class="ek-box"><div class="ek-today-row"><span>📊 解いた <b>' + solved + '</b> / ' + set.length + '</span><span>🎯 正答率 <b>' + rate(rec) + '</b></span><span>❗ 苦手 <b>' + wrong + '</b></span></div>';
+    h += '<div class="ek-meter"><i style="width:' + pct(solved, set.length) + '%"></i></div>';
+    h += '<div class="ek-pos small" style="grid-template-columns:repeat(' + tags.length + ',1fr)">';
+    tags.forEach(t => { h += '<button class="ek-pos-b' + (p1opt.tag === t ? ' on' : '') + '" data-tag="' + t + '"><span class="ek-pos-n">' + (t === 'all' ? 'すべて' : t) + '</span><span class="ek-pos-c">' + cnt(t) + '問</span></button>'; });
+    h += '</div>';
+    h += '<button class="ek-primary" id="p1Go10">▶ 10問 チャレンジ</button>';
+    h += '<div class="ek-row2"><button class="ek-secondary" id="p1GoWrong"' + (wrong ? '' : ' disabled') + '>❗ 苦手だけ (' + wrong + ')</button><button class="ek-secondary" id="p1GoExam">⏱ 本番形式 ' + (level === 'p1' ? 18 : 17) + '問</button></div></div>';
+    area().innerHTML = h; bindGo(area());
+    area().querySelectorAll('[data-tag]').forEach(b => b.onclick = () => { sfx('click'); p1opt.tag = b.dataset.tag; part1(); });
+    const pool = () => set.map((q, i) => i).filter(i => p1opt.tag === 'all' || set[i].tag === p1opt.tag);
+    const score = i => { const r = rec[i]; return r ? (r[1] * 2 - r[0]) : 5; };
+    const start = list => { sfx('click'); pq = { list: list, i: 0, ok: 0 }; part1Q(); };
+    document.getElementById('p1Go10').onclick = () => start(shuffle(shuffle(pool()).sort((a, b) => score(b) - score(a)).slice(0, 10)));
+    document.getElementById('p1GoWrong').onclick = () => start(shuffle(pool().filter(i => rec[i] && rec[i][1] > 0 && rec[i][1] >= rec[i][0])).slice(0, 10));
+    document.getElementById('p1GoExam').onclick = () => {
+      // 本番 비율: 語彙 대부분 + 熟語 몇 개 (+ 2級은 文法)
+      const by = t => shuffle(set.map((q, i) => i).filter(i => set[i].tag === t));
+      const L = level === 'p1' ? by('語彙').slice(0, 14).concat(by('熟語').slice(0, 4)) : by('語彙').slice(0, 10).concat(by('熟語').slice(0, 4), by('文法').slice(0, 3));
+      start(L);
+    };
   }
   function part1Q() {
     const root = area();
     if (pq.i >= pq.list.length) {
-      root.innerHTML = header('大問1 語句空所補充', '結果') + '<div class="ek-box ek-center"><div class="ek-big">' + (pq.ok >= 8 ? '🏆' : '💪') + '</div><p>' + pq.list.length + '問中 <b>' + pq.ok + '</b>問 正解</p><p class="ek-small">本番の 大問1は ' + (level === 'p1' ? '18' : '17') + '問。8割 取れれば 合格ペース!</p><button class="ek-primary" data-go="p1">もう10問</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
+      root.innerHTML = header('大問1 語句空所補充', '結果') + '<div class="ek-box ek-center"><div class="ek-big">' + (pq.ok >= 8 ? '🏆' : '💪') + '</div><p>' + pq.list.length + '問中 <b>' + pq.ok + '</b>問 正解</p><p class="ek-small">本番の 大問1は ' + (level === 'p1' ? '18' : '17') + '問。8割 取れれば 合格ペース!</p><button class="ek-primary" data-go="p1">大問1 メニューへ</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
       return bindGo(root);
     }
     const qi = pq.list[pq.i], q = P1SET()[qi];
