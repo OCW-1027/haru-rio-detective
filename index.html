@@ -30,6 +30,7 @@
 <link rel="stylesheet" href="styles/eiken.css">
 <link rel="stylesheet" href="styles/world.css">
 <link rel="stylesheet" href="styles/weather-ch.css">
+<link rel="stylesheet" href="styles/lab.css">
 </head>
 <body>
 
@@ -67,6 +68,12 @@
   <div class="page wxc-page" id="pageWeatherCh">
     <button class="back-btn wx-exit" id="btnWxBack">← 事務所</button>
     <div class="wx-wrap" id="wxArea"></div>
+  </div>
+
+  <!-- v2 新コンテンツ③: ラボ探偵 -->
+  <div class="page lab-page" id="pageLab">
+    <button class="back-btn lb-exit" id="btnLabBack">← 事務所</button>
+    <div class="lb-wrap" id="labArea"></div>
   </div>
 
   <!-- CHAPTER SELECT -->
@@ -500,6 +507,7 @@
 <script src="data/world-cities.js"></script>
 <script src="engine/world.js"></script>
 <script src="engine/weather-challenge.js"></script>
+<script src="engine/lab.js"></script>
 <script src="engine/hub.js"></script>
 <script src="engine/bindings.js"></script>
 <script type="module" src="engine/chat-bindings.js"></script>

@@ -1,0 +1,63 @@
+/* styles/lab.css — ラボ探偵 */
+.lab-page { background: linear-gradient(180deg, #eef6ee 0%, #fbf7ec 100%); overflow-y: auto; padding: 0 0 48px; }
+.lb-wrap { width: 100%; max-width: 760px; margin: 0 auto; padding: 64px 16px 0; }
+.lb-exit { position: absolute; top: 14px; left: 14px; z-index: 5; }
+.lb-hero { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: linear-gradient(135deg, #2e7d4f, #5aa96b); color: #fff; border-radius: 22px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(46,125,79,.25); }
+.lb-hero img { width: 96px; flex-shrink: 0; }
+.lb-hero p { font-family: 'Klee One'; font-size: 13px; margin: 6px 0 0; }
+.lb-kicker { font-family: 'Klee One'; font-size: 13px; opacity: .85; }
+.lb-h1 { font-family: 'RocknRoll One'; font-size: 32px; margin: 0; }
+.lb-cases { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; margin-top: 14px; }
+.lb-case { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; border: 2px solid #cfe5d3; background: #fff; text-align: left; cursor: pointer; box-shadow: 0 3px 0 #cfe5d3; }
+.lb-case > span:last-child { display: flex; flex-direction: column; gap: 2px; }
+.lb-case-i { font-size: 34px; }
+.lb-case b { font-family: 'RocknRoll One'; font-size: 15px; color: #1f3f2c; }
+.lb-case small { font-family: 'Klee One'; font-size: 12px; color: #6a7a6a; }
+.lb-stars { font-size: 14px; color: #e0a020; letter-spacing: 1px; }
+.lb-stars.big { font-size: 30px; }
+.lb-note { margin-top: 14px; font-family: 'Klee One'; font-size: 12px; color: #4a5a4a; background: rgba(255,255,255,.7); border-radius: 12px; padding: 10px 12px; }
+.lb-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.lb-back { border: 2px solid #cfe5d3; background: #fff; border-radius: 999px; padding: 6px 12px; font-family: 'RocknRoll One'; font-size: 13px; color: #2e7d4f; cursor: pointer; flex-shrink: 0; }
+.lb-title { font-family: 'RocknRoll One'; font-size: 16px; color: #1f3f2c; }
+.lb-box { background: #fff; border-radius: 18px; padding: 14px 16px; border: 2px solid #cfe5d3; margin-bottom: 12px; font-family: 'Klee One'; font-size: 14px; color: #2c3e30; line-height: 1.7; }
+.lb-center { text-align: center; }
+.lb-big { font-size: 48px; }
+.lb-small { font-size: 12px; color: #6a7a6a; }
+.lb-talk { display: flex; gap: 12px; align-items: flex-start; }
+.lb-talk img { width: 70px; flex-shrink: 0; }
+.lb-talk img.lb-haru { width: 60px; border-radius: 12px; }
+.lb-talk p { margin: 4px 0; }
+.lb-h2 { font-family: 'RocknRoll One'; font-size: 15px; color: #1f3f2c; margin: 4px 0 8px; }
+.lb-sus { display: grid; gap: 8px; margin-bottom: 4px; }
+.lb-su { display: flex; gap: 10px; align-items: flex-start; background: #fff; border: 2px solid #e3eee5; border-radius: 14px; padding: 10px 12px; font-family: 'Klee One'; font-size: 14px; }
+.lb-su p { margin: 2px 0 0; }
+.lb-face { font-size: 30px; }
+.lb-primary, .lb-secondary { display: block; width: 100%; margin-top: 10px; padding: 13px 16px; border-radius: 14px; font-family: 'RocknRoll One'; font-size: 16px; cursor: pointer; }
+.lb-primary { border: none; background: #2e7d4f; color: #fff; box-shadow: 0 4px 0 #1d5534; }
+.lb-secondary { border: 2px solid #2e7d4f; background: #fff; color: #2e7d4f; }
+.lb-svg { display: block; width: 100%; height: auto; background: #f7fbf7; border-radius: 12px; margin-bottom: 8px; }
+.lb-sl { display: block; font-family: 'RocknRoll One'; font-size: 14px; color: #1f3f2c; margin: 8px 0; }
+.lb-sl b { color: #c0392b; font-size: 18px; }
+.lb-sl input { display: block; width: 100%; margin-top: 4px; }
+.lb-out { margin-top: 8px; background: #fffbea; border: 2px dashed #e6d38a; border-radius: 12px; padding: 8px 12px; font-size: 14px; min-height: 20px; }
+.lb-out:empty { display: none; }
+.lb-opts { display: grid; gap: 8px; margin: 8px 0; }
+.lb-opts b, .lb-pot b { display: inline-block; min-width: 48px; font-family: 'RocknRoll One'; font-size: 13px; color: #1f3f2c; }
+.lb-opt { border: 2px solid #cfe5d3; background: #fff; border-radius: 999px; padding: 4px 12px; margin: 3px; font-family: 'Klee One'; font-size: 13px; cursor: pointer; }
+.lb-opt.on { background: #2e7d4f; color: #fff; border-color: #2e7d4f; }
+.lb-pots { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.lb-pot { background: #f7fbf7; border-radius: 12px; padding: 8px; }
+.lb-pot-h { font-family: 'RocknRoll One'; font-size: 14px; color: #2e7d4f; }
+.lb-warn { margin-top: 6px; color: #b5452f; font-size: 13px; }
+.lb-notes { font-size: 13px; line-height: 1.8; }
+.lb-pick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.lb-pk { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: 14px; border: 2px solid #cfe5d3; background: #fff; font-family: 'Klee One'; font-size: 12px; cursor: pointer; }
+.lb-pk.ok, .lb-rs.ok { background: #d8f0dc; border-color: #4f9a5a; }
+.lb-pk.ng, .lb-rs.ng { background: #f7d6d3; border-color: #c4625e; }
+.lb-reasons { display: grid; gap: 8px; }
+.lb-rs { text-align: left; padding: 12px; border-radius: 14px; border: 2px solid #cfe5d3; background: #fff; font-family: 'Klee One'; font-size: 14px; cursor: pointer; }
+.lb-vocab { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+.lb-vc { display: flex; flex-direction: column; align-items: center; padding: 10px 6px; border-radius: 14px; border: 2px solid #cfe5d3; background: #f7fbf7; cursor: pointer; }
+.lb-vc b { font-family: Georgia, serif; font-size: 16px; color: #1f3f2c; }
+.lb-vc small { font-family: 'Klee One'; font-size: 12px; color: #5a6a5a; }
+@media (max-width: 520px) { .lb-pots { grid-template-columns: 1fr; } }

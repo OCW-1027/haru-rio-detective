@@ -94,7 +94,8 @@ const Hub = (function () {
     h += '<button class="hub-new-btn" id="hubWorld"><img src="' + KORADON + '" alt=""><span><b>✈ コラドン航空 世界追跡<span class="tag">NEW</span></b><small>怪盗を 追って 世界を 飛ぼう · 解決 ' + Object.keys(wd).length + ' / 6</small></span></button>';
     const wxd = (State.v2 && State.v2.wx) || {};
     h += '<button class="hub-new-btn" id="hubWx"><img src="' + KORARIN + '" alt=""><span><b>🌤 お天気予報チャレンジ<span class="tag">NEW</span></b><small>本物の データで あしたを 予報 · 記録 ' + ((wxd.done || []).length) + '回</small></span></button>';
-    h += '<button class="hub-new-btn off" disabled><span style="font-size:40px">🧪</span><span><b>ラボ探偵</b><small>準備中</small></span></button>';
+    const lbd = (State.v2 && State.v2.lab && State.v2.lab.cleared) || {};
+    h += '<button class="hub-new-btn" id="hubLab"><span style="font-size:44px">🧪</span><span><b>ラボ探偵<span class="tag">NEW</span></b><small>実験で トリックを 見ぬけ · 解決 ' + Object.keys(lbd).length + ' / 4</small></span></button>';
     h += '</section>';
 
     // 사건 파일
@@ -129,6 +130,8 @@ const Hub = (function () {
     root.querySelectorAll('[data-study]').forEach(b => {
       b.onclick = () => { sfx('click'); STUDY.find(s => s.id === b.dataset.study).go(); };
     });
+    const hl = document.getElementById('hubLab');
+    if (hl) hl.onclick = () => { sfx('click'); LabDetective.open(); };
     const hx = document.getElementById('hubWx');
     if (hx) hx.onclick = () => { sfx('click'); WeatherChallenge.open(); };
     const hw = document.getElementById('hubWorld');
