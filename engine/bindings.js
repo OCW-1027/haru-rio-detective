@@ -59,11 +59,11 @@ loadState();
 document.getElementById('btnStart').onclick = () => {
   initAudio();
   playBGM('title');
-  buildChapterGrid();
-  showPage('pageSelect');
+  Hub.open();  // v2 P4: 허브(ハル探偵事務所)로
 };
 
-document.getElementById('btnBackTitle').onclick = () => { stopVoice(); showPage('pageTitle'); };
+document.getElementById('btnBackTitle').onclick = () => { stopVoice(); Hub.open(); };
+document.getElementById('btnHubBack').onclick = () => { stopVoice(); showPage('pageTitle'); };
 document.getElementById('btnBackSelect1').onclick = () => { stopVoice(); buildChapterGrid(); showPage('pageSelect'); };
 document.getElementById('btnBackSelect2').onclick = () => { stopVoice(); buildChapterGrid(); showPage('pageSelect'); };
 document.getElementById('btnBackWriting').onclick = () => { stopVoice(); buildChapterGrid(); showPage('pageSelect'); };

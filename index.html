@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="styles/learn.css">
 <link rel="stylesheet" href="styles/chat.css">
 <link rel="stylesheet" href="styles/vocab-learn.css">
+<link rel="stylesheet" href="styles/hub.css">
 </head>
 <body>
 
@@ -41,9 +42,15 @@
     </div>
   </div>
 
+  <!-- v2 P4: HUB (ハル探偵事務所) -->
+  <div class="page hub-page" id="pageHub">
+    <button class="back-btn hub-back" id="btnHubBack">← タイトル</button>
+    <div class="hub-wrap" id="hubArea"></div>
+  </div>
+
   <!-- CHAPTER SELECT -->
   <div class="page chapter-select" id="pageSelect">
-    <button class="back-btn" id="btnBackTitle">← もどる</button>
+    <button class="back-btn" id="btnBackTitle">← 事務所</button>
     <h2 class="select-title">📖 ものがたりの 章</h2>
     <p class="select-sub">あんごうを といて、じけんを かいけつ しよう!</p>
 
@@ -421,6 +428,7 @@
 <script src="engine/math-learn.js"></script>
 <script src="engine/scientists-learn.js"></script>
 <script src="engine/vocab-learn.js"></script>
+<script src="engine/hub.js"></script>
 <script src="engine/bindings.js"></script>
 <script type="module" src="engine/chat-bindings.js"></script>
 

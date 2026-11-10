@@ -1,0 +1,134 @@
+/* engine/hub.js — v2 P4: 허브 화면 「ハル探偵事務所」
+ * 상단 탭 18개 대신, 사무소 화면에서 시리즈·학습·게임으로 들어간다.
+ * 기존 pageSelect(시리즈별 사건 목록)와 switchTab 은 그대로 재사용한다.
+ * Dependencies: State, CaseEngine, GameV2, ReviewEngine, switchTab, showPage, sfx, escapeHtml,
+ *               CHAR_IMAGES, SCENE_IMAGES, STORY, SCIENTISTS_STORY
+ */
+const Hub = (function () {
+  const KORADON = 'assets/img/chars/spirits/koradon_idle_01.webp';
+  const KORARIN = 'assets/img/chars/spirits/korarin_idle_01.webp';
+
+  // 사건 파일 (탐정 시리즈)
+  function cases() {
+    const eng = k => CaseEngine.get(k);
+    const fromEngine = (k, icon, name) => {
+      const e = eng(k);
+      return { tab: k, icon: icon, name: name, cover: e.cfg.story[0].illustration,
+        total: e.cfg.story.filter(c => !c.comingSoon).length, cleared: State[e.cfg.clearedKey] };
+    };
+    return [
+      { tab: 'story', icon: '🔍', name: 'ハル&リオの 名探偵物語', cover: SCENE_IMAGES.schoolGate, total: STORY.length, cleared: State.cleared },
+      fromEngine('science', '🔬', '科学探偵'),
+      { tab: 'scientists', icon: '👨‍🔬', name: '偉人科学者ファイル', cover: SCIENTISTS_STORY[0].illustration,
+        total: SCIENTISTS_STORY.filter(c => !c.comingSoon).length, cleared: State.scientistsCleared },
+      fromEngine('wea', '🌦', '気象予報士'),
+      fromEngine('math', '🔢', '算数·数学'),
+      fromEngine('world', '🌍', '世界遺産の旅'),
+      fromEngine('soc', '🏛', '社会科総合'),
+      fromEngine('hist', '🌐', '世界経済·貿易史'),
+      fromEngine('mon', '💴', '日常のお金'),
+      fromEngine('biz', '📊', 'ビジネス·企業'),
+      fromEngine('lit', '🎭', '文学·芸術'),
+    ];
+  }
+
+  // 학습·게임
+  const STUDY = [
+    { id: 'eng', icon: '🔤', name: '英語', sub: '英検2級 単語·文法·作文', go: () => openList('eng', '🔤 英語') },
+    { id: 'quiz', icon: '🧠', name: 'クイズ', sub: 'ニュース·熟語 クイズ', go: () => openList('quiz', '🧠 クイズ') },
+    { id: 'weaLearn', icon: '📚', name: '気象 試験対策', sub: '気象予報士の 学習資料', go: () => openWeaLearn() },
+    { id: 'mathLearn', icon: '📐', name: '算数 試験対策', sub: '公式·図解·過去問', go: () => openMathLearn() },
+    { id: 'game', icon: '🎮', name: 'ゲーム', sub: 'がんばった ごほうび', go: () => openList('game', '🎮 ゲーム') },
+  ];
+
+  function countCleared(a, total) { return (a || []).slice(0, total).filter(Boolean).length; }
+
+  function openList(tab, title) {
+    const t = document.querySelector('#pageSelect .select-title');
+    const s = document.querySelector('#pageSelect .select-sub');
+    if (t) t.textContent = title;
+    if (s) s.textContent = tab === 'game' || tab === 'quiz' || tab === 'eng' ? '' : 'じけんを えらんで、なぞを とこう!';
+    switchTab(tab);
+    showPage('pageSelect');
+    const page = document.getElementById('pageSelect');
+    if (page) page.scrollTop = 0;
+  }
+
+  function build() {
+    const root = document.getElementById('hubArea');
+    if (!root) return;
+    const list = cases();
+    let solved = 0, total = 0;
+    list.forEach(c => { solved += countCleared(c.cleared, c.total); total += c.total; });
+    const due = ReviewEngine.dueCount();
+    const last = list.find(c => c.tab === State.currentTab);
+
+    let h = '';
+    // 사무소 배너
+    h += '<section class="hub-hero" style="background-image:url(' + SCENE_IMAGES.library + ')">';
+    h += '<div class="hub-hero-shade"></div>';
+    h += '<div class="hub-hero-text"><div class="hub-hero-kicker">ハル&リオの</div><h1 class="hub-hero-title">探偵事務所</h1>';
+    h += '<div class="hub-hero-stats"><span>🗂 解決した 事件 <b>' + solved + '</b> / ' + total + '</span>';
+    if (due) h += '<span>🔁 復習 <b>' + due + '</b>問</span>';
+    h += '</div></div>';
+    h += '<img class="hub-hero-char haru" src="' + CHAR_IMAGES.haru + '" alt="">';
+    h += '<img class="hub-hero-char rio" src="' + CHAR_IMAGES.rio + '" alt="">';
+    h += '<img class="hub-hero-spirit kd" src="' + KORADON + '" alt="">';
+    h += '<img class="hub-hero-spirit kr" src="' + KORARIN + '" alt="">';
+    h += '</section>';
+
+    // 오늘 할 일
+    h += '<section class="hub-today">';
+    if (last) {
+      h += '<button class="hub-today-btn" data-case="' + last.tab + '"><span class="hub-today-icon">' + last.icon + '</span><span><small>つづきから</small>' + escapeHtml(last.name) + '</span></button>';
+    }
+    if (due) {
+      h += '<button class="hub-today-btn review" id="hubReview"><span class="hub-today-icon">🔁</span><span><small>コラリンの 復習</small>まちがえた 問題 ' + due + '問</span></button>';
+    }
+    h += '</section>';
+
+    // 사건 파일
+    h += '<h2 class="hub-h">🗂 事件ファイル</h2><section class="hub-cases">';
+    list.forEach(c => {
+      const n = countCleared(c.cleared, c.total);
+      const pct = c.total ? Math.round(n * 100 / c.total) : 0;
+      h += '<button class="hub-case" data-case="' + c.tab + '">';
+      h += '<div class="hub-case-cover" style="background-image:url(' + c.cover + ')">' + (n === c.total && c.total ? '<span class="hub-case-done">COMPLETE</span>' : '') + '</div>';
+      h += '<div class="hub-case-body"><div class="hub-case-name"><span>' + c.icon + '</span>' + escapeHtml(c.name) + '</div>';
+      h += '<div class="hub-case-bar"><i style="width:' + pct + '%"></i></div>';
+      h += '<div class="hub-case-num">' + n + ' / ' + c.total + ' 事件</div></div>';
+      h += '</button>';
+    });
+    h += '</section>';
+
+    // 학습·게임
+    h += '<h2 class="hub-h">📚 学習室</h2><section class="hub-study">';
+    STUDY.forEach(s => {
+      h += '<button class="hub-study-btn" data-study="' + s.id + '"><span class="hub-study-icon">' + s.icon + '</span><span class="hub-study-name">' + s.name + '</span><span class="hub-study-sub">' + s.sub + '</span></button>';
+    });
+    h += '</section>';
+    root.innerHTML = h;
+
+    root.querySelectorAll('[data-case]').forEach(b => {
+      b.onclick = () => {
+        sfx('click');
+        const c = list.find(x => x.tab === b.dataset.case);
+        openList(c.tab, c.icon + ' ' + c.name);
+      };
+    });
+    root.querySelectorAll('[data-study]').forEach(b => {
+      b.onclick = () => { sfx('click'); STUDY.find(s => s.id === b.dataset.study).go(); };
+    });
+    const rv = document.getElementById('hubReview');
+    if (rv) rv.onclick = () => { sfx('click'); ReviewEngine.open(null, build); };
+  }
+
+  function open() {
+    build();
+    showPage('pageHub');
+    const page = document.getElementById('pageHub');
+    if (page) page.scrollTop = 0;
+  }
+
+  return { build: build, open: open, openList: openList };
+})();
