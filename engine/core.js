@@ -293,6 +293,7 @@ function saveState() {
       // v76: vocab 확장 마이그레이션 플래그
       vocabV76Migrated: State.vocabV76Migrated !== false,  // default true (이미 마이그됨)
       voiceOn: State.voiceOn,
+      v2: State.v2 || {},  // v2 P3: 별점·복습 기록
     };
     localStorage.setItem(SAVE_KEY, JSON.stringify(data));
   } catch(e) {
@@ -305,6 +306,7 @@ function loadState() {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) return;
     const data = JSON.parse(raw);
+    if (data.v2 && typeof data.v2 === 'object') State.v2 = data.v2;  // v2 P3
     if (Array.isArray(data.cleared)) {
       data.cleared.slice(0, State.cleared.length).forEach((v, i) => {
         State.cleared[i] = v;

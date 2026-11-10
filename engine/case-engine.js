@@ -8,10 +8,21 @@
 const CaseEngine = (function () {
   const registry = {};
 
+  // v2: 별점 — 오답·힌트 0회 ⭐3 / 합계 2회까지 ⭐2 / 그 이상 ⭐1
+  function calcStars(st) {
+    const n = (st.mistakes || 0) + (st.hintsUsed || 0);
+    return n === 0 ? 3 : n <= 2 ? 2 : 1;
+  }
+  function starText(n) { return '⭐'.repeat(n) + '<span class="v2-star-off">' + '☆'.repeat(3 - n) + '</span>'; }
+
   function create(cfg) {
     const STORY = cfg.story;
     const st = cfg.state;
     const P = cfg.idPrefix;
+    const HINT_SHOW = '💡 コラドンに ヒントを もらう';
+    const HINT_HIDE = '💡 ヒントを 隠す';
+    const KORADON_TAG = '<img class="v2-koradon" src="assets/img/chars/spirits/koradon_greet_01.webp" alt=""><strong>コラドン:</strong> ';
+    const KORARIN_IMG = 'assets/img/chars/spirits/korarin_greet_01.webp';
 
   function buildGrid(grid) {
     const wrapper = document.createElement('div');
@@ -26,6 +37,8 @@ const CaseEngine = (function () {
     html += '<div style="font-size:12px;color:#4a8a9a;margin-top:6px;font-family:Klee One;">';
     html += cfg.desc + ' (進行: ' + clearedCount + ' / ' + totalCases + ')';
     html += '</div>';
+    const dueN = ReviewEngine.dueCount(cfg.key);
+    if (dueN > 0) html += '<button class="v2-review-btn" id="' + P + 'ReviewBtn">🔁 まちがえた 問題を 復習 (' + dueN + '問)</button>';
     html += '</div>';
 
     // 사건 카드들
@@ -57,7 +70,7 @@ const CaseEngine = (function () {
       if (comingSoon) {
         html += '<div style="text-align:center;margin-top:6px;font-family:RocknRoll One;font-size:11px;color:#b85a5a;">🚧 準備中…</div>';
       } else {
-        html += '<div class="sci-case-stars">' + (cleared ? '⭐⭐⭐' : '') + '</div>';
+        html += '<div class="sci-case-stars">' + (cleared ? starText(GameV2.getStars(cfg.key, i)) : '') + '</div>';
       }
       if (locked && !comingSoon) html += '<div class="sci-case-lock">🔒</div>';
       html += '</div>';
@@ -71,6 +84,9 @@ const CaseEngine = (function () {
 
     wrapper.innerHTML = html;
     grid.appendChild(wrapper);
+
+    const rvBtn = wrapper.querySelector('.v2-review-btn');
+    if (rvBtn) rvBtn.onclick = () => { sfx('click'); ReviewEngine.open(cfg.key, () => { buildChapterGrid(); }); };
 
     wrapper.querySelectorAll('.sci-case-card').forEach(card => {
       card.onclick = () => {
@@ -107,6 +123,9 @@ const CaseEngine = (function () {
     st.answered = false;
     st.wrongSuspects = [];  // v51: 추리 단계에서 틀린 용의자 누적
     st.wrongIds = [];  // v50: 한 번 틀린 용의자 ID 모음 (정답이 자동 노출되지 않도록)
+    st.mistakes = 0;     // v2: 이번 도전의 오답 수 (별점 계산)
+    st.hintsUsed = 0;    // v2: 코라돈 힌트를 본 횟수
+    st.hintCounted = {}; // v2: 같은 문제의 힌트는 한 번만 센다
     showPage(cfg.page);
     // v32: 사건별 BGM 분위기
     const bgmKey = STORY[idx].bgm || 'mystery';
@@ -262,9 +281,9 @@ const CaseEngine = (function () {
           html += '<div class="sci-puzzle-opt" data-i="' + i + '">' + (i+1) + '. ' + escapeHtml(opt) + '</div>';
         });
         html += '</div>';
-        html += '<button class="sci-hint-toggle" id="' + P + 'HintBtn">' + (st.hintShown ? '💡 ヒントを 隠す' : '💡 ヒントを 見る') + '</button>';
+        html += '<button class="sci-hint-toggle" id="' + P + 'HintBtn">' + (st.hintShown ? HINT_HIDE : HINT_SHOW) + '</button>';
         html += '<div class="sci-puzzle-hint' + (st.hintShown ? ' show' : '') + '" id="' + P + 'Hint">';
-        html += '💡 ' + escapeHtml(step.puzzle.hint);
+        html += KORADON_TAG + escapeHtml(step.puzzle.hint);
         html += '</div>';
         html += '</div>';
         html += '<div id="' + P + 'Feedback"></div>';
@@ -316,9 +335,9 @@ const CaseEngine = (function () {
         html += '</div>';
       });
       html += '</div>';
-      html += '<button class="sci-hint-toggle" id="' + P + 'HintBtn">' + (st.hintShown ? '💡 ヒントを 隠す' : '💡 ヒントを 見る') + '</button>';
+      html += '<button class="sci-hint-toggle" id="' + P + 'HintBtn">' + (st.hintShown ? HINT_HIDE : HINT_SHOW) + '</button>';
       html += '<div class="sci-puzzle-hint' + (st.hintShown ? ' show' : '') + '" id="' + P + 'Hint">';
-      html += '💡 ' + escapeHtml(c.finalQ.hint);
+      html += KORADON_TAG + escapeHtml(c.finalQ.hint);
       html += '</div>';
       html += '<button class="sci-next-btn" id="' + P + 'Submit"' + (st.selectedSuspectId ? '' : ' disabled style="opacity:0.5;"') + '>🔍 この人物を 推理する!</button>';
       html += '</div>';
@@ -327,8 +346,11 @@ const CaseEngine = (function () {
     else if (st.phase === 'resolved') {
       html += '<div class="sci-resolved">';
       html += '<div class="sci-resolved-title">🏆 事件 解決!</div>';
+      const gotStars = st.lastStars || 3;
+      html += '<div class="v2-stars-result">' + starText(gotStars) + '<span>' + (gotStars === 3 ? 'ノーミス! 完ぺきな 推理!' : gotStars === 2 ? 'ナイス 推理! ノーミスで ⭐3つに 挑戦しよう' : '解決! もう一度 挑戦して ⭐を ふやそう') + '</span></div>';
       html += '<div style="font-family:Klee One;font-size:14px;color:var(--deep-ink);line-height:1.7;white-space:pre-wrap;">' + escapeHtml(c.finalQ.explanation) + '</div>';
       html += '<div class="sci-learned-box">';
+      html += '<div class="v2-korarin-h"><img src="' + KORARIN_IMG + '" alt=""><span>コラリンの まとめ</span></div>';
       html += '<div class="sci-learned-h">' + escapeHtml(c.learned.title) + '</div>';
       c.learned.points.forEach(p => {
         html += '<div class="sci-learned-item">' + escapeHtml(p) + '</div>';
@@ -437,12 +459,17 @@ const CaseEngine = (function () {
       hintBtn.onclick = () => {
         st.hintShown = !st.hintShown;
         sfx('click');
+        if (st.hintShown) {
+          const hk = st.phase + ':' + st.stepIdx;
+          if (!st.hintCounted) st.hintCounted = {};
+          if (!st.hintCounted[hk]) { st.hintCounted[hk] = true; st.hintsUsed = (st.hintsUsed || 0) + 1; }
+        }
         // v70: render() 대신 DOM 직접 조작 (정답 후 피드백·続けるボタン 보존)
         const hintEl = document.getElementById((P + 'Hint'));
         if (hintEl) {
           hintEl.classList.toggle('show', st.hintShown);
         }
-        hintBtn.textContent = st.hintShown ? '💡 ヒントを 隠す' : '💡 ヒントを 見る';
+        hintBtn.textContent = st.hintShown ? HINT_HIDE : HINT_SHOW;
       };
     }
 
@@ -484,6 +511,8 @@ const CaseEngine = (function () {
             // 오답: 누른 옵션만 wrong, 정답은 절대 표시하지 않음, explanation도 미공개
             opt.classList.add('answered', 'wrong');
             sfx('wrong');
+            st.mistakes = (st.mistakes || 0) + 1;
+            ReviewEngine.record(cfg.key, st.caseIdx, st.stepIdx);
             // 남은 선택지 수
             const remaining = document.querySelectorAll('.sci-puzzle-opt:not(.wrong)').length;
             fb.innerHTML = '<div class="sci-feedback ng">' +
@@ -527,6 +556,8 @@ const CaseEngine = (function () {
             triggerConfetti();
             // 클리어 처리
             State[cfg.clearedKey][st.caseIdx] = true;
+            st.lastStars = calcStars(st);
+            GameV2.setStars(cfg.key, st.caseIdx, st.lastStars);
             saveState();
             setTimeout(() => {
               st.phase = 'resolved';
@@ -539,6 +570,7 @@ const CaseEngine = (function () {
               st.wrongIds.push(st.selectedSuspectId);
             }
             sfx('wrong');
+            st.mistakes = (st.mistakes || 0) + 1;
             const fb = document.getElementById((P + 'Feedback'));
             // 남은 용의자 수 계산 (정답 힌트 X)
             const remaining = c.suspects.length - st.wrongIds.length;
