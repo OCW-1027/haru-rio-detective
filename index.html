@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="styles/chat.css">
 <link rel="stylesheet" href="styles/vocab-learn.css">
 <link rel="stylesheet" href="styles/hub.css">
+<link rel="stylesheet" href="styles/eiken.css">
 </head>
 <body>
 
@@ -46,6 +47,12 @@
   <div class="page hub-page" id="pageHub">
     <button class="back-btn hub-back" id="btnHubBack">← タイトル</button>
     <div class="hub-wrap" id="hubArea"></div>
+  </div>
+
+  <!-- v2 P7: 英検道場 -->
+  <div class="page eiken-page" id="pageEiken">
+    <button class="back-btn ek-exit" id="btnEikenBack">← 事務所</button>
+    <div class="ek-wrap" id="eikenArea"></div>
   </div>
 
   <!-- CHAPTER SELECT -->
@@ -428,6 +435,8 @@
 <script src="engine/math-learn.js"></script>
 <script src="engine/scientists-learn.js"></script>
 <script src="engine/vocab-learn.js"></script>
+<script src="data/eiken.js"></script>
+<script src="engine/eiken.js"></script>
 <script src="engine/hub.js"></script>
 <script src="engine/bindings.js"></script>
 <script type="module" src="engine/chat-bindings.js"></script>

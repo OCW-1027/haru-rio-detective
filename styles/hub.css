@@ -62,3 +62,4 @@
   .hub-case-name { font-size: 13px; }
   .hub-study { grid-template-columns: repeat(2, 1fr); }
 }
+.hub-study-btn.hot { border-color: #2a7a8a; background: linear-gradient(135deg, #e6f4f1, #fffdf5); box-shadow: 0 4px 0 #2a7a8a; }
