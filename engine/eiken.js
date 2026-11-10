@@ -74,23 +74,41 @@ const Eiken = (function () {
     if (role === 'W') return pool.find(v => FEMALE.test(v.name)) || pool[0];
     return pool.find(v => /en-US/i.test(v.lang)) || pool[0];
   }
+  // 음성 세대 번호: stopSpeak() 하면 증가 → 이전 세대의 콜백·이어 읽기는 모두 무시 (뒤로 가도 소리가 남는 버그 방지)
+  let speakGen = 0;
+  function onEikenPage() { const p = document.getElementById('pageEiken'); return !!(p && p.classList.contains('active')); }
   function speak(text, role, onEnd, rate) {
-    if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; }
+    const gen = speakGen;
+    const end = () => { if (gen === speakGen && onEnd) onEnd(); };
+    if (!('speechSynthesis' in window) || !onEikenPage()) { end(); return; }
     const u = new SpeechSynthesisUtterance(text);
     const v = voiceFor(role || 'N');
     if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'en-US';
     u.rate = rate || 0.92;
     if (role === 'M' && v && !MALE.test(v.name)) u.pitch = 0.75;
-    u.onend = () => onEnd && onEnd();
-    u.onerror = () => onEnd && onEnd();
+    u.onend = end;
+    u.onerror = end;
     speechSynthesis.speak(u);
   }
-  function stopSpeak() { try { speechSynthesis.cancel(); } catch (e) {} }
+  function stopSpeak() { speakGen++; try { speechSynthesis.cancel(); } catch (e) {} }
   function speakSeq(items, done) {
     stopSpeak();
+    const gen = speakGen;
     let i = 0;
-    (function next() { if (i >= items.length) { if (done) done(); return; } const it = items[i++]; speak(it[1], it[0], () => setTimeout(next, 350)); })();
+    (function next() {
+      if (gen !== speakGen || !onEikenPage()) return;
+      if (i >= items.length) { if (done) done(); return; }
+      const it = items[i++];
+      speak(it[1], it[0], () => setTimeout(next, 350));
+    })();
   }
+  // 다른 화면으로 나가거나 앱이 백그라운드로 가면 즉시 정지
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeak(); });
+  window.addEventListener('pagehide', stopSpeak);
+  try {
+    new MutationObserver(() => { if (!onEikenPage()) stopSpeak(); })
+      .observe(document.getElementById('pageEiken') || document.body, { attributes: true, attributeFilter: ['class'] });
+  } catch (e) {}
 
   // ---------- 화면 공통 ----------
   let level = 'g2';
@@ -389,7 +407,7 @@ const Eiken = (function () {
         const rec = REC('listen'); const key = it.qs.length > 1 ? li + '.' + qi : li; const r = rec[key] || [0, 0]; r[ok ? 0 : 1]++; rec[key] = r; save();
         wrap.querySelector('.ek-lfb').innerHTML = '<div class="ek-fb ' + (ok ? 'ok' : 'ng') + '"><div class="ek-fb-h">' + (ok ? '🎉 正解!' : '✗ 正解は 「' + esc(q.options[q.answer]) + '」') + '</div><div class="ek-fb-exp">💡 ' + esc(q.exp) + '</div></div>';
         qi++;
-        if (qi < it.qs.length) setTimeout(askQ, 600); else finish();
+        if (qi < it.qs.length) { const g = speakGen; setTimeout(() => { if (g === speakGen && document.getElementById('ekQ')) askQ(); }, 600); } else finish();
       });
     };
     document.getElementById('ekPlay').onclick = () => {
@@ -411,9 +429,11 @@ const Eiken = (function () {
     const e = data();
     let h = header('長文読解', '大問2 (空所補充) · 大問3 (内容一致)');
     h += '<div class="ek-grid">';
-    SET('read').forEach((r, i) => {
+    const L = SET('read').map((r, i) => [r, i]);
+    L.sort((x, y) => (y[0].real ? 1 : 0) - (x[0].real ? 1 : 0));
+    L.forEach(([r, i]) => {
       const done = e.read[r.id];
-      h += '<button class="ek-card" data-r="' + i + '"><span class="ek-card-icon">' + (r.type === 'cloze' ? '🧩' : '🔎') + '</span><span class="ek-card-name">' + esc(r.title) + '</span><span class="ek-card-sub">' + (r.type === 'cloze' ? '大問2 空所補充' : '大問3 内容一致') + (done ? ' ・ 前回 ' + done[0] + '/' + done[1] : '') + '</span></button>';
+      h += '<button class="ek-card' + (r.real ? ' real' : '') + '" data-r="' + i + '"><span class="ek-card-icon">' + (r.type === 'cloze' ? '🧩' : '🔎') + '</span><span class="ek-card-name">' + esc(r.title) + '</span><span class="ek-card-sub">' + (r.real ? '🎯 本番サイズ ・ ' : 'ミニ ・ ') + (r.type === 'cloze' ? '空所補充' : '内容一致 ' + r.questions.length + '問') + (done ? ' ・ 前回 ' + done[0] + '/' + done[1] : '') + '</span></button>';
     });
     h += '</div>';
     area().innerHTML = h; bindGo(area());
@@ -518,5 +538,5 @@ const Eiken = (function () {
     showPage('pageEiken');
     go('home');
   }
-  return { open: open, _speak: speak, _vocabStats: vocabStats, _wordList: wordList };
+  return { open: open, stop: stopSpeak, _speak: speak, _vocabStats: vocabStats, _wordList: wordList };
 })();
