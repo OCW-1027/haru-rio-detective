@@ -328,55 +328,80 @@ const Eiken = (function () {
     const rec = REC('listen');
     const score = i => { const r = rec[i]; return r ? (r[1] * 2 - r[0]) : 5; };
     const pick = shuffle(SET('listen').map((x, i) => i)).sort((a, b) => score(b) - score(a)).slice(0, 10);
-    lq = { list: shuffle(pick), i: 0, ok: 0 }; listenQ();
+    lq = { list: shuffle(pick), i: 0, ok: 0, total: 0 }; listenQ();
+  }
+  // 문항 정규화: 복수 설문 (準1級 Part2 = 1지문 2문) · Situation (Part3 = 문제지에 인쇄, 음성 아님)
+  function normListen(item) {
+    let lines = item.lines.slice(), situation = '';
+    if (lines.length && /^Situation:/i.test(lines[0][1])) { situation = lines[0][1].replace(/^Situation:\s*/i, ''); lines = lines.slice(1); }
+    const qs = item.qs || [{ q: item.q, options: item.options, answer: item.answer, exp: item.exp }];
+    return { part: item.part, lines: lines, situation: situation, qs: qs };
   }
   function listenQ() {
     const root = area();
     if (lq.i >= lq.list.length) {
-      root.innerHTML = header('リスニング', '結果') + '<div class="ek-box ek-center"><div class="ek-big">🎧</div><p>' + lq.list.length + '問中 <b>' + lq.ok + '</b>問 正解</p><button class="ek-primary" data-go="listen">次の 10問</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
+      root.innerHTML = header('リスニング', '結果') + '<div class="ek-box ek-center"><div class="ek-big">🎧</div><p>' + lq.total + '問中 <b>' + lq.ok + '</b>問 正解</p><button class="ek-primary" data-go="listen">次の 10題</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
       return bindGo(root);
     }
-    const li = lq.list[lq.i], item = SET('listen')[li];
-    let h = header('リスニング', (lq.i + 1) + ' / ' + lq.list.length + ' ・ Part ' + item.part + (item.part === 1 ? ' 会話' : item.part === 3 ? ' Real-Life' : ' 説明文'));
-    h += '<div class="ek-box ek-center"><div class="ek-listen-ico" id="ekWave">🎧</div><p class="ek-small" id="ekStatus">▶ を 押して 英語を 聞こう (本番は 1回 だけ!)</p>';
+    const li = lq.list[lq.i], it = normListen(SET('listen')[li]);
+    const partName = it.part === 1 ? ' 会話' : it.part === 3 ? ' Real-Life' : ' 説明文';
+    let h = header('リスニング', (lq.i + 1) + ' / ' + lq.list.length + ' ・ Part ' + it.part + partName + (it.qs.length > 1 ? ' (' + it.qs.length + '問)' : ''));
+    if (it.situation) h += '<div class="ek-box ek-situation"><div class="ek-script-h">📄 Situation (問題用紙に 印刷されている 文)</div><p>' + esc(it.situation) + '</p><div class="ek-sit-q">' + esc(it.qs[0].q) + '</div></div>';
+    h += '<div class="ek-box ek-center"><div class="ek-listen-ico" id="ekWave">🎧</div><p class="ek-small" id="ekStatus">' + (it.situation ? 'Situation と 質問を 読んだら ▶ (本番は 10秒)' : '▶ を 押して 英語を 聞こう (本番は 1回 だけ!)') + '</p>';
     h += '<button class="ek-primary" id="ekPlay">▶ 再生</button></div><div id="ekQ"></div>';
     root.innerHTML = h; bindGo(root);
-    let plays = 0;
-    const showQ = () => {
-      document.getElementById('ekStatus').textContent = 'Question: ' + item.q;
-      let qh = '<div class="ek-opts">';
-      shuffle(item.options.map((o, k) => k)).forEach((k, j) => { qh += '<button class="ek-opt" data-k="' + k + '">' + (j + 1) + '. ' + esc(item.options[k]) + '</button>'; });
-      qh += '</div><div id="ekFb"></div>';
-      document.getElementById('ekQ').innerHTML = qh;
+    let plays = 0, qi = 0;
+    const status = t => { const el = document.getElementById('ekStatus'); if (el) el.textContent = t; };
+    const finish = () => {
+      let sc = '<div class="ek-script"><div class="ek-script-h">📜 スクリプト</div>';
+      it.lines.forEach(l => { sc += '<p><b>' + ({ W: '★', M: '☆', N: '' }[l[0]]) + '</b>' + esc(l[1]) + '</p>'; });
+      it.qs.forEach((q, k) => { sc += '<p class="ek-script-q">Q' + (it.qs.length > 1 ? (k + 1) : '') + ': ' + esc(q.q) + '</p>'; });
+      sc += '</div>';
+      const box = document.createElement('div');
+      box.innerHTML = sc + '<button class="ek-secondary" id="ekAgain">🔁 もう一度 聞く</button><button class="ek-primary" id="ekNext">次へ →</button>';
+      document.getElementById('ekQ').appendChild(box);
+      document.getElementById('ekAgain').onclick = () => speakSeq(it.lines);
+      document.getElementById('ekNext').onclick = () => { stopSpeak(); lq.i++; listenQ(); };
+    };
+    const askQ = () => {
+      const q = it.qs[qi], label = it.qs.length > 1 ? 'No. ' + (qi + 1) + ' ' : '';
+      const printed = !!it.situation;   // 本番: Part1·2 の 質問は 音声のみ, Part3 は 印刷
+      status(printed ? 'Question: ' + q.q : '🔊 質問は 音声のみ (本番と 同じ)。選択肢を 見て 答えよう');
+      speak((it.qs.length > 1 ? 'Number ' + (qi + 1) + '. ' : 'Question. ') + q.q, 'N');
+      const wrap = document.createElement('div');
+      wrap.className = 'ek-lq';
+      const qlabel = 'Q' + (it.qs.length > 1 ? (qi + 1) : '') + '. ';
+      let qh = '<div class="ek-fb-h ek-qtext">' + qlabel + (printed ? esc(q.q) : '🔊 <button class="ek-mini ek-qsay">質問を もう一度 聞く</button>') + '</div><div class="ek-opts">';
+      shuffle(q.options.map((o, k) => k)).forEach((k, j) => { qh += '<button class="ek-opt" data-k="' + k + '">' + (j + 1) + '. ' + esc(q.options[k]) + '</button>'; });
+      qh += '</div><div class="ek-lfb"></div>';
+      wrap.innerHTML = qh;
+      document.getElementById('ekQ').appendChild(wrap);
+      const qs2 = wrap.querySelector('.ek-qsay'); if (qs2) qs2.onclick = () => speak(q.q, 'N');
       let done = false;
-      root.querySelectorAll('#ekQ .ek-opt').forEach(b => b.onclick = () => {
+      wrap.querySelectorAll('.ek-opt').forEach(b => b.onclick = () => {
         if (done) return; done = true; stopSpeak();
-        const ok = +b.dataset.k === item.answer;
-        root.querySelectorAll('#ekQ .ek-opt').forEach(x => { x.disabled = true; if (+x.dataset.k === item.answer) x.classList.add('ok'); });
+        const ok = +b.dataset.k === q.answer;
+        wrap.querySelectorAll('.ek-opt').forEach(x => { x.disabled = true; if (+x.dataset.k === q.answer) x.classList.add('ok'); });
         if (!ok) b.classList.add('ng');
         sfx(ok ? 'unlock' : 'wrong');
-        const rec = REC('listen'); const r = rec[li] || [0, 0]; r[ok ? 0 : 1]++; rec[li] = r; save();
-        if (ok) lq.ok++;
-        let sc = '<div class="ek-script"><div class="ek-script-h">📜 スクリプト</div>';
-        item.lines.forEach(l => { sc += '<p><b>' + ({ W: '★', M: '☆', N: '' }[l[0]]) + '</b>' + esc(l[1]) + '</p>'; });
-        sc += '<p class="ek-script-q">Q: ' + esc(item.q) + '</p></div>';
-        document.getElementById('ekFb').innerHTML = '<div class="ek-fb ' + (ok ? 'ok' : 'ng') + '"><div class="ek-fb-h">' + (ok ? '🎉 正解!' : '✗ 正解は 「' + esc(item.options[item.answer]) + '」') + '</div><div class="ek-fb-exp">💡 ' + esc(item.exp) + '</div></div>' + sc +
-          '<button class="ek-secondary" id="ekAgain">🔁 もう一度 聞く</button><button class="ek-primary" id="ekNext">次へ →</button>';
-        document.getElementById('ekAgain').onclick = () => speakSeq(item.lines);
-        document.getElementById('ekNext').onclick = () => { stopSpeak(); lq.i++; listenQ(); };
+        wrap.querySelector('.ek-qtext').textContent = qlabel + q.q;
+        lq.total++; if (ok) lq.ok++;
+        const rec = REC('listen'); const key = it.qs.length > 1 ? li + '.' + qi : li; const r = rec[key] || [0, 0]; r[ok ? 0 : 1]++; rec[key] = r; save();
+        wrap.querySelector('.ek-lfb').innerHTML = '<div class="ek-fb ' + (ok ? 'ok' : 'ng') + '"><div class="ek-fb-h">' + (ok ? '🎉 正解!' : '✗ 正解は 「' + esc(q.options[q.answer]) + '」') + '</div><div class="ek-fb-exp">💡 ' + esc(q.exp) + '</div></div>';
+        qi++;
+        if (qi < it.qs.length) setTimeout(askQ, 600); else finish();
       });
     };
     document.getElementById('ekPlay').onclick = () => {
       const btn = document.getElementById('ekPlay');
       btn.disabled = true; plays++;
       document.getElementById('ekWave').classList.add('on');
-      document.getElementById('ekStatus').textContent = '🔊 聞いています…';
-      const seq = item.lines.concat([['N', 'Question. ' + item.q]]);
-      speakSeq(seq, () => {
+      status('🔊 聞いています…');
+      speakSeq(it.lines, () => {
         const w = document.getElementById('ekWave'); if (w) w.classList.remove('on');
         if (!document.getElementById('ekQ')) return;
         btn.disabled = false; btn.textContent = '🔁 もう一度 (練習用)';
-        if (plays === 1) showQ();
+        if (plays === 1) askQ();
       });
     };
   }

@@ -144,9 +144,13 @@
   window.EIKEN_ADD_LISTEN = function (level, rows) {
     const name = level === 'p1' ? 'EIKEN_P1_LISTEN' : 'EIKEN_G2_LISTEN';
     const dst = level === 'p1' ? (window.EIKEN_P1_LISTEN = window.EIKEN_P1_LISTEN || []) : EIKEN_G2_LISTEN;
-    rows.forEach(r => { const a = r.split('|'); if (a.length !== 8) { console.warn('EIKEN_ADD_LISTEN bad row', r); return; }
+    // 1지문 복수설문: 'part|lines|Q1|正解|誤|誤|誤|解説|Q2|正解|誤|誤|誤|解説'
+    rows.forEach(r => { const a = r.split('|'); if (a.length < 8 || (a.length - 2) % 6) { console.warn('EIKEN_ADD_LISTEN bad row', r); return; }
       const lines = a[1].split('~').map(l => { const m = l.match(/^([WMN]):\s*(.*)$/); return m ? [m[1], m[2]] : ['N', l]; });
-      dst.push({ part: +a[0], lines: lines, q: a[2], options: [a[3], a[4], a[5], a[6]], answer: 0, exp: a[7] }); });
+      const qs = []; for (let i = 2; i < a.length; i += 6) qs.push({ q: a[i], options: [a[i + 1], a[i + 2], a[i + 3], a[i + 4]], answer: 0, exp: a[i + 5] });
+      const it = { part: +a[0], lines: lines, q: qs[0].q, options: qs[0].options, answer: 0, exp: qs[0].exp };
+      if (qs.length > 1) it.qs = qs;
+      dst.push(it); });
   };
   window.EIKEN_P1_READING = window.EIKEN_P1_READING || [];
   window.EIKEN_P1_WRITE = window.EIKEN_P1_WRITE || [];
