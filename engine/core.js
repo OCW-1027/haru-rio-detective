@@ -261,6 +261,10 @@ const State = {
 // ============================================================
 const SAVE_KEY = 'haruRioGameSave_v6';
 
+// v2: true 이면 모든 시리즈의 사건·장을 처음부터 자유롭게 선택 (순서 잠금 해제).
+//     다시 순서대로 풀게 하려면 false 로 바꾼다. (게임 탭의 토큰 잠금은 별개)
+const UNLOCK_ALL = true;
+
 function saveState() {
   try {
     const data = {

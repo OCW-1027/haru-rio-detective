@@ -47,7 +47,7 @@ const CaseEngine = (function () {
       const comingSoon = s.comingSoon;
       // 잠금 조건: 이전 장 클리어 + 준비완료 사건만
       let locked = false;
-      if (i > 0) {
+      if (i > 0 && !UNLOCK_ALL) {
         // 이전 장이 comingSoon이거나 클리어 안 했으면 잠금
         const prev = STORY[i - 1];
         if (prev.comingSoon || !State[cfg.clearedKey][i - 1]) locked = true;

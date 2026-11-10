@@ -69,7 +69,7 @@ function buildChapterGrid() {
   if (State.currentTab === 'story') {
     STORY.forEach((ch, i) => {
       // v27: 이전 장 클리어 + 이전 장 관문 통과(15장은 14장까지)가 조건
-      const locked = i > 0 && (!State.cleared[i - 1] || !State.gateCleared[i - 1]);
+      const locked = !UNLOCK_ALL && i > 0 && (!State.cleared[i - 1] || !State.gateCleared[i - 1]);
       const cleared = State.cleared[i];
       const gateCleared = State.gateCleared[i];
       const card = document.createElement('div');

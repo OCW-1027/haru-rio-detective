@@ -89,7 +89,7 @@ function buildScientistsGrid(grid) {
     const cleared = State.scientistsCleared[i];
     const comingSoon = s.comingSoon;
     let locked = false;
-    if (i > 0) {
+    if (i > 0 && !UNLOCK_ALL) {
       const prev = SCIENTISTS_STORY[i - 1];
       if (prev.comingSoon || !State.scientistsCleared[i - 1]) locked = true;
     }
