@@ -1,0 +1,86 @@
+/* styles/world.css — コラドン航空 世界追跡 */
+.world-page { background: linear-gradient(180deg, #e8f1fb 0%, #fbf6ea 100%); overflow-y: auto; padding: 0 0 48px; }
+.wc-wrap { width: 100%; max-width: 820px; margin: 0 auto; padding: 64px 16px 0; }
+.wc-exit { position: absolute; top: 14px; left: 14px; z-index: 5; }
+.wc-hero { display: flex; align-items: center; gap: 14px; background: linear-gradient(135deg, #1d4e89, #3a7bc8); color: #fff; border-radius: 22px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(29,78,137,.25); }
+.wc-hero img { width: 104px; flex-shrink: 0; filter: drop-shadow(0 4px 6px rgba(0,0,0,.25)); }
+.wc-hero p { font-family: 'Klee One'; font-size: 13px; margin: 6px 0 0; line-height: 1.6; }
+.wc-kicker { font-family: 'Klee One'; font-size: 13px; opacity: .85; }
+.wc-h1 { font-family: 'RocknRoll One'; font-size: 32px; margin: 0; }
+.wc-stats { margin: 12px 0; font-family: 'Klee One'; font-size: 14px; color: #1d4e89; }
+.wc-stats b { font-family: 'RocknRoll One'; font-size: 18px; }
+.wc-cases { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.wc-case { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 16px; border: 2px solid #cfdcef; background: #fff; text-align: left; cursor: pointer; box-shadow: 0 3px 0 #cfdcef; }
+.wc-case-t { display: flex; flex-direction: column; gap: 2px; }
+.wc-case-t b { font-family: 'RocknRoll One'; font-size: 15px; color: #1f2f4c; }
+.wc-case-t small { font-family: 'Klee One'; font-size: 12px; color: #6a7a8a; }
+.wc-stars { font-size: 14px; color: #e0a020; letter-spacing: 1px; }
+.wc-stars.big { font-size: 30px; }
+.wc-note { margin-top: 14px; font-family: 'Klee One'; font-size: 12px; color: #5a6a7a; background: rgba(255,255,255,.7); border-radius: 12px; padding: 10px 12px; }
+.wc-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.wc-back { border: 2px solid #cfdcef; background: #fff; border-radius: 999px; padding: 6px 12px; font-family: 'RocknRoll One'; font-size: 13px; color: #1d4e89; cursor: pointer; flex-shrink: 0; }
+.wc-title { font-family: 'RocknRoll One'; font-size: 17px; color: #1f2f4c; }
+.wc-sub { font-family: 'Klee One'; font-size: 12px; color: #6a7a9a; }
+.wc-box { background: #fff; border-radius: 18px; padding: 14px 16px; border: 2px solid #cfdcef; margin-bottom: 12px; font-family: 'Klee One'; font-size: 14px; color: #2c3e50; line-height: 1.7; }
+.wc-center { text-align: center; }
+.wc-small { font-size: 12px; color: #6a7a8a; }
+.wc-big { font-size: 48px; }
+.wc-talk { display: flex; gap: 12px; align-items: flex-start; }
+.wc-talk img { width: 72px; flex-shrink: 0; }
+.wc-talk p { margin: 4px 0; }
+.wc-city-n { font-family: 'RocknRoll One'; font-size: 20px; color: #1d4e89; }
+.wc-city-n small { font-family: 'Klee One'; font-size: 13px; color: #6a7a9a; }
+.wc-fact { margin-top: 4px; }
+.wc-map { display: block; width: 100%; height: auto; border-radius: 16px; border: 2px solid #cfdcef; margin-bottom: 12px; background: #bfe0f5; }
+.wc-sea { fill: #bfe0f5; }
+.wc-land { fill: #f2e6c9; stroke: #b9a77f; stroke-width: .6; }
+.wc-border { fill: none; stroke: #c9b78f; stroke-width: .5; }
+.wc-trail { stroke: #1d4e89; stroke-width: 2.5; stroke-dasharray: 6 5; opacity: .7; }
+.wc-fly { stroke: #e05a2a; stroke-width: 3; stroke-dasharray: 8 6; animation: wcDash 1.2s linear infinite; }
+@keyframes wcDash { to { stroke-dashoffset: -28; } }
+.wc-here circle { fill: #e05a2a; stroke: #fff; stroke-width: 3; }
+.wc-here text, .wc-opt text { font-family: "RocknRoll One"; text-anchor: middle; paint-order: stroke; stroke: #fff; }
+.wc-here text { fill: #b33a14; }
+.wc-opt { cursor: pointer; }
+.wc-opt circle { fill: #1d4e89; stroke: #fff; stroke-width: 2.5; }
+.wc-opt .wc-hit { fill: rgba(29,78,137,.15); stroke: none; }
+.wc-opt text { fill: #1d4e89; }
+.wc-h2 { font-family: 'RocknRoll One'; font-size: 15px; color: #1f2f4c; margin: 6px 0 8px; }
+.wc-wits { display: grid; gap: 8px; margin-bottom: 12px; }
+.wc-wit { background: #fff; border: 2px solid #cfdcef; border-radius: 14px; padding: 8px 10px; }
+.wc-wit.open { border-color: #9cc0e6; background: #f6faff; }
+.wc-wit-b { border: none; background: transparent; font-family: 'RocknRoll One'; font-size: 14px; color: #1d4e89; cursor: pointer; padding: 4px 0; }
+.wc-jaq { font-family: 'Klee One'; font-size: 15px; color: #2c3e50; line-height: 1.7; }
+.wc-en { font-family: Georgia, serif; font-size: 16px; color: #1f2f4c; line-height: 1.6; user-select: text; }
+.wc-ja { font-family: 'Klee One'; font-size: 13px; color: #5a6a7a; margin-top: 4px; }
+.wc-mini { border: none; background: #e6eef9; border-radius: 8px; padding: 2px 8px; font-size: 14px; cursor: pointer; }
+.wc-known { background: #fffaf0; border-color: #ecd9a8; }
+.wc-primary, .wc-secondary { display: block; width: 100%; margin-top: 10px; padding: 13px 16px; border-radius: 14px; font-family: 'RocknRoll One'; font-size: 16px; cursor: pointer; }
+.wc-primary { border: none; background: #1d4e89; color: #fff; box-shadow: 0 4px 0 #123563; }
+.wc-primary:disabled { opacity: .45; cursor: default; }
+.wc-secondary { border: 2px solid #1d4e89; background: #fff; color: #1d4e89; }
+.wc-dests, .wc-tz { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.wc-dest { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px; border-radius: 14px; border: 2px solid #cfdcef; background: #fff; cursor: pointer; font-family: 'RocknRoll One'; font-size: 15px; color: #1f2f4c; }
+.wc-dest small { font-family: 'Klee One'; font-size: 12px; color: #6a7a8a; }
+.wc-dest:disabled { opacity: .4; cursor: default; }
+.wc-dest.ok { background: #d8f0dc; border-color: #4f9a5a; }
+.wc-dest.ng { background: #f7d6d3; border-color: #c4625e; }
+.wc-plane { font-size: 44px; animation: wcPlane 1.4s ease-in-out; }
+@keyframes wcPlane { from { transform: translateX(-60px) rotate(-10deg); opacity: .3; } to { transform: translateX(60px) rotate(0); opacity: 1; } }
+.wc-fb { margin-top: 10px; border-radius: 12px; padding: 10px 12px; font-family: 'Klee One'; font-size: 14px; }
+.wc-fb.ok { background: #eaf6ec; border: 2px solid #9fd0a7; }
+.wc-fb.ng { background: #fbecea; border: 2px solid #e2aaa5; }
+.wc-sus { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.wc-su { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: 16px; border: 2px solid #cfdcef; background: #fff; cursor: pointer; }
+.wc-su small { font-family: 'Klee One'; font-size: 11px; color: #3a4a5c; text-align: center; }
+.wc-su:disabled { opacity: .35; }
+.wc-sum { margin: 6px 0 0; padding-left: 18px; font-size: 13px; }
+@media (max-width: 520px) { .wc-hero img { width: 78px; } .wc-h1 { font-size: 26px; } }
+/* ハブの 新しい 冒険 */
+.hub-new { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; margin-bottom: 8px; }
+.hub-new-btn { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 16px; border: 2px solid #9cc0e6; background: linear-gradient(135deg, #fff, #eef5ff); text-align: left; cursor: pointer; box-shadow: 0 3px 0 #9cc0e6; }
+.hub-new-btn img { width: 54px; }
+.hub-new-btn b { display: block; font-family: 'RocknRoll One'; font-size: 15px; color: #1d4e89; }
+.hub-new-btn small { font-family: 'Klee One'; font-size: 12px; color: #5a6a7a; }
+.hub-new-btn.off { opacity: .55; cursor: default; }
+.hub-new-btn .tag { display: inline-block; font-family: 'RocknRoll One'; font-size: 10px; background: #e05a2a; color: #fff; border-radius: 999px; padding: 1px 7px; margin-left: 4px; vertical-align: middle; }

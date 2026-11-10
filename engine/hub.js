@@ -88,6 +88,14 @@ const Hub = (function () {
     }
     h += '</section>';
 
+    // 새 콘텐츠 (시즌1)
+    const wd = (State.v2 && State.v2.world && State.v2.world.cleared) || {};
+    h += '<h2 class="hub-h">✨ 新しい 冒険</h2><section class="hub-new">';
+    h += '<button class="hub-new-btn" id="hubWorld"><img src="' + KORADON + '" alt=""><span><b>✈ コラドン航空 世界追跡<span class="tag">NEW</span></b><small>怪盗を 追って 世界を 飛ぼう · 解決 ' + Object.keys(wd).length + ' / 6</small></span></button>';
+    h += '<button class="hub-new-btn off" disabled><span style="font-size:40px">🌤</span><span><b>お天気予報チャレンジ</b><small>準備中</small></span></button>';
+    h += '<button class="hub-new-btn off" disabled><span style="font-size:40px">🧪</span><span><b>ラボ探偵</b><small>準備中</small></span></button>';
+    h += '</section>';
+
     // 사건 파일
     h += '<h2 class="hub-h">🗂 事件ファイル</h2><section class="hub-cases">';
     list.forEach(c => {
@@ -120,6 +128,8 @@ const Hub = (function () {
     root.querySelectorAll('[data-study]').forEach(b => {
       b.onclick = () => { sfx('click'); STUDY.find(s => s.id === b.dataset.study).go(); };
     });
+    const hw = document.getElementById('hubWorld');
+    if (hw) hw.onclick = () => { sfx('click'); WorldChase.open(); };
     const rv = document.getElementById('hubReview');
     if (rv) rv.onclick = () => { sfx('click'); ReviewEngine.open(null, build); };
   }
