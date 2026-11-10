@@ -135,12 +135,12 @@ const Eiken = (function () {
     h += '<div class="ek-row2"><button class="ek-secondary" data-go="quiz">⚡ 10問 クイズ</button><button class="ek-secondary" data-go="wlist">📋 単語リスト</button></div></div>';
 
     const g2 = level === 'g2';
-    const P1 = g2 ? EIKEN_G2_PART1 : (typeof EIKEN_P1_PART1 !== 'undefined' ? EIKEN_P1_PART1 : []);
+    const P1 = SET('p1'); const n = k => SET(k).length;
     const C = [
       { go: 'p1', icon: '✏️', name: '大問1 語句空所補充', sub: P1.length ? P1.length + '問 · 正答率 ' + rate(e[g2 ? 'p1' : 'pp1'] || {}) : '準備中', ok: P1.length > 0 },
-      { go: 'listen', icon: '🎧', name: 'リスニング', sub: g2 ? EIKEN_G2_LISTEN.length + '問 · 会話と 説明文' : '準備中', ok: g2 },
-      { go: 'write', icon: '📝', name: 'ライティング', sub: g2 ? '要約 · 意見論述 ' + EIKEN_G2_WRITE.length + '題' : '準備中', ok: g2 },
-      { go: 'read', icon: '📖', name: '長文読解', sub: g2 ? '大問2 空所補充 · 大問3 内容一致 ' + EIKEN_G2_READING.length + '題' : '準備中', ok: g2 },
+      { go: 'listen', icon: '🎧', name: 'リスニング', sub: n('listen') ? n('listen') + '問 · 正答率 ' + rate(REC('listen')) : '準備中', ok: n('listen') > 0 },
+      { go: 'write', icon: '📝', name: 'ライティング', sub: n('write') ? '要約 · 意見論述 ' + n('write') + '題' : '準備中', ok: n('write') > 0 },
+      { go: 'read', icon: '📖', name: '長文読解', sub: n('read') ? '空所補充 · 内容一致 ' + n('read') + '題' : '準備中', ok: n('read') > 0 },
       { icon: '🎤', name: '面接 (二次)', sub: '準備中', ok: false },
       { icon: '⏱', name: '模擬試験', sub: '準備中', ok: false },
     ];
@@ -254,6 +254,12 @@ const Eiken = (function () {
 
   // ---------- 大問1 ----------
   let pq = null;
+  function SET(kind) {
+    const g = { p1: 'EIKEN_G2_PART1', listen: 'EIKEN_G2_LISTEN', read: 'EIKEN_G2_READING', write: 'EIKEN_G2_WRITE' }[kind];
+    const n = level === 'p1' ? g.replace('G2', 'P1') : g;
+    try { const v = eval(n); return Array.isArray(v) ? v : []; } catch (e) { return []; }
+  }
+  function REC(kind) { const e = data(); const k = level === 'p1' ? 'p_' + kind : kind; return e[k] || (e[k] = {}); }
   function P1SET() { return level === 'p1' ? (typeof EIKEN_P1_PART1 !== 'undefined' ? EIKEN_P1_PART1 : []) : EIKEN_G2_PART1; }
   function P1REC() { const e = data(); return level === 'p1' ? (e.pp1 || (e.pp1 = {})) : e.p1; }
   function part1() {
@@ -297,15 +303,20 @@ const Eiken = (function () {
 
   // ---------- リスニング ----------
   let lq = null;
-  function listen() { lq = { list: shuffle(EIKEN_G2_LISTEN.map((x, i) => i)), i: 0, ok: 0 }; listenQ(); }
+  function listen() {
+    const rec = REC('listen');
+    const score = i => { const r = rec[i]; return r ? (r[1] * 2 - r[0]) : 5; };
+    const pick = shuffle(SET('listen').map((x, i) => i)).sort((a, b) => score(b) - score(a)).slice(0, 10);
+    lq = { list: shuffle(pick), i: 0, ok: 0 }; listenQ();
+  }
   function listenQ() {
     const root = area();
     if (lq.i >= lq.list.length) {
-      root.innerHTML = header('リスニング', '結果') + '<div class="ek-box ek-center"><div class="ek-big">🎧</div><p>' + lq.list.length + '問中 <b>' + lq.ok + '</b>問 正解</p><button class="ek-primary" data-go="listen">もう一度</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
+      root.innerHTML = header('リスニング', '結果') + '<div class="ek-box ek-center"><div class="ek-big">🎧</div><p>' + lq.list.length + '問中 <b>' + lq.ok + '</b>問 正解</p><button class="ek-primary" data-go="listen">次の 10問</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
       return bindGo(root);
     }
-    const li = lq.list[lq.i], item = EIKEN_G2_LISTEN[li];
-    let h = header('リスニング', (lq.i + 1) + ' / ' + lq.list.length + ' ・ Part ' + item.part + (item.part === 1 ? ' 会話' : ' 説明文'));
+    const li = lq.list[lq.i], item = SET('listen')[li];
+    let h = header('リスニング', (lq.i + 1) + ' / ' + lq.list.length + ' ・ Part ' + item.part + (item.part === 1 ? ' 会話' : item.part === 3 ? ' Real-Life' : ' 説明文'));
     h += '<div class="ek-box ek-center"><div class="ek-listen-ico" id="ekWave">🎧</div><p class="ek-small" id="ekStatus">▶ を 押して 英語を 聞こう (本番は 1回 だけ!)</p>';
     h += '<button class="ek-primary" id="ekPlay">▶ 再生</button></div><div id="ekQ"></div>';
     root.innerHTML = h; bindGo(root);
@@ -313,22 +324,22 @@ const Eiken = (function () {
     const showQ = () => {
       document.getElementById('ekStatus').textContent = 'Question: ' + item.q;
       let qh = '<div class="ek-opts">';
-      item.options.forEach((o, k) => { qh += '<button class="ek-opt" data-k="' + k + '">' + (k + 1) + '. ' + esc(o) + '</button>'; });
+      shuffle(item.options.map((o, k) => k)).forEach((k, j) => { qh += '<button class="ek-opt" data-k="' + k + '">' + (j + 1) + '. ' + esc(item.options[k]) + '</button>'; });
       qh += '</div><div id="ekFb"></div>';
       document.getElementById('ekQ').innerHTML = qh;
       let done = false;
       root.querySelectorAll('#ekQ .ek-opt').forEach(b => b.onclick = () => {
         if (done) return; done = true; stopSpeak();
         const ok = +b.dataset.k === item.answer;
-        root.querySelectorAll('#ekQ .ek-opt').forEach((x, k) => { x.disabled = true; if (k === item.answer) x.classList.add('ok'); });
+        root.querySelectorAll('#ekQ .ek-opt').forEach(x => { x.disabled = true; if (+x.dataset.k === item.answer) x.classList.add('ok'); });
         if (!ok) b.classList.add('ng');
         sfx(ok ? 'unlock' : 'wrong');
-        const e = data(); const r = e.listen[li] || [0, 0]; r[ok ? 0 : 1]++; e.listen[li] = r; save();
+        const rec = REC('listen'); const r = rec[li] || [0, 0]; r[ok ? 0 : 1]++; rec[li] = r; save();
         if (ok) lq.ok++;
         let sc = '<div class="ek-script"><div class="ek-script-h">📜 スクリプト</div>';
         item.lines.forEach(l => { sc += '<p><b>' + ({ W: '★', M: '☆', N: '' }[l[0]]) + '</b>' + esc(l[1]) + '</p>'; });
         sc += '<p class="ek-script-q">Q: ' + esc(item.q) + '</p></div>';
-        document.getElementById('ekFb').innerHTML = '<div class="ek-fb ' + (ok ? 'ok' : 'ng') + '"><div class="ek-fb-h">' + (ok ? '🎉 正解!' : '✗ 正解は ' + (item.answer + 1) + '番') + '</div><div class="ek-fb-exp">💡 ' + esc(item.exp) + '</div></div>' + sc +
+        document.getElementById('ekFb').innerHTML = '<div class="ek-fb ' + (ok ? 'ok' : 'ng') + '"><div class="ek-fb-h">' + (ok ? '🎉 正解!' : '✗ 正解は 「' + esc(item.options[item.answer]) + '」') + '</div><div class="ek-fb-exp">💡 ' + esc(item.exp) + '</div></div>' + sc +
           '<button class="ek-secondary" id="ekAgain">🔁 もう一度 聞く</button><button class="ek-primary" id="ekNext">次へ →</button>';
         document.getElementById('ekAgain').onclick = () => speakSeq(item.lines);
         document.getElementById('ekNext').onclick = () => { stopSpeak(); lq.i++; listenQ(); };
@@ -354,7 +365,7 @@ const Eiken = (function () {
     const e = data();
     let h = header('長文読解', '大問2 (空所補充) · 大問3 (内容一致)');
     h += '<div class="ek-grid">';
-    EIKEN_G2_READING.forEach((r, i) => {
+    SET('read').forEach((r, i) => {
       const done = e.read[r.id];
       h += '<button class="ek-card" data-r="' + i + '"><span class="ek-card-icon">' + (r.type === 'cloze' ? '🧩' : '🔎') + '</span><span class="ek-card-name">' + esc(r.title) + '</span><span class="ek-card-sub">' + (r.type === 'cloze' ? '大問2 空所補充' : '大問3 内容一致') + (done ? ' ・ 前回 ' + done[0] + '/' + done[1] : '') + '</span></button>';
     });
@@ -363,7 +374,7 @@ const Eiken = (function () {
     area().querySelectorAll('[data-r]').forEach(b => b.onclick = () => { sfx('click'); readTask(+b.dataset.r); });
   }
   function readTask(ri) {
-    const r = EIKEN_G2_READING[ri];
+    const r = SET('read')[ri];
     let h = header(esc(r.title), r.type === 'cloze' ? '大問2: 文中の ( ) に 入る ものを 選ぼう' : '大問3: 内容に 合う ものを 選ぼう');
     h += '<div class="ek-box ek-read">';
     r.paragraphs.forEach(p => { h += '<p class="ek-passage">' + esc(p).replace(/\((\d)\)/g, '<span class="ek-blank">( $1 )</span>') + '</p>'; });
@@ -399,9 +410,9 @@ const Eiken = (function () {
   // ---------- ライティング ----------
   function wordCount(t) { return (t.trim().match(/[A-Za-z0-9’'-]+/g) || []).length; }
   function writeList() {
-    let h = header('ライティング', '2級: 要約 1題 + 意見論述 1題 (各16点)');
+    let h = header('ライティング', level === 'p1' ? '準1級: 要約 1題 (60〜70語) + 意見論述 1題 (120〜150語)' : '2級: 要約 1題 + 意見論述 1題 (各16点)');
     h += '<div class="ek-grid">';
-    EIKEN_G2_WRITE.forEach((w, i) => {
+    SET('write').forEach((w, i) => {
       const saved = data().write[w.id];
       h += '<button class="ek-card" data-w="' + i + '"><span class="ek-card-icon">' + (w.type === 'summary' ? '🗜' : '💭') + '</span><span class="ek-card-name">' + esc(w.title) + '</span><span class="ek-card-sub">' + (saved ? '✍ ' + wordCount(saved) + '語 書いた' : w.min + '〜' + w.max + '語') + '</span></button>';
     });
@@ -410,7 +421,7 @@ const Eiken = (function () {
     area().querySelectorAll('[data-w]').forEach(b => b.onclick = () => { sfx('click'); writeTask(+b.dataset.w); });
   }
   function writeTask(i) {
-    const w = EIKEN_G2_WRITE[i], e = data();
+    const w = SET('write')[i], e = data();
     let h = header(esc(w.title), w.type === 'summary' ? '要約問題' : '意見論述');
     h += '<div class="ek-box">';
     if (w.type === 'summary') w.passage.forEach(p => { h += '<p class="ek-passage">' + esc(p) + '</p>'; });

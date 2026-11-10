@@ -133,4 +133,21 @@
   ];
   if (typeof EIKEN_G2_PART1 !== 'undefined') G2.forEach(a => EIKEN_G2_PART1.push(mk(a)));
   window.EIKEN_P1_PART1 = P1.map(mk);
+  // 문제은행 파일 (data/eiken-bank-*.js) 용: 'タグ|問題文|正解|誤1|誤2|誤3|日本語訳|解説'
+  window.EIKEN_ADD = function (level, rows) {
+    const T = { v: '語彙', n: '語彙', a: '語彙', i: '熟語', g: '文法' };
+    const dst = level === 'p1' ? window.EIKEN_P1_PART1 : EIKEN_G2_PART1;
+    rows.forEach(r => { const a = r.split('|'); if (a.length !== 8) { console.warn('EIKEN_ADD bad row', r); return; }
+      dst.push({ q: a[1], options: [a[2], a[3], a[4], a[5]], answer: 0, ja: a[6], exp: a[7], tag: T[a[0]] || a[0] }); });
+  };
+  // リスニング: 'part|W:台詞~M:台詞~N:ナレーション|質問|正解|誤1|誤2|誤3|解説'
+  window.EIKEN_ADD_LISTEN = function (level, rows) {
+    const name = level === 'p1' ? 'EIKEN_P1_LISTEN' : 'EIKEN_G2_LISTEN';
+    const dst = level === 'p1' ? (window.EIKEN_P1_LISTEN = window.EIKEN_P1_LISTEN || []) : EIKEN_G2_LISTEN;
+    rows.forEach(r => { const a = r.split('|'); if (a.length !== 8) { console.warn('EIKEN_ADD_LISTEN bad row', r); return; }
+      const lines = a[1].split('~').map(l => { const m = l.match(/^([WMN]):\s*(.*)$/); return m ? [m[1], m[2]] : ['N', l]; });
+      dst.push({ part: +a[0], lines: lines, q: a[2], options: [a[3], a[4], a[5], a[6]], answer: 0, exp: a[7] }); });
+  };
+  window.EIKEN_P1_READING = window.EIKEN_P1_READING || [];
+  window.EIKEN_P1_WRITE = window.EIKEN_P1_WRITE || [];
 })();
