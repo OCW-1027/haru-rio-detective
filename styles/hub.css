@@ -16,7 +16,7 @@
 .hub-hero-char.rio { right: 30px; height: 250px; }
 .hub-hero-spirit { position: absolute; z-index: 2; width: 74px; animation: hubFloat 3.2s ease-in-out infinite; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
 .hub-hero-spirit.kd { right: 268px; top: 70px; }
-.hub-hero-spirit.kr { right: 8px; top: 28px; animation-delay: -1.6s; }
+.hub-hero-spirit.kr { right: 330px; top: 150px; animation-delay: -1.6s; }
 @keyframes hubFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
 .hub-today { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0 6px; }
@@ -56,7 +56,8 @@
   .hub-hero-char.haru { right: 92px; }
   .hub-hero-char.rio { right: 4px; height: 182px; }
   .hub-hero-spirit { width: 54px; }
-  .hub-hero-spirit.kd { right: 180px; top: 96px; }
+  .hub-hero-spirit.kd { right: 240px; top: 178px; }
+  .hub-hero-spirit.kr { right: 182px; top: 186px; }
   .hub-cases { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .hub-case-name { font-size: 13px; }
   .hub-study { grid-template-columns: repeat(2, 1fr); }
