@@ -14,18 +14,39 @@ const Eiken = (function () {
   };
 
   // ---------- 데이터 ----------
+  const POS = [
+    { id: 'all', name: 'すべて', icon: '📚' },
+    { id: 'v', name: '動詞', icon: '🏃' },
+    { id: 'n', name: '名詞', icon: '📦' },
+    { id: 'a', name: '形容詞·副詞', icon: '🎨' },
+    { id: 'i', name: '熟語', icon: '🔗' },
+  ];
+  const POS_NAME = { v: '動詞', n: '名詞', a: '形容詞·副詞', i: '熟語' };
   function words(level) {
     const has = n => { try { return Array.isArray(eval(n)); } catch (e) { return false; } };
-    const pick = names => names.filter(has).flatMap(n => eval(n).map(w => ({ en: w.en, ja: w.ja })));
-    const g2 = ['G2_VERBS', 'G2_NOUNS', 'G2_ADJADV', 'G2_VERBS_PLUS', 'G2_NOUNS_PLUS', 'G2_ADJADV_PLUS',
-      'G2_VERBS_PLUS2', 'G2_VERBS_PLUS3', 'G2_NOUNS_PLUS2', 'G2_NOUNS_PLUS3', 'G2_ADJADV_PLUS2', 'G2_ADJADV_PLUS3',
-      'IDIOMS_G2', 'IDIOMS_G2_PLUS'];
-    const p1 = ['G_PRE1_WORDS', 'G_PRE1_WORDS_PLUS', 'G_PRE1_WORDS_PLUS2', 'G_PRE1_WORDS_PLUS3'];
-    const seen = new Set();
-    return pick(level === 'p1' ? p1 : g2).filter(w => w.en && !seen.has(w.en) && seen.add(w.en));
+    const out = [], seen = new Set();
+    const add = (en, ja, pos) => { if (!en || seen.has(en)) return; seen.add(en); out.push({ en: en, ja: ja, pos: pos }); };
+    if (level === 'p1') {
+      const P = typeof EIKEN_P1_POS !== 'undefined' ? EIKEN_P1_POS : { v: '', a: '' };
+      const V = new Set(P.v.split(' ')), A = new Set(P.a.split(' '));
+      ['G_PRE1_WORDS', 'G_PRE1_WORDS_PLUS', 'G_PRE1_WORDS_PLUS2', 'G_PRE1_WORDS_PLUS3'].filter(has)
+        .forEach(n => eval(n).forEach(w => add(w.en, w.ja, V.has(w.en) ? 'v' : A.has(w.en) ? 'a' : (/ /.test(w.en) ? 'i' : 'n'))));
+    } else {
+      const G = { v: ['G2_VERBS', 'G2_VERBS_PLUS', 'G2_VERBS_PLUS2', 'G2_VERBS_PLUS3'],
+        n: ['G2_NOUNS', 'G2_NOUNS_PLUS', 'G2_NOUNS_PLUS2', 'G2_NOUNS_PLUS3'],
+        a: ['G2_ADJADV', 'G2_ADJADV_PLUS', 'G2_ADJADV_PLUS2', 'G2_ADJADV_PLUS3'],
+        i: ['IDIOMS_G2', 'IDIOMS_G2_PLUS'] };
+      Object.keys(G).forEach(p => G[p].filter(has).forEach(n => eval(n).forEach(w => add(w.en, w.ja, p))));
+    }
+    const X = typeof EIKEN_WORDS !== 'undefined' && EIKEN_WORDS[level];
+    if (X) Object.keys(X).forEach(p => X[p].forEach(s => { const k = s.indexOf('|'); add(s.slice(0, k), s.slice(k + 1), p); }));
+    return out;
   }
   let cache = {};
-  function wordList(level) { return cache[level] || (cache[level] = words(level)); }
+  function wordList(level, pos) {
+    const all = cache[level] || (cache[level] = words(level));
+    return !pos || pos === 'all' ? all : all.filter(w => w.pos === pos);
+  }
 
   function data() {
     if (!State.v2) State.v2 = {};
@@ -81,31 +102,42 @@ const Eiken = (function () {
   function bindGo(root) {
     root.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { sfx('click'); stopSpeak(); go(b.dataset.go); });
   }
-  function go(v) { view = v; ({ home: home, vocab: vocab, p1: part1, listen: listen, write: writeList, read: readList }[v] || home)(); const p = document.getElementById('pageEiken'); if (p) p.scrollTop = 0; }
+  function go(v) { view = v; ({ home: home, vocab: vocab, quiz: quiz, wlist: wlist, p1: part1, listen: listen, write: writeList, read: readList }[v] || home)(); const p = document.getElementById('pageEiken'); if (p) p.scrollTop = 0; }
 
   // ---------- 홈 ----------
-  function vocabStats(lv) {
-    const e = data(), list = wordList(lv), t = Date.now();
+  let pos = 'all';
+  function newLeftToday(e) { return Math.max(0, NEW_PER_DAY + (e.newDay.bonus || 0) - e.newDay.n); }
+  function vocabStats(lv, p) {
+    const e = data(), list = wordList(lv, p), t = Date.now();
     let mastered = 0, learning = 0, due = 0;
     list.forEach(w => { const s = e.srs[lv + ':' + w.en]; if (!s) return; if (s[0] >= MASTER_BOX) mastered++; else learning++; if (s[1] <= t) due++; });
     return { total: list.length, mastered: mastered, learning: learning, due: due, fresh: list.length - mastered - learning };
   }
   function rate(obj) { let ok = 0, ng = 0; Object.values(obj).forEach(r => { ok += r[0]; ng += r[1]; }); return ok + ng ? Math.round(ok * 100 / (ok + ng)) + '%' : '—'; }
+  function pct(a, b) { return b ? (a * 100 / b).toFixed(1) : 0; }
   function home() {
-    const e = data(), vs = vocabStats(level);
-    const newLeft = Math.max(0, NEW_PER_DAY - e.newDay.n);
+    const e = data(), vs = vocabStats(level, pos);
+    const newLeft = newLeftToday(e);
     let h = '<div class="ek-hero"><div><div class="ek-kicker">コラドン&コラリンの</div><h1 class="ek-h1">英検道場</h1>';
     h += '<div class="ek-levels"><button class="ek-lv' + (level === 'g2' ? ' on' : '') + '" data-lv="g2">2級</button><button class="ek-lv' + (level === 'p1' ? ' on' : '') + '" data-lv="p1">準1級</button></div></div>';
     h += '<img src="assets/img/chars/spirits/korarin_greet_01.webp" alt=""></div>';
 
-    h += '<div class="ek-today"><div class="ek-today-h">きょうの 単語</div>';
+    h += '<div class="ek-today"><div class="ek-today-h">単語トレーニング <span class="ek-today-all">' + (level === 'g2' ? '2級' : '準1級') + ' 全 ' + wordList(level).length + '語</span></div>';
+    h += '<div class="ek-pos">';
+    POS.forEach(p => {
+      const st = vocabStats(level, p.id);
+      h += '<button class="ek-pos-b' + (pos === p.id ? ' on' : '') + '" data-pos="' + p.id + '"><span class="ek-pos-n">' + p.icon + ' ' + p.name + '</span><span class="ek-pos-c">' + st.mastered + ' / ' + st.total + '</span><span class="ek-pos-m"><i style="width:' + pct(st.mastered, st.total) + '%"></i></span></button>';
+    });
+    h += '</div>';
     h += '<div class="ek-today-row"><span>🔁 復習 <b>' + vs.due + '</b></span><span>🆕 新しい 単語 <b>' + Math.min(newLeft, vs.fresh) + '</b></span><span>✅ 覚えた <b>' + vs.mastered + '</b> / ' + vs.total + '</span></div>';
-    h += '<div class="ek-meter"><i style="width:' + (vs.mastered * 100 / vs.total).toFixed(1) + '%"></i><i class="l" style="width:' + (vs.learning * 100 / vs.total).toFixed(1) + '%"></i></div>';
-    h += '<button class="ek-primary" data-go="vocab">単語トレーニング 開始 →</button></div>';
+    h += '<div class="ek-meter"><i style="width:' + pct(vs.mastered, vs.total) + '%"></i><i class="l" style="width:' + pct(vs.learning, vs.total) + '%"></i></div>';
+    h += '<button class="ek-primary" data-go="vocab">' + (pos === 'all' ? '' : POS_NAME[pos] + 'を ') + 'トレーニング 開始 →</button>';
+    h += '<div class="ek-row2"><button class="ek-secondary" data-go="quiz">⚡ 10問 クイズ</button><button class="ek-secondary" data-go="wlist">📋 単語リスト</button></div></div>';
 
     const g2 = level === 'g2';
+    const P1 = g2 ? EIKEN_G2_PART1 : (typeof EIKEN_P1_PART1 !== 'undefined' ? EIKEN_P1_PART1 : []);
     const C = [
-      { go: 'p1', icon: '✏️', name: '大問1 語句空所補充', sub: g2 ? EIKEN_G2_PART1.length + '問 · 正答率 ' + rate(e.p1) : '準備中', ok: g2 },
+      { go: 'p1', icon: '✏️', name: '大問1 語句空所補充', sub: P1.length ? P1.length + '問 · 正答率 ' + rate(e[g2 ? 'p1' : 'pp1'] || {}) : '準備中', ok: P1.length > 0 },
       { go: 'listen', icon: '🎧', name: 'リスニング', sub: g2 ? EIKEN_G2_LISTEN.length + '問 · 会話と 説明文' : '準備中', ok: g2 },
       { go: 'write', icon: '📝', name: 'ライティング', sub: g2 ? '要約 · 意見論述 ' + EIKEN_G2_WRITE.length + '題' : '準備中', ok: g2 },
       { go: 'read', icon: '📖', name: '長文読解', sub: g2 ? '大問2 空所補充 · 大問3 内容一致 ' + EIKEN_G2_READING.length + '題' : '準備中', ok: g2 },
@@ -119,58 +151,85 @@ const Eiken = (function () {
     area().innerHTML = h;
     bindGo(area());
     area().querySelectorAll('[data-lv]').forEach(b => b.onclick = () => { sfx('click'); level = b.dataset.lv; home(); });
+    area().querySelectorAll('[data-pos]').forEach(b => b.onclick = () => { sfx('click'); pos = b.dataset.pos; home(); });
   }
 
   // ---------- 単語 (간격반복) ----------
   let vq = null;
   function buildVocabQueue() {
-    const e = data(), list = wordList(level), t = Date.now();
+    const e = data(), list = wordList(level, pos), t = Date.now();
     const due = shuffle(list.filter(w => { const s = e.srs[level + ':' + w.en]; return s && s[1] <= t; })).slice(0, 20);
-    const newLeft = Math.max(0, NEW_PER_DAY - e.newDay.n);
+    const newLeft = newLeftToday(e);
     const fresh = list.filter(w => !e.srs[level + ':' + w.en]).slice(0, Math.min(newLeft, 10));
     return shuffle(due.concat(fresh)).map(w => ({ w: w, retry: false }));
   }
-  function vocab() {
-    vq = { list: buildVocabQueue(), i: 0, ok: 0, ng: 0 };
-    vocabQ();
+  // 퀴즈: SRS 와 별도로 아무 단어나 10문 (이미 본 단어 우선 섞기)
+  function buildQuizQueue() {
+    const e = data(), list = wordList(level, pos);
+    const seen = list.filter(w => e.srs[level + ':' + w.en]);
+    const src = seen.length >= 10 ? shuffle(seen).slice(0, 6).concat(shuffle(list).slice(0, 4)) : shuffle(list).slice(0, 10);
+    const uniq = []; const u = new Set(); src.forEach(w => { if (!u.has(w.en)) { u.add(w.en); uniq.push(w); } });
+    return shuffle(uniq).map(w => ({ w: w, retry: false, quiz: true }));
   }
+  function vocab() { vq = { list: buildVocabQueue(), i: 0, ok: 0, ng: 0, mode: 'srs' }; vocabQ(); }
+  function quiz() { vq = { list: buildQuizQueue(), i: 0, ok: 0, ng: 0, mode: 'quiz' }; vocabQ(); }
+  function sub() { return (level === 'g2' ? '2級' : '準1級') + (pos === 'all' ? '' : ' · ' + POS_NAME[pos]); }
   function vocabQ() {
-    const root = area();
+    const root = area(), e = data();
+    const title = vq.mode === 'quiz' ? '⚡ 単語クイズ' : '単語トレーニング';
     if (!vq.list.length) {
-      root.innerHTML = header('単語トレーニング', level === 'g2' ? '2級' : '準1級') + '<div class="ek-box ek-center"><div class="ek-big">🎉</div><p>きょうの 単語は ぜんぶ 終わりました!<br>また あした 新しい 単語と 復習が 出ます。</p><button class="ek-primary" data-go="home">道場に もどる</button></div>';
-      return bindGo(root);
+      const more = vocabStats(level, pos).fresh > 0;
+      root.innerHTML = header(title, sub()) + '<div class="ek-box ek-center"><div class="ek-big">🎉</div><p>きょうの 単語は ぜんぶ 終わりました!</p>' +
+        (more ? '<button class="ek-primary" id="ekMore">🆕 もっと 新しい 単語 (+10)</button>' : '') +
+        '<button class="ek-secondary" data-go="quiz">⚡ 10問 クイズ</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
+      bindGo(root);
+      const m = document.getElementById('ekMore'); if (m) m.onclick = () => { sfx('click'); e.newDay.bonus = (e.newDay.bonus || 0) + 10; save(); vocab(); };
+      return;
     }
     if (vq.i >= vq.list.length) {
-      root.innerHTML = header('単語トレーニング', '結果') + '<div class="ek-box ek-center"><div class="ek-big">' + (vq.ng ? '👍' : '🏆') + '</div><p>正解 <b>' + vq.ok + '</b> ・ まちがい <b>' + vq.ng + '</b></p><p class="ek-small">まちがえた 単語は 少し あとで また 出てきます。</p><button class="ek-primary" data-go="vocab">もう1セット</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
-      return bindGo(root);
+      const more = vq.mode === 'srs' && vocabStats(level, pos).fresh > 0;
+      root.innerHTML = header(title, '結果') + '<div class="ek-box ek-center"><div class="ek-big">' + (vq.ng ? '👍' : '🏆') + '</div><p>正解 <b>' + vq.ok + '</b> ・ まちがい <b>' + vq.ng + '</b></p><p class="ek-small">まちがえた 単語は 少し あとで また 出てきます。</p>' +
+        '<button class="ek-primary" data-go="' + (vq.mode === 'quiz' ? 'quiz' : 'vocab') + '">もう1セット</button>' +
+        (more ? '<button class="ek-secondary" id="ekMore">🆕 新しい 単語を もっと (+10)</button>' : '') +
+        '<button class="ek-secondary" data-go="home">道場に もどる</button></div>';
+      bindGo(root);
+      const m = document.getElementById('ekMore'); if (m) m.onclick = () => { sfx('click'); e.newDay.bonus = (e.newDay.bonus || 0) + 10; save(); vocab(); };
+      return;
     }
-    const e = data(), item = vq.list[vq.i], w = item.w, key = level + ':' + w.en;
+    const item = vq.list[vq.i], w = item.w, key = level + ':' + w.en;
     const s = e.srs[key] || [0, 0];
-    const reverse = s[0] >= 2 && Math.random() < 0.5;          // 익숙해지면 일→영도 출제
-    const pool = wordList(level).filter(x => x.en !== w.en);
+    // 출제 형식: 영→일 / 일→영 (box≥2) / 듣기 (box≥1)
+    const r = Math.random();
+    const type = s[0] >= 2 && r < 0.35 ? 'ja' : s[0] >= 1 && r > 0.75 ? 'ear' : 'en';
+    const same = wordList(level, w.pos).filter(x => x.en !== w.en);
+    const pool = same.length >= 3 ? same : wordList(level).filter(x => x.en !== w.en);
     const opts = shuffle([w].concat(shuffle(pool).slice(0, 3)));
-    let h = header('単語トレーニング', (vq.i + 1) + ' / ' + vq.list.length + (s[0] ? ' ・ 復習' : ' ・ 🆕 新しい 単語'));
-    h += '<div class="ek-box ek-word"><div class="ek-word-main">' + esc(reverse ? w.ja : w.en) + '</div>';
-    if (!reverse) h += '<button class="ek-speak" id="ekSay">🔊</button>';
-    h += '<div class="ek-word-ask">' + (reverse ? '英語で 言うと?' : '意味は?') + '</div></div>';
-    h += '<div class="ek-opts">';
-    opts.forEach((o, k) => { h += '<button class="ek-opt" data-k="' + k + '">' + esc(reverse ? o.en : o.ja) + '</button>'; });
+    const tag = '<span class="ek-tag">' + POS_NAME[w.pos] + '</span>';
+    let h = header(title, (vq.i + 1) + ' / ' + vq.list.length + (vq.mode === 'quiz' ? '' : s[0] ? ' ・ 復習' : ' ・ 🆕 新しい 単語'));
+    h += '<div class="ek-box ek-word">' + tag;
+    if (type === 'ear') h += '<div class="ek-word-main">🎧</div><button class="ek-speak" id="ekSay">🔊 もう一度</button><div class="ek-word-ask">聞こえた 単語の 意味は?</div>';
+    else h += '<div class="ek-word-main">' + esc(type === 'ja' ? w.ja : w.en) + '</div>' + (type === 'en' ? '<button class="ek-speak" id="ekSay">🔊</button>' : '') + '<div class="ek-word-ask">' + (type === 'ja' ? '英語で 言うと?' : '意味は?') + '</div>';
+    h += '</div><div class="ek-opts">';
+    opts.forEach((o, k) => { h += '<button class="ek-opt" data-k="' + k + '">' + esc(type === 'ja' ? o.en : o.ja) + '</button>'; });
     h += '</div><div id="ekFb"></div>';
-    area().innerHTML = h; bindGo(area());
+    root.innerHTML = h; bindGo(root);
     const say = document.getElementById('ekSay');
     if (say) { say.onclick = () => speak(w.en, 'N'); speak(w.en, 'N'); }
     let done = false;
-    area().querySelectorAll('.ek-opt').forEach(b => b.onclick = () => {
+    root.querySelectorAll('.ek-opt').forEach(b => b.onclick = () => {
       if (done) return; done = true;
       const ok = opts[+b.dataset.k] === w;
-      area().querySelectorAll('.ek-opt').forEach((x, k) => { x.disabled = true; if (opts[k] === w) x.classList.add('ok'); });
+      root.querySelectorAll('.ek-opt').forEach((x, k) => { x.disabled = true; if (opts[k] === w) x.classList.add('ok'); });
       if (!ok) b.classList.add('ng');
       sfx(ok ? 'unlock' : 'wrong');
-      const isNew = !e.srs[key];
-      if (isNew) e.newDay.n++;
-      if (ok && !item.retry) { const nb = Math.min(s[0] + 1, BOX_DAYS.length - 1); e.srs[key] = [nb, Date.now() + BOX_DAYS[nb] * DAY]; vq.ok++; }
-      else if (ok) { e.srs[key] = [1, Date.now() + DAY]; vq.ok++; }
-      else { e.srs[key] = [0, Date.now()]; vq.ng++; vq.list.push({ w: w, retry: true }); }
+      if (vq.mode === 'quiz') {
+        if (ok) vq.ok++; else { vq.ng++; if (e.srs[key]) e.srs[key] = [Math.max(0, s[0] - 1), Date.now()]; }
+      } else {
+        if (!e.srs[key]) e.newDay.n++;
+        if (ok && !item.retry) { const nb = Math.min(s[0] + 1, BOX_DAYS.length - 1); e.srs[key] = [nb, Date.now() + BOX_DAYS[nb] * DAY]; vq.ok++; }
+        else if (ok) { e.srs[key] = [1, Date.now() + DAY]; vq.ok++; }
+        else { e.srs[key] = [0, Date.now()]; vq.ng++; vq.list.push({ w: w, retry: true }); }
+      }
       save();
       speak(w.en, 'N');
       document.getElementById('ekFb').innerHTML = '<div class="ek-fb ' + (ok ? 'ok' : 'ng') + '"><b>' + esc(w.en) + '</b> = ' + esc(w.ja) + '</div><button class="ek-primary" id="ekNext">次へ →</button>';
@@ -178,12 +237,29 @@ const Eiken = (function () {
     });
   }
 
+  // ---------- 単語リスト ----------
+  function wlist() {
+    const e = data(), list = wordList(level, pos);
+    const mark = w => { const s = e.srs[level + ':' + w.en]; return !s ? '' : s[0] >= MASTER_BOX ? '✅' : '🔁'; };
+    let h = header('📋 単語リスト', sub() + ' · ' + list.length + '語');
+    h += '<div class="ek-pos small">';
+    POS.forEach(p => { h += '<button class="ek-pos-b' + (pos === p.id ? ' on' : '') + '" data-pos="' + p.id + '"><span class="ek-pos-n">' + p.icon + ' ' + p.name + '</span></button>'; });
+    h += '</div><p class="ek-small">タップすると 発音を 聞けます。✅ 覚えた · 🔁 練習中</p><div class="ek-wl">';
+    list.forEach((w, i) => { h += '<button class="ek-wl-r" data-i="' + i + '"><span class="ek-wl-m">' + mark(w) + '</span><b>' + esc(w.en) + '</b><span>' + esc(w.ja) + '</span></button>'; });
+    h += '</div>';
+    area().innerHTML = h; bindGo(area());
+    area().querySelectorAll('[data-pos]').forEach(b => b.onclick = () => { sfx('click'); pos = b.dataset.pos; wlist(); });
+    area().querySelectorAll('.ek-wl-r').forEach(b => b.onclick = () => { stopSpeak(); speak(list[+b.dataset.i].en, 'N'); });
+  }
+
   // ---------- 大問1 ----------
   let pq = null;
+  function P1SET() { return level === 'p1' ? (typeof EIKEN_P1_PART1 !== 'undefined' ? EIKEN_P1_PART1 : []) : EIKEN_G2_PART1; }
+  function P1REC() { const e = data(); return level === 'p1' ? (e.pp1 || (e.pp1 = {})) : e.p1; }
   function part1() {
-    const e = data();
-    const idx = EIKEN_G2_PART1.map((q, i) => i);
-    const score = i => { const r = e.p1[i]; return r ? (r[1] * 2 - r[0]) : 5; };   // 미풀이·오답 우선
+    const rec = P1REC();
+    const idx = P1SET().map((q, i) => i);
+    const score = i => { const r = rec[i]; return r ? (r[1] * 2 - r[0]) : 5; };   // 미풀이·오답 우선
     const pick = shuffle(idx).sort((a, b) => score(b) - score(a)).slice(0, 10);
     pq = { list: shuffle(pick), i: 0, ok: 0 };
     part1Q();
@@ -191,10 +267,10 @@ const Eiken = (function () {
   function part1Q() {
     const root = area();
     if (pq.i >= pq.list.length) {
-      root.innerHTML = header('大問1 語句空所補充', '結果') + '<div class="ek-box ek-center"><div class="ek-big">' + (pq.ok >= 8 ? '🏆' : '💪') + '</div><p>' + pq.list.length + '問中 <b>' + pq.ok + '</b>問 正解</p><p class="ek-small">本番の 大問1は 17問。8割 取れれば 合格ペース!</p><button class="ek-primary" data-go="p1">もう10問</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
+      root.innerHTML = header('大問1 語句空所補充', '結果') + '<div class="ek-box ek-center"><div class="ek-big">' + (pq.ok >= 8 ? '🏆' : '💪') + '</div><p>' + pq.list.length + '問中 <b>' + pq.ok + '</b>問 正解</p><p class="ek-small">本番の 大問1は ' + (level === 'p1' ? '18' : '17') + '問。8割 取れれば 合格ペース!</p><button class="ek-primary" data-go="p1">もう10問</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
       return bindGo(root);
     }
-    const qi = pq.list[pq.i], q = EIKEN_G2_PART1[qi];
+    const qi = pq.list[pq.i], q = P1SET()[qi];
     const order = shuffle([0, 1, 2, 3]);
     let h = header('大問1 語句空所補充', (pq.i + 1) + ' / ' + pq.list.length + ' ・ ' + q.tag);
     h += '<div class="ek-box ek-q">' + esc(q.q).replace('( )', '<span class="ek-blank">(　　)</span>') + '</div><div class="ek-opts two">';
@@ -208,7 +284,7 @@ const Eiken = (function () {
       root.querySelectorAll('.ek-opt').forEach(x => { x.disabled = true; if (+x.dataset.o === q.answer) x.classList.add('ok'); });
       if (!ok) b.classList.add('ng');
       sfx(ok ? 'unlock' : 'wrong');
-      const e = data(); const r = e.p1[qi] || [0, 0]; r[ok ? 0 : 1]++; e.p1[qi] = r; save();
+      const rec = P1REC(); const r = rec[qi] || [0, 0]; r[ok ? 0 : 1]++; rec[qi] = r; save();
       if (ok) pq.ok++;
       const full = q.q.replace('( )', q.options[q.answer]);
       document.getElementById('ekFb').innerHTML = '<div class="ek-fb ' + (ok ? 'ok' : 'ng') + '"><div class="ek-fb-h">' + (ok ? '🎉 正解!' : '✗ 正解は ' + esc(q.options[q.answer])) + '</div>' +
