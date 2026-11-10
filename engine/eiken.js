@@ -30,7 +30,7 @@ const Eiken = (function () {
   function data() {
     if (!State.v2) State.v2 = {};
     const e = State.v2.eiken || (State.v2.eiken = {});
-    e.srs = e.srs || {}; e.p1 = e.p1 || {}; e.listen = e.listen || {}; e.write = e.write || {};
+    e.srs = e.srs || {}; e.p1 = e.p1 || {}; e.listen = e.listen || {}; e.write = e.write || {}; e.read = e.read || {};
     if (!e.newDay || e.newDay.d !== today()) e.newDay = { d: today(), n: 0 };
     return e;
   }
@@ -81,7 +81,7 @@ const Eiken = (function () {
   function bindGo(root) {
     root.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { sfx('click'); stopSpeak(); go(b.dataset.go); });
   }
-  function go(v) { view = v; ({ home: home, vocab: vocab, p1: part1, listen: listen, write: writeList }[v] || home)(); const p = document.getElementById('pageEiken'); if (p) p.scrollTop = 0; }
+  function go(v) { view = v; ({ home: home, vocab: vocab, p1: part1, listen: listen, write: writeList, read: readList }[v] || home)(); const p = document.getElementById('pageEiken'); if (p) p.scrollTop = 0; }
 
   // ---------- 홈 ----------
   function vocabStats(lv) {
@@ -108,7 +108,7 @@ const Eiken = (function () {
       { go: 'p1', icon: '✏️', name: '大問1 語句空所補充', sub: g2 ? EIKEN_G2_PART1.length + '問 · 正答率 ' + rate(e.p1) : '準備中', ok: g2 },
       { go: 'listen', icon: '🎧', name: 'リスニング', sub: g2 ? EIKEN_G2_LISTEN.length + '問 · 会話と 説明文' : '準備中', ok: g2 },
       { go: 'write', icon: '📝', name: 'ライティング', sub: g2 ? '要約 · 意見論述 ' + EIKEN_G2_WRITE.length + '題' : '準備中', ok: g2 },
-      { icon: '📖', name: '長文読解', sub: '準備中', ok: false },
+      { go: 'read', icon: '📖', name: '長文読解', sub: g2 ? '大問2 空所補充 · 大問3 内容一致 ' + EIKEN_G2_READING.length + '題' : '準備中', ok: g2 },
       { icon: '🎤', name: '面接 (二次)', sub: '準備中', ok: false },
       { icon: '⏱', name: '模擬試験', sub: '準備中', ok: false },
     ];
@@ -271,6 +271,53 @@ const Eiken = (function () {
         if (plays === 1) showQ();
       });
     };
+  }
+
+  // ---------- 長文読解 ----------
+  function readList() {
+    const e = data();
+    let h = header('長文読解', '大問2 (空所補充) · 大問3 (内容一致)');
+    h += '<div class="ek-grid">';
+    EIKEN_G2_READING.forEach((r, i) => {
+      const done = e.read[r.id];
+      h += '<button class="ek-card" data-r="' + i + '"><span class="ek-card-icon">' + (r.type === 'cloze' ? '🧩' : '🔎') + '</span><span class="ek-card-name">' + esc(r.title) + '</span><span class="ek-card-sub">' + (r.type === 'cloze' ? '大問2 空所補充' : '大問3 内容一致') + (done ? ' ・ 前回 ' + done[0] + '/' + done[1] : '') + '</span></button>';
+    });
+    h += '</div>';
+    area().innerHTML = h; bindGo(area());
+    area().querySelectorAll('[data-r]').forEach(b => b.onclick = () => { sfx('click'); readTask(+b.dataset.r); });
+  }
+  function readTask(ri) {
+    const r = EIKEN_G2_READING[ri];
+    let h = header(esc(r.title), r.type === 'cloze' ? '大問2: 文中の ( ) に 入る ものを 選ぼう' : '大問3: 内容に 合う ものを 選ぼう');
+    h += '<div class="ek-box ek-read">';
+    r.paragraphs.forEach(p => { h += '<p class="ek-passage">' + esc(p).replace(/\((\d)\)/g, '<span class="ek-blank">( $1 )</span>') + '</p>'; });
+    h += '</div>';
+    const orders = r.questions.map(() => shuffle([0, 1, 2, 3]));
+    r.questions.forEach((q, qi) => {
+      h += '<div class="ek-box ek-rq" data-qi="' + qi + '"><div class="ek-fb-h">' + (r.type === 'cloze' ? esc(q.q) + ' に 入るのは?' : 'Q' + (qi + 1) + '. ' + esc(q.q)) + '</div><div class="ek-opts">';
+      orders[qi].forEach((o, k) => { h += '<button class="ek-opt" data-o="' + o + '">' + (k + 1) + '. ' + esc(q.options[o]) + '</button>'; });
+      h += '</div><div class="ek-rfb"></div></div>';
+    });
+    h += '<div id="ekReadEnd"></div>';
+    area().innerHTML = h; bindGo(area());
+    let answered = 0, ok = 0;
+    area().querySelectorAll('.ek-rq').forEach(box => {
+      const qi = +box.dataset.qi, q = r.questions[qi];
+      let done = false;
+      box.querySelectorAll('.ek-opt').forEach(b => b.onclick = () => {
+        if (done) return; done = true; answered++;
+        const good = +b.dataset.o === q.answer; if (good) ok++;
+        box.querySelectorAll('.ek-opt').forEach(x => { x.disabled = true; if (+x.dataset.o === q.answer) x.classList.add('ok'); });
+        if (!good) b.classList.add('ng');
+        sfx(good ? 'unlock' : 'wrong');
+        box.querySelector('.ek-rfb').innerHTML = '<div class="ek-fb ' + (good ? 'ok' : 'ng') + '"><div class="ek-fb-h">' + (good ? '🎉 正解!' : '✗ 正解は 「' + esc(q.options[q.answer]) + '」') + '</div><div class="ek-fb-exp">💡 ' + esc(q.exp) + '</div></div>';
+        if (answered === r.questions.length) {
+          data().read[r.id] = [ok, r.questions.length]; save();
+          document.getElementById('ekReadEnd').innerHTML = '<div class="ek-box ek-center"><p>' + r.questions.length + '問中 <b>' + ok + '</b>問 正解</p><button class="ek-primary" data-go="read">ほかの 長文へ</button></div>';
+          bindGo(document.getElementById('ekReadEnd'));
+        }
+      });
+    });
   }
 
   // ---------- ライティング ----------
