@@ -29,6 +29,7 @@
 <link rel="stylesheet" href="styles/hub.css">
 <link rel="stylesheet" href="styles/eiken.css">
 <link rel="stylesheet" href="styles/world.css">
+<link rel="stylesheet" href="styles/weather-ch.css">
 </head>
 <body>
 
@@ -60,6 +61,12 @@
   <div class="page world-page" id="pageWorld">
     <button class="back-btn wc-exit" id="btnWorldBack">← 事務所</button>
     <div class="wc-wrap" id="worldArea"></div>
+  </div>
+
+  <!-- v2 新コンテンツ②: お天気予報チャレンジ -->
+  <div class="page wxc-page" id="pageWeatherCh">
+    <button class="back-btn wx-exit" id="btnWxBack">← 事務所</button>
+    <div class="wx-wrap" id="wxArea"></div>
   </div>
 
   <!-- CHAPTER SELECT -->
@@ -492,6 +499,7 @@
 <script src="data/world-map.js"></script>
 <script src="data/world-cities.js"></script>
 <script src="engine/world.js"></script>
+<script src="engine/weather-challenge.js"></script>
 <script src="engine/hub.js"></script>
 <script src="engine/bindings.js"></script>
 <script type="module" src="engine/chat-bindings.js"></script>

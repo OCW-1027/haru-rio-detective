@@ -65,6 +65,7 @@ document.getElementById('btnStart').onclick = () => {
 document.getElementById('btnBackTitle').onclick = () => { stopVoice(); Hub.open(); };
 document.getElementById('btnEikenBack').onclick = () => { Eiken.stop(); Hub.open(); };
 document.getElementById('btnWorldBack').onclick = () => { WorldChase.stop(); Hub.open(); };
+document.getElementById('btnWxBack').onclick = () => { WeatherChallenge.stop(); Hub.open(); };
 document.getElementById('btnHubBack').onclick = () => { stopVoice(); showPage('pageTitle'); };
 document.getElementById('btnBackSelect1').onclick = () => { stopVoice(); buildChapterGrid(); showPage('pageSelect'); };
 document.getElementById('btnBackSelect2').onclick = () => { stopVoice(); buildChapterGrid(); showPage('pageSelect'); };

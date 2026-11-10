@@ -1,0 +1,60 @@
+/* styles/weather-ch.css — お天気予報チャレンジ */
+.wxc-page { background: linear-gradient(180deg, #e3f2fb 0%, #fdf7e8 100%); overflow-y: auto; padding: 0 0 48px; }
+.wx-wrap { width: 100%; max-width: 760px; margin: 0 auto; padding: 64px 16px 0; }
+.wx-exit { position: absolute; top: 14px; left: 14px; z-index: 5; }
+.wx-hero { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: linear-gradient(135deg, #2a6fb0, #58a6d8); color: #fff; border-radius: 22px; padding: 18px 20px; box-shadow: 0 8px 24px rgba(42,111,176,.25); }
+.wx-hero img { width: 96px; flex-shrink: 0; }
+.wx-hero p { font-family: 'Klee One'; font-size: 13px; line-height: 1.6; margin: 6px 0 0; }
+.wx-kicker { font-family: 'Klee One'; font-size: 13px; opacity: .85; }
+.wx-h1 { font-family: 'RocknRoll One'; font-size: 28px; margin: 0; }
+.wx-cities { display: flex; gap: 8px; margin: 12px 0; flex-wrap: wrap; }
+.wx-city { border: 2px solid #a9cbe6; background: #fff; border-radius: 999px; padding: 6px 16px; font-family: 'RocknRoll One'; font-size: 14px; color: #2a6fb0; cursor: pointer; }
+.wx-city.on { background: #2a6fb0; color: #fff; border-color: #2a6fb0; }
+.wx-box { background: #fff; border-radius: 18px; padding: 14px 16px; border: 2px solid #cfe1ef; margin-bottom: 12px; font-family: 'Klee One'; font-size: 14px; color: #2c3e50; line-height: 1.7; }
+.wx-center { text-align: center; }
+.wx-h { font-family: 'RocknRoll One'; font-size: 15px; color: #1f3f5c; margin-bottom: 8px; }
+.wx-h2 { font-family: 'RocknRoll One'; font-size: 15px; color: #1f3f5c; margin: 14px 0 8px; }
+.wx-small { font-size: 12px; color: #5a6a7a; }
+.wx-small b.down { color: #c4423a; } .wx-small b.up { color: #2f8a4a; }
+.wx-days, .wx-ups { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 6px; }
+.wx-day, .wx-up { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border-radius: 12px; background: #f4f9fd; }
+.wx-day.today { background: #e2f0fb; box-shadow: inset 0 0 0 2px #2a6fb0; }
+.wx-day.q { background: #fff7e2; box-shadow: inset 0 0 0 2px #e0b040; }
+.wx-day small, .wx-up small { font-size: 11px; color: #5a6a7a; }
+.wx-day b, .wx-up b { font-family: 'RocknRoll One'; font-size: 13px; color: #1f3f5c; }
+.wx-ico { font-size: 26px; }
+.wx-chart { width: 100%; height: auto; background: #f7fbfe; border-radius: 10px; }
+.wx-chart text { font-size: 10px; fill: #5a6a7a; }
+.wx-now { display: flex; flex-wrap: wrap; gap: 14px; }
+.wx-now b { font-family: 'RocknRoll One'; color: #1f3f5c; }
+.wx-talk { display: flex; gap: 12px; align-items: flex-start; }
+.wx-talk img { width: 70px; flex-shrink: 0; }
+.wx-talk ul { margin: 4px 0 0; padding-left: 18px; font-size: 13px; }
+.wx-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+.wx-cat { display: flex; flex-direction: column; align-items: center; padding: 10px 4px; border-radius: 14px; border: 2px solid #cfe1ef; background: #fff; font-family: 'RocknRoll One'; font-size: 13px; color: #1f3f5c; cursor: pointer; }
+.wx-cat span { font-size: 28px; }
+.wx-cat.on { border-color: #2a6fb0; background: #e2f0fb; box-shadow: 0 2px 0 #2a6fb0; }
+.wx-sl { display: block; font-family: 'RocknRoll One'; font-size: 14px; color: #1f3f5c; margin: 8px 0; }
+.wx-sl b { font-size: 20px; color: #c45a20; }
+.wx-sl input { display: block; width: 100%; margin-top: 4px; }
+.wx-primary, .wx-secondary { display: block; width: 100%; margin-top: 10px; padding: 13px 16px; border-radius: 14px; font-family: 'RocknRoll One'; font-size: 16px; cursor: pointer; }
+.wx-primary { border: none; background: #2a6fb0; color: #fff; box-shadow: 0 4px 0 #1b4f80; }
+.wx-primary:disabled { opacity: .45; cursor: default; }
+.wx-secondary { border: 2px solid #2a6fb0; background: #fff; color: #2a6fb0; }
+.wx-rec { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
+.wx-rec b { display: block; font-family: 'RocknRoll One'; font-size: 24px; color: #2a6fb0; }
+.wx-rec small { font-size: 11px; color: #5a6a7a; }
+.wx-wait { background: #fffaf0; border-color: #ecd9a8; }
+.wx-hist { display: grid; gap: 4px; }
+.wx-hrow { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; background: #fff; border-radius: 10px; padding: 6px 10px; font-family: 'Klee One'; font-size: 13px; }
+.wx-hrow b { font-family: 'RocknRoll One'; color: #2a6fb0; }
+.wx-note { font-family: 'Klee One'; font-size: 11px; color: #6a7a8a; margin-top: 12px; }
+.wx-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.wx-back { border: 2px solid #cfe1ef; background: #fff; border-radius: 999px; padding: 6px 12px; font-family: 'RocknRoll One'; font-size: 13px; color: #2a6fb0; cursor: pointer; flex-shrink: 0; }
+.wx-title { font-family: 'RocknRoll One'; font-size: 16px; color: #1f3f5c; }
+.wx-score { font-family: 'RocknRoll One'; font-size: 54px; color: #2a6fb0; }
+.wx-score small { font-size: 18px; }
+.wx-tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+.wx-tbl th, .wx-tbl td { padding: 6px; text-align: center; border-bottom: 1px solid #e3edf5; }
+.wx-tbl tr.real td { font-weight: bold; background: #f3faf3; }
+.wx-en { font-family: Georgia, serif; font-size: 15px; }
