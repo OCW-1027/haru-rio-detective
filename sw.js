@@ -1,44 +1,48 @@
-// sw.js — Bundle C (Phase 4): offline cache for hosted assets.
-// FCM background messages are handled by firebase-messaging-sw.js (separate SW).
-const CACHE_NAME = 'haruchat-v1';
-const PRECACHE_URLS = [
-  '/haru-rio-detective/',
-  '/haru-rio-detective/index.html',
-  '/haru-rio-detective/manifest.json',
-];
+// sw.js — v2 기반 공사(P2): 이미지는 캐시 우선, 코드는 네트워크 우선(+오프라인 대비).
+// FCM 백그라운드 메시지는 firebase-messaging-sw.js (별도 SW) 가 처리한다.
+const CODE_CACHE = 'haru-code-v2';   // HTML·JS·CSS — 항상 최신을 받고, 실패할 때만 캐시 사용
+const IMG_CACHE  = 'haru-img-v2';    // 이미지·글꼴 — 한 번 받으면 다시 받지 않음
+// ※ 같은 파일 이름으로 그림 내용을 바꿨다면 IMG_CACHE 의 숫자를 올린다.
+const KEEP = [CODE_CACHE, IMG_CACHE];
+const IMG_RE = /\.(webp|png|jpe?g|gif|svg|ico|woff2?)$/i;
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) =>
-      cache.addAll(PRECACHE_URLS).catch(() => null)
-    )
-  );
-  self.skipWaiting();
-});
+self.addEventListener('install', () => self.skipWaiting());
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((k) => !KEEP.includes(k)).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
+  );
+});
+
+function cacheFirst(req) {
+  return caches.open(IMG_CACHE).then((cache) =>
+    cache.match(req).then((hit) =>
+      hit || fetch(req).then((res) => {
+        if (res && res.ok) cache.put(req, res.clone()).catch(() => {});
+        return res;
+      })
     )
   );
-  self.clients.claim();
-});
+}
+
+function networkFirst(req) {
+  return fetch(req)
+    .then((res) => {
+      if (res && res.ok) {
+        const copy = res.clone();
+        caches.open(CODE_CACHE).then((c) => c.put(req, copy)).catch(() => {});
+      }
+      return res;
+    })
+    .catch(() => caches.match(req, { ignoreSearch: req.mode === 'navigate' }).then((hit) => hit || Response.error()));
+}
 
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
-  // Network-first, cache fallback
-  event.respondWith(
-    fetch(req)
-      .then((res) => {
-        // Optionally update cache for navigations
-        if (res && res.ok && req.mode === 'navigate') {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then((c) => c.put(req, copy)).catch(() => {});
-        }
-        return res;
-      })
-      .catch(() => caches.match(req))
-  );
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;       // Firebase·글꼴 CDN 등은 브라우저에 맡김
+  event.respondWith(IMG_RE.test(url.pathname) ? cacheFirst(req) : networkFirst(req));
 });
