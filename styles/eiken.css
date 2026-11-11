@@ -141,3 +141,67 @@
 .ek-mres span { display: block; font-family: 'Klee One'; font-size: 13px; color: #3a4a5c; margin-top: 4px; }
 .ek-mine { background: #fffdf5; border: 1px dashed #e0d4b4; border-radius: 10px; padding: 8px 10px; white-space: pre-wrap; font-family: Georgia, serif; }
 .ek-mw .ek-fb-en { font-size: 15px; margin: 4px 0; }
+/* ---- 面接 (二次) ---- */
+.iv-howto ul { margin: 6px 0; padding-left: 18px; font-family: 'Klee One'; font-size: 14px; line-height: 1.7; }
+.iv-list { display: grid; gap: 10px; }
+.iv-li { display: flex; gap: 12px; align-items: center; text-align: left; padding: 10px 12px; border-radius: 16px; border: 2px solid #cfe5e0; background: #fff; cursor: pointer; }
+.iv-li b { display: block; font-family: 'RocknRoll One'; font-size: 15px; color: #1f3f4c; }
+.iv-li small { display: block; font-family: Georgia, serif; font-size: 12px; color: #5a6a7a; margin: 2px 0; }
+.iv-best { font-family: 'Klee One'; font-size: 12px; color: #2a7a8a; }
+.iv-li-art { width: 74px; flex-shrink: 0; text-align: center; }
+.iv-li-art.ok .art-main { border-radius: 10px; aspect-ratio: 4 / 3; object-fit: cover; }
+.iv-li-i { font-size: 34px; }
+.iv-steps { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.iv-steps span { white-space: nowrap; }
+.iv-steps span { font-family: 'RocknRoll One'; font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #e8f1ef; color: #8a9a9a; }
+.iv-steps span.done { background: #cfe9e3; color: #2a7a8a; }
+.iv-steps span.now { background: #2a7a8a; color: #fff; }
+.iv-ex { display: flex; gap: 10px; align-items: flex-start; background: #f3f8ff; border: 2px solid #cbdcf3; border-radius: 16px; padding: 12px; margin-bottom: 12px; }
+.iv-ex-i { font-size: 34px; line-height: 1; }
+.iv-ex b { font-family: 'RocknRoll One'; font-size: 13px; color: #3a5a8a; }
+.iv-ex-t { font-family: Georgia, 'Times New Roman', serif; font-size: 16px; color: #1f2f4c; line-height: 1.5; margin: 2px 0 4px; }
+.iv-ex-t.hid { display: none; }
+.iv-mini { border: 1px solid #b9cbe3; background: #fff; border-radius: 999px; padding: 2px 10px; font-family: 'Klee One'; font-size: 12px; color: #3a5a8a; cursor: pointer; }
+.iv-card { background: #fffdf7; border: 2px solid #e6dcc0; border-radius: 16px; padding: 14px; margin-bottom: 12px; }
+.iv-ttl { font-family: Georgia, serif; font-weight: bold; font-size: 17px; text-align: center; color: #3a2f1c; margin-bottom: 6px; }
+.iv-pass { font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.75; color: #2a2418; margin: 0 0 10px; }
+.iv-ins { font-family: Georgia, serif; font-size: 14px; color: #4a3f2c; background: #f6efdc; border-radius: 10px; padding: 8px 10px; margin-bottom: 10px; }
+.iv-ins b { color: #2a2418; }
+.iv-panels { display: grid; gap: 8px; grid-template-columns: repeat(3, 1fr); }
+.iv-panels.n4 { grid-template-columns: repeat(2, 1fr); }
+.iv-panel { position: relative; background: #fff; border: 2px solid #d9cfb4; border-radius: 10px; padding: 6px; display: flex; flex-direction: column; gap: 4px; }
+.iv-t { align-self: flex-start; font-family: Georgia, serif; font-size: 12px; font-weight: bold; color: #fff; background: #6b5a3a; border-radius: 6px; padding: 1px 8px; }
+.iv-t::before { content: '→ '; }
+.iv-pic { width: 100%; }
+.iv-pic.ok .art-main { border-radius: 6px; aspect-ratio: 4 / 3; object-fit: cover; }
+.iv-desc { font-family: 'Klee One'; font-size: 12px; line-height: 1.55; color: #4a4030; background: #f8f3e6; border-radius: 6px; padding: 8px; min-height: 64px; }
+.iv-say { font-family: Georgia, serif; font-size: 12.5px; color: #1f2f4c; background: #eef4ff; border: 1px solid #c9d8ef; border-radius: 10px; padding: 4px 8px; }
+.iv-count { font-family: 'RocknRoll One'; font-size: 18px; color: #2a7a8a; }
+.iv-count b { font-size: 26px; }
+.iv-ans { text-align: center; }
+.iv-timer { font-family: 'RocknRoll One'; font-size: 14px; color: #6a7a8a; margin-bottom: 6px; }
+.iv-tr { min-height: 64px; text-align: left; background: #f7faf9; border: 2px dashed #cfe5e0; border-radius: 12px; padding: 10px; margin-bottom: 10px; }
+.iv-said { font-family: Georgia, 'Times New Roman', serif; font-size: 16px; line-height: 1.6; color: #1f3f4c; }
+.iv-said.live { color: #5a7a8a; }
+.iv-rec { width: 100%; padding: 16px; border: none; border-radius: 999px; background: #e0574a; color: #fff; font-family: 'RocknRoll One'; font-size: 18px; box-shadow: 0 4px 0 #a83a30; cursor: pointer; }
+.iv-rec.on { background: #2f3f4f; box-shadow: 0 4px 0 #1a2530; animation: ivPulse 1.4s infinite; }
+@keyframes ivPulse { 50% { opacity: .8; } }
+.iv-type { margin-top: 10px; text-align: left; }
+.iv-type summary { font-family: 'Klee One'; font-size: 13px; color: #6a7a8a; cursor: pointer; }
+.iv-type textarea { width: 100%; box-sizing: border-box; margin-top: 6px; border: 2px solid #cfe5e0; border-radius: 10px; padding: 8px; font-family: Georgia, serif; font-size: 15px; }
+.iv-down { text-align: center; font-family: 'Klee One'; font-size: 14px; color: #8a7a5a; background: #f6efdc; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+.iv-yn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.iv-total { font-size: 34px; color: #2a7a8a; }
+.iv-tbl { margin: 8px auto 0; border-collapse: collapse; font-size: 14px; }
+.iv-tbl td { padding: 4px 12px; border-bottom: 1px solid #e3eeeb; text-align: left; }
+.iv-tbl td:last-child { text-align: right; }
+.iv-res-h { display: flex; justify-content: space-between; font-family: 'RocknRoll One'; font-size: 15px; color: #1f3f4c; margin-bottom: 6px; }
+.iv-res-h span { color: #2a7a8a; }
+.iv-q { font-family: Georgia, serif; font-size: 14px; color: #4a5a6a; margin: 0 0 6px; }
+.iv-lab { font-family: 'RocknRoll One'; font-size: 12px; color: #8a9aa0; margin-top: 8px; }
+.iv-model { font-family: Georgia, 'Times New Roman', serif; font-size: 15px; line-height: 1.6; color: #2a5a3a; background: #f1f8f2; border-radius: 10px; padding: 8px 10px; margin: 4px 0; }
+.iv-hl { font-family: Georgia, serif; font-size: 15px; line-height: 1.7; margin-top: 6px; }
+.iv-hl .miss { color: #c0392b; text-decoration: underline wavy #e2aaa5; }
+.iv-tips { margin: 6px 0; padding-left: 18px; font-family: 'Klee One'; font-size: 13px; color: #8a4a2a; line-height: 1.6; }
+.iv-good { font-family: 'Klee One'; color: #2e7d4f; margin: 6px 0; }
+@media (max-width: 520px) { .iv-panels { grid-template-columns: 1fr; } .iv-panels.n4 { grid-template-columns: 1fr 1fr; } }

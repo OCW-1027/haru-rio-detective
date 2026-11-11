@@ -11,12 +11,13 @@
   lab_hero          ラボ探偵 표지                               → lab/hero.webp             384x384
   lab_case_<id>     사건 장면                                  → lab/case_<id>.webp        960x540
   lab_sus_<case>_<s>  라보 용의자 상반신                        → lab/sus_<case>_<s>.webp   384x384
+  int_<cardid>_<n>  英検 面接 イラスト (コマ)                  → eiken/int/<cardid>_<n>.webp 640x480
 
 사용법:
   pip install pillow numpy scipy rembg onnxruntime
   python tools/process_v2_art.py _art_inbox/v2
 """
-import sys, os, glob
+import sys, os, glob, re
 from PIL import Image
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
@@ -38,6 +39,7 @@ def target(name):
     if name == 'lab_hero':              return ('cover', 'lab/hero.webp', 384, 384, 0.5)
     if name.startswith('lab_case_'):    return ('cover', 'lab/case_%s.webp' % name[9:], 960, 540, 0.5)
     if name.startswith('lab_sus_'):     return ('cover', 'lab/sus_%s.webp' % name[8:], 384, 384, 0.2)
+    if name.startswith('int_'):         return ('cover', 'eiken/int/%s.webp' % name[4:], 640, 480, 0.5)
     return None
 
 def main():
@@ -45,7 +47,7 @@ def main():
     files = sorted(f for e in ('png', 'jpg', 'jpeg', 'webp') for f in glob.glob(os.path.join(src, '*.' + e)))
     session = None
     for f in files:
-        name = os.path.splitext(os.path.basename(f))[0]
+        name = re.sub(r'^#?\d+_', '', os.path.splitext(os.path.basename(f))[0])   # 「#01_gang_mirage」→「gang_mirage」
         t = target(name)
         if not t:
             print('SKIP (이름 규칙 밖):', name); continue

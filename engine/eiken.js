@@ -106,7 +106,7 @@ const Eiken = (function () {
   document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeak(); });
   window.addEventListener('pagehide', stopSpeak);
   try {
-    new MutationObserver(() => { if (!onEikenPage()) stopSpeak(); })
+    new MutationObserver(() => { if (!onEikenPage()) { stopSpeak(); if (typeof EikenInterview !== 'undefined') EikenInterview.stop(); } })
       .observe(document.getElementById('pageEiken') || document.body, { attributes: true, attributeFilter: ['class'] });
   } catch (e) {}
 
@@ -120,7 +120,7 @@ const Eiken = (function () {
   function bindGo(root) {
     root.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { sfx('click'); stopSpeak(); go(b.dataset.go); });
   }
-  function go(v) { view = v; ({ home: home, vocab: vocab, quiz: quiz, wlist: wlist, p1: part1, listen: listen, write: writeList, read: readList, mock: mockIntro }[v] || home)(); const p = document.getElementById('pageEiken'); if (p) p.scrollTop = 0; }
+  function go(v) { view = v; ({ home: home, vocab: vocab, quiz: quiz, wlist: wlist, p1: part1, listen: listen, write: writeList, read: readList, mock: mockIntro, interview: interview }[v] || home)(); const p = document.getElementById('pageEiken'); if (p) p.scrollTop = 0; }
 
   // ---------- 홈 ----------
   let pos = 'all';
@@ -159,7 +159,7 @@ const Eiken = (function () {
       { go: 'listen', icon: '🎧', name: 'リスニング', sub: n('listen') ? n('listen') + '問 · 正答率 ' + rate(REC('listen')) : '準備中', ok: n('listen') > 0 },
       { go: 'write', icon: '📝', name: 'ライティング', sub: n('write') ? '要約 · 意見論述 ' + n('write') + '題' : '準備中', ok: n('write') > 0 },
       { go: 'read', icon: '📖', name: '長文読解', sub: n('read') ? '空所補充 · 内容一致 ' + n('read') + '題' : '準備中', ok: n('read') > 0 },
-      { icon: '🎤', name: '面接 (二次)', sub: '準備中', ok: false },
+      { go: 'interview', icon: '🎤', name: '面接 (二次)', sub: (typeof EIKEN_INTERVIEW !== 'undefined' ? EIKEN_INTERVIEW[level].length + 'カード · ' : '') + (level === 'p1' ? 'ナレーション + 4問' : '音読 + 4問') + ' · 音声認識', ok: typeof EikenInterview !== 'undefined' },
       { go: 'mock', icon: '⏱', name: '模擬試験 (本番形式)', sub: (level === 'p1' ? '筆記31問 + 作文2題 + リスニング29問' : '筆記31問 + 作文2題 + リスニング30問'), ok: true },
     ];
     h += '<div class="ek-grid">';
@@ -697,5 +697,7 @@ const Eiken = (function () {
     showPage('pageEiken');
     go('home');
   }
-  return { open: open, stop: stopSpeak, _speak: speak, _vocabStats: vocabStats, _wordList: wordList };
+  function interview() { EikenInterview.open({ area: area, header: header, bindGo: bindGo, speak: speak, stopSpeak: stopSpeak, data: data, save: () => { try { saveState(); } catch (e) {} }, esc: esc }, level); }
+  function stopAll() { stopSpeak(); if (typeof EikenInterview !== 'undefined') EikenInterview.stop(); }
+  return { open: open, stop: stopAll, _speak: speak, _vocabStats: vocabStats, _wordList: wordList };
 })();
