@@ -312,8 +312,130 @@ const ELAD = (function () {
     return choice('線対称な 図形は どれ?', yes[0], nos, [yes[0] + 'は 折って 重なる 軸が ある', '平行四辺形は 点対称だが 線対称では ない']);
   });
 
-  const GROUPS = [{ id: 'e4', name: '小学 4年', color: '#c0702a' }, { id: 'e5', name: '小学 5年', color: '#3a8a6a' }, { id: 'e6', name: '小学 6年', color: '#5a6ab0' }];
+  // ---- 6年 (つづき) ----
+  add('e6', 'e6i', '🔤', '文字と 式', ['わからない 数を x や a で 表す: 1こ x円の あめ 5こ → x × 5 (円)', 'x に 数を あてはめると 式の 値が 決まる', 'x + 15 = 40 の x は、40 − 15 で 求める (逆算)'], () => {
+    const k = pick(['val', 'solve', 'solve2', 'mean']);
+    if (k === 'val') { const a = R(2, 9), b = R(5, 40), x = R(2, 15); return { q: 'x = ' + x + ' の とき、x × ' + a + ' + ' + b + ' の 値は?', type: 'num', a: x * a + b, steps: [x + ' × ' + a + ' = ' + x * a, x * a + ' + ' + b + ' = ' + (x * a + b)] }; }
+    if (k === 'solve') { const x = R(5, 60), b = R(5, 40), op = pick(['+', '−', '×']); if (op === '−' && x <= b) return null; const c = op === '+' ? x + b : op === '−' ? x - b : x * (b % 9 + 2);
+      return op === '×' ? { q: 'x × ' + (b % 9 + 2) + ' = ' + c + ' の x は?', type: 'num', a: x, steps: ['x = ' + c + ' ÷ ' + (b % 9 + 2) + ' = ' + x] } : { q: 'x ' + op + ' ' + b + ' = ' + c + ' の x は?', type: 'num', a: x, steps: ['x = ' + c + (op === '+' ? ' − ' : ' + ') + b + ' = ' + x] }; }
+    if (k === 'solve2') { const x = R(20, 200), n = R(3, 8), p = R(50, 300); return { q: '1こ x円の ケーキを ' + n + 'こ と ' + p + '円の ジュースを 買ったら、代金は ' + (x * n + p) + '円だった。x は?', type: 'num', a: x, steps: ['式: x × ' + n + ' + ' + p + ' = ' + (x * n + p), 'x × ' + n + ' = ' + (x * n + p) + ' − ' + p + ' = ' + x * n, 'x = ' + x * n + ' ÷ ' + n + ' = ' + x] }; }
+    const a = R(3, 9); return choice('「x × ' + a + '」で 表される ものは どれ?', '1辺 x cm の ' + ['', '', '', '正三角形', '正方形', '正五角形', '正六角形', '正七角形', '正八角形', '正九角形'][a] + 'の まわりの 長さ', ['x cm の テープを ' + a + '人で 分けた 1人分', 'x 円 持っていて ' + a + '円 使った 残り', 'x 才の 人の ' + a + '年後の 年れい'], [a + '本の 辺が すべて x cm', '→ x × ' + a]);
+  });
+  add('e6', 'e6j', '📋', 'データの 調べ方', ['ドットプロット: 1つの データを 1つの ● で 表す', '度数分布表: 区間 (階級) ごとに 人数を 数える', '代表値: 平均値・中央値 (まん中)・最頻値 (いちばん 多い)'], () => {
+    const n = pick([9, 10, 11]), xs = Array.from({ length: n }, () => R(2, 10)).sort((a, b) => a - b), k = pick(['mean', 'med', 'mode', 'range', 'class']);
+    const med = n % 2 ? xs[(n - 1) / 2] : (xs[n / 2 - 1] + xs[n / 2]) / 2, cnt = {}; xs.forEach(v => cnt[v] = (cnt[v] || 0) + 1); const mx = Math.max(...Object.values(cnt)), modes = Object.keys(cnt).filter(v => cnt[v] === mx);
+    const q0 = n + '人の 小テストの 点数 (小さい 順): ' + xs.join(', ');
+    if (k === 'mean') { const s = xs.reduce((a, b) => a + b, 0); if (s * 10 % n) return null; return { q: q0 + '\n平均値は?', type: 'num', a: r3(s / n), steps: ['合計 ' + s + ' ÷ ' + n + ' = ' + r3(s / n)] }; }
+    if (k === 'med') return { q: q0 + '\n中央値は?', type: 'num', a: med, steps: [n % 2 ? 'まん中は ' + ((n + 1) / 2) + '番目 → ' + med : 'まん中 2つ (' + n / 2 + '番目と ' + (n / 2 + 1) + '番目) の 平均 → ' + med] };
+    if (k === 'mode') { if (modes.length > 1) return null; return { q: q0 + '\n最頻値は?', type: 'num', a: +modes[0], steps: [modes[0] + '点が ' + mx + '人で いちばん 多い'] }; }
+    if (k === 'range') return { q: q0 + '\n範囲 (最大値 − 最小値) は?', type: 'num', a: xs[n - 1] - xs[0], steps: [xs[n - 1] + ' − ' + xs[0] + ' = ' + (xs[n - 1] - xs[0])] };
+    const c = xs.filter(v => v >= 6 && v < 8).length; return { q: q0 + '\n6点 以上 8点 未満の 人は 何人?', type: 'num', a: c, steps: ['6 と 7 の 人を 数える (8 は ふくまない)', '→ ' + c + '人'] };
+  });
+  add('e6', 'e6k', '🍫', '分数の 文章題', ['「全体の 2/5」= 全体 × 2/5', '「残りの 1/3」は 残りを もとに する', '時間の 分数: 20分 = 20/60 時間 = 1/3 時間'], () => {
+    const k = pick(['part', 'rest', 'base', 'time', 'area']);
+    if (k === 'part') { const d = pick([3, 4, 5, 6, 8]), n = R(1, d - 1), tot = d * R(3, 15); return { q: tot + 'ページの 本の ' + n + '/' + d + ' を 読んだ。何ページ 読んだ?', type: 'num', a: tot * n / d, steps: [tot + ' × ' + n + '/' + d + ' = ' + tot * n / d] }; }
+    if (k === 'rest') { const tot = pick([60, 120, 240, 360]), a = pick([2, 3, 4]), b = pick([2, 3, 5]); const r1 = tot - tot / a, r2 = r1 - r1 / b; if (!Number.isInteger(r2)) return null; return { q: tot + '円 持っていた。はじめに 持っていた お金の 1/' + a + ' を 使い、次に 残りの 1/' + b + ' を 使った。何円 残っている?', type: 'num', a: r2, steps: ['はじめ: ' + tot + ' × 1/' + a + ' = ' + tot / a + '円 使う → 残り ' + r1 + '円', '次: ' + r1 + ' × 1/' + b + ' = ' + r1 / b + '円 使う → 残り ' + r2 + '円'] }; }
+    if (k === 'base') { const d = pick([3, 4, 5]), n = R(1, d - 1), tot = d * R(4, 20); return { q: 'クラスの ' + n + '/' + d + ' に あたる ' + tot * n / d + '人が 自転車通学。クラスは 何人?', type: 'num', a: tot, steps: ['クラス × ' + n + '/' + d + ' = ' + tot * n / d, 'クラス = ' + tot * n / d + ' ÷ ' + n + '/' + d + ' = ' + tot] }; }
+    if (k === 'time') { const m = pick([10, 15, 20, 30, 40, 45]), v = pick([3, 4, 6, 12]) * 60 / gcd(m, 60) * gcd(m, 60) / 60; const dist = v * m / 60; if (!Number.isInteger(dist * 10)) return null; return { q: '時速 ' + v + 'km で ' + m + '分 歩くと 何 km 進む?', type: 'num', a: r3(dist), steps: [m + '分 = ' + m + '/60 時間 = ' + fs(fr(m, 60)) + ' 時間', v + ' × ' + fs(fr(m, 60)) + ' = ' + r3(dist) + 'km'] }; }
+    const a = R(2, 5), b = R(2, 5), c = pick([3, 4, 5]); return { q: 'たて ' + a + '/' + c + ' m、よこ ' + b + ' m の 長方形の 面積は 何 m²? (分数で)', type: 'num', a: fr(a * b, c), steps: [a + '/' + c + ' × ' + b + ' = ' + fs(fr(a * b, c))] };
+  });
+  add('e6', 'e6l', '🏃', '速さの 応用', ['平均の 速さ = 全体の 道のり ÷ 全体の 時間 (速さの 平均では ない!)', '単位を そろえる: 分速 → 時速 は × 60', '時間を 分数で: 1時間20分 = 1と1/3 時間'], () => {
+    const k = pick(['avg', 'conv', 'meet', 'time2']);
+    if (k === 'avg') { const d = pick([12, 24, 60, 120]), v1 = pick([3, 4, 6, 12]), v2 = pick([2, 3, 4, 6]); if (v1 === v2 || d % v1 || d % v2 || (2 * d) % (d / v1 + d / v2)) return null; return { q: 'A から B まで ' + d + 'km を 行きは 時速 ' + v1 + 'km、帰りは 時速 ' + v2 + 'km で 往復した。往復の 平均の 速さは 時速 何 km?', type: 'num', a: 2 * d / (d / v1 + d / v2), steps: ['行き ' + d + ' ÷ ' + v1 + ' = ' + d / v1 + '時間、帰り ' + d + ' ÷ ' + v2 + ' = ' + d / v2 + '時間', '全体: ' + 2 * d + 'km ÷ ' + (d / v1 + d / v2) + '時間 = 時速 ' + 2 * d / (d / v1 + d / v2) + 'km', '※ (' + v1 + ' + ' + v2 + ') ÷ 2 = ' + (v1 + v2) / 2 + ' では ない!'] }; }
+    if (k === 'conv') { const v = pick([50, 60, 75, 80, 90, 120]); return { q: '分速 ' + v + 'm は 時速 何 km?', type: 'num', a: r3(v * 60 / 1000), steps: ['1時間 = 60分 → 時速 ' + v * 60 + 'm', '= 時速 ' + r3(v * 60 / 1000) + 'km'] }; }
+    if (k === 'meet') { const a = R(50, 80), b = R(50, 80), t = R(5, 15); return { q: '池の まわりの 道 (1周 ' + (a + b) * t + 'm) を、A は 分速 ' + a + 'm、B は 分速 ' + b + 'm で 同じ 場所から 反対向きに 歩く。何分後に 出会う?', type: 'num', a: t, steps: ['2人で 1分に ' + a + ' + ' + b + ' = ' + (a + b) + 'm ずつ 近づく', (a + b) * t + ' ÷ ' + (a + b) + ' = ' + t + '分後'] }; }
+    const v = pick([4, 6, 12, 15]), m = pick([20, 30, 40, 50]), d = v * (60 + m) / 60; if (!Number.isInteger(d * 10)) return null; return { q: '時速 ' + v + 'km で 1時間' + m + '分 進むと 何 km?', type: 'num', a: r3(d), steps: ['1時間' + m + '分 = 1と' + fs(fr(m, 60)) + ' 時間 = ' + fs(fr(60 + m, 60)) + ' 時間', v + ' × ' + fs(fr(60 + m, 60)) + ' = ' + r3(d) + 'km'] };
+  });
+
+  // ======================= 発展 (中学受験) =======================
+  add('ej', 'ej1', '🐢', 'つるかめ算', ['「全部 つる (または かめ) だったら?」と 仮定する', 'ちがいの 数 ÷ 1ぴき あたりの ちがい = 入れかえる 数', '面積図でも 解ける'], () => {
+    const k = pick(['crane', 'coin', 'test']);
+    if (k === 'crane') { const n = R(10, 30), t = R(2, n - 2), legs = 2 * (n - t) + 4 * t; return { q: 'つると かめが 合わせて ' + n + 'ひき、足の 数は 合わせて ' + legs + '本。かめは 何びき?', type: 'num', a: t, steps: ['全部 つるだと 足は 2 × ' + n + ' = ' + 2 * n + '本', '実際との 差: ' + legs + ' − ' + 2 * n + ' = ' + (legs - 2 * n) + '本', 'つる 1羽を かめに 変えると 足は 2本 ふえる → ' + (legs - 2 * n) + ' ÷ 2 = ' + t + 'ひき'] }; }
+    if (k === 'coin') { const n = R(10, 25), b = R(2, n - 2), tot = 50 * b + 10 * (n - b); return { q: '10円玉と 50円玉が 合わせて ' + n + 'まい、合計 ' + tot + '円。50円玉は 何まい?', type: 'num', a: b, steps: ['全部 10円玉だと ' + 10 * n + '円', '差: ' + tot + ' − ' + 10 * n + ' = ' + (tot - 10 * n) + '円', '1まい 50円玉に 変えると 40円 ふえる → ' + (tot - 10 * n) + ' ÷ 40 = ' + b + 'まい'] }; }
+    const n = 20, ok = R(8, 19), sc = 5 * ok - 2 * (n - ok); return { q: '20問の テスト。正解 1問 5点、まちがい 1問 2点 減点 (全問 答える)。得点は ' + sc + '点。正解は 何問?', type: 'num', a: ok, steps: ['全問 正解なら 100点', '差: 100 − ' + sc + ' = ' + (100 - sc) + '点', '1問 まちがえると 5 + 2 = 7点 減る → ' + (100 - sc) + ' ÷ 7 = ' + (n - ok) + '問 まちがい', '正解 = 20 − ' + (n - ok) + ' = ' + ok + '問'] };
+  });
+  add('ej', 'ej2', '⚖', '和差算・分配算', ['和差算: 大 = (和 + 差) ÷ 2、小 = (和 − 差) ÷ 2', '分配算: 「Aは Bの 3倍より 5 多い」→ 線分図で そろえる', '線分図を かいて、同じ 長さに そろえる'], () => {
+    const k = pick(['sd', 'sd3', 'bunpai']);
+    if (k === 'sd') { const b = R(10, 80), d = R(4, 30), a = b + d; return { q: '2つの 数の 和が ' + (a + b) + '、差が ' + d + '。大きい ほうの 数は?', type: 'num', a: a, steps: ['大きい ほう = (和 + 差) ÷ 2', '(' + (a + b) + ' + ' + d + ') ÷ 2 = ' + a] }; }
+    if (k === 'sd3') { const c = R(100, 300), b = c + R(50, 150), a = b + R(50, 150); return { q: 'A・B・C の 3人の 所持金の 合計は ' + (a + b + c) + '円。A は B より ' + (a - b) + '円 多く、B は C より ' + (b - c) + '円 多い。C は 何円?', type: 'num', a: c, steps: ['C に そろえる: A = C + ' + (a - c) + '、B = C + ' + (b - c), 'C × 3 + ' + (a - c) + ' + ' + (b - c) + ' = ' + (a + b + c), 'C = (' + (a + b + c) + ' − ' + (a - b + 2 * (b - c)) + ') ÷ 3 = ' + c] }; }
+    const b = R(20, 120), m = R(2, 4), e = R(5, 40), a = b * m + e; return { q: 'A と B の 合計は ' + (a + b) + '円。A は B の ' + m + '倍より ' + e + '円 多い。B は 何円?', type: 'num', a: b, steps: ['線分図: A = B × ' + m + ' + ' + e, 'B × ' + (m + 1) + ' + ' + e + ' = ' + (a + b), 'B = (' + (a + b) + ' − ' + e + ') ÷ ' + (m + 1) + ' = ' + b] };
+  });
+  add('ej', 'ej3', '🌳', '植木算', ['両はしに 植える 直線: 木の 本数 = 間の 数 + 1', '両はしに 植えない: 本数 = 間の 数 − 1', '池の まわり (円): 本数 = 間の 数'], () => {
+    const k = pick(['both', 'none', 'circle', 'cut', 'tape']), g = pick([2, 3, 4, 5, 6, 8, 10]), n = R(6, 30), L = g * n;
+    if (k === 'both') return { q: '長さ ' + L + 'm の 道の 片側に、はしから はしまで ' + g + 'm おきに 木を 植える (両はしにも 植える)。木は 何本?', type: 'num', a: n + 1, steps: ['間の 数: ' + L + ' ÷ ' + g + ' = ' + n, '両はしに 植える → 間の 数 + 1 = ' + (n + 1) + '本'] };
+    if (k === 'none') return { q: '長さ ' + L + 'm の 道に ' + g + 'm おきに 旗を 立てる。両はしには 立てない。旗は 何本?', type: 'num', a: n - 1, steps: ['間の 数: ' + L + ' ÷ ' + g + ' = ' + n, '両はしに 立てない → ' + n + ' − 1 = ' + (n - 1) + '本'] };
+    if (k === 'circle') return { q: '1周 ' + L + 'm の 池の まわりに ' + g + 'm おきに くいを 打つ。くいは 何本?', type: 'num', a: n, steps: ['まわり (輪) では 本数 = 間の 数', L + ' ÷ ' + g + ' = ' + n + '本'] };
+    if (k === 'cut') { const p = R(4, 12), t = R(2, 6); return { q: '丸太を ' + p + 'こ に 切り分ける。1回 切るのに ' + t + '分 かかる。全部で 何分 かかる? (休みなし)', type: 'num', a: (p - 1) * t, steps: [p + 'こに 分けるには ' + (p - 1) + '回 切る', (p - 1) + ' × ' + t + ' = ' + (p - 1) * t + '分'] }; }
+    const m = R(4, 10), len = R(10, 25), over = R(2, 5); return { q: '長さ ' + len + 'cm の テープ ' + m + 'まいを、のりしろ ' + over + 'cm ずつ 重ねて つなぐ。全体の 長さは 何 cm?', type: 'num', a: len * m - over * (m - 1), steps: ['重なりは ' + (m - 1) + 'か所', len + ' × ' + m + ' − ' + over + ' × ' + (m - 1) + ' = ' + (len * m - over * (m - 1)) + 'cm'] };
+  });
+  add('ej', 'ej4', '🏃‍♂️', '旅人算', ['出会い: 2人の きょり ÷ (速さの 和)', '追いつき: 2人の きょり ÷ (速さの 差)', '池の まわり: 反対向き = 和、同じ向き = 差'], () => {
+    const k = pick(['meet', 'catch', 'catch2', 'pond']);
+    if (k === 'meet') { const a = R(50, 90), b = R(40, 80), t = R(6, 20); return { q: (a + b) * t + 'm はなれた 2地点から、兄は 分速 ' + a + 'm、弟は 分速 ' + b + 'm で 向かい合って 同時に 出発した。何分後に 出会う?', type: 'num', a: t, steps: ['1分に ' + a + ' + ' + b + ' = ' + (a + b) + 'm ずつ 近づく', (a + b) * t + ' ÷ ' + (a + b) + ' = ' + t + '分後'] }; }
+    if (k === 'catch') { const b = R(50, 70), a = b + R(20, 60), t = R(5, 15); const gap = (a - b) * t; return { q: '弟が 家を 出て ' + gap + 'm 先を 歩いている。兄が 分速 ' + a + 'm で 追いかける (弟は 分速 ' + b + 'm)。兄は 何分で 追いつく?', type: 'num', a: t, steps: ['1分に ' + a + ' − ' + b + ' = ' + (a - b) + 'm ずつ ちぢまる', gap + ' ÷ ' + (a - b) + ' = ' + t + '分'] }; }
+    if (k === 'catch2') { const b = pick([60, 70, 80]), a = pick([180, 200, 240]), t0 = R(5, 12), t = b * t0 / (a - b); if (!Number.isInteger(t)) return null; return { q: '弟が 分速 ' + b + 'm で 家を 出た ' + t0 + '分後に、兄が 自転車 (分速 ' + a + 'm) で 追いかけた。兄は 出発して 何分後に 追いつく?', type: 'num', a: t, steps: ['兄が 出発する とき、弟は ' + b + ' × ' + t0 + ' = ' + b * t0 + 'm 先', '1分に ' + (a - b) + 'm ちぢまる → ' + b * t0 + ' ÷ ' + (a - b) + ' = ' + t + '分後'] }; }
+    const a = R(70, 100), b = R(40, 65), L = (a - b) * R(10, 30); return { q: '1周 ' + L + 'm の 池を、A (分速 ' + a + 'm) と B (分速 ' + b + 'm) が 同じ 場所から 同じ 向きに 出発。A が B に はじめて 追いつく (1周 差を つける) のは 何分後?', type: 'num', a: L / (a - b), steps: ['同じ 向き → 速さの 差 ' + (a - b) + 'm/分', '1周の 差 ' + L + 'm ÷ ' + (a - b) + ' = ' + L / (a - b) + '分後'] };
+  });
+  add('ej', 'ej5', '🚃', '通過算', ['電車が 鉄橋を わたりきる: 進む きょり = 鉄橋 + 電車の 長さ', '電車が 人 (電柱) の 前を 通る: 進む きょり = 電車の 長さ', '秒速に そろえて 計算する'], () => {
+    const k = pick(['pole', 'bridge', 'bridge2', 'tunnel']), v = pick([15, 20, 25, 30]), Lt = v * pick([4, 5, 6, 8]);
+    if (k === 'pole') return { q: '長さ ' + Lt + 'm の 電車が 秒速 ' + v + 'm で 走っている。電柱の 前を 通りすぎるのに 何秒 かかる?', type: 'num', a: Lt / v, steps: ['電柱の 前を 通る → 進む きょり = 電車の 長さ ' + Lt + 'm', Lt + ' ÷ ' + v + ' = ' + Lt / v + '秒'] };
+    if (k === 'bridge') { const B = v * R(10, 40) - Lt; if (B <= 0) return null; return { q: '長さ ' + Lt + 'm の 電車が、長さ ' + B + 'm の 鉄橋を 秒速 ' + v + 'm で わたる。わたり始めてから わたり終わるまで 何秒?', type: 'num', a: (B + Lt) / v, steps: ['進む きょり = 鉄橋 + 電車 = ' + B + ' + ' + Lt + ' = ' + (B + Lt) + 'm', (B + Lt) + ' ÷ ' + v + ' = ' + (B + Lt) / v + '秒'] }; }
+    if (k === 'bridge2') { const t = R(15, 40), B = v * t - Lt; if (B <= 0) return null; return { q: '秒速 ' + v + 'm の 電車が、長さ ' + B + 'm の 鉄橋を わたり始めてから わたり終わるまでに ' + t + '秒 かかった。電車の 長さは 何 m?', type: 'num', a: Lt, steps: ['進んだ きょり: ' + v + ' × ' + t + ' = ' + v * t + 'm', 'これは 鉄橋 + 電車 → 電車 = ' + v * t + ' − ' + B + ' = ' + Lt + 'm'] }; }
+    const T = v * R(20, 60) + Lt; return { q: '長さ ' + Lt + 'm の 電車が 秒速 ' + v + 'm で、長さ ' + T + 'm の トンネルに 入った。電車が 完全に かくれている 時間は 何秒?', type: 'num', a: (T - Lt) / v, steps: ['完全に かくれる → 進む きょり = トンネル − 電車 = ' + (T - Lt) + 'm', (T - Lt) + ' ÷ ' + v + ' = ' + (T - Lt) / v + '秒'] };
+  });
+  add('ej', 'ej6', '🚤', '流水算', ['下りの 速さ = 船の 速さ + 川の 流れ', '上りの 速さ = 船の 速さ − 川の 流れ', '船の 速さ = (下り + 上り) ÷ 2、流れ = (下り − 上り) ÷ 2'], () => {
+    const k = pick(['down', 'up', 'boat', 'river']), b = R(6, 15), r = R(1, 4), d = lcm(b + r, b - r) * R(1, 2);
+    if (k === 'down') return { q: '静水での 速さが 時速 ' + b + 'km の 船が、流れの 速さ 時速 ' + r + 'km の 川を ' + d + 'km 下る。何時間 かかる?', type: 'num', a: d / (b + r), steps: ['下り = ' + b + ' + ' + r + ' = 時速 ' + (b + r) + 'km', d + ' ÷ ' + (b + r) + ' = ' + d / (b + r) + '時間'] };
+    if (k === 'up') return { q: '静水での 速さが 時速 ' + b + 'km の 船が、流れの 速さ 時速 ' + r + 'km の 川を ' + d + 'km 上る。何時間 かかる?', type: 'num', a: d / (b - r), steps: ['上り = ' + b + ' − ' + r + ' = 時速 ' + (b - r) + 'km', d + ' ÷ ' + (b - r) + ' = ' + d / (b - r) + '時間'] };
+    if (k === 'boat') return { q: 'ある 船が 川を 下ると 時速 ' + (b + r) + 'km、上ると 時速 ' + (b - r) + 'km。静水での 船の 速さは 時速 何 km?', type: 'num', a: b, steps: ['船の 速さ = (下り + 上り) ÷ 2', '(' + (b + r) + ' + ' + (b - r) + ') ÷ 2 = ' + b] };
+    return { q: 'ある 船が 川を 下ると 時速 ' + (b + r) + 'km、上ると 時速 ' + (b - r) + 'km。川の 流れの 速さは 時速 何 km?', type: 'num', a: r, steps: ['流れ = (下り − 上り) ÷ 2', '(' + (b + r) + ' − ' + (b - r) + ') ÷ 2 = ' + r] };
+  });
+  add('ej', 'ej7', '🛠', '仕事算', ['全体の 仕事量を 最小公倍数で 決める (または 1 と する)', '1日 あたりの 仕事量 = 全体 ÷ 日数', 'いっしょに やる = 1日 あたりの 量を 足す'], () => {
+    const k = pick(['two', 'two', 'pipe', 'after']), a = pick([6, 10, 12, 15, 20]), b = pick([4, 5, 6, 10, 12, 30]); if (a === b) return null; const W = lcm(a, b), t = W / (W / a + W / b);
+    if (k === 'two') { if (!Number.isInteger(t * 10)) return null; return { q: 'ある 仕事を A は ' + a + '日、B は ' + b + '日で 終える。2人で いっしょに すると 何日で 終わる?', type: 'num', a: r3(t), steps: ['全体を ' + a + ' と ' + b + ' の 最小公倍数 ' + W + ' と する', 'A は 1日 ' + W / a + '、B は 1日 ' + W / b + ' → 2人で ' + (W / a + W / b), W + ' ÷ ' + (W / a + W / b) + ' = ' + r3(t) + '日'] }; }
+    if (k === 'pipe') { if (!Number.isInteger(t * 10)) return null; return { q: '水そうを いっぱいに するのに、A 管だけだと ' + a + '分、B 管だけだと ' + b + '分 かかる。両方 使うと 何分?', type: 'num', a: r3(t), steps: ['水そうを ' + W + ' と する → A 1分 ' + W / a + '、B 1分 ' + W / b, W + ' ÷ ' + (W / a + W / b) + ' = ' + r3(t) + '分'] }; }
+    const x = R(1, Math.min(a, b) - 1), rest = W - (W / a + W / b) * x; if (rest <= 0 || rest % (W / b)) return null; return { q: 'ある 仕事を A は ' + a + '日、B は ' + b + '日で 終える。はじめ 2人で ' + x + '日 した あと、残りを B 1人で した。B 1人で した のは 何日?', type: 'num', a: rest / (W / b), steps: ['全体 ' + W + '、A 1日 ' + W / a + '、B 1日 ' + W / b, '2人で ' + x + '日: ' + (W / a + W / b) * x + ' → 残り ' + rest, rest + ' ÷ ' + W / b + ' = ' + rest / (W / b) + '日'] };
+  });
+  add('ej', 'ej8', '🧂', '食塩水 (濃度)', ['食塩の 重さ = 食塩水 × 濃度', '濃度 = 食塩 ÷ 食塩水 × 100 (%)', '水を 加えても 食塩の 重さは 変わらない'], () => {
+    const k = pick(['salt', 'conc', 'water', 'mix', 'evap']);
+    if (k === 'salt') { const w = R(2, 10) * 50, p = pick([4, 5, 6, 8, 10, 12, 15]); return { q: p + '% の 食塩水 ' + w + 'g に ふくまれる 食塩は 何 g?', type: 'num', a: w * p / 100, steps: [w + ' × ' + p / 100 + ' = ' + w * p / 100 + 'g'] }; }
+    if (k === 'conc') { const salt = R(2, 9) * 5, water = R(4, 19) * 20 - salt; const tot = salt + water, p = salt * 100 / tot; if (!Number.isInteger(p * 10)) return null; return { q: '水 ' + water + 'g に 食塩 ' + salt + 'g を とかした。濃度は 何 %?', type: 'num', a: r3(p), steps: ['食塩水 = ' + water + ' + ' + salt + ' = ' + tot + 'g', salt + ' ÷ ' + tot + ' × 100 = ' + r3(p) + '%'] }; }
+    if (k === 'water') { const w = R(2, 6) * 100, p = pick([10, 12, 15, 20]), q = pick([5, 6, 8, 10].filter(x => x < p)), salt = w * p / 100, nw = salt * 100 / q; if (!Number.isInteger(nw)) return null; return { q: p + '% の 食塩水 ' + w + 'g に 水を 加えて ' + q + '% に したい。水を 何 g 加える?', type: 'num', a: nw - w, steps: ['食塩: ' + w + ' × ' + p / 100 + ' = ' + salt + 'g (変わらない)', q + '% に なる 食塩水: ' + salt + ' ÷ ' + q / 100 + ' = ' + nw + 'g', '加える 水: ' + nw + ' − ' + w + ' = ' + (nw - w) + 'g'] }; }
+    if (k === 'mix') { const a = R(1, 4) * 100, b = R(1, 4) * 100, p = pick([4, 6, 8, 10]), q = pick([10, 12, 15, 20]), salt = a * p / 100 + b * q / 100, c = salt * 100 / (a + b); if (!Number.isInteger(c * 10)) return null; return { q: p + '% の 食塩水 ' + a + 'g と ' + q + '% の 食塩水 ' + b + 'g を 混ぜた。何 % に なる?', type: 'num', a: r3(c), steps: ['食塩: ' + a * p / 100 + ' + ' + b * q / 100 + ' = ' + salt + 'g', '食塩水: ' + (a + b) + 'g', salt + ' ÷ ' + (a + b) + ' × 100 = ' + r3(c) + '%'] }; }
+    const w = R(3, 8) * 100, p = pick([4, 5, 6, 8]), salt = w * p / 100, q = pick([10, 12, 16, 20].filter(x => x > p)), nw = salt * 100 / q; if (!Number.isInteger(nw)) return null; return { q: p + '% の 食塩水 ' + w + 'g から 水を 蒸発させて ' + q + '% に したい。何 g 蒸発させる?', type: 'num', a: w - nw, steps: ['食塩 ' + salt + 'g (変わらない)', q + '% の 食塩水: ' + salt + ' ÷ ' + q / 100 + ' = ' + nw + 'g', w + ' − ' + nw + ' = ' + (w - nw) + 'g'] };
+  });
+  add('ej', 'ej9', '💴', '損益算', ['定価 = 原価 × (1 + 利益の 割合)', '売り値 = 定価 × (1 − 値引きの 割合)', '利益 = 売り値 − 原価 (マイナスなら 損)'], () => {
+    const k = pick(['teika', 'urine', 'rieki', 'genka']), c = R(4, 30) * 100, up = pick([20, 25, 30, 40, 50]), off = pick([10, 20, 25]);
+    if (k === 'teika') return { q: '原価 ' + c + '円の 品物に ' + up + '% の 利益を 見こんで 定価を つけた。定価は 何円?', type: 'num', a: c * (100 + up) / 100, steps: [c + ' × ' + (100 + up) / 100 + ' = ' + c * (100 + up) / 100 + '円'] };
+    const t = c * (100 + up) / 100, s = t * (100 - off) / 100;
+    if (k === 'urine') return { q: '定価 ' + t + '円の 品物を ' + off + '% 引きで 売った。売り値は 何円?', type: 'num', a: s, steps: [t + ' × ' + (100 - off) / 100 + ' = ' + s + '円'] };
+    if (k === 'rieki') { if (!Number.isInteger(s)) return null; return { q: '原価 ' + c + '円の 品物に ' + up + '% の 利益を 見こんで 定価を つけたが、売れないので 定価の ' + off + '% 引きで 売った。利益は 何円? (損なら マイナス)', type: 'num', a: s - c, steps: ['定価: ' + c + ' × ' + (100 + up) / 100 + ' = ' + t, '売り値: ' + t + ' × ' + (100 - off) / 100 + ' = ' + s, '利益: ' + s + ' − ' + c + ' = ' + (s - c) + '円'] }; }
+    return { q: '原価に ' + up + '% の 利益を 見こんで 定価 ' + t + '円 を つけた。原価は 何円?', type: 'num', a: c, steps: ['原価 × ' + (100 + up) / 100 + ' = ' + t, '原価 = ' + t + ' ÷ ' + (100 + up) / 100 + ' = ' + c + '円'] };
+  });
+  add('ej', 'ej10', '👨‍👦', '年齢算・倍数算', ['年齢の 差は 何年たっても 変わらない', '「何年後に 3倍」→ 差を 線分図で 考える (差 = 子の 2つ分)', '倍数算: やりとり しても 合計が 変わらない ことを 使う'], () => {
+    const k = pick(['after', 'before', 'sum', 'give']);
+    if (k === 'after') { const c = R(4, 12), m = pick([2, 3, 4]), x = R(1, 15), p = m * (c + x) - x; if (p - c < 20) return null; return { q: '今、父は ' + p + '才、子は ' + c + '才。父の 年れいが 子の ' + m + '倍に なるのは 何年後?', type: 'num', a: x, steps: ['年の 差 ' + (p - c) + '才 は 変わらない', m + '倍の とき、差は 子の ' + (m - 1) + 'つ分 → 子 = ' + (p - c) + ' ÷ ' + (m - 1) + ' = ' + (p - c) / (m - 1) + '才', (p - c) / (m - 1) + ' − ' + c + ' = ' + x + '年後'] }; }
+    if (k === 'before') { const c = R(12, 20), m = pick([3, 4, 5]), x = R(1, 8), p = m * (c - x) + x; if (c - x <= 0) return null; return { q: '今、母は ' + p + '才、子は ' + c + '才。母の 年れいが 子の ' + m + '倍だったのは 何年前?', type: 'num', a: x, steps: ['差 ' + (p - c) + '才 = 子の ' + (m - 1) + 'つ分', 'その とき 子は ' + (p - c) / (m - 1) + '才', c + ' − ' + (p - c) / (m - 1) + ' = ' + x + '年前'] }; }
+    if (k === 'sum') { const a = R(30, 45), b = R(28, 42), c1 = R(3, 10), c2 = c1 + R(1, 4), m = pick([2, 3]); const x = (a + b - m * (c1 + c2)) / (2 * m - 2); if (!Number.isInteger(x) || x <= 0) return null; return { q: '父 ' + a + '才、母 ' + b + '才、兄 ' + c2 + '才、弟 ' + c1 + '才。両親の 年れいの 和が 兄弟の 和の ' + m + '倍に なるのは 何年後?', type: 'num', a: x, steps: ['x 年後: 両親の 和 ' + (a + b) + ' + 2x、兄弟の 和 ' + (c1 + c2) + ' + 2x', (a + b) + ' + 2x = ' + m + ' × (' + (c1 + c2) + ' + 2x)', 'x = ' + x] }; }
+    const ra = pick([3, 5]), rb = pick([2, 1]), g = R(1, 4) * 10; return { q: 'A と B の 所持金の 比は ' + ra + ' : ' + rb + '。A が B に ' + g * (ra - rb) + '円 わたすと、2人の 所持金は 同じに なる。はじめ A は 何円?', type: 'num', a: 2 * g * ra, steps: ['わたす 前後で 合計は 変わらない', '差 ' + (ra - rb) + ' つ分 の 半分 = わたした お金 → 1つ分 = ' + g * (ra - rb) + ' × 2 ÷ ' + (ra - rb) + ' = ' + g * 2, 'A = ' + g * 2 + ' × ' + ra + ' = ' + g * 2 * ra + '円'] };
+  });
+  add('ej', 'ej11', '🔢', '規則性 (数列・周期)', ['等差数列: □番目 = 最初 + 差 × (□ − 1)', '周期: 何こで 1セット かを 見つけ、わり算の あまりで 考える', '曜日の 問題は 7日 周期'], () => {
+    const k = pick(['ap', 'apsum', 'cycle', 'week', 'nth']);
+    if (k === 'ap') { const a = R(1, 9), d = R(2, 9), n = R(10, 50); return { q: a + ', ' + (a + d) + ', ' + (a + 2 * d) + ', ' + (a + 3 * d) + ', … と 並ぶ。' + n + '番目の 数は?', type: 'num', a: a + d * (n - 1), steps: ['差は ' + d, a + ' + ' + d + ' × (' + n + ' − 1) = ' + (a + d * (n - 1))] }; }
+    if (k === 'apsum') { const n = R(10, 50); return { q: '1 + 3 + 5 + 7 + … と、奇数を 小さい 順に ' + n + 'こ 足すと?', type: 'num', a: n * n, steps: ['奇数を n こ 足すと n × n に なる (正方形の 形)', n + ' × ' + n + ' = ' + n * n] }; }
+    if (k === 'cycle') { const pat = pick(['○●△', '赤青黄緑', 'ABCDE']), p = pat.length, n = R(20, 200), c = pat[(n - 1) % p]; return choice(pat.split('').join(' ') + ' ' + pat.split('').join(' ') + ' … と くり返す。' + n + '番目は?', c, pat.split('').filter(x => x !== c), [p + 'こで 1セット', n + ' ÷ ' + p + ' = ' + Math.floor(n / p) + ' あまり ' + n % p + (n % p ? ' → セットの ' + n % p + '番目' : ' → セットの 最後'), '→ ' + c]); }
+    if (k === 'week') { const W = ['日', '月', '火', '水', '木', '金', '土'], s = R(0, 6), d = R(10, 100); return choice('今日は ' + W[s] + '曜日。' + d + '日後は 何曜日?', W[(s + d) % 7] + '曜日', W.filter((_, i) => i !== (s + d) % 7).map(x => x + '曜日').sort(() => Math.random() - 0.5), ['7日ごとに 同じ 曜日', d + ' ÷ 7 = ' + Math.floor(d / 7) + ' あまり ' + d % 7, W[s] + ' から ' + d % 7 + '日 進む → ' + W[(s + d) % 7]]); }
+    const a = R(3, 7), d = R(3, 8), v = a + d * R(15, 40); return { q: a + ', ' + (a + d) + ', ' + (a + 2 * d) + ', … と 並ぶ。' + v + ' は 何番目?', type: 'num', a: (v - a) / d + 1, steps: ['(' + v + ' − ' + a + ') ÷ ' + d + ' = ' + (v - a) / d, '+ 1 → ' + ((v - a) / d + 1) + '番目'] };
+  });
+  add('ej', 'ej12', '📏', '平均算・過不足算', ['平均算: 合計 = 平均 × 人数 で 考える', '過不足算: (余り + 不足) ÷ (1人分の 差) = 人数', '面積図で 考えると わかりやすい'], () => {
+    const k = pick(['avg2', 'avgadd', 'kafusoku', 'kafusoku2']);
+    if (k === 'avg2') { const nb = R(10, 20), ng = R(10, 20), ab = R(60, 80), ag = R(62, 85); const tot = nb * ab + ng * ag; if (tot % (nb + ng)) return null; return { q: '男子 ' + nb + '人の 平均点は ' + ab + '点、女子 ' + ng + '人の 平均点は ' + ag + '点。クラス全体の 平均点は?', type: 'num', a: tot / (nb + ng), steps: ['合計: ' + nb + ' × ' + ab + ' + ' + ng + ' × ' + ag + ' = ' + tot, tot + ' ÷ ' + (nb + ng) + ' = ' + tot / (nb + ng) + '点', '※ (' + ab + ' + ' + ag + ') ÷ 2 では ない'] }; }
+    if (k === 'avgadd') { const n = R(4, 9), a = R(60, 80), up = R(1, 4), x = a + up * (n + 1); return { q: n + '回の テストの 平均は ' + a + '点。次の テストで 何点 とれば、平均が ' + up + '点 上がる?', type: 'num', a: x, steps: [(n + 1) + '回の 合計は ' + (a + up) + ' × ' + (n + 1) + ' = ' + (a + up) * (n + 1), 'これまで ' + a * n, (a + up) * (n + 1) + ' − ' + a * n + ' = ' + x + '点'] }; }
+    if (k === 'kafusoku') { const n = R(6, 20), p = R(3, 6), r = R(2, Math.min(9, 2 * n - 1)), s = 2 * n - r; return { q: 'みかんを 子どもに 配る。1人 ' + p + 'こずつ だと ' + r + 'こ 余り、' + (p + 2) + 'こずつ だと ' + s + 'こ 足りない。子どもは 何人?', type: 'num', a: (r + s) / 2, steps: ['1人分の 差 2こ、全体の 差 ' + r + ' + ' + s + ' = ' + (r + s) + 'こ', (r + s) + ' ÷ 2 = ' + (r + s) / 2 + '人'] }; }
+    const n = R(5, 15), p = R(3, 6), r = R(10, 30), q = p + R(1, 3), extra = q * n - (p * n + r); if (extra <= 0) return null; return { q: 'あめを 1人 ' + p + 'こずつ 配ると ' + r + 'こ 余る。1人 ' + q + 'こずつ 配ると ' + extra + 'こ 足りない。あめは 何こ?', type: 'num', a: p * n + r, steps: ['1人分の 差 ' + (q - p) + 'こ、全体の 差 ' + r + ' + ' + extra + ' = ' + (r + extra), '人数 = ' + (r + extra) + ' ÷ ' + (q - p) + ' = ' + n + '人', 'あめ = ' + p + ' × ' + n + ' + ' + r + ' = ' + (p * n + r) + 'こ'] };
+  });
+
+  const GROUPS = [{ id: 'e4', name: '小学 4年', color: '#c0702a' }, { id: 'e5', name: '小学 5年', color: '#3a8a6a' }, { id: 'e6', name: '小学 6年', color: '#5a6ab0' }, { id: 'ej', name: '発展 (中学受験 算数)', color: '#8a3a5a' }];
   function make(u) { let r = null; for (let i = 0; i < 60 && !r; i++) { try { r = u.gen(); } catch (e) { r = null; } } return r; }
   return { U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs, title: '小学 算数 ラダー (4〜6年)', icon: '🎒',
-    desc: '小学4年 から 6年 まで (学校の 教科書と 同じ 順番) ', note: '問題の 数は 毎回 変わるよ。くわしい 解説で 図を 見ながら 学ぼう。', diags: [['e', '🩺 実力診断 (小学 20問)']], back: 'home' };
+    desc: '小学4年 から 6年 まで (学校の 教科書と 同じ 順番) + 発展 (中学受験の 特殊算)', note: '問題の 数は 毎回 変わるよ。くわしい 解説で 図を 見ながら 学ぼう。', diags: [['e', '🩺 実力診断 (小学 20問)']], back: 'home' };
 })();
