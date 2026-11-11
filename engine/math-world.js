@@ -247,6 +247,8 @@ const MathWorld = (function () {
     const D = ladData(); let h = head('📈 中学・高校 数学ラダー');
     const done = LADDER.U.filter(u => (D[u.id] || {}).best >= 8).length;
     h += '<div class="mw-box"><b>中学1年 から 高校2年 (+ 発展) まで ' + LADDER.U.length + ' 単元</b><p>どの 単元からでも 始めて OK。「要点 → 例題 → 練習 10問」で、8問 以上 正解で ★、全問 正解で 🏅。問題の 数は 毎回 変わるよ。</p><div class="mw-ladprog">' + '<i style="width:' + Math.round(done * 100 / LADDER.U.length) + '%"></i></div><small class="mw-ladn">★ ' + done + ' / ' + LADDER.U.length + '</small></div>';
+    const last = (data().diag || []).slice(-1)[0];
+    h += '<div class="mw-row"><button class="mw-primary" data-diag="c">🩺 実力診断 (中学 20問)</button><button class="mw-primary" data-diag="h">🩺 実力診断 (高校 20問)</button></div>' + (last ? '<p class="mw-note">前回の 診断: ' + esc(last.d) + ' ' + (last.lv === 'c' ? '中学' : '高校') + ' ' + last.ok + ' / ' + last.n + '</p>' : '');
     LADDER.GROUPS.forEach(g => {
       const us = LADDER.U.filter(u => u.g === g.id); if (!us.length) return;
       h += '<h3 class="mw-cat" style="color:' + g.color + '">' + g.name + ' <small>' + us.filter(u => (D[u.id] || {}).best >= 8).length + ' / ' + us.length + '</small></h3><div class="mw-grid">';
@@ -255,6 +257,31 @@ const MathWorld = (function () {
     });
     area().innerHTML = h; bindBack();
     area().querySelectorAll('[data-lu]').forEach(b => b.onclick = () => { sfx('click'); ladUnit(LADDER.byId(b.dataset.lu)); });
+    area().querySelectorAll('[data-diag]').forEach(b => b.onclick = () => { sfx('click'); diagStart(b.dataset.diag); });
+  }
+  function diagStart(lv) {
+    const gs = lv === 'c' ? ['c1', 'c2', 'c3'] : ['h1', 'hA', 'h2', 'hB', 'h3'];
+    const pool = LADDER.U.filter(u => gs.indexOf(u.g) >= 0).sort(() => Math.random() - 0.5), units = [];
+    while (units.length < 20) units.push(pool[units.length % pool.length]);
+    units.sort((a, b) => LADDER.U.indexOf(a) - LADDER.U.indexOf(b));   // やさしい 順
+    run = { diag: lv, units: units, u: units[0], i: 0, ok: 0, n: 20, wrong: [], res: [] }; ladQ();
+  }
+  function diagEnd() {
+    const R = run, D = data(), byU = {};
+    R.units.forEach((u, i) => { const b = byU[u.id] || (byU[u.id] = [0, 0]); b[1]++; if (R.res[i]) b[0]++; });
+    const weak = Object.keys(byU).filter(id => byU[id][0] < byU[id][1]);
+    const rec = { d: (typeof Study !== 'undefined' ? Study.today() : ''), lv: R.diag, ok: R.ok, n: R.n, weak: weak };
+    D.diag = (D.diag || []).concat([rec]).slice(-10); save();
+    const gs = {}; R.units.forEach((u, i) => { const g = gs[u.g] || (gs[u.g] = [0, 0]); g[1]++; if (R.res[i]) g[0]++; });
+    let h = head('🩺 実力診断 — 結果', '一覧');
+    const pct = Math.round(R.ok * 100 / R.n);
+    h += '<div class="mw-result"><b>' + R.ok + ' / ' + R.n + '</b><p>' + (pct >= 85 ? '🏅 すばらしい! この レベルは ほぼ 完ぺき。次の 学年へ 進もう。' : pct >= 60 ? 'よく できました! 下の 苦手 単元を 練習すると 完成に 近づくよ。' : 'まずは 下の 単元の 要点と 例題から 始めよう。') + '</p></div>';
+    h += '<div class="mw-box"><b>学年別</b><table class="mw-dtbl">' + Object.keys(gs).map(g => { const G = LADDER.GROUPS.find(x => x.id === g); return '<tr><th style="color:' + G.color + '">' + G.name + '</th><td>' + gs[g][0] + ' / ' + gs[g][1] + '</td><td><span class="mw-dbar"><i style="width:' + Math.round(gs[g][0] * 100 / gs[g][1]) + '%;background:' + G.color + '"></i></span></td></tr>'; }).join('') + '</table></div>';
+    if (weak.length) h += '<div class="mw-box"><b>📌 おすすめ 単元 (まちがえた ところ)</b><div class="mw-grid" style="margin-top:8px">' + weak.map(id => { const u = LADDER.byId(id); return '<button class="mw-card" data-lu="' + id + '"><span class="mw-ci">' + u.icon + '</span><span class="mw-cn">' + esc(u.name) + '</span><span class="mw-cs">' + LADDER.GROUPS.find(x => x.id === u.g).name + '</span></button>'; }).join('') + '</div></div>';
+    h += '<div class="mw-row"><button class="mw-secondary" id="mwList">一覧へ</button></div>';
+    area().innerHTML = h; bindBack(ladList);
+    area().querySelectorAll('[data-lu]').forEach(b => b.onclick = () => { sfx('click'); ladUnit(LADDER.byId(b.dataset.lu)); });
+    $('mwList').onclick = () => { sfx('click'); ladList(); };
   }
   function fmtA(p) { return p.type === 'choice' ? p.opts[0] : p.type === 'num' ? LADDER._fs(p.a) : p.type === 'set' ? LADDER._fs(p.a[0]) + ', ' + LADDER._fs(p.a[1]) : (p.labels || ['', '']).map((l, i) => l + ' = ' + LADDER._fs(p.a[i])).join('、'); }
   function ladUnit(u) {
@@ -272,16 +299,16 @@ const MathWorld = (function () {
     $('mwLadGo').onclick = () => { sfx('click'); run = { u: u, i: 0, ok: 0, n: 10, wrong: [] }; ladQ(); };
   }
   function ladQ() {
-    const R = run, u = R.u, p = LADDER.make(u); R.p = p; R.done = false; R.miss = 0;
+    const R = run; if (R.diag) R.u = R.units[R.i]; const u = R.u, p = LADDER.make(u); R.p = p; R.done = false; R.miss = 0;
     if (p.type === 'choice') { const idx = p.opts.map((o, i) => i); for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; } R.order = idx; }
-    let h = head(u.icon + ' ' + esc(u.name) + ' <small>' + (R.i + 1) + ' / ' + R.n + '</small>', '単元');
+    let h = head((R.diag ? '🩺 実力診断 ・ ' : '') + u.icon + ' ' + esc(u.name) + ' <small>' + (R.i + 1) + ' / ' + R.n + '</small>', R.diag ? '一覧' : '単元');
     h += '<div class="mw-dots">' + Array.from({ length: R.n }, (_, i) => '<i class="' + (i < R.i ? (R.res && R.res[i] ? 'ok' : 'ng') : i === R.i ? 'cur' : '') + '"></i>').join('') + '</div>';
     h += '<div class="mw-q big mw-pre">' + esc(p.q) + '</div>';
     if (p.type === 'choice') h += '<div class="mw-chs">' + R.order.map((oi, k) => '<button class="mw-ch" data-ch="' + oi + '"><b>' + ['ア', 'イ', 'ウ', 'エ'][k] + '</b> ' + esc(p.opts[oi]) + '</button>').join('') + '</div>';
     else if (p.type === 'num') h += '<div class="mw-inp"><input id="mwA" autocomplete="off" placeholder="答え"><button class="mw-ok" id="mwAGo">決定</button></div><div class="mw-keys"><button data-ins="−">−</button><button data-ins="/">/</button><span>分数は 3/4、負の数は −5</span></div>';
     else { const L = p.type === 'set' ? ['解 1', '解 2'] : p.labels; h += '<div class="mw-pair"><label>' + esc(L[0]) + '<input id="mwA1" autocomplete="off"></label><label>' + esc(L[1]) + '<input id="mwA2" autocomplete="off"></label><button class="mw-ok" id="mwPairGo">決定</button></div><div class="mw-keys"><button data-ins="−">−</button><button data-ins="/">/</button><span>分数は 3/4、負の数は −5</span></div>'; }
     h += '<div id="mwFb"></div>';
-    area().innerHTML = h; bindBack(() => ladUnit(u));
+    area().innerHTML = h; bindBack(R.diag ? ladList : () => ladUnit(u));
     let lastF = 'mwA'; ['mwA', 'mwA1', 'mwA2'].forEach(id => { const e = $(id); if (e) e.addEventListener('focus', () => { lastF = id; }); });
     area().querySelectorAll('[data-ins]').forEach(b => { b.onmousedown = e => e.preventDefault(); b.onclick = () => { const e = $(lastF) || $('mwA1'); if (!e || e.disabled) return; e.value += b.dataset.ins; e.focus(); }; });
     if (p.type === 'choice') area().querySelectorAll('[data-ch]').forEach(b => b.onclick = () => ladAns(+b.dataset.ch === 0, b));
@@ -297,13 +324,13 @@ const MathWorld = (function () {
   }
   function ladAns(ok, btn) {
     const R = run; if (!R || R.done) return; const p = R.p, fb = $('mwFb');
-    if (!ok && R.miss === 0 && p.type !== 'choice') { R.miss = 1; sfx('wrong'); fb.innerHTML = '<div class="mw-ng">🤔 ちがうみたい。もう1回! (符号・約分・計算ミスを 確認)</div>'; return; }
+    if (!ok && R.miss === 0 && p.type !== 'choice' && !R.diag) { R.miss = 1; sfx('wrong'); fb.innerHTML = '<div class="mw-ng">🤔 ちがうみたい。もう1回! (符号・約分・計算ミスを 確認)</div>'; return; }
     R.done = true; R.res = R.res || []; R.res[R.i] = ok; if (ok) R.ok++; else R.wrong.push(p);
     sfx(ok ? 'correct' : 'wrong');
     area().querySelectorAll('.mw-ch').forEach(b => { b.disabled = true; if (+b.dataset.ch === 0) b.classList.add('right'); }); if (btn && !ok) btn.classList.add('wrongc');
     ['mwA', 'mwAGo', 'mwA1', 'mwA2', 'mwPairGo'].forEach(id => { const e = $(id); if (e) e.disabled = true; });
     fb.innerHTML = '<div class="' + (ok ? 'mw-okm' : 'mw-ng') + '">' + (ok ? '⭕ 正解!' : '❌ 答えは ' + esc(fmtA(p))) + '</div>' + (ok ? '<details class="mw-det"><summary>解き方を 見る</summary><ol class="mw-steps">' + p.steps.map(s => '<li>' + esc(s) + '</li>').join('') + '</ol></details>' : '<ol class="mw-steps">' + p.steps.map(s => '<li>' + esc(s) + '</li>').join('') + '</ol>') + '<button class="mw-primary" id="mwNext">' + (R.i + 1 < R.n ? '次の 問題 →' : '結果を 見る') + '</button>';
-    $('mwNext').onclick = () => { sfx('click'); R.i++; if (R.i < R.n) ladQ(); else ladEnd(); };
+    $('mwNext').onclick = () => { sfx('click'); R.i++; if (R.i < R.n) ladQ(); else if (R.diag) diagEnd(); else ladEnd(); };
   }
   function ladEnd() {
     const R = run, u = R.u, D = ladData(), r = D[u.id] || (D[u.id] = { best: 0, n: 0 }), before = r.best;

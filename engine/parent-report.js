@@ -60,6 +60,17 @@ const ParentReport = (function () {
     return h;
   }
 
+  // ---- 数学ラダー ----
+  function ladderBlock() {
+    if (typeof LADDER === 'undefined') return '';
+    const m = v2().mw || {}, lad = m.lad || {}, diag = m.diag || [];
+    if (!Object.keys(lad).length && !diag.length) return '';
+    let h = '<table class="pr-tbl"><tbody>';
+    LADDER.GROUPS.forEach(g => { const us = LADDER.U.filter(u => u.g === g.id), st = us.filter(u => (lad[u.id] || {}).best >= 8).length, tried = us.filter(u => lad[u.id]).length; if (tried) h += '<tr><th>' + esc(g.name) + '</th><td class="pr-num">★ ' + st + ' / ' + us.length + '</td><td>' + bar(pct(st, us.length), 'good') + '</td></tr>'; });
+    h += '</tbody></table>';
+    if (diag.length) { const d = diag[diag.length - 1]; h += '<div class="pr-note">最新の 実力診断 (' + esc(d.d) + '・' + (d.lv === 'c' ? '中学' : '高校') + '): <b>' + d.ok + ' / ' + d.n + '</b>' + (d.weak.length ? '<br>苦手 単元: ' + d.weak.map(id => { const u = LADDER.byId(id); return u ? esc(u.name) : ''; }).filter(Boolean).join('、') : '') + '</div>'; }
+    return h;
+  }
   // ---- 冒険の 進み具合 ----
   function adventureBlock() {
     const V = v2(), rows = [];
@@ -102,6 +113,7 @@ const ParentReport = (function () {
     h += '<section class="pr-card"><h3>💡 おすすめ</h3><ul class="pr-tips">' + tips(S7.sum, S7.days).map(t => '<li>' + esc(t) + '</li>').join('') + '</ul></section>';
     h += '<section class="pr-card"><h3>🇬🇧 英検道場 (これまでの 合計)</h3>' + eikenBlock() + '</section>';
     const ib = indianBlock(); if (ib) h += '<section class="pr-card"><h3>🇮🇳 インド式 計算道場</h3>' + ib + '</section>';
+    const lb = ladderBlock(); if (lb) h += '<section class="pr-card"><h3>📈 中学・高校 数学ラダー</h3>' + lb + '</section>';
     h += '<section class="pr-card"><h3>🧭 冒険の 進み具合</h3>' + adventureBlock() + '</section>';
     h += '<p class="pr-foot">※ この 端末に 保存された 記録です。学習時間は 画面を 操作している 1分ごとに 数えています (2026年11月 以降の 記録)。</p>';
     $('prArea').innerHTML = h;
