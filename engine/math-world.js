@@ -248,8 +248,9 @@ const MathWorld = (function () {
     const isM = L === LADDER, D = ladData(); let h = head(L.icon + ' ' + L.title);
     const done = L.U.filter(u => (D[u.id] || {}).best >= 8).length;
     h += '<div class="mw-box"><b>' + (isM ? '中学1年 から 高校2年 (+ 発展) まで ' : '中学 理科 から 高校 物理基礎・化学基礎、社会まで ') + L.U.length + ' 単元</b><p>どの 単元からでも 始めて OK。「要点 → 例題 → 練習 10問」で、8問 以上 正解で ★、全問 正解で 🏅。' + (isM ? '問題の 数は 毎回 変わるよ。' : '理科は 数値が 毎回 変わり、社会は 解説つきの 厳選問題だよ。') + '</p><div class="mw-ladprog">' + '<i style="width:' + Math.round(done * 100 / L.U.length) + '%"></i></div><small class="mw-ladn">★ ' + done + ' / ' + L.U.length + '</small></div>';
-    const last = (data().diag || []).slice(-1)[0];
-    if (isM) h += '<div class="mw-row"><button class="mw-primary" data-diag="c">🩺 実力診断 (中学 20問)</button><button class="mw-primary" data-diag="h">🩺 実力診断 (高校 20問)</button></div>' + (last ? '<p class="mw-note">前回の 診断: ' + esc(last.d) + ' ' + (last.lv === 'c' ? '中学' : '高校') + ' ' + last.ok + ' / ' + last.n + '</p>' : '');
+    const last = (data().diag || []).filter(d => isM ? d.lv !== 's' : d.lv === 's').slice(-1)[0];
+    if (!isM) h += '<div class="mw-row"><button class="mw-primary" data-diag="s">🩺 社会 実力診断 (20問)</button></div>';
+    if (isM) h += '<div class="mw-row"><button class="mw-primary" data-diag="c">🩺 実力診断 (中学 20問)</button><button class="mw-primary" data-diag="h">🩺 実力診断 (高校 20問)</button></div>' + (last ? '<p class="mw-note">前回の 診断: ' + esc(last.d) + ' ' + ({ c: '中学', h: '高校', s: '社会' })[last.lv] + ' ' + last.ok + ' / ' + last.n + '</p>' : '');
     L.GROUPS.forEach(g => {
       const us = L.U.filter(u => u.g === g.id); if (!us.length) return;
       h += '<h3 class="mw-cat" style="color:' + g.color + '">' + g.name + ' <small>' + us.filter(u => (D[u.id] || {}).best >= 8).length + ' / ' + us.length + '</small></h3><div class="mw-grid">';
@@ -262,7 +263,8 @@ const MathWorld = (function () {
     area().querySelectorAll('[data-diag]').forEach(b => b.onclick = () => { sfx('click'); diagStart(b.dataset.diag); });
   }
   function diagStart(lv) {
-    const gs = lv === 'c' ? ['c1', 'c2', 'c3'] : ['h1', 'hA', 'h2', 'hB', 'h3'];
+    const gs = lv === 'c' ? ['c1', 'c2', 'c3'] : lv === 's' ? ['sh', 'sg', 'sc2'] : ['h1', 'hA', 'h2', 'hB', 'h3'];
+    if (lv === 's') L = SCILAD; else L = LADDER;
     const pool = L.U.filter(u => gs.indexOf(u.g) >= 0).sort(() => Math.random() - 0.5), units = [];
     while (units.length < 20) units.push(pool[units.length % pool.length]);
     units.sort((a, b) => L.U.indexOf(a) - L.U.indexOf(b));   // やさしい 順
@@ -278,7 +280,7 @@ const MathWorld = (function () {
     let h = head('🩺 実力診断 — 結果', '一覧');
     const pct = Math.round(R.ok * 100 / R.n);
     h += '<div class="mw-result"><b>' + R.ok + ' / ' + R.n + '</b><p>' + (pct >= 85 ? '🏅 すばらしい! この レベルは ほぼ 完ぺき。次の 学年へ 進もう。' : pct >= 60 ? 'よく できました! 下の 苦手 単元を 練習すると 完成に 近づくよ。' : 'まずは 下の 単元の 要点と 例題から 始めよう。') + '</p></div>';
-    h += '<div class="mw-box"><b>学年別</b><table class="mw-dtbl">' + Object.keys(gs).map(g => { const G = L.GROUPS.find(x => x.id === g); return '<tr><th style="color:' + G.color + '">' + G.name + '</th><td>' + gs[g][0] + ' / ' + gs[g][1] + '</td><td><span class="mw-dbar"><i style="width:' + Math.round(gs[g][0] * 100 / gs[g][1]) + '%;background:' + G.color + '"></i></span></td></tr>'; }).join('') + '</table></div>';
+    h += '<div class="mw-box"><b>' + (R.diag === 's' ? '分野別' : '学年別') + '</b><table class="mw-dtbl">' + Object.keys(gs).map(g => { const G = L.GROUPS.find(x => x.id === g); return '<tr><th style="color:' + G.color + '">' + G.name + '</th><td>' + gs[g][0] + ' / ' + gs[g][1] + '</td><td><span class="mw-dbar"><i style="width:' + Math.round(gs[g][0] * 100 / gs[g][1]) + '%;background:' + G.color + '"></i></span></td></tr>'; }).join('') + '</table></div>';
     if (weak.length) h += '<div class="mw-box"><b>📌 おすすめ 単元 (まちがえた ところ)</b><div class="mw-grid" style="margin-top:8px">' + weak.map(id => { const u = L.byId(id); return '<button class="mw-card" data-lu="' + id + '"><span class="mw-ci">' + u.icon + '</span><span class="mw-cn">' + esc(u.name) + '</span><span class="mw-cs">' + L.GROUPS.find(x => x.id === u.g).name + '</span></button>'; }).join('') + '</div></div>';
     h += '<div class="mw-row"><button class="mw-secondary" id="mwList">一覧へ</button></div>';
     area().innerHTML = h; bindBack(ladList);

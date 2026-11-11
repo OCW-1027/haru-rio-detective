@@ -68,7 +68,8 @@ const ParentReport = (function () {
     let h = '<table class="pr-tbl"><tbody>';
     LADDER.GROUPS.forEach(g => { const us = LADDER.U.filter(u => u.g === g.id), st = us.filter(u => (lad[u.id] || {}).best >= 8).length, tried = us.filter(u => lad[u.id]).length; if (tried) h += '<tr><th>' + esc(g.name) + '</th><td class="pr-num">★ ' + st + ' / ' + us.length + '</td><td>' + bar(pct(st, us.length), 'good') + '</td></tr>'; });
     h += '</tbody></table>';
-    if (diag.length && LADDER.title.indexOf('数学') >= 0) { const d = diag[diag.length - 1]; h += '<div class="pr-note">最新の 実力診断 (' + esc(d.d) + '・' + (d.lv === 'c' ? '中学' : '高校') + '): <b>' + d.ok + ' / ' + d.n + '</b>' + (d.weak.length ? '<br>苦手 単元: ' + d.weak.map(id => { const u = LADDER.byId(id); return u ? esc(u.name) : ''; }).filter(Boolean).join('、') : '') + '</div>'; }
+    const isMath = LADDER.title.indexOf('数学') >= 0, dl = diag.filter(d => isMath ? d.lv !== 's' : d.lv === 's');
+    if (dl.length) { const d = dl[dl.length - 1]; h += '<div class="pr-note">最新の 実力診断 (' + esc(d.d) + '・' + ({ c: '中学', h: '高校', s: '社会' })[d.lv] + '): <b>' + d.ok + ' / ' + d.n + '</b>' + (d.weak.length ? '<br>苦手 単元: ' + d.weak.map(id => { const u = LADDER.byId(id); return u ? esc(u.name) : ''; }).filter(Boolean).join('、') : '') + '</div>'; }
     return h;
   }
   // ---- 冒険の 進み具合 ----
