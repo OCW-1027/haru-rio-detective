@@ -41,13 +41,13 @@ const LF = (function () {
   function graph(o) {
     const W = o.w || 360, H = o.h || 320, P = 28, xr = o.x, yr = o.y, X = v => P + (v - xr[0]) * (W - 2 * P) / (xr[1] - xr[0]), Y = v => H - P - (v - yr[0]) * (H - 2 * P) / (yr[1] - yr[0]);
     let s = rect(0, 0, W, H, 'white', 'white', 0);
-    const st = o.grid || 1;
-    for (let v = Math.ceil(xr[0] / st) * st; v <= xr[1]; v += st) s += line(X(v), Y(yr[0]), X(v), Y(yr[1]), '#e3e8ef', 1);
-    for (let v = Math.ceil(yr[0] / st) * st; v <= yr[1]; v += st) s += line(X(xr[0]), Y(v), X(xr[1]), Y(v), '#e3e8ef', 1);
+    const st = o.grid || 1, sy = o.gridY || st;
+    for (let v = Math.ceil(xr[0] / st) * st; v <= xr[1] + 1e-9; v += st) s += line(X(v), Y(yr[0]), X(v), Y(yr[1]), '#e3e8ef', 1);
+    for (let v = Math.ceil(yr[0] / sy) * sy; v <= yr[1] + 1e-9; v += sy) s += line(X(xr[0]), Y(v), X(xr[1]), Y(v), '#e3e8ef', 1);
     s += line(X(xr[0]), Y(0), X(xr[1]) + 6, Y(0), 'ink', 1.8) + line(X(0), Y(yr[0]), X(0), Y(yr[1]) - 6, 'ink', 1.8) + txt(X(xr[1]) + 2, Y(0) - 8, 'x', 'ink', 14, 'end') + txt(X(0) + 12, Y(yr[1]) + 4, 'y', 'ink', 14) + txt(X(0) - 8, Y(0) + 16, 'O', 'ink', 13);
-    const lab = o.labels || st;
-    for (let v = Math.ceil(xr[0] / lab) * lab; v <= xr[1]; v += lab) if (v) s += txt(X(v), Y(0) + 16, v < 0 ? '−' + (-v) : v, 'gray', 11);
-    for (let v = Math.ceil(yr[0] / lab) * lab; v <= yr[1]; v += lab) if (v) s += txt(X(0) - 8, Y(v) + 4, v < 0 ? '−' + (-v) : v, 'gray', 11, 'end');
+    const lab = o.labels || st, laby = o.labelsY || (o.gridY ? sy : lab);
+    for (let v = Math.ceil(xr[0] / lab) * lab; v <= xr[1] + 1e-9; v += lab) { const r = Math.round(v * 1000) / 1000; if (r) s += txt(X(v), Y(0) + 16, r < 0 ? '−' + (-r) : r, 'gray', 11); }
+    for (let v = Math.ceil(yr[0] / laby) * laby; v <= yr[1] + 1e-9; v += laby) { const r = Math.round(v * 1000) / 1000; if (r) s += txt(X(0) - 8, Y(v) + 4, r < 0 ? '−' + (-r) : r, 'gray', 11, 'end'); }
     (o.fns || []).forEach(([f, c, label, lx]) => { const pts = []; for (let i = 0; i <= 200; i++) { const x = xr[0] + (xr[1] - xr[0]) * i / 200, y = f(x); if (isFinite(y) && y >= yr[0] - 1 && y <= yr[1] + 1) pts.push([X(x), Y(Math.max(yr[0] - 1, Math.min(yr[1] + 1, y)))]); else if (pts.length) { s += pline(pts.splice(0), c); } } if (pts.length) s += pline(pts, c); if (label) { const x = lx != null ? lx : xr[1] - (xr[1] - xr[0]) * 0.15, y = f(x); if (isFinite(y)) s += txt(X(x), Y(Math.max(yr[0], Math.min(yr[1], y))) - 10, label, c, 14, 'middle', true); } });
     (o.segs || []).forEach(g => { s += line(X(g[0]), Y(g[1]), X(g[2]), Y(g[3]), g[4] || 'gray', 1.8, g[5] ? '5 4' : null); });
     (o.pts || []).forEach(p => { s += circle(X(p[0]), Y(p[1]), 5, p[3] || 'red', 'white', 1.5) + (p[2] ? txt(X(p[0]) + (p[4] || 8), Y(p[1]) - 9, p[2], p[3] || 'red', 13, p[4] < 0 ? 'end' : 'start', true) : ''); });
