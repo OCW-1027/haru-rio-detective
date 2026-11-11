@@ -1,0 +1,52 @@
+/* 世界の 国 クイズ */
+.wq-page { background: linear-gradient(180deg, #eaf4fb 0%, #f6f2e8 100%); overflow-y: auto; padding: 0 0 48px; }
+.wq-wrap { width: 100%; max-width: 640px; margin: 0 auto; padding: 64px 16px 0; box-sizing: border-box; }
+.wq-exit { position: absolute; top: 14px; left: 14px; z-index: 5; }
+.wq-head h1 { font-family: 'RocknRoll One'; font-size: 24px; color: #1f3f5c; margin: 0 0 4px; }
+.wq-head p { font-family: 'Klee One'; font-size: 13px; color: #5a6a7a; margin: 0 0 12px; line-height: 1.6; }
+.wq-modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+.wq-mode { border: 2px solid #c8d8e8; background: #fff; border-radius: 14px; padding: 9px 6px; text-align: center; cursor: pointer; min-width: 0; }
+.wq-mode b { display: block; font-family: 'RocknRoll One'; font-size: 13px; color: #2a4a6a; }
+.wq-mode small { display: block; font-family: 'Klee One'; font-size: 10.5px; color: #7a8a9a; margin-top: 3px; line-height: 1.35; }
+.wq-mode.on { border-color: #2e5fa8; background: #e4eefa; box-shadow: 0 2px 0 #2e5fa8; }
+@media (max-width: 420px) { .wq-mode small { display: none; } }
+.wq-conts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.wq-cont { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.wq-cont.all { grid-column: 1 / -1; }
+.wq-cgo { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto auto; column-gap: 8px; align-items: center; text-align: left; border: 2px solid #d8e2ec; background: #fff; border-radius: 16px; padding: 10px 12px; cursor: pointer; box-shadow: 0 3px 0 #d8e2ec; }
+.wq-ci { grid-row: 1 / 4; font-size: 30px; }
+.wq-cn { font-family: 'RocknRoll One'; font-size: 15px; color: #1f3f5c; }
+.wq-cc { font-family: 'Klee One'; font-size: 12px; color: #6a7a8a; }
+.wq-bar { height: 6px; border-radius: 99px; background: #e6edf3; overflow: hidden; }
+.wq-bar i { display: block; height: 100%; background: linear-gradient(90deg, #6aa8d8, #2e5fa8); }
+.wq-weak { align-self: flex-end; border: 1.5px solid #e2a0a0; background: #fff4f2; color: #a83a3a; border-radius: 999px; padding: 3px 12px; font-family: 'RocknRoll One'; font-size: 12px; cursor: pointer; }
+.wq-note { font-family: 'Klee One'; font-size: 12px; color: #7a8a9a; margin-top: 14px; text-align: center; }
+.wq-top { display: flex; align-items: center; gap: 8px; font-family: 'RocknRoll One'; font-size: 13px; color: #2a4a6a; flex-wrap: wrap; }
+.wq-quit { border: 1.5px solid #c8d8e8; background: #fff; border-radius: 999px; padding: 4px 12px; font-family: 'RocknRoll One'; font-size: 12px; color: #4a6a8a; cursor: pointer; }
+.wq-cnt { margin-left: auto; color: #6a7a8a; }
+.wq-prog { height: 6px; border-radius: 99px; background: #e0e8f0; overflow: hidden; margin: 8px 0 10px; }
+.wq-prog i { display: block; height: 100%; background: #2e5fa8; }
+.wq-q { background: #fff; border: 2px solid #dde6f2; border-radius: 16px; padding: 12px; }
+.wq-qt { font-family: 'RocknRoll One'; font-size: 17px; color: #1f2f3f; line-height: 1.5; }
+.wq-reg { font-family: 'Klee One'; font-size: 12px; color: #8a9aaa; margin: 2px 0 6px; }
+.wq-map svg { width: 100%; height: auto; max-height: 52vh; display: block; margin: 0 auto; border-radius: 10px; font-family: sans-serif; }
+.wq-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+@media (max-width: 420px) { .wq-opts { grid-template-columns: 1fr; } }
+.wq-opt { text-align: left; border: 2px solid #c8d8e8; background: #fff; border-radius: 14px; padding: 11px 12px; font-family: 'RocknRoll One'; font-size: 15px; color: #1f3f5c; cursor: pointer; min-width: 0; overflow-wrap: anywhere; }
+.wq-opt b { color: #2e5fa8; margin-right: 4px; }
+.wq-opt.ok { border-color: #3a9a5a; background: #e8f6ec; }
+.wq-opt.ng { border-color: #d05a4a; background: #fdecea; }
+.wq-opt:disabled { cursor: default; }
+.wq-fb { margin-top: 10px; border-radius: 14px; padding: 10px 12px; font-family: 'Klee One'; font-size: 14px; line-height: 1.6; }
+.wq-fb.ok { background: #e8f6ec; border: 1.5px solid #9ad0aa; }
+.wq-fb.ng { background: #fdf0ee; border: 1.5px solid #e8b0a8; }
+.wq-fbh { font-family: 'RocknRoll One'; font-size: 16px; margin-bottom: 2px; }
+.wq-next, .wq-sec { display: block; width: 100%; margin-top: 10px; border-radius: 999px; padding: 12px; font-family: 'RocknRoll One'; font-size: 15px; cursor: pointer; }
+.wq-next { border: none; background: #2e5fa8; color: #fff; box-shadow: 0 3px 0 #1c3f78; }
+.wq-sec { border: 2px solid #c8d8e8; background: #fff; color: #2a4a6a; }
+.wq-res { background: #fff; border: 2px solid #dde6f2; border-radius: 18px; padding: 18px 14px; text-align: center; font-family: 'Klee One'; }
+.wq-rbig { font-size: 52px; }
+.wq-res h2 { font-family: 'RocknRoll One'; font-size: 20px; margin: 4px 0; color: #1f3f5c; }
+.wq-wl { text-align: left; background: #fbf6ee; border-radius: 12px; padding: 8px 12px; margin-top: 10px; font-size: 13px; }
+.wq-wl ul { margin: 6px 0 0; padding-left: 18px; columns: 2; }
+@media (max-width: 420px) { .wq-wl ul { columns: 1; } }

@@ -70,6 +70,7 @@ document.getElementById('btnLabBack').onclick = () => { LabDetective.stop(); Hub
 document.getElementById('btnIndianBack').onclick = () => { IndianMath.stop(); Hub.open(); };
 document.getElementById('btnParentBack').onclick = () => { Hub.open(); };
 document.getElementById('btnBadgesBack').onclick = () => { Hub.open(); };
+document.getElementById('btnWQBack').onclick = () => { Hub.open(); };
 document.getElementById('btnMwBack').onclick = () => { MathWorld.stop(); Hub.open(); };
 document.getElementById('btnStoryBack').onclick = () => { MainStory.stop(); Hub.open(); };
 document.getElementById('btnHubBack').onclick = () => { stopVoice(); showPage('pageTitle'); };

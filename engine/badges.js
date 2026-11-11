@@ -57,6 +57,9 @@ const Badges = (function () {
     ['diagS', '📜', '社会 合格', '社会の 実力診断で 17問 以上', () => diagBest('s'), 17, '理科・社会'],
     ['diagR', '⚗', '理科 合格', '理科の 実力診断で 16問 以上', () => diagBest('r'), 16, '理科・社会'],
     ['ta12', '⏱', '年表 マスター', '年表 タイムアタックで 12問 以上', taBest, 12, '理科・社会'],
+    ['wq50', '🌐', '世界を 知る', '世界の 国 クイズ (地図 → 国名) で 50か国・地域を 覚える', () => safe(() => WorldQuiz.stats().map), 50, '理科・社会'],
+    ['wqAll', '🌍', '世界地図 制覇', '世界の 国 クイズ (地図 → 国名) で 全部 覚える', () => safe(() => WorldQuiz.stats().map), () => safe(() => WorldQuiz.stats().total) || 237, '理科・社会'],
+    ['wqCap', '🏛', '首都 博士', '世界の 国 クイズ (国名 → 首都) で 全部 覚える', () => safe(() => WorldQuiz.stats().cap), () => safe(() => WorldQuiz.stats().capTotal) || 220, '理科・社会'],
     ['wx', '🌤', 'お天気 キャスター', 'お天気予報チャレンジを 5回', () => ((v2().wx || {}).done || []).length, 5, '理科・社会'],
   ];
   const goal = b => typeof b[5] === 'function' ? b[5]() : b[5];

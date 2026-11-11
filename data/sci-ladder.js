@@ -977,5 +977,5 @@ const SCILAD = (function () {
   ];
   const ORD = GROUPS.map(g => g.id); U.sort((a, b) => ORD.indexOf(a.g) - ORD.indexOf(b.g));
   function make(u) { let r = null; for (let i = 0; i < 60 && !r; i++) { try { r = u.gen(); } catch (e) { r = null; } } return r; }
-  return { U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs, title: '理科・社会 ラダー', icon: '🔬' };
+  return { U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs, _wMap: wMap, title: '理科・社会 ラダー', icon: '🔬' };
 })();
