@@ -32,6 +32,7 @@
 <link rel="stylesheet" href="styles/weather-ch.css">
 <link rel="stylesheet" href="styles/lab.css">
 <link rel="stylesheet" href="styles/indian-math.css">
+<link rel="stylesheet" href="styles/main-story.css">
 </head>
 <body>
 
@@ -72,6 +73,11 @@
   </div>
 
   <!-- v2 新コンテンツ③: ラボ探偵 -->
+  <div class="page ms-page" id="pageStoryMain">
+    <button class="back-btn ms-exit" id="btnStoryBack">← 事務所</button>
+    <div class="ms-wrap" id="msArea"></div>
+  </div>
+
   <div class="page im-page" id="pageIndian">
     <button class="back-btn im-exit" id="btnIndianBack">← 事務所</button>
     <div class="im-wrap" id="imArea"></div>
@@ -521,6 +527,8 @@
 <script src="engine/lab.js"></script>
 <script src="data/indian-math.js"></script>
 <script src="engine/indian-math.js"></script>
+<script src="data/main-story.js"></script>
+<script src="engine/main-story.js"></script>
 <script src="engine/hub.js"></script>
 <script src="engine/bindings.js"></script>
 <script type="module" src="engine/chat-bindings.js"></script>

@@ -88,6 +88,10 @@ const Hub = (function () {
     }
     h += '</section>';
 
+    // 메인 스토리
+    const sg = (State.v2 && State.v2.story && State.v2.story.got) ? Object.keys(State.v2.story.got).length : 0;
+    h += '<button class="hub-story" id="hubStory"><span class="hub-story-k">メインストーリー シーズン1</span><b>📖 知のカケラ — 怪盗ブランクを 追え</b><span class="hub-story-bar"><span style="width:' + (sg / 12 * 100) + '%"></span></span><small>取りもどした カケラ ' + sg + ' / 12' + (sg >= 10 ? ' · ⚔ 幹部ゼロが 待っている' : '') + '</small></button>';
+
     // 새 콘텐츠 (시즌1)
     const wd = (State.v2 && State.v2.world && State.v2.world.cleared) || {};
     h += '<h2 class="hub-h">✨ 新しい 冒険</h2><section class="hub-new">';
@@ -132,6 +136,8 @@ const Hub = (function () {
     root.querySelectorAll('[data-study]').forEach(b => {
       b.onclick = () => { sfx('click'); STUDY.find(s => s.id === b.dataset.study).go(); };
     });
+    const hs = document.getElementById('hubStory');
+    if (hs) hs.onclick = () => { sfx('click'); MainStory.open(); };
     const hi = document.getElementById('hubIndian');
     if (hi) hi.onclick = () => { sfx('click'); IndianMath.open(); };
     const hl = document.getElementById('hubLab');
