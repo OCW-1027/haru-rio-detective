@@ -6,7 +6,7 @@
  */
 const Study = (function () {
   const AREA = {
-    pageEiken: 'eiken', pageIndian: 'indian', pageMathWorld: 'mathw', pageMath: 'math', pageMathLearn: 'math',
+    pageEiken: 'eiken', pageIndian: 'indian', pageCodeLab: 'mathw', pageMathWorld: 'mathw', pageMath: 'math', pageMathLearn: 'math',
     pageWorldChase: 'chase', pageLab: 'lab', pageWeatherCh: 'weather', pageWea: 'weather', pageWeaLearn: 'weather',
     pageStoryMain: 'story', pageStory: 'case', pageSelect: 'case', pagePuzzle: 'case',
     pageEng: 'english', pageWriting: 'english', pageGrammar: 'english', pageComposition: 'english', pagePhraseDict: 'english', pageDaily: 'english', pageNews: 'english', pageCompound: 'english',
