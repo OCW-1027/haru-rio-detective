@@ -39,18 +39,18 @@ EIKEN_G2_READING.push(
       { q: '(3)', options: ['In some countries', 'Even in the past', 'Without electricity', 'Because of the timer'], answer: 0,
         exp: '世界で 人気 → 国によっては (In some countries) スープや ケーキにも。' } ] },
 
-  { id: 'g2x84', real: true, type: 'cloze', title: 'Monkeys in the Hot Spring',
+  { id: 'g2x84', real: true, type: 'cloze', title: 'The Wave That Traveled the World',
     paragraphs: [
-      'In the mountains of Nagano Prefecture, there is a valley called Jigokudani, which means "Hell Valley." Its name comes from the steam and hot water that come out of the ground there. In winter, the valley is covered with deep snow, and temperatures can fall below minus ten degrees. Yet visitors come from all over the world to see something unusual: wild monkeys (1).',
-      'According to local records, this behavior started in the 1960s. One day, a young female monkey went into a hot spring to pick up soybeans that people had thrown in. She seemed to enjoy the warm water, and soon other young monkeys began to (2). Before long, many monkeys in the group were bathing regularly. Because the monkeys were using the bath for human guests, a separate hot spring was later made just for them.',
-      'Scientists have studied why the monkeys bathe. In one study, researchers measured stress hormones in the monkeys\' waste. They found that monkeys that bathed in winter had lower levels of stress than those that did not. (3), bathing may help the monkeys save energy, because they do not need to burn as much body fat to stay warm on cold days.' ],
+      'One of the most famous Japanese pictures in the world shows a huge blue wave about to crash down on three small boats, with Mount Fuji in the distance. It is called The Great Wave off Kanagawa, and it was made by the artist Katsushika Hokusai in the early 1830s. Surprisingly, Hokusai created it when he was already over 70 years old. He once wrote that he hoped to (1) as he grew older.',
+      'The Great Wave is a woodblock print, so many copies could be made and sold at low prices. One reason for its striking color is a pigment called Prussian blue. This blue paint had been invented in Europe and was brought to Japan by traders. (2), it was expensive, but by Hokusai\'s time it had become cheaper, and artists used it to create bright skies and seas that did not fade easily.',
+      'After Japan opened to foreign trade in the 1850s, Japanese prints were taken to Europe, where they had a great influence on artists such as Vincent van Gogh. A picture of the wave was even used on the cover of a piece of music by the French composer Claude Debussy. Today, the image (3). Since 2024, it has also appeared on the back of Japan\'s new 1,000-yen bill.' ],
     questions: [
-      { q: '(1)', options: ['relaxing in the hot water', 'running across the frozen lake', 'eating food from visitors\' hands', 'building homes out of snow'], answer: 0,
-        exp: '題名と 続きから → 温泉に つかる サル。' },
-      { q: '(2)', options: ['copy what she was doing', 'throw soybeans into the water', 'stay away from the valley', 'fight with the older monkeys'], answer: 0,
-        exp: '他の 若い サルも 真似を し始めた。' },
-      { q: '(3)', options: ['In addition', 'However', 'Instead', 'For instance'], answer: 0,
-        exp: 'ストレス 軽減に 加えて エネルギー節約 → In addition。' } ] },
+      { q: '(1)', options: ['keep improving his skills', 'stop painting pictures of waves', 'move to a city in Europe', 'teach his students to use color'], answer: 0,
+        exp: '70歳を 過ぎても 傑作 → 年を とるほど 上達したい と 願った。' },
+      { q: '(2)', options: ['At first', 'As a result', 'For example', 'In other words'], answer: 0,
+        exp: '最初は 高価 → 北斎の 頃には 安く なった → At first。' },
+      { q: '(3)', options: ['can be seen on all kinds of products', 'is kept secret in a museum in Paris', 'is no longer popular outside Japan', 'was changed by other artists'], answer: 0,
+        exp: '世界中で 有名 → いろいろな 商品で 見られる。' } ] },
 
   { id: 'g2x85', real: true, type: 'cloze', title: 'The Return of the Furoshiki',
     paragraphs: [

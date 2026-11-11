@@ -1,17 +1,17 @@
 /* 英検準1級 長文 本番サイズ セット10 (オリジナル) — 大問2 空所補充 10題 (模試 21〜25回) */
 EIKEN_P1_READING.push(
-  { id: 'p1x81', real: true, type: 'cloze', title: 'Learning by Remembering',
+  { id: 'p1x81', real: true, type: 'cloze', title: 'The Planes That Did Not Return',
     paragraphs: [
-      'When students prepare for an exam, many of them read their textbooks and notes again and again. This method feels effective because the material becomes more familiar each time. However, psychologists warn that familiarity can be misleading. Recognizing information when we see it is not the same as being able to (1) when it is needed.',
-      'In a well-known study published in 2006, researchers asked students to learn a short passage. Some students studied it several times, while others studied it once and then tried to write down as much as they could remember. When tested five minutes later, the students who had simply restudied did slightly better. (2), when they were tested a week later, the students who had practiced recalling the information remembered far more. This phenomenon is known as the testing effect, or retrieval practice.',
-      'Researchers believe that the effort of pulling information out of memory strengthens it, making it easier to recall in the future. Based on these findings, many experts recommend that students (3), such as using flashcards or explaining a topic to a friend without looking at their notes. Some teachers have also started giving short, low-pressure quizzes that do not count toward students\' grades.' ],
+      'During World War II, the United States military wanted to protect its bomber planes from enemy fire. Officials examined planes that had returned from missions and recorded where they had been hit by bullets. Most of the damage was found on the wings and the body of the planes, while there were far fewer holes around the engines. The officials therefore planned to (1).',
+      'A mathematician named Abraham Wald, who was working with a group of researchers, pointed out a serious problem with this plan. The officials had only looked at the planes that had survived. Planes that were hit in the engines, Wald argued, had probably crashed and never returned, which was why so few holes were seen there. (2), the areas without holes were exactly the places that most needed protection. The military followed his advice and added armor around the engines.',
+      'This error in thinking is now known as survivorship bias. It occurs when people draw conclusions from the examples that remain visible while ignoring those that have disappeared. For instance, stories about famous business leaders who left university may give the impression that dropping out leads to success. However, such stories (3), since most people who dropped out and failed are never written about.' ],
     questions: [
-      { q: '(1)', options: ['recall it from memory', 'find it in a textbook', 'understand why it matters', 'read it more quickly'], answer: 0,
-        exp: '見て わかる (再認) ≠ 必要な ときに 思い出せる (想起)。' },
-      { q: '(2)', options: ['However', 'Likewise', 'As a result', 'In other words'], answer: 0,
-        exp: '5分後は 再読組が 上 ⇔ 1週間後は 想起組が 圧倒 → However。' },
-      { q: '(3)', options: ['test themselves regularly', 'read their notes more often', 'study for longer hours', 'avoid taking quizzes'], answer: 0,
-        exp: '単語カードや ノートを 見ずに 説明 → 自分で 自分を テストする。' } ] },
+      { q: '(1)', options: ['add extra armor where the most holes were found', 'stop sending bombers on dangerous missions', 'build planes with more powerful engines', 'repair only the planes that had crashed'], answer: 0,
+        exp: '穴が 多い 翼や 胴体を 補強しよう と 考えた。' },
+      { q: '(2)', options: ['In other words', 'Even so', 'By contrast', 'For example'], answer: 0,
+        exp: 'エンジンに 被弾した 機は 戻れなかった = つまり 穴の ない 場所こそ 守るべき。' },
+      { q: '(3)', options: ['give only a partial picture', 'are based on careful research', 'encourage people to study harder', 'are usually told by failures'], answer: 0,
+        exp: '失敗した 中退者は 語られない → 一部しか 見えていない。' } ] },
 
   { id: 'p1x82', real: true, type: 'cloze', title: 'The Town That Sorts Everything',
     paragraphs: [
@@ -52,18 +52,18 @@ EIKEN_P1_READING.push(
       { q: '(3)', options: ['considering each option separately', 'always choosing the largest size', 'buying only the cheapest products', 'trusting the store\'s recommendations'], answer: 0,
         exp: '他が なくても 欲しいか → 選択肢を それぞれ 単独で 考える。' } ] },
 
-  { id: 'p1x85', real: true, type: 'cloze', title: 'Changing the Clocks',
+  { id: 'p1x85', real: true, type: 'cloze', title: 'A Mold That Designed a Railway',
     paragraphs: [
-      'In many countries in Europe and North America, people set their clocks forward one hour in spring and back again in autumn. This system, known as daylight saving time, was widely adopted during the twentieth century. The main idea was to make better use of natural light in the evening, which supporters believed would (1). Japan also used daylight saving time for a few years after World War II, but it was abandoned in 1952 because of strong public opposition.',
-      'In recent years, however, many people have begun to question whether daylight saving time is still beneficial. Studies of its effect on energy use have produced mixed results, and modern lifestyles, with air conditioners and electronic devices, have reduced any savings. (2), medical researchers have found that the shift in spring, when people lose an hour of sleep, is associated with a temporary increase in heart attacks and traffic accidents.',
-      'In 2019, the European Parliament voted to end the practice of changing clocks twice a year. However, the plan has not been put into effect, partly because member countries (3). Some prefer to stay on summer time permanently to enjoy brighter evenings, while others prefer permanent standard time, which sleep experts say better matches the body\'s natural rhythms.' ],
+      'Slime molds are simple living things that consist of only a single cell, yet that cell can grow to cover an area larger than a dinner plate. They have no brain or nervous system. Nevertheless, a Japanese scientist named Nakagaki Toshiyuki has shown that one type of slime mold is capable of (1). In 2000, he and his team reported that it could find the shortest path through a maze to reach food placed at the exit.',
+      'In a later experiment, the researchers placed pieces of oat, a favorite food of the slime mold, on a flat surface in positions that matched the locations of cities around Tokyo. They then placed the slime mold at the position of Tokyo itself. As it spread out to reach the food, it formed a network of tube-like connections. (2), the network that remained looked remarkably similar to the actual railway system of the Tokyo area, and it was just as efficient and resistant to breakdowns.',
+      'The researchers explain that the slime mold strengthens tubes that carry a lot of nutrients and allows unused ones to disappear. Engineers believe that copying this simple rule could (3), such as networks for transportation, electricity, or the internet. The study received an Ig Nobel Prize, an award for research that first makes people laugh and then makes them think.' ],
     questions: [
-      { q: '(1)', options: ['reduce the amount of energy used', 'make people sleep for longer', 'help farmers wake up later', 'increase the number of holidays'], answer: 0,
-        exp: '夕方の 自然光を 活用 → エネルギー消費を 減らせる と 考えられた。' },
-      { q: '(2)', options: ['Moreover', 'Instead', 'In contrast', 'Even so'], answer: 0,
-        exp: '省エネ効果が 疑問 + さらに 健康への 悪影響 → Moreover。' },
-      { q: '(3)', options: ['cannot agree on which time to keep', 'have already stopped changing their clocks', 'want to change clocks more often', 'do not have enough sleep experts'], answer: 0,
-        exp: '夏時間を 続けたい国 / 標準時を 続けたい国 → どちらに するか 合意できない。' } ] },
+      { q: '(1)', options: ['solving surprisingly complex problems', 'moving faster than most insects', 'surviving without any food at all', 'communicating with human beings'], answer: 0,
+        exp: '脳が ないのに 迷路の 最短経路を 見つける → 複雑な 問題を 解ける。' },
+      { q: '(2)', options: ['Strikingly', 'Unfortunately', 'Previously', 'Instead'], answer: 0,
+        exp: '実際の 鉄道網と 驚くほど 似ていた → Strikingly。' },
+      { q: '(3)', options: ['help design better systems', 'make railways unnecessary', 'replace engineers completely', 'reduce the number of cities'], answer: 0,
+        exp: '交通・電力・ネット網など より良い システムの 設計に 役立つ。' } ] },
 
   { id: 'p1x86', real: true, type: 'cloze', title: 'Forests of Dead Trees',
     paragraphs: [
@@ -91,31 +91,31 @@ EIKEN_P1_READING.push(
       { q: '(3)', options: ['offer a variety of spaces for different purposes', 'return to giving every worker a private office', 'ban the use of headphones at work', 'require employees to talk more often'], answer: 0,
         exp: '静かな 部屋・会議室・オープン スペース → 用途別の 多様な 空間。' } ] },
 
-  { id: 'p1x88', real: true, type: 'cloze', title: 'Diamonds Made in a Laboratory',
+  { id: 'p1x88', real: true, type: 'cloze', title: 'Why Projects Take Longer Than Planned',
     paragraphs: [
-      'For generations, diamonds have been seen as symbols of love and wealth, partly because they are rare and must be dug out of the ground. Today, however, scientists can produce diamonds in laboratories in just a few weeks by recreating the extreme heat and pressure found deep inside the Earth. These lab-grown diamonds (1). Even experts usually need special equipment to tell them apart.',
-      'Lab-grown diamonds have quickly become popular, especially among younger shoppers. One reason is price: they often cost only a fraction of what natural diamonds of the same size do, and their prices have fallen sharply as production has increased. (2), some buyers prefer them for ethical reasons. Mining natural diamonds can damage the environment, and in some regions, it has been linked to poor working conditions and conflict.',
-      'The rise of lab-grown diamonds has created serious challenges for the traditional diamond industry, and the prices of natural diamonds have dropped in recent years. Mining companies have responded by emphasizing the natural origin of their products, arguing that a stone formed over billions of years has a special value that a factory cannot copy. Whether consumers will continue to (3) remains to be seen.' ],
+      'When the Sydney Opera House was planned in the late 1950s, it was expected to open in 1963 at a cost of about seven million Australian dollars. In fact, it was not completed until 1973, and the final cost was more than 100 million dollars. Such delays are surprisingly common. Psychologists have found that people consistently (1), even when they have experienced similar delays in the past.',
+      'This tendency is known as the planning fallacy. In one study, university students were asked to estimate how long it would take them to finish their graduation theses. On average, they predicted about 34 days, but the actual average was around 56 days. (2), fewer than a third of the students finished by the time they had predicted. Researchers believe the problem arises because people focus on the details of the current project and imagine everything going smoothly, while ignoring unexpected problems that commonly occur.',
+      'One method that has been shown to reduce the planning fallacy is called reference class forecasting. Instead of focusing only on the project at hand, planners (3), and use the actual results of those cases to make their estimates. Some governments now require this approach for large public construction projects, such as roads and railways, in order to produce more realistic budgets and schedules.' ],
     questions: [
-      { q: '(1)', options: ['have the same chemical structure as natural ones', 'are much softer than natural diamonds', 'can be easily recognized by anyone', 'are usually larger than mined stones'], answer: 0,
-        exp: '専門家でも 機器が 必要 → 天然と 同じ 化学構造。' },
-      { q: '(2)', options: ['In addition', 'Even so', 'In contrast', 'For instance'], answer: 0,
-        exp: '価格に 加えて 倫理的 理由 → In addition。' },
-      { q: '(3)', options: ['pay more for diamonds that come from the earth', 'keep buying diamonds as symbols of love', 'avoid wearing any kind of jewelry at all', 'prefer the stones that are made in factories'], answer: 0,
-        exp: '天然の 価値を 強調 → 消費者が 天然に 高い お金を 払い続けるか。' } ] },
+      { q: '(1)', options: ['underestimate how long tasks will take', 'refuse to make plans for the future', 'finish their work earlier than expected', 'choose projects that are too easy'], answer: 0,
+        exp: '大幅な 遅れが よく ある → 所要時間を 少なく 見積もる。' },
+      { q: '(2)', options: ['Moreover', 'However', 'Instead', 'Even so'], answer: 0,
+        exp: '平均の ずれ + さらに 予定通りは 3分の1未満 → Moreover。' },
+      { q: '(3)', options: ['look at how long similar past projects took', 'add as many details to the plan as possible', 'ask the workers to work longer hours', 'avoid setting any deadlines at all'], answer: 0,
+        exp: '類似の 過去の 事例の 実績を もとに 見積もる。' } ] },
 
-  { id: 'p1x89', real: true, type: 'cloze', title: 'The Dance of the Honeybees',
+  { id: 'p1x89', real: true, type: 'cloze', title: 'A Gift from an Asteroid',
     paragraphs: [
-      'When a honeybee finds a good source of food, it returns to the hive and performs a special movement known as the waggle dance. The bee runs forward in a straight line while shaking its body from side to side, then circles back and repeats the movement many times. For a long time, people did not understand why bees did this. It was the Austrian scientist Karl von Frisch who discovered that the dance (1).',
-      'Through careful experiments in the mid-twentieth century, von Frisch showed that the angle of the straight run tells other bees which direction to fly. If the bee dances straight up the wall of the hive, the food is in the same direction as the sun. If it dances at an angle to the right, the food is that same angle to the right of the sun. (2), the length of time the bee spends shaking its body indicates how far away the food is.',
-      'Many scientists were at first reluctant to accept that insects could share such detailed information. However, later studies confirmed von Frisch\'s findings, and he was awarded the Nobel Prize in 1973. Today, researchers are using the waggle dance to (3). By decoding the dances of bees in cities and farmland, they can learn where the bees are finding flowers and which areas may lack the plants they need.' ],
+      'In December 2020, a small capsule fell from the sky and landed in the desert of southern Australia. It had been sent by Hayabusa2, a Japanese spacecraft that had traveled for six years to visit an asteroid called Ryugu and return. Inside the capsule were about five grams of rock and dust from the asteroid. Although the amount was small, scientists were extremely excited, because the samples (1).',
+      'Asteroids like Ryugu are thought to be leftovers from the formation of the solar system about 4.6 billion years ago. Unlike rocks on Earth, which have been changed by heat, water, and life, the material on such asteroids has remained almost unchanged. (2), Hayabusa2 fired a small object at the surface to create a crater, which allowed it to collect material from below the surface that had been protected from sunlight and radiation.',
+      'When scientists analyzed the samples, they found more than 20 kinds of amino acids, which are the building blocks of proteins. They also detected uracil, one of the basic components of RNA. These findings support the idea that some of the ingredients needed for life may have (3). Meanwhile, Hayabusa2 has continued its journey and is scheduled to visit another asteroid in 2031.' ],
     questions: [
-      { q: '(1)', options: ['tells other bees where to find food', 'helps the bee to warm up its body', 'is a way of choosing a new queen', 'warns the hive about enemies'], answer: 0,
-        exp: '餌の 場所を 仲間に 伝える (方向・距離)。' },
-      { q: '(2)', options: ['Furthermore', 'Instead', 'However', 'As a result'], answer: 0,
-        exp: '角度 = 方向 + さらに 時間 = 距離 → Furthermore。' },
-      { q: '(3)', options: ['study the environment in which bees live', 'teach bees to make more honey', 'communicate directly with bees', 'stop bees from flying into cities'], answer: 0,
-        exp: 'ダンスを 解読して どこに 花が あるか (生息環境) を 調べる。' } ] },
+      { q: '(1)', options: ['could reveal what the early solar system was like', 'were the first rocks ever found in Australia', 'contained large amounts of valuable metals', 'proved that people could live on asteroids'], answer: 0,
+        exp: '次の 段落: ほぼ 変化していない 太陽系 初期の 物質 → 初期の 姿が わかる。' },
+      { q: '(2)', options: ['To obtain the freshest possible material', 'To avoid damaging the asteroid', 'Because the capsule was too small', 'After returning to the Earth'], answer: 0,
+        exp: '地表下の 守られた 物質を 採る → できるだけ 新鮮な 試料を 得る ため。' },
+      { q: '(3)', options: ['been brought to Earth from space', 'been created by the spacecraft', 'disappeared from Ryugu long ago', 'come from the Australian desert'], answer: 0,
+        exp: 'アミノ酸や ウラシル → 生命の 材料が 宇宙から 運ばれた 可能性。' } ] },
 
   { id: 'p1x90', real: true, type: 'cloze', title: 'Plastic in the Clouds',
     paragraphs: [
