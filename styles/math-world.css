@@ -71,3 +71,27 @@
 .mw-si { font-size: 34px; flex-shrink: 0; }
 .mw-study b { font-family: 'RocknRoll One'; font-size: 14.5px; color: #5a3a8a; }
 .mw-study p { font-family: 'Klee One'; font-size: 13.5px; line-height: 1.75; color: #3a3a4a; margin: 4px 0 0; }
+/* 数学ラダー */
+.mw-ladprog { height: 8px; background: #e6edf6; border-radius: 999px; overflow: hidden; margin-top: 8px; }
+.mw-ladprog i { display: block; height: 100%; background: #2a6a9a; }
+.mw-ladn { font-family: 'Klee One'; font-size: 12px; color: #5a6a7a; }
+.mw-cat small { font-size: 11.5px; color: #8a8a9a; font-family: 'Klee One'; }
+.mw-tag { display: inline-block; color: #fff; font-family: 'RocknRoll One'; font-size: 12px; border-radius: 999px; padding: 2px 12px; margin-bottom: 8px; }
+.mw-point ul { margin: 6px 0 0; padding-left: 20px; font-family: 'Klee One'; font-size: 14px; line-height: 1.8; color: #2a2a3a; }
+.mw-pre { white-space: pre-line; }
+.mw-exopts { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 14.5px; }
+.mw-dots { display: flex; gap: 5px; margin: 0 0 10px; }
+.mw-dots i { flex: 1; height: 6px; border-radius: 999px; background: #dde6f2; }
+.mw-dots i.ok { background: #5aaa6a; } .mw-dots i.ng { background: #e07a5a; } .mw-dots i.cur { background: #2e5fa8; }
+.mw-chs { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-bottom: 8px; }
+.mw-ch { text-align: left; border: 2px solid #b8c8e0; background: #fff; border-radius: 12px; padding: 12px; font-family: 'RocknRoll One'; font-size: 16px; color: #1a2a3a; cursor: pointer; }
+.mw-ch b { color: #2e5fa8; margin-right: 6px; }
+.mw-ch.right { border-color: #5aaa6a; background: #e6f6ea; } .mw-ch.wrongc { border-color: #e07a5a; background: #fdeee8; }
+.mw-ch:disabled { cursor: default; }
+.mw-pair { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; margin: 4px 0 8px; }
+.mw-pair label { display: flex; flex-direction: column; font-family: 'Klee One'; font-size: 12.5px; color: #4a5a6a; gap: 2px; }
+.mw-pair input { width: 110px; font-size: 20px; font-family: 'RocknRoll One'; padding: 8px 10px; border: 2px solid #b8c8e0; border-radius: 12px; text-align: center; }
+.mw-keys { display: flex; align-items: center; gap: 6px; margin: -2px 0 8px; }
+.mw-keys button { width: 44px; height: 38px; border: 2px solid #b8c8e0; background: #fff; border-radius: 10px; font-family: 'RocknRoll One'; font-size: 18px; color: #2e5fa8; cursor: pointer; }
+.mw-keys span { font-family: 'Klee One'; font-size: 12px; color: #8a8a9a; }
+.mw-det summary { font-family: 'Klee One'; font-size: 13px; color: #2e5fa8; cursor: pointer; margin: 4px 0; }

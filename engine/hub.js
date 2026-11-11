@@ -103,7 +103,7 @@ const Hub = (function () {
     const imd = (State.v2 && State.v2.indian && State.v2.indian.t) || {};
     h += '<button class="hub-new-btn" id="hubIndian"><span style="font-size:44px">🇮🇳</span><span><b>インド式 計算道場<span class="tag">NEW</span></b><small>20の ワザ · 検定 · ★ ' + Object.keys(imd).reduce((a, k) => a + (imd[k].stars || 0), 0) + ' / 60</small></span></button>';
     const mwd = (State.v2 && State.v2.mw) || {};
-    h += '<button class="hub-new-btn" id="hubMathWorld"><span style="font-size:44px">🌏</span><span><b>世界の 算数道場<span class="tag">NEW</span></b><small>シンガポール式 · ロシア式 · 公式図鑑 · パズル ' + Object.keys(mwd.ru || {}).length + ' / 24</small></span></button>';
+    h += '<button class="hub-new-btn" id="hubMathWorld"><span style="font-size:44px">🌏</span><span><b>世界の 算数道場<span class="tag">NEW</span></b><small>中学・高校 数学ラダー · シンガポール式 · ロシア式 · 公式図鑑</small></span></button>';
     h += '</section>';
 
     // 사건 파일

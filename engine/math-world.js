@@ -36,7 +36,9 @@ const MathWorld = (function () {
     let h = '<div class="mw-hero">' + art(KORADON, '🌏', 'mw-kora') + '<div><div class="mw-kicker">世界の</div><h1 class="mw-h1">算数道場</h1><p>コラドン:「算数が 強い 国には、それぞれ ひみつの 考え方が あるんだ。インドの ワザ、シンガポールの 図、ロシアの パズル … 全部 ためしてみよう!」</p></div></div>';
     const corner = (id, flag, name, sub, prog, color) => '<button class="mw-corner" id="' + id + '" style="--cc:' + color + '"><span class="mw-flag">' + flag + '</span><span class="mw-cb"><b>' + name + '</b><small>' + sub + '</small></span><span class="mw-prog">' + prog + '</span></button>';
     h += '<div class="mw-corners">';
-    h += corner('mwIndian', '🇮🇳', 'インド式 計算道場', '20の 計算ワザ · 検定', '▶', '#d0702a');
+    const ladDone = LADDER.U.filter(u => ((D.lad || {})[u.id] || {}).best >= 8).length;
+    h += corner('mwLad', '📈', '中学・高校 数学ラダー', '中1 〜 高2 + 発展 ・ ' + LADDER.U.length + ' 単元', ladDone + ' / ' + LADDER.U.length, '#2a6a9a');
+    h += corner('mwIndian', '🇮🇳', 'インド式 計算道場 へ', '事務所の「インド式 計算道場」と 同じ 道場です', '→', '#d0702a');
     h += corner('mwSg', '🇸🇬', 'シンガポール式 線分図', '文章題を 図に して 解く', sgStars + ' / ' + MW.SG.length, '#c0392b');
     h += corner('mwRu', '🇷🇺', 'ロシア式 思考パズル', 'じっくり 考える 24題', ru + ' / ' + MW.RU.length, '#2e5fa8');
     h += corner('mwFm', '📘', '公式図鑑', '公式が「なぜ そうなるか」', fm + ' / ' + MW.FM.length, '#2a8a5a');
@@ -44,6 +46,7 @@ const MathWorld = (function () {
     h += '</div><p class="mw-note">💡 同じ 問題でも、国に よって 考え方が ちがう。いちばん わかりやすい 方法を 自分で 選べるのが 最強!</p>';
     area().innerHTML = h;
     $('mwIndian').onclick = () => { sfx('click'); stop(); if (typeof IndianMath !== 'undefined') IndianMath.open(); };
+    $('mwLad').onclick = () => { sfx('click'); ladList(); };
     $('mwSg').onclick = () => { sfx('click'); sgList(); };
     $('mwRu').onclick = () => { sfx('click'); ruList(); };
     $('mwFm').onclick = () => { sfx('click'); fmList(); };
@@ -202,7 +205,7 @@ const MathWorld = (function () {
     stop();
     const D = data(), c = f.chk(); run = { f: f, c: c, miss: 0 };
     let h = head('📘 ' + esc(f.name) + (D.fm[f.id] ? ' 🔖' : ''), '図鑑');
-    h += '<div class="mw-fcard">' + figSVG(f.fig) + '<div class="mw-formula">' + esc(f.f) + '</div><div class="mw-how"><b>なぜ?</b> ' + esc(f.how) + '</div></div>';
+    h += '<div class="mw-fcard">' + (f.fig ? figSVG(f.fig) : '') + '<div class="mw-formula">' + esc(f.f) + '</div><div class="mw-how"><b>なぜ?</b> ' + esc(f.how) + '</div></div>';
     h += '<div class="mw-q">✅ 確認問題: ' + esc(c.q) + '</div>' + answerBox('mwA') + '<div id="mwFb"></div>';
     area().innerHTML = h; bindBack(fmList);
     bindAnswer('mwA', v => {
@@ -228,9 +231,96 @@ const MathWorld = (function () {
     $('mwGoRu').onclick = () => { sfx('click'); ruList(); };
   }
 
+  // ================= 中学・高校 数学ラダー =================
+  function ladData() { const d = data(); return d.lad || (d.lad = {}); }
+  const ladStar = id => { const r = ladData()[id]; return !r ? '' : r.best >= 10 ? '🏅' : r.best >= 8 ? '★' : '·'; };
+  function toVal(v) { return Array.isArray(v) ? v[0] / v[1] : v; }
+  function parseAns(s) {
+    s = String(s).trim().replace(/[０-９．／－]/g, c => ({ '．': '.', '／': '/', '－': '-' })[c] || String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/[−–—ー]/g, '-').replace(/\s/g, '');
+    if (!s) return null;
+    const m = s.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/); if (m) return +m[2] === 0 ? null : +m[1] / +m[2];
+    return /^-?\d+(\.\d+)?$/.test(s) ? +s : null;
+  }
+  const near = (x, y) => x != null && Math.abs(x - y) < 1e-9;
+  function ladList() {
+    stop();
+    const D = ladData(); let h = head('📈 中学・高校 数学ラダー');
+    const done = LADDER.U.filter(u => (D[u.id] || {}).best >= 8).length;
+    h += '<div class="mw-box"><b>中学1年 から 高校2年 (+ 発展) まで ' + LADDER.U.length + ' 単元</b><p>どの 単元からでも 始めて OK。「要点 → 例題 → 練習 10問」で、8問 以上 正解で ★、全問 正解で 🏅。問題の 数は 毎回 変わるよ。</p><div class="mw-ladprog">' + '<i style="width:' + Math.round(done * 100 / LADDER.U.length) + '%"></i></div><small class="mw-ladn">★ ' + done + ' / ' + LADDER.U.length + '</small></div>';
+    LADDER.GROUPS.forEach(g => {
+      const us = LADDER.U.filter(u => u.g === g.id); if (!us.length) return;
+      h += '<h3 class="mw-cat" style="color:' + g.color + '">' + g.name + ' <small>' + us.filter(u => (D[u.id] || {}).best >= 8).length + ' / ' + us.length + '</small></h3><div class="mw-grid">';
+      us.forEach(u => { h += '<button class="mw-card" data-lu="' + u.id + '" style="border-color:color-mix(in srgb,' + g.color + ' 30%,white)"><span class="mw-ci">' + u.icon + '</span><span class="mw-cn">' + esc(u.name) + '</span><span class="mw-cs">' + (ladStar(u.id) || '未挑戦') + ((D[u.id] || {}).best != null ? ' ' + D[u.id].best + '/10' : '') + '</span></button>'; });
+      h += '</div>';
+    });
+    area().innerHTML = h; bindBack();
+    area().querySelectorAll('[data-lu]').forEach(b => b.onclick = () => { sfx('click'); ladUnit(LADDER.byId(b.dataset.lu)); });
+  }
+  function fmtA(p) { return p.type === 'choice' ? p.opts[0] : p.type === 'num' ? LADDER._fs(p.a) : p.type === 'set' ? LADDER._fs(p.a[0]) + ', ' + LADDER._fs(p.a[1]) : (p.labels || ['', '']).map((l, i) => l + ' = ' + LADDER._fs(p.a[i])).join('、'); }
+  function ladUnit(u) {
+    stop();
+    const g = LADDER.GROUPS.find(x => x.id === u.g), ex = LADDER.make(u);
+    let h = head(u.icon + ' ' + esc(u.name), '一覧');
+    h += '<div class="mw-tag" style="background:' + g.color + '">' + g.name + '</div>';
+    h += '<div class="mw-box mw-point"><b>📌 要点</b><ul>' + u.point.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
+    h += '<div class="mw-box"><b>📝 例題</b><div class="mw-q mw-pre">' + esc(ex.q) + (ex.type === 'choice' ? '<div class="mw-exopts">' + ex.opts.map((o, i) => '<span>' + ['ア', 'イ', 'ウ', 'エ'][i] + ' ' + esc(o) + '</span>').join('') + '</div>' : '') + '</div><ol class="mw-steps" id="mwExSteps"></ol><div class="mw-row"><button class="mw-secondary" id="mwExNext">次の ステップ ▶</button><button class="mw-secondary" id="mwExNew">別の 例題</button></div></div>';
+    h += '<div class="mw-row"><button class="mw-primary" id="mwLadGo">✏ 練習 10問</button></div>';
+    area().innerHTML = h; bindBack(ladList);
+    let k = 0; const steps = ex.steps.concat(['答え: ' + fmtA(ex)]);
+    $('mwExNext').onclick = () => { sfx('click'); if (k < steps.length) { $('mwExSteps').insertAdjacentHTML('beforeend', '<li>' + esc(steps[k]) + '</li>'); k++; } if (k >= steps.length) $('mwExNext').disabled = true; };
+    $('mwExNew').onclick = () => { sfx('click'); ladUnit(u); };
+    $('mwLadGo').onclick = () => { sfx('click'); run = { u: u, i: 0, ok: 0, n: 10, wrong: [] }; ladQ(); };
+  }
+  function ladQ() {
+    const R = run, u = R.u, p = LADDER.make(u); R.p = p; R.done = false; R.miss = 0;
+    if (p.type === 'choice') { const idx = p.opts.map((o, i) => i); for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; } R.order = idx; }
+    let h = head(u.icon + ' ' + esc(u.name) + ' <small>' + (R.i + 1) + ' / ' + R.n + '</small>', '単元');
+    h += '<div class="mw-dots">' + Array.from({ length: R.n }, (_, i) => '<i class="' + (i < R.i ? (R.res && R.res[i] ? 'ok' : 'ng') : i === R.i ? 'cur' : '') + '"></i>').join('') + '</div>';
+    h += '<div class="mw-q big mw-pre">' + esc(p.q) + '</div>';
+    if (p.type === 'choice') h += '<div class="mw-chs">' + R.order.map((oi, k) => '<button class="mw-ch" data-ch="' + oi + '"><b>' + ['ア', 'イ', 'ウ', 'エ'][k] + '</b> ' + esc(p.opts[oi]) + '</button>').join('') + '</div>';
+    else if (p.type === 'num') h += '<div class="mw-inp"><input id="mwA" autocomplete="off" placeholder="答え"><button class="mw-ok" id="mwAGo">決定</button></div><div class="mw-keys"><button data-ins="−">−</button><button data-ins="/">/</button><span>分数は 3/4、負の数は −5</span></div>';
+    else { const L = p.type === 'set' ? ['解 1', '解 2'] : p.labels; h += '<div class="mw-pair"><label>' + esc(L[0]) + '<input id="mwA1" autocomplete="off"></label><label>' + esc(L[1]) + '<input id="mwA2" autocomplete="off"></label><button class="mw-ok" id="mwPairGo">決定</button></div><div class="mw-keys"><button data-ins="−">−</button><button data-ins="/">/</button><span>分数は 3/4、負の数は −5</span></div>'; }
+    h += '<div id="mwFb"></div>';
+    area().innerHTML = h; bindBack(() => ladUnit(u));
+    let lastF = 'mwA'; ['mwA', 'mwA1', 'mwA2'].forEach(id => { const e = $(id); if (e) e.addEventListener('focus', () => { lastF = id; }); });
+    area().querySelectorAll('[data-ins]').forEach(b => { b.onmousedown = e => e.preventDefault(); b.onclick = () => { const e = $(lastF) || $('mwA1'); if (!e || e.disabled) return; e.value += b.dataset.ins; e.focus(); }; });
+    if (p.type === 'choice') area().querySelectorAll('[data-ch]').forEach(b => b.onclick = () => ladAns(+b.dataset.ch === 0, b));
+    else if (p.type === 'num') { const go = () => { const v = parseAns($('mwA').value); if (v == null) { $('mwA').classList.add('shake'); setTimeout(() => $('mwA').classList.remove('shake'), 400); return; } ladAns(near(v, toVal(p.a))); };
+      $('mwAGo').onclick = go; $('mwA').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); go(); } }; if (!('ontouchstart' in window)) $('mwA').focus(); }
+    else {
+      const go = () => { const x = parseAns($('mwA1').value), y = parseAns($('mwA2').value); if (x == null || y == null) { ($('mwA1').value ? $('mwA2') : $('mwA1')).focus(); return; }
+        const a = toVal(p.a[0]), b = toVal(p.a[1]);
+        ladAns(p.type === 'set' ? ((near(x, a) && near(y, b)) || (near(x, b) && near(y, a))) : near(x, a) && near(y, b)); };
+      $('mwPairGo').onclick = go; ['mwA1', 'mwA2'].forEach(id => $(id).onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); id === 'mwA1' && !$('mwA2').value ? $('mwA2').focus() : go(); } });
+      if (!('ontouchstart' in window)) $('mwA1').focus();
+    }
+  }
+  function ladAns(ok, btn) {
+    const R = run; if (!R || R.done) return; const p = R.p, fb = $('mwFb');
+    if (!ok && R.miss === 0 && p.type !== 'choice') { R.miss = 1; sfx('wrong'); fb.innerHTML = '<div class="mw-ng">🤔 ちがうみたい。もう1回! (符号・約分・計算ミスを 確認)</div>'; return; }
+    R.done = true; R.res = R.res || []; R.res[R.i] = ok; if (ok) R.ok++; else R.wrong.push(p);
+    sfx(ok ? 'correct' : 'wrong');
+    area().querySelectorAll('.mw-ch').forEach(b => { b.disabled = true; if (+b.dataset.ch === 0) b.classList.add('right'); }); if (btn && !ok) btn.classList.add('wrongc');
+    ['mwA', 'mwAGo', 'mwA1', 'mwA2', 'mwPairGo'].forEach(id => { const e = $(id); if (e) e.disabled = true; });
+    fb.innerHTML = '<div class="' + (ok ? 'mw-okm' : 'mw-ng') + '">' + (ok ? '⭕ 正解!' : '❌ 答えは ' + esc(fmtA(p))) + '</div>' + (ok ? '<details class="mw-det"><summary>解き方を 見る</summary><ol class="mw-steps">' + p.steps.map(s => '<li>' + esc(s) + '</li>').join('') + '</ol></details>' : '<ol class="mw-steps">' + p.steps.map(s => '<li>' + esc(s) + '</li>').join('') + '</ol>') + '<button class="mw-primary" id="mwNext">' + (R.i + 1 < R.n ? '次の 問題 →' : '結果を 見る') + '</button>';
+    $('mwNext').onclick = () => { sfx('click'); R.i++; if (R.i < R.n) ladQ(); else ladEnd(); };
+  }
+  function ladEnd() {
+    const R = run, u = R.u, D = ladData(), r = D[u.id] || (D[u.id] = { best: 0, n: 0 }), before = r.best;
+    r.best = Math.max(r.best || 0, R.ok); r.n = (r.n || 0) + 1; save();
+    let h = head(u.icon + ' ' + esc(u.name) + ' — 結果', '単元');
+    h += '<div class="mw-result"><b>' + R.ok + ' / ' + R.n + '</b><p>' + (R.ok === 10 ? '🏅 パーフェクト! この 単元は 完全に マスター。' : R.ok >= 8 ? '★ 合格! 次の 単元へ 進もう。' : 'あと ' + (8 - R.ok) + '問で ★。まちがえた 問題の 解き方を 見直そう。') + (r.best > before && before ? '<br>(自己ベスト 更新)' : '') + '</p></div>';
+    const idx = LADDER.U.indexOf(u), nx = LADDER.U[idx + 1];
+    h += '<div class="mw-row"><button class="mw-primary" id="mwAgain">もう一度 (新しい 問題)</button>' + (nx ? '<button class="mw-secondary" id="mwNextU">次の 単元: ' + esc(nx.name) + '</button>' : '') + '<button class="mw-secondary" id="mwList">一覧へ</button></div>';
+    area().innerHTML = h; bindBack(() => ladUnit(u));
+    $('mwAgain').onclick = () => { sfx('click'); run = { u: u, i: 0, ok: 0, n: 10, wrong: [] }; ladQ(); };
+    if (nx) $('mwNextU').onclick = () => { sfx('click'); ladUnit(nx); };
+    $('mwList').onclick = () => { sfx('click'); ladList(); };
+  }
+
   function open(where) {
     showPage('pageMathWorld');
-    ({ sg: sgList, ru: ruList, fm: fmList, study: study }[where] || home)();
+    ({ sg: sgList, ru: ruList, fm: fmList, study: study, lad: ladList }[where] || home)();
     const p = $('pageMathWorld'); if (p) p.scrollTop = 0;
   }
   return { open: open, stop: stop, _bar: barSVG, _fig: figSVG, _run: () => run };
