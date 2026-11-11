@@ -94,8 +94,15 @@ const MathWorld = (function () {
     area().innerHTML = h; bindBack();
     area().querySelectorAll('[data-sg]').forEach(b => b.onclick = () => { sfx('click'); sgPlay(MW.SG.find(t => t.id === b.dataset.sg)); });
   }
-  function sgPlay(t) {
+  function sgPlay(t, skipLesson) {
     stop();
+    if (!skipLesson && typeof Lesson !== 'undefined' && Lesson.has('mw_' + t.id)) {   // まず くわしい 解説
+      let h = head('📖 ' + t.icon + ' ' + esc(t.name), '一覧');
+      h += '<div class="mw-rule">📏 ' + esc(t.rule) + '</div>' + Lesson.html('mw_' + t.id) + '<div class="mw-row"><button class="mw-primary" id="mwSgGo">✏ 5問 スタート</button></div>';
+      area().innerHTML = h; bindBack(sgList); const pg = area().closest('.page'); if (pg) pg.scrollTop = 0;
+      $('mwSgGo').onclick = () => { sfx('click'); sgPlay(t, true); };
+      return;
+    }
     run = { t: t, i: 0, ok: 0, n: 5 };
     sgQ();
   }
@@ -128,7 +135,7 @@ const MathWorld = (function () {
     h += '<div class="mw-result"><b>' + R.ok + ' / ' + R.n + '</b><p>' + (R.ok >= 4 ? '🏅 線分図マスター! この タイプは もう だいじょうぶ。' : R.ok >= 2 ? 'いい感じ! 図を かく くせを つけよう。' : '図を かいてから 式を 立てると、ぐっと 楽に なるよ。') + '</p></div>';
     h += '<div class="mw-row"><button class="mw-primary" id="mwAgain">もう一度 (新しい 数)</button><button class="mw-secondary" id="mwList">一覧へ</button></div>';
     area().innerHTML = h; bindBack(sgList);
-    $('mwAgain').onclick = () => { sfx('click'); sgPlay(t); };
+    $('mwAgain').onclick = () => { sfx('click'); sgPlay(t, true); };
     $('mwList').onclick = () => { sfx('click'); sgList(); };
   }
 
@@ -137,7 +144,9 @@ const MathWorld = (function () {
     stop();
     const D = data();
     let h = head('🇷🇺 ロシア式 思考パズル');
-    h += '<div class="mw-box"><b>数学サークルの 問題</b><p>速く 解くより「なぜ?」を 考える 問題たち。すぐに わからなくても だいじょうぶ。ヒントは 1回だけ 見られるよ。</p></div><div class="mw-ru">';
+    h += '<div class="mw-box"><b>数学サークルの 問題</b><p>速く 解くより「なぜ?」を 考える 問題たち。すぐに わからなくても だいじょうぶ。ヒントは 1回だけ 見られるよ。</p></div>';
+    if (typeof Lesson !== 'undefined' && Lesson.has('mw_ru')) h += '<details class="mw-box mw-ruls"><summary>📖 くわしい 解説: 考える ための 作戦</summary>' + Lesson.html('mw_ru') + '</details>';
+    h += '<div class="mw-ru">';
     MW.RU.forEach((r, i) => { h += '<button class="mw-rub' + (D.ru[i] ? ' done' : '') + '" data-ru="' + i + '">' + (D.ru[i] ? '✓' : i + 1) + '</button>'; });
     h += '</div>';
     area().innerHTML = h; bindBack();
