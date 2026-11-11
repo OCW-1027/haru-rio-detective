@@ -920,6 +920,37 @@ const SCILAD = (function () {
     return { q: '地図の ①〜④ の うち、' + t[0] + ' は どれ?', fig: jpMap(null, labels), type: 'choice', a: 0, opts: [right].concat(mk.filter(m => m !== right)), steps: [t[0] + ' = ' + right, all.map((p, i) => mk[i] + ' ' + p[0]).join('、')] };
   });
 
+  // ---- 世界地図 (Natural Earth 110m の 実際の 国境) ----
+  function wMap(r, hl, marks) {
+    const M = WORLDMAP, vb = M.VB[r], sw = r2(vb[2] / 380), Cby = {}; M.C.forEach(c => Cby[c[0]] = c);
+    let s = '<svg viewBox="' + vb.join(' ') + '" role="img" aria-label="' + M.RN[r] + 'の 地図"><rect x="' + vb[0] + '" y="' + vb[1] + '" width="' + vb[2] + '" height="' + vb[3] + '" fill="#d4e6f1"/>';
+    M.VI[r].forEach(k => { s += '<path d="' + M.P[k] + '" fill="' + (k === hl ? '#d0382a' : Cby[k] ? '#efe2c2' : '#e3ddcf') + '" stroke="' + (k === hl ? '#7a1a10' : '#fffdf6') + '" stroke-width="' + (k === hl ? sw * 1.6 : sw) + '" stroke-linejoin="round"/>'; });
+    if (hl && Cby[hl] && Cby[hl][7] < vb[2] * vb[3] / 900) { const c = Cby[hl]; s += '<circle cx="' + c[5] + '" cy="' + c[6] + '" r="' + r2(vb[2] / 22) + '" fill="none" stroke="#d0382a" stroke-width="' + sw * 2.2 + '" stroke-dasharray="' + sw * 4 + ' ' + sw * 2.5 + '"/>'; }
+    if (marks) Object.keys(marks).forEach(k => { const c = Cby[k], rr = r2(vb[2] / 34); s += '<circle cx="' + c[5] + '" cy="' + c[6] + '" r="' + rr + '" fill="#fff" stroke="#2e5fa8" stroke-width="' + sw * 2 + '"/><text x="' + c[5] + '" y="' + r2(c[6] + rr * 0.42) + '" text-anchor="middle" font-size="' + r2(rr * 1.25) + '" font-weight="700" fill="#2e5fa8">' + marks[k] + '</text>'; });
+    return s + '</svg>';
+  }
+  add('sg', 'xg6', '🌐', '世界地図 (国と 首都)', ['地図の 形と 位置で 国を 見分けよう (となりの 国との 位置関係が 手がかり)', '首都 = 最大の 都市 とは かぎらない (例: オーストラリアの 首都は キャンベラ、トルコは アンカラ)', '赤く ぬった 国が 小さい ときは 点線の 円で 囲んで あるよ'], () => {
+    if (typeof WORLDMAP === 'undefined') return null;
+    const M = WORLDMAP, r = pick(Object.keys(M.VB)), vb = M.VB[r], RN = M.RN[r];
+    const inV = c => c[5] > vb[0] + vb[2] * 0.03 && c[5] < vb[0] + vb[2] * 0.97 && c[6] > vb[1] + vb[3] * 0.03 && c[6] < vb[1] + vb[3] * 0.97;
+    const pool = M.C.filter(inV); if (pool.length < 4) return null;
+    const near = (x, n) => pool.filter(c => c !== x).sort((a, b) => Math.hypot(a[5] - x[5], a[6] - x[6]) - Math.hypot(b[5] - x[5], b[6] - x[6])).slice(0, n).sort(() => Math.random() - 0.5);
+    const main = pool.filter(c => c[3] === r), x = pick(main.length ? main : pool), k = pick(['hl', 'hl', 'mk', 'mk', 'cap', 'mcap']);
+    const note = c => c[2] ? c[1] + 'の 首都は ' + c[2] + (c[4] ? ' (' + c[4] + 'は 首都では ない)' : '') : c[1] + ' (' + M.RN[c[3]] + ')';
+    if (k === 'hl') { const nb = near(x, 5), o = chq('地図 (' + RN + ') で 赤く ぬった 国は?', x[1], nb.map(c => c[1]), [x[1] + ' — 近くの 国: ' + near(x, 3).map(c => c[1]).join('・'), note(x)]); return o && Object.assign(o, { fig: wMap(r, x[0]) }); }
+    if (k === 'cap' || (k === 'mcap' && !x[2])) { if (!x[2]) return null; const caps = near(x, 8).filter(c => c[2]).map(c => c[2]); const o = chq('地図 (' + RN + ') で 赤く ぬった 国の 首都は?', x[2], (x[4] ? [x[4]] : []).concat(caps), ['赤い 国は ' + x[1], note(x)]); return o && Object.assign(o, { fig: wMap(r, x[0]) }); }
+    // A〜D の 印 (重ならない よう 離れた 4か国)
+    const minD = vb[2] / 7, cand = [x].concat(near(x, 12)), sel = [];
+    cand.forEach(c => { if (sel.length < 4 && sel.every(s => Math.hypot(s[5] - c[5], s[6] - c[6]) >= minD)) sel.push(c); });
+    if (sel.length < 4) return null;
+    const L = ['A', 'B', 'C', 'D'], order = sel.slice().sort(() => Math.random() - 0.5), marks = {}; order.forEach((c, i) => marks[c[0]] = L[i]);
+    const li = L[order.indexOf(x)];
+    if (k === 'mk') { const o = chq('地図 (' + RN + ') の ' + li + ' の 国は?', x[1], order.filter(c => c !== x).map(c => c[1]).concat(near(x, 4).map(c => c[1])), [order.map((c, i) => L[i] + ' = ' + c[1]).join('、'), note(x)]); return o && Object.assign(o, { fig: wMap(r, null, marks) }); }
+    if (!x[2]) return null;
+    const o = chq('地図 (' + RN + ') の ' + li + ' の 国の 首都は?', x[2], (x[4] ? [x[4]] : []).concat(order.filter(c => c !== x && c[2]).map(c => c[2])).concat(near(x, 8).filter(c => c[2]).map(c => c[2])), [li + ' = ' + x[1], note(x), order.filter(c => c !== x).map(c => L[order.indexOf(c)] + ' = ' + c[1] + (c[2] ? ' (' + c[2] + ')' : '')).join('、')]);
+    return o && Object.assign(o, { fig: wMap(r, null, marks) });
+  });
+
   const GROUPS = [
     { id: 'sj1', name: '中学 理科 (物理・化学)', color: '#2a7aa8' }, { id: 'sj2', name: '中学 理科 (生物・地学)', color: '#3a8a5a' },
     { id: 'shp', name: '高校 物理基礎', color: '#5a5ab0' }, { id: 'shc', name: '高校 化学基礎', color: '#a0582a' }, { id: 'shb', name: '高校 生物基礎・地学基礎', color: '#2a8a7a' },
