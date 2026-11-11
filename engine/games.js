@@ -46,6 +46,8 @@ function buildGameGrid(grid) {
   }
   html += '</div>';
 
+  if (typeof MiniLearn !== 'undefined') html += MiniLearn.menuHtml();
+  html += '<div class="ml-menu-h" style="margin-top:6px">🕹 ごほうび ゲーム <span>1回 トークン 1個</span></div>';
   html += '<div class="game-grid-menu">';
   GAMES.forEach(g => {
     const best = (State.gameStats[g.id] && State.gameStats[g.id].best) || 0;
@@ -62,6 +64,7 @@ function buildGameGrid(grid) {
   html += '</div>';
   wrapper.innerHTML = html;
   grid.appendChild(wrapper);
+  if (typeof MiniLearn !== 'undefined') MiniLearn.bindMenu(wrapper);
 
   wrapper.querySelectorAll('.game-card').forEach(card => {
     card.onclick = () => {
