@@ -41,10 +41,24 @@ const ReviewEngine = (function () {
   }
   function dueCount(series) { return due(series).length; }
   function question(r) {
+    if (r.s === 'scientists') return sciQuestion(r);
     const eng = CaseEngine.get(r.s);
     const c = eng && eng.cfg.story[r.c];
     const step = c && c.steps && c.steps[r.q];
     return step && step.puzzle ? { c: c, step: step, title: eng.cfg.title } : null;
+  }
+  // 偉人科学者ファイル (独自エンジン): q < 100 = 推理ステップ, q ≥ 100 = クリア クイズ
+  function sciQuestion(r) {
+    if (typeof SCIENTISTS_STORY === 'undefined') return null;
+    const c = SCIENTISTS_STORY[r.c]; if (!c) return null;
+    if (r.q >= 100) {
+      const q = c.caseQuiz && c.caseQuiz[r.q - 100]; if (!q) return null;
+      return { c: c, step: { title: 'クリア クイズ', puzzle: { prompt: q.q, options: q.options, answer: q.correct, explanation: q.exp || ('正解は「' + q.options[q.correct] + '」') } }, title: '偉人科学者ファイル' };
+    }
+    const st = c.steps && c.steps[r.q]; if (!st || !st.options) return null;
+    const ans = st.options.findIndex(o => o.isCorrect); if (ans < 0) return null;
+    const exp = (st.options[ans].response || []).map(l => typeof l === 'string' ? l : (l.text || '')).filter(Boolean).join(' ');
+    return { c: c, step: { title: st.title || ('推理 ' + (r.q + 1)), puzzle: { prompt: st.question, options: st.options.map(o => o.label), answer: ans, explanation: exp } }, title: '偉人科学者ファイル' };
   }
   function answer(r, ok) {
     if (ok) {
@@ -78,7 +92,8 @@ const ReviewEngine = (function () {
       h += '<div class="v2-review-h">🔁 復習 ' + (i + 1) + ' / ' + queue.length + '<button class="v2-review-x" id="v2RvX">✕</button></div>';
       h += '<div class="v2-review-src">' + escapeHtml(q.c.title) + ' ・ ' + escapeHtml(q.step.title || '') + '</div>';
       h += '<div class="sci-puzzle-prompt">' + escapeHtml(pz.prompt) + '</div><div class="sci-puzzle-options">';
-      pz.options.forEach((o, k) => { h += '<div class="sci-puzzle-opt" data-i="' + k + '">' + (k + 1) + '. ' + escapeHtml(o) + '</div>'; });
+      const order = pz.options.map((o, k) => k).sort(() => Math.random() - 0.5);   // 表示順は 毎回 シャッフル
+      order.forEach((k, n) => { h += '<div class="sci-puzzle-opt" data-i="' + k + '">' + (n + 1) + '. ' + escapeHtml(pz.options[k]) + '</div>'; });
       h += '</div><div id="v2RvFb"></div></div>';
       ov.innerHTML = h;
       ov.querySelector('#v2RvX').onclick = close;
@@ -87,7 +102,7 @@ const ReviewEngine = (function () {
         el.onclick = () => {
           if (done) return; done = true;
           const k = parseInt(el.dataset.i), ok = k === pz.answer;
-          ov.querySelectorAll('.sci-puzzle-opt').forEach((o, n) => { o.classList.add('answered'); if (n === pz.answer) o.classList.add('correct'); });
+          ov.querySelectorAll('.sci-puzzle-opt').forEach(o => { o.classList.add('answered'); if (parseInt(o.dataset.i) === pz.answer) o.classList.add('correct'); });
           if (!ok) el.classList.add('wrong');
           try { sfx(ok ? 'unlock' : 'wrong'); } catch (e) {}
           if (ok) okN++;

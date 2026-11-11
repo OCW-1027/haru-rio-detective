@@ -83,6 +83,8 @@ function buildScientistsGrid(grid) {
   html += '<div style="font-size:12px;color:#4a8a9a;margin-top:6px;font-family:Klee One;">';
   html += '偉人科学者の 発見を 追体験しよう! (進行: ' + clearedCount + ' / ' + totalCases + ')';
   html += '</div>';
+  let dueN = 0; try { dueN = ReviewEngine.dueCount('scientists'); } catch (e) {}
+  if (dueN > 0) html += '<button class="v2-review-btn" id="sciFileReviewBtn">🔁 まちがえた 問題を 復習 (' + dueN + '問)</button>';
   html += '</div>';
 
   SCIENTISTS_STORY.forEach((s, i) => {
@@ -113,7 +115,8 @@ function buildScientistsGrid(grid) {
     if (comingSoon) {
       html += '<div style="text-align:center;margin-top:6px;font-family:RocknRoll One;font-size:11px;color:#b85a5a;">🚧 準備中…</div>';
     } else {
-      html += '<div class="sci-case-stars">' + (cleared ? '⭐⭐⭐' : '') + '</div>';
+      let sn = 3; try { sn = GameV2.getStars('scientists', i); } catch (e) {}
+      html += '<div class="sci-case-stars">' + (cleared ? '⭐'.repeat(sn) + '<span class="v2-star-off">' + '☆'.repeat(3 - sn) + '</span>' : '') + '</div>';
     }
     if (locked && !comingSoon) html += '<div class="sci-case-lock">🔒</div>';
     html += '</div>';
@@ -146,7 +149,8 @@ function buildScientistsGrid(grid) {
       sfx('click');
       startScientistsCase(idx);
     };
-  });
+  });  const rvBtn = wrapper.querySelector('#sciFileReviewBtn');
+  if (rvBtn) rvBtn.onclick = () => { sfx('click'); ReviewEngine.open('scientists', () => { buildChapterGrid(); }); };
 }
 
 function startScientistsCase(idx) {
@@ -438,6 +442,7 @@ function bindScientistsEvents() {
         } else {
           sfx('wrong');
           ScientistsState.wrongIdxs.push(i);
+          try { if (ScientistsState.wrongIdxs.length === 1) ReviewEngine.record('scientists', ScientistsState.caseIdx, ScientistsState.stepIdx); } catch (e) {}
           // 즉시 오답 reaction line 표시: 임시로 pickedIdx + response 사용
           ScientistsState.pickedIdx = i;
           ScientistsState.responseIdx = 0;
@@ -455,6 +460,7 @@ function bindScientistsEvents() {
           sfx('correct');
         } else {
           sfx('wrong');
+          try { ReviewEngine.record('scientists', ScientistsState.caseIdx, 100 + qIdx); } catch (e) {}
         }
         renderScientists();
       }
@@ -528,6 +534,8 @@ function scientistsHandleNext() {
       // State에 클리어 반영
       if (State.scientistsCleared && State.scientistsCleared.length > ScientistsState.caseIdx) {
         State.scientistsCleared[ScientistsState.caseIdx] = true;
+        const tq = c.caseQuiz.length, cq = ScientistsState.quizCorrect;
+        try { GameV2.setStars('scientists', ScientistsState.caseIdx, cq === tq ? 3 : cq >= tq - 1 ? 2 : 1); } catch (e) {}
         try { saveState(); } catch(e) {}
       }
       try { triggerConfetti(); } catch(e) {}
