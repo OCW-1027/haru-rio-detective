@@ -55,7 +55,7 @@ const ParentReport = (function () {
     const d = v2().indian; if (!d || !d.t || typeof IM === 'undefined') return '';
     const stars = IM.T.reduce((a, t) => a + ((d.t[t.id] || {}).stars || 0), 0);
     const weak = IM.T.map(t => ({ t: t, r: d.t[t.id] })).filter(x => x.r && x.r.n >= 5).map(x => ({ t: x.t, p: pct(x.r.ok, x.r.n), n: x.r.n })).filter(x => x.p < 85).sort((a, b) => a.p - b.p).slice(0, 3);
-    let h = '<div class="pr-kv"><span>★ <b>' + stars + '</b> / ' + IM.T.length * 3 + '</span><span>検定 合格 <b>' + Object.keys(d.badge || {}).length + '</b> / 3</span></div>';
+    let h = '<div class="pr-kv"><span>★ <b>' + stars + '</b> / ' + IM.T.length * 3 + '</span><span>検定 合格 <b>' + Object.keys(d.badge || {}).length + '</b> / ' + IM.COURSES.length + '</span></div>';
     if (weak.length) h += '<div class="pr-note">苦手な ワザ: ' + weak.map(w => esc(w.t.icon + ' ' + w.t.name) + ' (' + w.p + '%)').join('、') + '</div>';
     return h;
   }

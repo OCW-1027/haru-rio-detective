@@ -31,8 +31,8 @@ const IndianMath = (function () {
   function home() {
     stop();
     const D = data(), total = IM.T.reduce((a, t) => a + tr(t.id).stars, 0);
-    let h = '<div class="im-hero">' + aarya('big') + '<div><div class="im-kicker">インド式</div><h1 class="im-h1">計算道場</h1><p>アーリヤ:「ナマステ! わたしは インドの ベンガルールから 来た アーリヤ。インドの 子どもたちが 使う 計算の ワザを 20こ 教えるよ。ワザには 全部 ちゃんと 理由が あるんだ!」</p></div></div>';
-    h += '<div class="im-stats"><div><b>' + total + '</b><small>/ ' + IM.T.length * 3 + ' ★</small></div><div><b>' + IM.T.filter(t => tr(t.id).stars >= 1).length + '</b><small>おぼえた ワザ</small></div><div><b>' + IM.COURSES.filter(c => D.badge[c.id]).length + '</b><small>/ 3 検定 合格</small></div></div>';
+    let h = '<div class="im-hero">' + aarya('big') + '<div><div class="im-kicker">インド式</div><h1 class="im-h1">計算道場</h1><p>アーリヤ:「ナマステ! わたしは インドの ベンガルールから 来た アーリヤ。インドの 子どもたちが 使う 計算の ワザを ' + IM.T.length + 'こ 教えるよ。ワザには 全部 ちゃんと 理由が あるんだ!」</p></div></div>';
+    h += '<div class="im-stats"><div><b>' + total + '</b><small>/ ' + IM.T.length * 3 + ' ★</small></div><div><b>' + IM.T.filter(t => tr(t.id).stars >= 1).length + '</b><small>おぼえた ワザ</small></div><div><b>' + IM.COURSES.filter(c => D.badge[c.id]).length + '</b><small>/ ' + IM.COURSES.length + ' 検定 合格</small></div></div>';
     h += '<div class="im-row"><button class="im-primary" id="imReview">📅 今日の 復習 (10問)</button><button class="im-secondary" id="imStory">📜 インド数学 ものがたり</button></div>';
     IM.COURSES.forEach(c => {
       const list = IM.T.filter(t => t.course === c.id), best = D.exam[c.id];

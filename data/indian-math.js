@@ -2,7 +2,7 @@
  * 各ワザ: rand(lv) → 問題の 数 / make(args) → { q: 問題, a: 答え, steps: [解き方 (HTML)] }
  *   lv 1 = ステップ1 (形に なれる) / lv 2 = ステップ2 (本気)
  *   ans: 'num' (数) | 'qr' (商と あまり) | 'ox' (○×)
- * course: kihon 基本 / oyo 応用 / tatsujin 達人
+ * course: kihon 基本 / oyo 応用 / tatsujin 達人 / jokyu 上級
  * why: なぜ そうなるか (式 · 図)。 area: 面積図 [上の ラベル2, 左の ラベル2, 4マス]
  */
 const IM = (function () {
@@ -266,10 +266,65 @@ const IM = (function () {
       return { q: N + ' ÷ 9', a: [q, r], steps: st };
     }, ans: 'qr', target: 6, slow: 14 });
 
+  // ===================== 上級 (ヴェーダ数学 発展) =====================
+  T.push({ id: 't21', course: 'jokyu', icon: '🎯', name: '1000に 近い 数どうし', short: '1000との ちがいを 使う: (x + yの ちがい) × 1000 + ちがいどうしの 積 (3けた)',
+    why: ['ニキラムの 1000 版。x = 1000 + a、y = 1000 + b と すると x × y = (1000 + a + b) × 1000 + a × b。', '例: 996 × 993 → ちがい −4 と −7 → 996 − 7 = 989、(−4)×(−7) = 028 → 989028', '後ろは 必ず 3けた で 書く (足りなければ 0 を つめる)。'],
+    ex: [996, 993], rand: lv => lv === 1 ? [1000 - R(1, 9), 1000 - R(1, 9)] : (Math.random() < 0.5 ? [1000 - R(5, 40), 1000 - R(5, 40)] : [1000 + R(2, 30), 1000 + R(2, 30)]),
+    make: ([x, y]) => {
+      const a = x - 1000, b = y - 1000, left = x + b, right = a * b, ans = x * y, st = [];
+      const sg = v => v < 0 ? '−' + (-v) : '+' + v;
+      st.push('1000との ちがい: ' + s(x, 'a') + ' → ' + s(sg(a), 'b') + '、' + s(y, 'a') + ' → ' + s(sg(b), 'b'));
+      st.push('左: ' + x + ' ' + sg(b) + ' = ' + s(left, 'c') + '  /  右: (' + sg(a) + ') × (' + sg(b) + ') = ' + s(right, 'c'));
+      if (right >= 1000) st.push('右が 4けた → 千の位を 左へ くり上げ');
+      st.push(left + ' × 1000 + ' + right + ' = 答え ' + s(ans, 'r'));
+      return { q: x + ' × ' + y, a: ans, steps: st };
+    }, ans: 'num', target: 6, slow: 15 });
+  T.push({ id: 't22', course: 'jokyu', icon: '²', name: 'どんな 2けたでも 2乗 (デュプレックス)', short: 'ab² = a² | 2ab | b² を 右から くり上げ',
+    why: ['(10a + b)² = 100a² + 2·10ab + b²。3つの 部分を 位ごとに 並べて、右から くり上げる だけ。', '例: 47² → 16 | 56 | 49 → 49 の 4 を 56 へ: 60 → 6 を 16 へ: 22 → 2209', '2ab (デュプレックス) が インド式の かなめ。'],
+    ex: [47], rand: lv => [lv === 1 ? R(11, 49) : R(51, 99)],
+    make: ([n]) => {
+      const a = Math.floor(n / 10), b = n % 10, cols = [a * a, 2 * a * b, b * b], ans = n * n;
+      return { q: n + '²', a: ans, steps: [s(a, 'a') + '² = ' + s(a * a, 'b') + '、2 × ' + a + ' × ' + b + ' = ' + s(2 * a * b, 'b') + '、' + s(b, 'a') + '² = ' + s(b * b, 'b'), box(cols), carryNote(cols) + '答え ' + s(ans, 'r')] };
+    }, ans: 'num', target: 8, slow: 10 });
+  T.push({ id: 't23', course: 'jokyu', icon: '³²', name: '3けたの 2乗 (デュプレックス)', short: 'abc² = a² | 2ab | 2ac+b² | 2bc | c²',
+    why: ['5つの 列: a²、2ab、2ac + b²、2bc、c²。まん中の 列は「外側どうしの 2倍 + まん中の 2乗」。', '例: 213² → 4 | 4 | 12+1=13 | 6 | 9 → くり上げて 45369', '2けたの デュプレックスを 3けたに のばした 形。'],
+    ex: [213], rand: lv => [lv === 1 ? R(101, 233) : R(234, 999)],
+    make: ([n]) => {
+      const a = Math.floor(n / 100), b = Math.floor(n / 10) % 10, c = n % 10, cols = [a * a, 2 * a * b, 2 * a * c + b * b, 2 * b * c, c * c], ans = n * n;
+      return { q: n + '²', a: ans, steps: ['a=' + a + '、b=' + b + '、c=' + c, 'a² = ' + cols[0] + '、2ab = ' + cols[1] + '、2ac + b² = ' + (2 * a * c) + ' + ' + (b * b) + ' = ' + cols[2] + '、2bc = ' + cols[3] + '、c² = ' + cols[4], box(cols.map(v => s(v, 'b'))), carryNote(cols) + '答え ' + s(ans, 'r')] };
+    }, ans: 'num', target: 4, slow: 25 });
+  T.push({ id: 't24', course: 'jokyu', icon: '⚖', name: '中点で かけ算 (平方の 差)', short: 'x × y = (中点)² − (中点との 差)²',
+    why: ['(m + d)(m − d) = m² − d²。2つの 数の まん中 (中点) m の 2乗から、差 d の 2乗を ひく。', '例: 47 × 53 → 中点 50、差 3 → 2500 − 9 = 2491', '中点が 10 の 倍数や 25・50 に なる ときに とくに 速い。'],
+    ex: [47, 53], rand: lv => { const m = lv === 1 ? pick([20, 30, 40, 50, 60, 70, 80, 90]) : pick([25, 35, 45, 55, 65, 75, 85, 95, 100, 150, 200]), d = R(1, lv === 1 ? 5 : 9); return [m - d, m + d]; },
+    make: ([x, y]) => {
+      const m = (x + y) / 2, d = (y - x) / 2, ans = x * y;
+      return { q: x + ' × ' + y, a: ans, steps: ['中点 ' + s(m, 'a') + '、差 ' + s(d, 'b'), m + '² = ' + s(m * m, 'c') + '、' + d + '² = ' + s(d * d, 'c'), (m * m) + ' − ' + (d * d) + ' = 答え ' + s(ans, 'r')] };
+    }, ans: 'num', target: 8, slow: 10 });
+  T.push({ id: 't25', course: 'jokyu', icon: '🔍', name: '7・11・13 の 倍数判定', short: '下から 3けたずつ 区切り、交互に 足し引き → 7・11・13 で わり切れるか',
+    why: ['1001 = 7 × 11 × 13。1000 ≡ −1 なので、3けたずつ 区切った かたまりを 交互に 足し引きした 数と 同じ あまりに なる。', '例: 123123 → 123 − 123 = 0 → 7 でも 11 でも 13 でも わり切れる', '残った 3けた以下の 数を 7・11・13 で わって 確かめる。'],
+    ex: [246813, 7], rand: lv => { const k = pick([7, 11, 13]), yes = Math.random() < 0.5; let N = lv === 1 ? R(10000, 99999) : R(100000, 9999999); if (yes) N -= N % k; else if (N % k === 0) N += 1; return [N, k]; },
+    make: ([N, k]) => {
+      const parts = []; let t = N; while (t) { parts.unshift(t % 1000); t = Math.floor(t / 1000); }
+      let alt = 0; parts.slice().reverse().forEach((p, i) => { alt += i % 2 ? -p : p; });
+      const ok = N % k === 0;
+      return { q: N + ' は ' + k + ' で わり切れる?', a: ok ? 'o' : 'x', steps: ['3けたずつ: ' + box(parts.map(p => s(String(p).padStart(parts.indexOf(p) === 0 ? 1 : 3, '0'), 'b'))), '下から 交互に + − : ' + s(alt, 'c'), alt + ' ÷ ' + k + ' → ' + (alt % k === 0 ? 'わり切れる' : 'あまり ' + (((alt % k) + k) % k)), '答え ' + s(ok ? '○ わり切れる' : '× わり切れない', 'r')] };
+    }, ans: 'ox', target: 8, slow: 12 });
+  T.push({ id: 't26', course: 'jokyu', icon: '🔁', name: '循環小数の n けた目', short: '1/7 = 0.142857 142857… 周期で わって あまりの 位置を 見る',
+    why: ['1/7 の 小数は 142857 の 6けたが くり返す。2/7・3/7… も 同じ 数字の 輪を 別の 場所から 読む だけ (2/7 = 0.285714…)。', 'n けた目は n ÷ 周期 の あまりで 決まる (あまり 0 は 周期の 最後)。', '1/13 = 0.076923…、1/27 = 0.037… なども 同じ 考え方。'],
+    ex: [1, 7, 20], rand: lv => { const P = lv === 1 ? [[1, 7], [2, 7], [3, 7], [1, 3], [1, 11]] : [[1, 7], [4, 7], [5, 7], [6, 7], [1, 13], [1, 27], [5, 11]]; const [a, b] = pick(P); return [a, b, R(lv === 1 ? 7 : 20, lv === 1 ? 40 : 500)]; },
+    make: ([a, b, n]) => {
+      let r = a % b, dig = ''; const seen = {}; while (seen[r] === undefined) { seen[r] = dig.length; r *= 10; dig += Math.floor(r / b); r %= b; }
+      const start = seen[r], per = dig.slice(start), pre = dig.slice(0, start); // 純循環なら pre = ''
+      const k = n <= pre.length ? null : ((n - pre.length - 1) % per.length);
+      const ans = k === null ? +pre[n - 1] : +per[k];
+      return { q: a + '/' + b + ' を 小数に した とき、小数第 ' + n + ' 位の 数字は?', a: ans, steps: [a + '/' + b + ' = 0.' + pre + per + per + '… (周期 ' + s(per.length, 'a') + ' けた: ' + s(per, 'b') + ')', n + ' ÷ ' + per.length + ' = ' + Math.floor((n - pre.length - 1) / per.length) + ' あまり ' + (((n - pre.length - 1) % per.length) + 1) + ' → 周期の ' + (k + 1) + ' 番目', '答え ' + s(ans, 'r')] };
+    }, ans: 'num', target: 6, slow: 15 });
+
   const COURSES = [
     { id: 'kihon', name: '基本', sub: 'インド式の 入口。くり上げの 少ない 形から', color: '#3a8fd1', exam: { n: 20, sec: 480, pass: 16 } },
     { id: 'oyo', name: '応用', sub: '19×19・100の 近く・たすきがけ・検算', color: '#e0832a', exam: { n: 20, sec: 600, pass: 16 } },
     { id: 'tatsujin', name: '達人', sub: '3けたの たすきがけ・平方根・立方根・÷9', color: '#8b4bc7', exam: { n: 15, sec: 900, pass: 12 } },
+    { id: 'jokyu', name: '上級', sub: '中学・高校レベル: 1000の 近く・デュプレックス 2乗・平方の 差・倍数判定・循環小数', color: '#c0392b', exam: { n: 12, sec: 900, pass: 9 } },
   ];
   const STORIES = [
     { icon: '0️⃣', t: '「0」は インドで 生まれた', b: '7世紀の インドの 数学者 ブラーマグプタは、0 を「何も ない ことを 表す 数」として あつかい、0 を 足す・ひく・かける ときの ルールを 本に 書いた (628年)。0 が 数に なったことで、今の 計算の 仕方が できあがった。' },
