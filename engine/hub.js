@@ -95,7 +95,9 @@ const Hub = (function () {
     const wxd = (State.v2 && State.v2.wx) || {};
     h += '<button class="hub-new-btn" id="hubWx"><img src="' + KORARIN + '" alt=""><span><b>🌤 お天気予報チャレンジ<span class="tag">NEW</span></b><small>本物の データで あしたを 予報 · 記録 ' + ((wxd.done || []).length) + '回</small></span></button>';
     const lbd = (State.v2 && State.v2.lab && State.v2.lab.cleared) || {};
-    h += '<button class="hub-new-btn" id="hubLab"><span style="font-size:44px">🧪</span><span><b>ラボ探偵<span class="tag">NEW</span></b><small>実験で トリックを 見ぬけ · 解決 ' + Object.keys(lbd).length + ' / 4</small></span></button>';
+    h += '<button class="hub-new-btn" id="hubLab"><span style="font-size:44px">🧪</span><span><b>ラボ探偵<span class="tag">NEW</span></b><small>実験で トリックを 見ぬけ · 解決 ' + Object.keys(lbd).length + ' / ' + (typeof LabDetective !== 'undefined' ? LabDetective._cases.length : 5) + '</small></span></button>';
+    const imd = (State.v2 && State.v2.indian && State.v2.indian.t) || {};
+    h += '<button class="hub-new-btn" id="hubIndian"><span style="font-size:44px">🇮🇳</span><span><b>インド式 計算道場<span class="tag">NEW</span></b><small>20の ワザ · 検定 · ★ ' + Object.keys(imd).reduce((a, k) => a + (imd[k].stars || 0), 0) + ' / 60</small></span></button>';
     h += '</section>';
 
     // 사건 파일
@@ -130,6 +132,8 @@ const Hub = (function () {
     root.querySelectorAll('[data-study]').forEach(b => {
       b.onclick = () => { sfx('click'); STUDY.find(s => s.id === b.dataset.study).go(); };
     });
+    const hi = document.getElementById('hubIndian');
+    if (hi) hi.onclick = () => { sfx('click'); IndianMath.open(); };
     const hl = document.getElementById('hubLab');
     if (hl) hl.onclick = () => { sfx('click'); LabDetective.open(); };
     const hx = document.getElementById('hubWx');

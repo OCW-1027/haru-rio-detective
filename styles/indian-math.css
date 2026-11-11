@@ -1,0 +1,99 @@
+/* インド式 計算道場 */
+.im-page { background: linear-gradient(180deg, #fff6e6 0%, #fdf1f0 55%, #f1f6ff 100%); overflow-y: auto; padding: 0 0 48px; }
+.im-wrap { width: 100%; max-width: 760px; margin: 0 auto; padding: 64px 16px 0; box-sizing: border-box; }
+.im-exit { position: absolute; top: 14px; left: 14px; z-index: 5; }
+.im-hero { display: flex; gap: 14px; align-items: center; background: #fff; border: 2px solid #f1d9b0; border-radius: 22px; padding: 14px; margin-bottom: 12px; }
+.im-hero p { font-family: 'Klee One'; font-size: 14px; line-height: 1.7; color: #4a3a2a; margin: 4px 0 0; }
+.im-kicker { font-family: 'RocknRoll One'; font-size: 13px; color: #d0702a; }
+.im-h1 { font-family: 'RocknRoll One'; font-size: 28px; color: #3a2a1a; margin: 0; }
+.im-aarya { flex-shrink: 0; text-align: center; }
+.im-aarya.big { width: 96px; } .im-aarya.sm { width: 56px; }
+.im-aarya.ok .art-main { border-radius: 50%; aspect-ratio: 1; object-fit: cover; border: 3px solid #f1c98a; }
+.im-aarya-fb { font-size: 56px; line-height: 1.1; }
+.im-aarya.sm .im-aarya-fb { font-size: 38px; }
+.im-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.im-stats > div { background: #fff; border: 2px solid #f1e2c8; border-radius: 14px; padding: 8px; text-align: center; }
+.im-stats b { font-family: 'RocknRoll One'; font-size: 22px; color: #c0602a; }
+.im-stats small { display: block; font-family: 'Klee One'; font-size: 11px; color: #8a7a6a; }
+.im-row { display: flex; gap: 8px; margin: 10px 0; }
+.im-row > * { flex: 1; }
+.im-primary, .im-secondary { border: none; border-radius: 14px; padding: 12px 10px; font-family: 'RocknRoll One'; font-size: 15px; cursor: pointer; width: 100%; }
+.im-primary { background: #e0732a; color: #fff; box-shadow: 0 3px 0 #a8501a; }
+.im-secondary { background: #fff; color: #a8501a; border: 2px solid #f1c98a; }
+.im-primary small, .im-secondary small { font-family: 'Klee One'; font-size: 11px; opacity: .85; }
+.im-course { background: #fff; border: 2px solid color-mix(in srgb, var(--cc) 35%, white); border-radius: 18px; padding: 12px; margin-bottom: 12px; }
+.im-ch { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+.im-ch b { font-family: 'RocknRoll One'; font-size: 17px; color: var(--cc); }
+.im-ch small { display: block; font-family: 'Klee One'; font-size: 12px; color: #6a6a6a; }
+.im-exam { flex-shrink: 0; border: 2px solid var(--cc); background: #fff; color: var(--cc); border-radius: 999px; padding: 6px 12px; font-family: 'RocknRoll One'; font-size: 13px; cursor: pointer; }
+.im-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.im-card { display: grid; grid-template-columns: 34px 1fr; grid-template-rows: auto auto; align-items: center; gap: 0 6px; text-align: left; background: #fffaf3; border: 2px solid #f1e2c8; border-radius: 12px; padding: 8px; cursor: pointer; }
+.im-ci { grid-row: span 2; font-size: 24px; text-align: center; }
+.im-cn { font-family: 'RocknRoll One'; font-size: 12.5px; color: #3a2a1a; line-height: 1.35; }
+.im-cs { color: #e5a520; font-size: 13px; letter-spacing: 1px; }
+.im-note, .im-small { font-family: 'Klee One'; font-size: 12.5px; color: #7a6a5a; line-height: 1.6; }
+.im-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.im-back { flex-shrink: 0; border: 2px solid #f1c98a; background: #fff; border-radius: 999px; padding: 5px 12px; font-family: 'RocknRoll One'; font-size: 13px; color: #a8501a; cursor: pointer; }
+.im-title { font-family: 'RocknRoll One'; font-size: 17px; color: #3a2a1a; }
+.im-tinfo { display: flex; flex-wrap: wrap; gap: 6px 12px; font-family: 'Klee One'; font-size: 12.5px; color: #6a5a4a; margin-bottom: 8px; }
+.im-tinfo span:first-child { color: var(--cc); font-family: 'RocknRoll One'; }
+.im-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+.im-tabs button { border: 2px solid #f1e2c8; background: #fff; border-radius: 12px; padding: 8px 2px; font-family: 'RocknRoll One'; font-size: 13px; color: #8a6a4a; cursor: pointer; }
+.im-tabs button.on { background: #e0732a; border-color: #e0732a; color: #fff; }
+.im-box { background: #fff; border: 2px solid #f1e2c8; border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
+.im-center { text-align: center; }
+.im-rule { background: #fff7e8; border-color: #f1c98a; }
+.im-rule b { font-family: 'RocknRoll One'; font-size: 13px; color: #c0602a; }
+.im-rule p { font-family: 'RocknRoll One'; font-size: 16px; color: #3a2a1a; margin: 4px 0 0; line-height: 1.5; }
+.im-talk { display: flex; gap: 10px; align-items: flex-start; text-align: left; }
+.im-talk b { font-family: 'RocknRoll One'; font-size: 14px; color: #a8501a; }
+.im-talk p { font-family: 'Klee One'; font-size: 14px; line-height: 1.75; margin: 4px 0; color: #3a2a1a; }
+.im-kor { width: 48px; flex-shrink: 0; }
+.im-kor .art-main { display: block !important; width: 48px; }
+.im-area { width: 100%; max-width: 300px; }
+.im-q { font-family: 'RocknRoll One'; font-size: 22px; color: #2a2a3a; margin: 4px 0 8px; }
+.im-q.big { font-size: 34px; letter-spacing: 1px; }
+.im-steps { margin: 6px 0; padding-left: 22px; text-align: left; }
+.im-steps li { font-family: 'Klee One'; font-size: 15px; line-height: 1.8; margin-bottom: 4px; color: #2a2a2a; }
+.im-a { color: #2a6fc0; font-weight: bold; } .im-b { color: #d0702a; font-weight: bold; } .im-c { color: #2e8a4a; font-weight: bold; } .im-r { color: #c0392b; font-weight: bold; font-size: 1.1em; }
+.im-box .im-box { margin: 0; }
+.im-box span.im-box { display: inline-block; border: 2px solid #d9d0c0; border-radius: 8px; padding: 0 8px; margin: 0; font-family: 'RocknRoll One'; background: #fffdf8; }
+.im-bar { color: #b0a090; margin: 0 4px; }
+.im-okline { font-family: 'RocknRoll One'; font-size: 18px; color: #2e8a4a; text-align: center; margin: 8px 0; }
+.im-inp { display: flex; justify-content: center; gap: 10px; margin: 6px 0 10px; }
+.im-inp input { width: 180px; font-family: 'RocknRoll One'; font-size: 30px; text-align: center; border: 3px solid #f1c98a; border-radius: 14px; padding: 6px; color: #2a2a3a; }
+.im-inp label { font-family: 'RocknRoll One'; font-size: 13px; color: #8a6a4a; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.im-inp label input { width: 120px; }
+.im-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 320px; margin: 0 auto; }
+.im-pad button { border: none; background: #fff3e2; border-radius: 14px; padding: 14px 0; font-family: 'RocknRoll One'; font-size: 24px; color: #4a3a2a; box-shadow: 0 3px 0 #e8cfa8; cursor: pointer; }
+.im-pad button.ok { background: #e0732a; color: #fff; font-size: 18px; box-shadow: 0 3px 0 #a8501a; }
+.im-pad button:active { transform: translateY(2px); box-shadow: none; }
+.im-ox { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.im-ox button { border: none; border-radius: 16px; padding: 22px 0; font-family: 'RocknRoll One'; font-size: 22px; cursor: pointer; background: #e9f6ec; color: #2e8a4a; box-shadow: 0 3px 0 #b9dcc2; }
+.im-ox button[data-ox="x"] { background: #fdecea; color: #c0392b; box-shadow: 0 3px 0 #efbdb7; }
+.im-good { font-family: 'RocknRoll One'; font-size: 18px; color: #2e8a4a; margin: 4px 0; }
+.im-good.big, .im-bad.big { font-size: 22px; }
+.im-bad { font-family: 'RocknRoll One'; font-size: 16px; color: #c0392b; margin: 4px 0 8px; }
+.im-prog { height: 8px; background: #f1e2c8; border-radius: 999px; overflow: hidden; margin-bottom: 4px; }
+.im-prog div { height: 100%; background: #e0732a; transition: width .3s; }
+.im-qno { font-family: 'Klee One'; font-size: 12.5px; color: #8a7a6a; margin-bottom: 8px; }
+.im-hint summary { font-family: 'Klee One'; font-size: 13px; color: #a8501a; cursor: pointer; }
+.im-hint p { font-family: 'RocknRoll One'; font-size: 14px; margin: 6px 0; }
+.im-big { font-size: 46px; }
+.im-score { font-family: 'RocknRoll One'; font-size: 36px; color: #c0602a; }
+.im-wr { border-top: 1px dashed #f1e2c8; padding: 6px 0; }
+.im-wr summary { font-family: 'RocknRoll One'; font-size: 14px; color: #3a2a1a; cursor: pointer; }
+.im-spr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.im-clock { font-family: 'RocknRoll One'; font-size: 34px; color: #2a6fc0; min-width: 70px; }
+.im-clock.wide { font-size: 26px; }
+.im-clock.hurry { color: #c0392b; }
+.im-sc { font-family: 'RocknRoll One'; font-size: 18px; color: #4a3a2a; }
+.im-skip { margin-top: 10px; border: none; background: none; font-family: 'Klee One'; font-size: 13px; color: #9a8a7a; text-decoration: underline; cursor: pointer; }
+.im-tbl { width: 100%; border-collapse: collapse; margin-top: 6px; font-family: 'Klee One'; font-size: 13.5px; }
+.im-tbl td { padding: 4px 6px; border-bottom: 1px solid #f4ead8; }
+.im-tbl td:last-child { text-align: right; font-family: 'RocknRoll One'; }
+.im-story { display: flex; gap: 12px; align-items: flex-start; }
+.im-si { font-size: 34px; line-height: 1.2; }
+.im-story b { font-family: 'RocknRoll One'; font-size: 15px; color: #a8501a; }
+.im-story p { font-family: 'Klee One'; font-size: 14px; line-height: 1.8; margin: 4px 0 0; color: #3a2a1a; }
+@media (max-width: 520px) { .im-h1 { font-size: 24px; } .im-q.big { font-size: 28px; } .im-aarya.big { width: 72px; } .im-grid { grid-template-columns: 1fr 1fr; } }
