@@ -129,7 +129,7 @@ const Eiken = (function () {
   function bindGo(root) {
     root.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { sfx('click'); stopSpeak(); go(b.dataset.go); });
   }
-  function go(v) { view = v; ({ home: home, vocab: vocab, quiz: quiz, wlist: wlist, p1: part1, listen: listen, write: writeList, read: readList, mock: mockIntro, interview: interview }[v] || home)(); const p = document.getElementById('pageEiken'); if (p) p.scrollTop = 0; }
+  function go(v) { if (v === 'k1') { k1 = true; v = 'p1'; } else if (v !== 'p1') k1 = false; view = v; ({ home: home, vocab: vocab, quiz: quiz, wlist: wlist, p1: part1, listen: listen, write: writeList, read: readList, mock: mockIntro, interview: interview }[v] || home)(); const p = document.getElementById('pageEiken'); if (p) p.scrollTop = 0; }
 
   // ---------- 홈 ----------
   let pos = 'all';
@@ -169,7 +169,8 @@ const Eiken = (function () {
       { go: 'write', icon: '📝', name: 'ライティング', sub: n('write') ? '要約 · 意見論述 ' + n('write') + '題' : '準備中', ok: n('write') > 0 },
       { go: 'read', icon: '📖', name: '長文読解', sub: n('read') ? '空所補充 · 内容一致 ' + n('read') + '題' : '準備中', ok: n('read') > 0 },
       { go: 'interview', icon: '🎤', name: '面接 (二次)', sub: (typeof EIKEN_INTERVIEW !== 'undefined' ? EIKEN_INTERVIEW[level].length + 'カード · ' : '') + (level === 'p1' ? 'ナレーション + 4問' : '音読 + 4問') + ' · 音声認識', ok: typeof EikenInterview !== 'undefined' },
-      { go: 'mock', icon: '⏱', name: '模擬試験 (本番形式)', sub: (level === 'p1' ? '筆記31問 + 作文2題 + リスニング29問' : '筆記31問 + 作文2題 + リスニング30問'), ok: true },
+      ...(level === 'p1' && typeof EIKEN_1K_PART1 !== 'undefined' ? [{ go: 'k1', icon: '🎓', name: '1級 チャレンジ (大問1)', sub: EIKEN_1K_PART1.length + '問 · 正答率 ' + rate(e.k1p1 || {}), ok: true }] : []),
+      { go: 'mock', icon: '⏱', name: '模擬試験 (本番形式)', sub: '全 ' + mockPlan().n + '回 · ' + (level === 'p1' ? '筆記31問 + 作文2題 + リスニング29問' : '筆記31問 + 作文2題 + リスニング30問'), ok: true },
     ];
     h += '<div class="ek-grid">';
     C.forEach(c => { h += '<button class="ek-card' + (c.ok ? '' : ' off') + '"' + (c.ok ? ' data-go="' + c.go + '"' : ' disabled') + '><span class="ek-card-icon">' + c.icon + '</span><span class="ek-card-name">' + c.name + '</span><span class="ek-card-sub">' + c.sub + '</span></button>'; });
@@ -280,15 +281,15 @@ const Eiken = (function () {
   }
 
   // ---------- 大問1 ----------
-  let pq = null;
+  let pq = null, k1 = false;   // k1 = 1級 チャレンジ (準1級の 画面から)
   function SET(kind) {
     const g = { p1: 'EIKEN_G2_PART1', listen: 'EIKEN_G2_LISTEN', read: 'EIKEN_G2_READING', write: 'EIKEN_G2_WRITE' }[kind];
     const n = level === 'p1' ? g.replace('G2', 'P1') : g;
     try { const v = eval(n); return Array.isArray(v) ? v : []; } catch (e) { return []; }
   }
   function REC(kind) { const e = data(); const k = level === 'p1' ? 'p_' + kind : kind; return e[k] || (e[k] = {}); }
-  function P1SET() { return level === 'p1' ? (typeof EIKEN_P1_PART1 !== 'undefined' ? EIKEN_P1_PART1 : []) : EIKEN_G2_PART1; }
-  function P1REC() { const e = data(); return level === 'p1' ? (e.pp1 || (e.pp1 = {})) : e.p1; }
+  function P1SET() { if (k1) return typeof EIKEN_1K_PART1 !== 'undefined' ? EIKEN_1K_PART1 : []; return level === 'p1' ? (typeof EIKEN_P1_PART1 !== 'undefined' ? EIKEN_P1_PART1 : []) : EIKEN_G2_PART1; }
+  function P1REC() { const e = data(); if (k1) return e.k1p1 || (e.k1p1 = {}); return level === 'p1' ? (e.pp1 || (e.pp1 = {})) : e.p1; }
   let p1opt = { tag: 'all' };
   function part1() {
     const set = P1SET(), rec = P1REC();
@@ -296,14 +297,15 @@ const Eiken = (function () {
     const cnt = t => set.filter(q => t === 'all' || q.tag === t).length;
     const solved = Object.keys(rec).length;
     const wrong = Object.keys(rec).filter(i => rec[i][1] > 0 && rec[i][1] >= rec[i][0]).length;
-    let h = header('✏️ 大問1 語句空所補充', (level === 'p1' ? '準1級' : '2級') + ' · 全 ' + set.length + '問');
+    let h = header(k1 ? '🎓 1級 チャレンジ' : '✏️ 大問1 語句空所補充', (k1 ? '1級 大問1 体験' : level === 'p1' ? '準1級' : '2級') + ' · 全 ' + set.length + '問');
+    if (k1) h += '<div class="ek-box"><p class="ek-small">🎓 1級の 大問1 は 22問、語彙の レベルは 約1万〜1万5千語。準1級より ずっと 難しい 単語ばかり。まちがえても 大丈夫、解説で 覚えよう!</p></div>';
     h += '<div class="ek-box"><div class="ek-today-row"><span>📊 解いた <b>' + solved + '</b> / ' + set.length + '</span><span>🎯 正答率 <b>' + rate(rec) + '</b></span><span>❗ 苦手 <b>' + wrong + '</b></span></div>';
     h += '<div class="ek-meter"><i style="width:' + pct(solved, set.length) + '%"></i></div>';
     h += '<div class="ek-pos small" style="grid-template-columns:repeat(' + tags.length + ',1fr)">';
     tags.forEach(t => { h += '<button class="ek-pos-b' + (p1opt.tag === t ? ' on' : '') + '" data-tag="' + t + '"><span class="ek-pos-n">' + (t === 'all' ? 'すべて' : t) + '</span><span class="ek-pos-c">' + cnt(t) + '問</span></button>'; });
     h += '</div>';
     h += '<button class="ek-primary" id="p1Go10">▶ 10問 チャレンジ</button>';
-    h += '<div class="ek-row2"><button class="ek-secondary" id="p1GoWrong"' + (wrong ? '' : ' disabled') + '>❗ 苦手だけ (' + wrong + ')</button><button class="ek-secondary" id="p1GoExam">⏱ 本番形式 ' + (level === 'p1' ? 18 : 17) + '問</button></div></div>';
+    h += '<div class="ek-row2"><button class="ek-secondary" id="p1GoWrong"' + (wrong ? '' : ' disabled') + '>❗ 苦手だけ (' + wrong + ')</button><button class="ek-secondary" id="p1GoExam">⏱ 本番形式 ' + (k1 ? 22 : level === 'p1' ? 18 : 17) + '問</button></div></div>';
     area().innerHTML = h; bindGo(area());
     area().querySelectorAll('[data-tag]').forEach(b => b.onclick = () => { sfx('click'); p1opt.tag = b.dataset.tag; part1(); });
     const pool = () => set.map((q, i) => i).filter(i => p1opt.tag === 'all' || set[i].tag === p1opt.tag);
@@ -313,6 +315,7 @@ const Eiken = (function () {
     document.getElementById('p1GoWrong').onclick = () => start(shuffle(pool().filter(i => rec[i] && rec[i][1] > 0 && rec[i][1] >= rec[i][0])).slice(0, 10));
     document.getElementById('p1GoExam').onclick = () => {
       // 本番 비율: 語彙 대부분 + 熟語 몇 개 (+ 2級은 文法)
+      if (k1) return start(shuffle(set.map((q, i) => i)).slice(0, 22));
       const by = t => shuffle(set.map((q, i) => i).filter(i => set[i].tag === t));
       const L = level === 'p1' ? by('語彙').slice(0, 14).concat(by('熟語').slice(0, 4)) : by('語彙').slice(0, 10).concat(by('熟語').slice(0, 4), by('文法').slice(0, 3));
       start(L);
@@ -321,12 +324,12 @@ const Eiken = (function () {
   function part1Q() {
     const root = area();
     if (pq.i >= pq.list.length) {
-      root.innerHTML = header('大問1 語句空所補充', '結果') + '<div class="ek-box ek-center"><div class="ek-big">' + (pq.ok >= 8 ? '🏆' : '💪') + '</div><p>' + pq.list.length + '問中 <b>' + pq.ok + '</b>問 正解</p><p class="ek-small">本番の 大問1は ' + (level === 'p1' ? '18' : '17') + '問。8割 取れれば 合格ペース!</p><button class="ek-primary" data-go="p1">大問1 メニューへ</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
+      root.innerHTML = header(k1 ? '🎓 1級 チャレンジ' : '大問1 語句空所補充', '結果') + '<div class="ek-box ek-center"><div class="ek-big">' + (pq.ok >= 8 ? '🏆' : '💪') + '</div><p>' + pq.list.length + '問中 <b>' + pq.ok + '</b>問 正解</p><p class="ek-small">本番の 大問1は ' + (k1 ? '22' : level === 'p1' ? '18' : '17') + '問。8割 取れれば 合格ペース!</p><button class="ek-primary" data-go="p1">大問1 メニューへ</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
       return bindGo(root);
     }
     const qi = pq.list[pq.i], q = P1SET()[qi];
     const order = shuffle([0, 1, 2, 3]);
-    let h = header('大問1 語句空所補充', (pq.i + 1) + ' / ' + pq.list.length + ' ・ ' + q.tag);
+    let h = header(k1 ? '🎓 1級 チャレンジ' : '大問1 語句空所補充', (pq.i + 1) + ' / ' + pq.list.length + ' ・ ' + q.tag);
     h += '<div class="ek-box ek-q">' + esc(q.q).replace('( )', '<span class="ek-blank">(　　)</span>') + '</div><div class="ek-opts two">';
     order.forEach((o, k) => { h += '<button class="ek-opt" data-o="' + o + '">' + (k + 1) + '. ' + esc(q.options[o]) + '</button>'; });
     h += '</div><div id="ekFb"></div>';
@@ -513,6 +516,31 @@ const Eiken = (function () {
     const real = shuffle(all.filter(r => r.real)), mini = shuffle(all.filter(r => !r.real));
     return real.concat(mini);
   }
+  // 固定の 回 (第1回, 第2回 …): 本番サイズの 長文・リスニング・大問1 を 前から 順に 区切って 割り当てる。
+  // 新しい 問題は 配列の 後ろに 追加されるので、既存の 回の 中身は 変わらない (回が 増えるだけ)。
+  function mockPlan() {
+    const C = MOCK[level], set = P1SET(), R = SET('read'), LS = SET('listen');
+    const chunk = (pool, size) => { const out = []; for (let i = 0; i + size <= pool.length; i += size) out.push(pool.slice(i, i + size)); return out; };
+    const idx = (arr, f) => arr.map((x, i) => i).filter(i => f(arr[i]));
+    const p1 = {}; Object.keys(C.p1).forEach(t => { p1[t] = chunk(idx(set, q => q.tag === t), C.p1[t]); });
+    const cloze = chunk(idx(R, r => r.real && r.type === 'cloze'), C.cloze);
+    const need = {}; C.content.forEach(nq => { need[nq] = (need[nq] || 0) + 1; });
+    const content = {}; Object.keys(need).forEach(nq => { content[nq] = chunk(idx(R, r => r.real && r.type === 'content' && r.questions.length === +nq), need[nq]); });
+    const L = C.L.map(([part, n, nq]) => chunk(idx(LS, x => x.part === part && (x.qs ? x.qs.length : 1) === nq), n));
+    const lens = [cloze.length].concat(Object.values(content).map(c => c.length), Object.values(p1).map(c => c.length), L.map(c => c.length));
+    return { n: Math.min.apply(null, lens), p1: p1, cloze: cloze, content: content, L: L };
+  }
+  function buildFixed(k) {
+    const C = MOCK[level], P = mockPlan(), R = SET('read'), W = SET('write');
+    const p1 = []; Object.keys(C.p1).forEach(t => p1.push(...P.p1[t][k]));
+    const used = {}; const content = C.content.map(nq => { used[nq] = (used[nq] || 0); return R[P.content[nq][k][used[nq]++]]; });
+    const lis = []; P.L.forEach(c => lis.push(...c[k]));
+    const ws = W.filter(w => w.type === 'summary'), wo = W.filter(w => w.type === 'opinion');
+    const rs = seedRand(1000 + k * 7 + (level === 'p1' ? 500 : 0));
+    return { level: level, no: k + 1, p1: p1.map(i => ({ i: i, order: rs.shuf([0, 1, 2, 3]) })), cloze: P.cloze[k].map(i => R[i]), content: content, lis: lis,
+      wsum: ws[k % Math.max(1, ws.length)], wop: wo[k % Math.max(1, wo.length)], ans: {}, lans: {}, li: 0, t0: Date.now(), stage: 'read', rscore: null };
+  }
+  function seedRand(seed) { let x = seed >>> 0 || 1; const r = () => { x = (x * 1103515245 + 12345) >>> 0; return x / 4294967296; }; return { shuf: a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; } }; }
   function buildMock() {
     const C = MOCK[level], set = P1SET();
     const p1 = [];
@@ -533,16 +561,28 @@ const Eiken = (function () {
       ans: {}, lans: {}, li: 0, t0: Date.now(), stage: 'read', rscore: null };
   }
   function mockIntro() {
-    const C = MOCK[level];
-    let h = header('⏱ 模擬試験', (level === 'p1' ? '準1級' : '2級') + ' 一次試験 (本番形式)');
+    const C = MOCK[level], P = mockPlan(), e = data();
+    const hist = (e.mock || []).filter(m => m.lv === level);
+    let h = header('⏱ 模擬試験', (level === 'p1' ? '準1級' : '2級') + ' 一次試験 (本番形式) ・ 全 ' + P.n + '回');
     h += '<div class="ek-box"><p class="ek-passage">本番と 同じ 問題数・順番で 解きます。途中で 答えは 出ません (最後に まとめて 採点)。</p><ul class="ek-mock-ul">';
     const nP1 = Object.values(C.p1).reduce((a, b) => a + b, 0);
     h += '<li>📝 筆記 (目安 ' + C.min + '分): 大問1 短文空所補充 ' + nP1 + '問 → 大問2 長文空所補充 2題 → 大問3 長文内容一致 ' + C.content.join('問 + ') + '問</li>';
     h += '<li>✍ 作文: 要約 1題 + 意見論述 1題 (筆記の 時間内)</li>';
     h += '<li>🎧 リスニング (約' + C.lmin + '分): ' + C.L.map(l => 'Part' + l[0] + ' ' + l[1] + (l[2] > 1 ? '題×' + l[2] + '問' : '問')).join(' / ') + ' — 音声は 1回だけ</li></ul>';
-    h += '<button class="ek-primary" id="mkStart">▶ 試験 開始</button><p class="ek-small">※ 問題は すべて この道場の オリジナル問題から 本番の 割合で 選びます。</p></div>';
+    h += '<p class="ek-small">第1回〜第' + P.n + '回は それぞれ 別の 問題 (長文・リスニングが 重ならない)。順番に 受けて 本番の 練習を しよう。</p></div>';
+    h += '<div class="ek-grid ek-mock-grid">';
+    for (let k = 0; k < P.n; k++) {
+      const hs = hist.filter(m => m.n === k + 1), last = hs[hs.length - 1];
+      const pc = m => Math.round((m.r[0] + m.l[0]) * 100 / (m.r[1] + m.l[1]));
+      const best = hs.length ? Math.max.apply(null, hs.map(pc)) : null;
+      h += '<button class="ek-card real' + (hs.length ? ' done' : '') + '" data-mk="' + k + '"><span class="ek-card-icon">' + (hs.length ? (best >= 75 ? '🏅' : '📝') : '⏱') + '</span><span class="ek-card-name">第' + (k + 1) + '回</span><span class="ek-card-sub">' + (last ? '前回 R ' + last.r[0] + '/' + last.r[1] + ' ・ L ' + last.l[0] + '/' + last.l[1] + '<br>ベスト ' + best + '%' : 'まだ 受けていない') + '</span></button>';
+    }
+    h += '</div>';
+    h += '<button class="ek-secondary" id="mkRand">🎲 ランダム模試 (ミニ長文も まぜて 出題)</button>';
+    h += '<p class="ek-small">※ 問題は すべて この道場の オリジナル問題です。</p>';
     area().innerHTML = h; bindGo(area());
-    document.getElementById('mkStart').onclick = () => { sfx('click'); mk = buildMock(); mockRead(); };
+    area().querySelectorAll('[data-mk]').forEach(b => b.onclick = () => { sfx('click'); mk = buildFixed(+b.dataset.mk); mockRead(); });
+    document.getElementById('mkRand').onclick = () => { sfx('click'); mk = buildMock(); mockRead(); };
   }
   function mins() { return Math.floor((Date.now() - mk.t0) / 60000); }
   function optBtns(name, opts, order, sel) {
@@ -553,7 +593,7 @@ const Eiken = (function () {
   function mockRead() {
     const set = P1SET();
     let n = 0;
-    let h = header('⏱ 模擬試験 ・ 筆記', '経過 ' + mins() + '分 / 目安 ' + MOCK[mk.level].min + '分');
+    let h = header('⏱ 模擬試験 ・ 筆記' + (mk.no ? ' 第' + mk.no + '回' : ''), '経過 ' + mins() + '分 / 目安 ' + MOCK[mk.level].min + '分');
     h += '<div class="ek-mock-sec">大問1 次の (　) に 入れるのに 最も 適切な ものを 選びなさい。</div>';
     mk.p1.forEach((it, k) => {
       const q = set[it.i]; n++;
@@ -643,10 +683,10 @@ const Eiken = (function () {
     let lc = 0, lTotal = 0;
     mk.lis.forEach(idx => { const it = normListen(SET('listen')[idx]); it.qs.forEach((q, qi) => { lTotal++; if (mk.lans[idx + '.' + qi] === q.answer) lc++; else wrong.push({ sec: 'リスニング Part' + it.part, q: q.q, a: q.options[q.answer], exp: q.exp }); }); });
     const rr = r1 + r23, pr = Math.round(rr * 100 / rTotal), pl = Math.round(lc * 100 / lTotal);
-    const e = data(); e.mock = e.mock || []; e.mock.push({ lv: mk.level, d: today(), r: [rr, rTotal], l: [lc, lTotal] }); save();
+    const e = data(); e.mock = e.mock || []; e.mock.push({ lv: mk.level, n: mk.no || 0, d: today(), r: [rr, rTotal], l: [lc, lTotal] }); save();
     if (typeof Study !== 'undefined') { for (let i = 0; i < rTotal; i++) Study.log('eiken', i < rr, 'mockR'); for (let i = 0; i < lTotal; i++) Study.log('eiken', i < lc, 'mockL'); }
     const judge = p => p >= 75 ? '🟢 合格圏' : p >= 60 ? '🟡 あと少し' : '🔴 要復習';
-    let h = header('⏱ 模擬試験 ・ 結果', (mk.level === 'p1' ? '準1級' : '2級') + ' ・ 筆記 ' + (mk.rmin || 0) + '分');
+    let h = header('⏱ 模擬試験 ・ 結果', (mk.level === 'p1' ? '準1級' : '2級') + (mk.no ? ' 第' + mk.no + '回' : ' ランダム') + ' ・ 筆記 ' + (mk.rmin || 0) + '分');
     h += '<div class="ek-box"><div class="ek-mres"><div><b>' + rr + '</b> / ' + rTotal + '<span>リーディング ' + pr + '% ' + judge(pr) + '</span></div><div><b>' + lc + '</b> / ' + lTotal + '<span>リスニング ' + pl + '% ' + judge(pl) + '</span></div></div>';
     h += '<p class="ek-small">※ 英検の 合否は CSE スコア (技能ごとの 換算) で 決まります。正答率 7〜8割が 一次合格の おおよその 目安です。作文は 下の モデル解答と 比べて 自己採点しよう。</p></div>';
     [[mk.wsum, 'mkSum'], [mk.wop, 'mkOp']].forEach(([w, id]) => { if (!w) return; h += '<div class="ek-box ek-model"><div class="ek-fb-h">✍ ' + (w.type === 'summary' ? '要約' : '意見論述') + ' — あなた ' + wordCount(mk[id] || '') + '語</div><p class="ek-mine">' + esc(mk[id] || '(未記入)') + '</p><div class="ek-fb-h">📖 モデル解答</div><p>' + esc(w.model) + '</p></div>'; });
@@ -734,7 +774,9 @@ const Eiken = (function () {
       SET('listen').forEach(x => { const it = normListen(x); it.lines.forEach(l => out.push([l[0], l[1]])); it.qs.forEach((q, k) => { out.push(['N', (it.qs.length > 1 ? 'Number ' + (k + 1) + '. ' : 'Question. ') + q.q]); out.push(['N', q.q]); }); });
       wordList(lv).forEach(w => out.push(['N', w.en]));
       SET('write').forEach(w => { if (w.model) out.push(['N', w.model]); });
+      P1SET().forEach(q => out.push(['N', q.q.replace('( )', q.options[q.answer])]));   // 大問1 の 解説 🔊
     });
+    k1 = true; P1SET().forEach(q => out.push(['N', q.q.replace('( )', q.options[q.answer])])); k1 = false;
     level = keep; return out;
   }
   return { open: open, stop: stopAll, _speechTexts: speechTexts, _speak: speak, _vocabStats: vocabStats, _wordList: wordList };
