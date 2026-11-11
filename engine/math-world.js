@@ -12,7 +12,7 @@ const MathWorld = (function () {
   const area = () => $('mwArea');
   function data() { if (!State.v2) State.v2 = {}; const d = State.v2.mw || (State.v2.mw = {}); d.sg = d.sg || {}; d.ru = d.ru || {}; d.fm = d.fm || {}; return d; }
   function save() { try { saveState(); } catch (e) {} }
-  function stop() { run = null; document.onkeydown = null; }
+  function stop() { if (run && run.timer) clearInterval(run.timer); run = null; document.onkeydown = null; }
   function art(src, fb, cls) { return '<span class="art-w ' + (cls || '') + '"><img class="art-main" src="' + src + '" alt="" onload="this.parentNode.classList.add(\'ok\')" onerror="this.remove()"><span class="art-fb">' + (fb || '') + '</span></span>'; }
   function head(title, back) { return '<div class="mw-head"><button class="mw-back" id="mwBack">← ' + (back || '道場') + '</button><div class="mw-title">' + title + '</div></div>'; }
   function bindBack(fn) { const b = $('mwBack'); if (b) b.onclick = () => { sfx('click'); stop(); (fn || home)(); }; }
@@ -254,7 +254,7 @@ const MathWorld = (function () {
     L.GROUPS.forEach(g => {
       const us = L.U.filter(u => u.g === g.id); if (!us.length) return;
       h += '<h3 class="mw-cat" style="color:' + g.color + '">' + g.name + ' <small>' + us.filter(u => (D[u.id] || {}).best >= 8).length + ' / ' + us.length + '</small></h3><div class="mw-grid">';
-      us.forEach(u => { h += '<button class="mw-card" data-lu="' + u.id + '" style="border-color:color-mix(in srgb,' + g.color + ' 30%,white)"><span class="mw-ci">' + u.icon + '</span><span class="mw-cn">' + esc(u.name) + '</span><span class="mw-cs">' + (ladStar(u.id) || '未挑戦') + ((D[u.id] || {}).best != null ? ' ' + D[u.id].best + '/10' : '') + '</span></button>'; });
+      us.forEach(u => { h += '<button class="mw-card" data-lu="' + u.id + '" style="border-color:color-mix(in srgb,' + g.color + ' 30%,white)"><span class="mw-ci">' + u.icon + '</span><span class="mw-cn">' + esc(u.name) + '</span><span class="mw-cs">' + (ladStar(u.id) || '未挑戦') + ((D[u.id] || {}).best != null ? (u.ta ? ' ベスト ' + (D[u.id].ta || 0) + '問' : ' ' + D[u.id].best + '/10') : '') + '</span></button>'; });
       h += '</div>';
     });
     area().innerHTML = h; bindBack(isM ? home : () => { if (typeof Hub !== 'undefined') Hub.open(); });
@@ -294,20 +294,20 @@ const MathWorld = (function () {
     let h = head(u.icon + ' ' + esc(u.name), '一覧');
     h += '<div class="mw-tag" style="background:' + g.color + '">' + g.name + '</div>';
     h += '<div class="mw-box mw-point"><b>📌 要点</b><ul>' + u.point.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
-    h += '<div class="mw-box"><b>📝 例題</b><div class="mw-q mw-pre">' + esc(ex.q) + (ex.type === 'choice' ? '<div class="mw-exopts">' + ex.opts.map((o, i) => '<span>' + ['ア', 'イ', 'ウ', 'エ'][i] + ' ' + esc(o) + '</span>').join('') + '</div>' : '') + '</div><ol class="mw-steps" id="mwExSteps"></ol><div class="mw-row"><button class="mw-secondary" id="mwExNext">次の ステップ ▶</button><button class="mw-secondary" id="mwExNew">別の 例題</button></div></div>';
-    h += '<div class="mw-row"><button class="mw-primary" id="mwLadGo">✏ 練習 10問</button></div>';
+    h += '<div class="mw-box"><b>📝 例題</b><div class="mw-q mw-pre">' + esc(ex.q) + (ex.fig ? '<div class="mw-qfig">' + ex.fig + '</div>' : '') + (ex.type === 'choice' ? '<div class="mw-exopts">' + ex.opts.map((o, i) => '<span>' + ['ア', 'イ', 'ウ', 'エ'][i] + ' ' + esc(o) + '</span>').join('') + '</div>' : '') + '</div><ol class="mw-steps" id="mwExSteps"></ol><div class="mw-row"><button class="mw-secondary" id="mwExNext">次の ステップ ▶</button><button class="mw-secondary" id="mwExNew">別の 例題</button></div></div>';
+    h += '<div class="mw-row"><button class="mw-primary" id="mwLadGo">' + (u.ta ? '⏱ スタート (' + u.ta + '秒)' + (ladData()[u.id] ? ' ・ 自己ベスト ' + (ladData()[u.id].ta || 0) + '問' : '') : '✏ 練習 10問') + '</button></div>';
     area().innerHTML = h; bindBack(ladList);
     let k = 0; const steps = ex.steps.concat(['答え: ' + fmtA(ex)]);
     $('mwExNext').onclick = () => { sfx('click'); if (k < steps.length) { $('mwExSteps').insertAdjacentHTML('beforeend', '<li>' + esc(steps[k]) + '</li>'); k++; } if (k >= steps.length) $('mwExNext').disabled = true; };
     $('mwExNew').onclick = () => { sfx('click'); ladUnit(u); };
-    $('mwLadGo').onclick = () => { sfx('click'); run = { u: u, i: 0, ok: 0, n: 10, wrong: [] }; ladQ(); };
+    $('mwLadGo').onclick = () => { sfx('click'); if (u.ta) { taStart(u); return; } run = { u: u, i: 0, ok: 0, n: 10, wrong: [] }; ladQ(); };
   }
   function ladQ() {
     const R = run; if (R.diag) R.u = R.units[R.i]; const u = R.u, p = L.make(u); R.p = p; R.done = false; R.miss = 0;
     if (p.type === 'choice') { const idx = p.opts.map((o, i) => i); for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; } R.order = idx; }
     let h = head((R.diag ? '🩺 実力診断 ・ ' : '') + u.icon + ' ' + esc(u.name) + ' <small>' + (R.i + 1) + ' / ' + R.n + '</small>', R.diag ? '一覧' : '単元');
     h += '<div class="mw-dots">' + Array.from({ length: R.n }, (_, i) => '<i class="' + (i < R.i ? (R.res && R.res[i] ? 'ok' : 'ng') : i === R.i ? 'cur' : '') + '"></i>').join('') + '</div>';
-    h += '<div class="mw-q big mw-pre">' + esc(p.q) + '</div>';
+    h += '<div class="mw-q big mw-pre">' + esc(p.q) + (p.fig ? '<div class="mw-qfig">' + p.fig + '</div>' : '') + '</div>';
     if (p.type === 'choice') h += '<div class="mw-chs">' + R.order.map((oi, k) => '<button class="mw-ch" data-ch="' + oi + '"><b>' + ['ア', 'イ', 'ウ', 'エ'][k] + '</b> ' + esc(p.opts[oi]) + '</button>').join('') + '</div>';
     else if (p.type === 'num') h += '<div class="mw-inp"><input id="mwA" autocomplete="off" placeholder="答え"><button class="mw-ok" id="mwAGo">決定</button></div><div class="mw-keys"><button data-ins="−">−</button><button data-ins="/">/</button><span>分数は 3/4、負の数は −5</span></div>';
     else { const L = p.type === 'set' ? ['解 1', '解 2'] : p.labels; h += '<div class="mw-pair"><label>' + esc(L[0]) + '<input id="mwA1" autocomplete="off"></label><label>' + esc(L[1]) + '<input id="mwA2" autocomplete="off"></label><button class="mw-ok" id="mwPairGo">決定</button></div><div class="mw-keys"><button data-ins="−">−</button><button data-ins="/">/</button><span>分数は 3/4、負の数は −5</span></div>'; }
@@ -335,6 +335,35 @@ const MathWorld = (function () {
     ['mwA', 'mwAGo', 'mwA1', 'mwA2', 'mwPairGo'].forEach(id => { const e = $(id); if (e) e.disabled = true; });
     fb.innerHTML = '<div class="' + (ok ? 'mw-okm' : 'mw-ng') + '">' + (ok ? '⭕ 正解!' : '❌ 答えは ' + esc(fmtA(p))) + '</div>' + (ok ? '<details class="mw-det"><summary>解き方を 見る</summary><ol class="mw-steps">' + p.steps.map(s => '<li>' + esc(s) + '</li>').join('') + '</ol></details>' : '<ol class="mw-steps">' + p.steps.map(s => '<li>' + esc(s) + '</li>').join('') + '</ol>') + '<button class="mw-primary" id="mwNext">' + (R.i + 1 < R.n ? '次の 問題 →' : '結果を 見る') + '</button>';
     $('mwNext').onclick = () => { sfx('click'); R.i++; if (R.i < R.n) ladQ(); else if (R.diag) diagEnd(); else ladEnd(); };
+  }
+  // ---- タイムアタック ----
+  function taStart(u) { stop(); run = { u: u, ta: true, ok: 0, n: 0, end: Date.now() + u.ta * 1000 }; taQ(); run.timer = setInterval(taTick, 250); }
+  function taTick() { const R = run; if (!R || !R.ta) return; const left = Math.max(0, Math.ceil((R.end - Date.now()) / 1000)), el = $('mwTaT'); if (el) el.textContent = left; if (left <= 0) taEnd(); }
+  function taQ() {
+    const R = run, u = R.u, p = L.make(u); R.p = p; R.lock = false;
+    const idx = p.opts.map((o, i) => i).sort(() => Math.random() - 0.5);
+    let h = head('⏱ ' + esc(u.name), '単元');
+    h += '<div class="mw-ta"><span>残り <b id="mwTaT">' + Math.max(0, Math.ceil((R.end - Date.now()) / 1000)) + '</b> 秒</span><span>正解 <b>' + R.ok + '</b> / ' + R.n + '</span></div>';
+    h += '<div class="mw-q big mw-pre">' + esc(p.q) + '</div><div class="mw-chs">' + idx.map((oi, k) => '<button class="mw-ch" data-ch="' + oi + '"><b>' + ['ア', 'イ', 'ウ', 'エ'][k] + '</b> ' + esc(p.opts[oi]) + '</button>').join('') + '</div><div id="mwFb"></div>';
+    area().innerHTML = h; bindBack(() => { const t = run && run.timer; if (t) clearInterval(t); ladUnit(u); });
+    area().querySelectorAll('[data-ch]').forEach(b => b.onclick = () => {
+      const R2 = run; if (!R2 || !R2.ta || R2.lock) return; R2.lock = true; R2.n++;
+      const ok = +b.dataset.ch === 0; if (ok) R2.ok++; sfx(ok ? 'correct' : 'wrong');
+      area().querySelectorAll('.mw-ch').forEach(x => { if (+x.dataset.ch === 0) x.classList.add('right'); }); if (!ok) b.classList.add('wrongc');
+      if (!ok) $('mwFb').innerHTML = '<div class="mw-ng" style="font-size:13px">' + p.steps.map(esc).join('<br>') + '</div>';
+      setTimeout(() => { if (run === R2 && Date.now() < R2.end) taQ(); }, ok ? 450 : 1800);
+    });
+  }
+  function taEnd() {
+    const R = run; if (!R || !R.ta || R.done) return; R.done = true; clearInterval(R.timer);
+    const D = ladData(), r = D[R.u.id] || (D[R.u.id] = { best: 0, n: 0 }), prev = r.ta || 0;
+    r.ta = Math.max(prev, R.ok); r.n = (r.n || 0) + 1; r.best = Math.max(r.best || 0, R.ok >= 12 ? 10 : R.ok >= 8 ? 8 : 0); save();
+    let h = head('⏱ ' + esc(R.u.name) + ' — 結果', '単元');
+    h += '<div class="mw-result"><b>' + R.ok + ' 問</b><p>' + R.n + '問 中 ' + R.ok + '問 正解' + (R.ok > prev ? '<br>🎉 自己ベスト 更新! (前回まで ' + prev + '問)' : '<br>自己ベスト ' + prev + '問') + '<br>' + (R.ok >= 12 ? '🏅 年表マスター!' : R.ok >= 8 ? '★ 合格!' : '8問で ★') + '</p></div>';
+    h += '<div class="mw-row"><button class="mw-primary" id="mwAgain">もう一度</button><button class="mw-secondary" id="mwList">一覧へ</button></div>';
+    area().innerHTML = h; bindBack(() => ladUnit(R.u));
+    $('mwAgain').onclick = () => { sfx('click'); taStart(R.u); };
+    $('mwList').onclick = () => { sfx('click'); ladList(); };
   }
   function ladEnd() {
     const R = run, u = R.u, D = ladData(), r = D[u.id] || (D[u.id] = { best: 0, n: 0 }), before = r.best;
