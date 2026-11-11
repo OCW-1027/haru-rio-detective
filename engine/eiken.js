@@ -350,12 +350,29 @@ const Eiken = (function () {
   }
 
   // ---------- リスニング ----------
-  let lq = null;
-  function listen() {
-    const rec = REC('listen');
-    const score = i => { const r = rec[i]; return r ? (r[1] * 2 - r[0]) : 5; };
-    const pick = shuffle(SET('listen').map((x, i) => i)).sort((a, b) => score(b) - score(a)).slice(0, 10);
-    lq = { list: shuffle(pick), i: 0, ok: 0, total: 0 }; listenQ();
+  let lq = null, lpart = 0;
+  const LPARTS = () => level === 'p1'
+    ? [[1, '会話の 内容一致選択', '2人の 会話を 聞いて 質問に 答える'], [2, '文の 内容一致選択', '説明文を 聞いて 2問 (または 1問) に 答える'], [3, 'Real-Life 形式', 'Situation を 読んでから、放送を 聞いて 行動を 選ぶ']]
+    : [[1, '会話の 内容一致選択', '2人の 会話を 聞いて 質問に 答える'], [2, '文の 内容一致選択', '説明文・アナウンスを 聞いて 質問に 答える']];
+  // パート 選択 → 10題。part: 0 = ミックス
+  function listen(part) {
+    if (part === undefined) return listenMenu();
+    lpart = part;
+    const rec = REC('listen'), all = SET('listen');
+    const score = i => { const r = rec[i] || rec[i + '.0']; return r ? (r[1] * 2 - r[0]) : 5; };
+    const pick = shuffle(all.map((x, i) => i).filter(i => !part || all[i].part === part)).sort((a, b) => score(b) - score(a)).slice(0, 10);
+    lq = { list: shuffle(pick), i: 0, ok: 0, total: 0, part: part }; listenQ();
+  }
+  function listenMenu() {
+    const rec = REC('listen'), all = SET('listen');
+    const sub = part => { const o = {}; Object.keys(rec).forEach(k => { const it = all[parseInt(k, 10)]; if (it && (!part || it.part === part)) o[k] = rec[k]; }); return o; };
+    const cnt = part => all.filter(x => !part || x.part === part).length;
+    let h = header('リスニング', 'パートを えらぼう') + '<div class="ek-box"><p class="ek-small">本番と 同じ パート分けで 練習できるよ。苦手な パートを 集中して やってみよう。まちがえた 問題ほど 出やすく なる。</p></div><div class="ek-grid">';
+    h += '<button class="ek-card" data-lp="0"><span class="ek-card-icon">🎧</span><span class="ek-card-name">ミックス (全パート)</span><span class="ek-card-sub">' + cnt(0) + '問 · 正答率 ' + rate(sub(0)) + '</span></button>';
+    LPARTS().forEach(([n, nm, ds]) => { h += '<button class="ek-card" data-lp="' + n + '"><span class="ek-card-icon">' + ['', '💬', '📢', '🏃'][n] + '</span><span class="ek-card-name">Part ' + n + ' ' + nm + '</span><span class="ek-card-sub">' + ds + '<br>' + cnt(n) + '問 · 正答率 ' + rate(sub(n)) + '</span></button>'; });
+    h += '</div>';
+    const root = area(); root.innerHTML = h; bindGo(root);
+    root.querySelectorAll('[data-lp]').forEach(b => b.onclick = () => { sfx('click'); listen(+b.dataset.lp); });
   }
   // 문항 정규화: 복수 설문 (準1級 Part2 = 1지문 2문) · Situation (Part3 = 문제지에 인쇄, 음성 아님)
   function normListen(item) {
@@ -367,8 +384,8 @@ const Eiken = (function () {
   function listenQ() {
     const root = area();
     if (lq.i >= lq.list.length) {
-      root.innerHTML = header('リスニング', '結果') + '<div class="ek-box ek-center"><div class="ek-big">🎧</div><p>' + lq.total + '問中 <b>' + lq.ok + '</b>問 正解</p><button class="ek-primary" data-go="listen">次の 10題</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
-      return bindGo(root);
+      root.innerHTML = header('リスニング', '結果') + '<div class="ek-box ek-center"><div class="ek-big">🎧</div><p>' + lq.total + '問中 <b>' + lq.ok + '</b>問 正解</p><button class="ek-primary" id="ekLAgain">次の 10題' + (lq.part ? ' (Part ' + lq.part + ')' : '') + '</button><button class="ek-secondary" data-go="listen">パートを えらぶ</button><button class="ek-secondary" data-go="home">道場に もどる</button></div>';
+      bindGo(root); document.getElementById('ekLAgain').onclick = () => { sfx('click'); listen(lq.part); }; return;
     }
     const li = lq.list[lq.i], it = normListen(SET('listen')[li]);
     const partName = it.part === 1 ? ' 会話' : it.part === 3 ? ' Real-Life' : ' 説明文';
