@@ -14,7 +14,23 @@ const MiniLearn = (function () {
     { id: 'word', icon: '🔤', name: '英単語 スピード', desc: '英検の 単語を 60秒 早押し', target: 18, area: 'eiken' },
     { id: 'flag', icon: '🚩', name: '国旗 フラッシュ', desc: '国旗を 見て 国名を 当てよう', target: 15, area: 'geo' },
     { id: 'capital', icon: '🏙', name: '首都 フラッシュ', desc: '国の 首都を 60秒で 何問?', target: 15, area: 'geo' },
+    { id: 'pref', icon: '🗾', name: '県庁所在地 ラッシュ', desc: '47都道府県と 県庁所在地', target: 18, area: 'soc' },
+    { id: 'element', icon: '⚗', name: '元素記号 ラッシュ', desc: '元素記号 ⇄ 元素名 (中学・高校 理科)', target: 16, area: 'science' },
   ];
+  // [都道府県, 県庁所在地, 地方]
+  const PREF = [['北海道','札幌市','北海道'],['青森県','青森市','東北'],['岩手県','盛岡市','東北'],['宮城県','仙台市','東北'],['秋田県','秋田市','東北'],['山形県','山形市','東北'],['福島県','福島市','東北'],
+    ['茨城県','水戸市','関東'],['栃木県','宇都宮市','関東'],['群馬県','前橋市','関東'],['埼玉県','さいたま市','関東'],['千葉県','千葉市','関東'],['東京都','東京 (新宿区)','関東'],['神奈川県','横浜市','関東'],
+    ['新潟県','新潟市','中部'],['富山県','富山市','中部'],['石川県','金沢市','中部'],['福井県','福井市','中部'],['山梨県','甲府市','中部'],['長野県','長野市','中部'],['岐阜県','岐阜市','中部'],['静岡県','静岡市','中部'],['愛知県','名古屋市','中部'],
+    ['三重県','津市','近畿'],['滋賀県','大津市','近畿'],['京都府','京都市','近畿'],['大阪府','大阪市','近畿'],['兵庫県','神戸市','近畿'],['奈良県','奈良市','近畿'],['和歌山県','和歌山市','近畿'],
+    ['鳥取県','鳥取市','中国'],['島根県','松江市','中国'],['岡山県','岡山市','中国'],['広島県','広島市','中国'],['山口県','山口市','中国'],
+    ['徳島県','徳島市','四国'],['香川県','高松市','四国'],['愛媛県','松山市','四国'],['高知県','高知市','四国'],
+    ['福岡県','福岡市','九州・沖縄'],['佐賀県','佐賀市','九州・沖縄'],['長崎県','長崎市','九州・沖縄'],['熊本県','熊本市','九州・沖縄'],['大分県','大分市','九州・沖縄'],['宮崎県','宮崎市','九州・沖縄'],['鹿児島県','鹿児島市','九州・沖縄'],['沖縄県','那覇市','九州・沖縄']];
+  // ひっかけ用: 県内の 大きな 都市 (県庁所在地では ない)
+  const PREF_TRAP = { '岩手県': '花巻市', '宮城県': '石巻市', '福島県': '郡山市', '茨城県': 'つくば市', '栃木県': '日光市', '群馬県': '高崎市', '埼玉県': '川越市', '神奈川県': '川崎市', '山梨県': '富士吉田市', '長野県': '松本市', '静岡県': '浜松市', '愛知県': '豊田市', '三重県': '四日市市', '滋賀県': '彦根市', '兵庫県': '姫路市', '島根県': '出雲市', '山口県': '下関市', '香川県': '丸亀市', '愛媛県': '今治市', '福岡県': '北九州市', '沖縄県': '沖縄市', '北海道': '函館市', '石川県': '加賀市', '青森県': '八戸市', '鹿児島県': '霧島市', '岐阜県': '大垣市' };
+  // [記号, 名前]
+  const ELEM = [['H','水素'],['He','ヘリウム'],['Li','リチウム'],['Be','ベリリウム'],['B','ホウ素'],['C','炭素'],['N','窒素'],['O','酸素'],['F','フッ素'],['Ne','ネオン'],
+    ['Na','ナトリウム'],['Mg','マグネシウム'],['Al','アルミニウム'],['Si','ケイ素'],['P','リン'],['S','硫黄'],['Cl','塩素'],['Ar','アルゴン'],['K','カリウム'],['Ca','カルシウム'],
+    ['Mn','マンガン'],['Fe','鉄'],['Co','コバルト'],['Ni','ニッケル'],['Cu','銅'],['Zn','亜鉛'],['Br','臭素'],['Kr','クリプトン'],['Ag','銀'],['Sn','スズ'],['I','ヨウ素'],['Ba','バリウム'],['Pt','白金'],['Au','金'],['Hg','水銀'],['Pb','鉛'],['U','ウラン'],['Ti','チタン'],['Cr','クロム'],['Xe','キセノン']];
   const $ = id => document.getElementById(id);
   const esc = s => (typeof escapeHtml === 'function' ? escapeHtml(String(s)) : String(s));
   const rnd = n => Math.floor(Math.random() * n);
@@ -51,6 +67,24 @@ const MiniLearn = (function () {
   // ---------- 問題の 作り方 (4択) ----------
   let wordLv = 'g2';
   function choiceQ(id) {
+    if (id === 'pref') {
+      const row = pick(PREF), rev = Math.random() < 0.35;
+      if (rev) {   // 県庁所在地 → 都道府県
+        const opts = shuffle([row[0]].concat(shuffle(PREF.filter(r => r !== row && r[2] === row[2]).map(r => r[0])).concat(shuffle(PREF.filter(r => r !== row).map(r => r[0]))).filter((x, i, a) => a.indexOf(x) === i).slice(0, 3)));
+        return { prompt: '<div class="ml-word">' + esc(row[1]) + '</div><div class="ml-ask">が 県庁所在地の 都道府県は?</div>', opts: opts, ans: opts.indexOf(row[0]), note: row[1] + ' → ' + row[0] };
+      }
+      const pool = []; if (PREF_TRAP[row[0]]) pool.push(PREF_TRAP[row[0]]);
+      shuffle(PREF.filter(r => r !== row && r[2] === row[2])).forEach(r => { if (pool.length < 3) pool.push(r[1]); });
+      while (pool.length < 3) { const x = pick(PREF)[1]; if (x !== row[1] && !pool.includes(x)) pool.push(x); }
+      const opts = shuffle([row[1]].concat(pool));
+      return { prompt: '<div class="ml-word">' + esc(row[0]) + '</div><div class="ml-ask">の 県庁所在地は? (' + row[2] + '地方)</div>', opts: opts, ans: opts.indexOf(row[1]), note: row[0] + ' → ' + row[1] + (PREF_TRAP[row[0]] && pool.includes(PREF_TRAP[row[0]]) ? ' (' + PREF_TRAP[row[0]] + 'は 県庁所在地ではない)' : '') };
+    }
+    if (id === 'element') {
+      const e = pick(ELEM), sym = Math.random() < 0.5;
+      const others = shuffle(ELEM.filter(x => x !== e)).slice(0, 3);
+      const opts = shuffle([e].concat(others));
+      return { prompt: '<div class="ml-word">' + esc(sym ? e[0] : e[1]) + '</div><div class="ml-ask">' + (sym ? 'この 元素記号の 元素は?' : 'の 元素記号は?') + '</div>', opts: opts.map(x => sym ? x[1] : x[0]), ans: opts.indexOf(e), note: e[0] + ' = ' + e[1] };
+    }
     if (id === 'word') {
       const list = (typeof Eiken !== 'undefined' && Eiken._wordList) ? Eiken._wordList(wordLv) : [];
       const w = pick(list), same = list.filter(x => x.pos === w.pos && x.en !== w.en && x.ja !== w.ja);
