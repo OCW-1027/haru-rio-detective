@@ -247,7 +247,7 @@ const MathWorld = (function () {
     stop(); if (src) L = src;
     const isM = L === LADDER, D = ladData(); let h = head(L.icon + ' ' + L.title);
     const done = L.U.filter(u => (D[u.id] || {}).best >= 8).length;
-    h += '<div class="mw-box"><b>' + (isM ? '中学1年 から 高校2年 (+ 発展) まで ' : '中学 理科 から 高校 物理基礎・化学基礎、社会まで ') + L.U.length + ' 単元</b><p>どの 単元からでも 始めて OK。「要点 → 例題 → 練習 10問」で、8問 以上 正解で ★、全問 正解で 🏅。' + (isM ? '問題の 数は 毎回 変わるよ。' : '理科は 数値が 毎回 変わり、社会は 解説つきの 厳選問題だよ。') + '</p><div class="mw-ladprog">' + '<i style="width:' + Math.round(done * 100 / L.U.length) + '%"></i></div><small class="mw-ladn">★ ' + done + ' / ' + L.U.length + '</small></div>';
+    h += '<div class="mw-box"><b>' + (isM ? '中学1年 から 高校2年 (+ 発展) まで ' : '中学 理科 から 高校 物理基礎・化学基礎・生物基礎・地学基礎、社会まで ') + L.U.length + ' 単元</b><p>どの 単元からでも 始めて OK。「要点 → 例題 → 練習 10問」で、8問 以上 正解で ★、全問 正解で 🏅。' + (isM ? '問題の 数は 毎回 変わるよ。' : '理科は 数値が 毎回 変わり、社会は 解説つきの 厳選問題だよ。') + '</p><div class="mw-ladprog">' + '<i style="width:' + Math.round(done * 100 / L.U.length) + '%"></i></div><small class="mw-ladn">★ ' + done + ' / ' + L.U.length + '</small></div>';
     const last = (data().diag || []).filter(d => isM ? (d.lv === 'c' || d.lv === 'h') : (d.lv === 's' || d.lv === 'r')).slice(-1)[0];
     if (!isM) h += '<div class="mw-row"><button class="mw-primary" data-diag="r">🩺 理科 実力診断 (20問)</button><button class="mw-primary" data-diag="s">🩺 社会 実力診断 (20問)</button></div>';
     if (isM) h += '<div class="mw-row"><button class="mw-primary" data-diag="c">🩺 実力診断 (中学 20問)</button><button class="mw-primary" data-diag="h">🩺 実力診断 (高校 20問)</button></div>' + (last ? '<p class="mw-note">前回の 診断: ' + esc(last.d) + ' ' + ({ c: '中学', h: '高校', s: '社会', r: '理科' })[last.lv] + ' ' + last.ok + ' / ' + last.n + '</p>' : '');
