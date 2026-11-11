@@ -50,3 +50,6 @@
 .wq-wl { text-align: left; background: #fbf6ee; border-radius: 12px; padding: 8px 12px; margin-top: 10px; font-size: 13px; }
 .wq-wl ul { margin: 6px 0 0; padding-left: 18px; columns: 2; }
 @media (max-width: 420px) { .wq-wl ul { columns: 1; } }
+/* 国旗モード */
+.wq-flag { display: flex; justify-content: center; margin: 12px 0 6px; }
+.wq-flag .flag-svg { width: min(260px, 70vw); height: auto; border-radius: 4px; box-shadow: 0 3px 10px rgba(40, 50, 70, .18); }
