@@ -922,7 +922,22 @@ const SCILAD = (function () {
 
   // ---- 世界地図 (Natural Earth 50m の 実際の 国境・地域ごとの 地図、237の 国・地域) ----
   const WM = () => typeof WORLDMAP !== 'undefined' ? WORLDMAP : null;
+  function wzLoad() { if (typeof WZ !== 'undefined' || wzLoad.s || typeof document === 'undefined') return; wzLoad.s = 1; const el = document.createElement('script'); el.src = 'data/world-zoom.js'; document.head.appendChild(el); }
+  function wMapZ(r, hl) {   // 小さな 国・島: 拡大地図 + 右上に 地域地図 (位置)
+    const Z = WZ[hl], R = WM().R[r], sw = r2(Z.w / 480), c = R.C.find(x => x[0] === hl);
+    let s = '<svg viewBox="0 0 ' + Z.w + ' ' + Z.h + '" role="img" aria-label="拡大地図"><rect width="' + Z.w + '" height="' + Z.h + '" fill="#d4e6f1"/>';
+    Object.keys(Z.P).forEach(k => { const on = k === Z.hl && !Z.pt; s += '<path d="' + Z.P[k] + '" fill="' + (on ? '#d0382a' : '#e8e0cc') + '" stroke="' + (on ? '#7a1a10' : '#fffdf6') + '" stroke-width="' + (on ? sw * 2.2 : sw) + '" stroke-linejoin="round"/>'; });
+    Z.dots.forEach(([x, y]) => { s += '<circle cx="' + x + '" cy="' + y + '" r="' + r2(Z.w / 80) + '" fill="#d0382a" stroke="#fff" stroke-width="' + sw * 1.5 + '"/>'; });
+    if (Z.pt || (!Z.hl && Z.dots.length <= 2)) Z.dots.slice(0, 1).forEach(([x, y]) => { s += '<circle cx="' + x + '" cy="' + y + '" r="' + r2(Z.w / 14) + '" fill="none" stroke="#d0382a" stroke-width="' + sw * 2.5 + '" stroke-dasharray="' + sw * 6 + ' ' + sw * 4 + '"/>'; });
+    const iw = r2(Z.w * 0.34), ih = r2(iw * R.h / R.w), ix = r2(Z.w - iw - 6), bx = r2(R.w / 11);
+    s += '<rect x="' + (ix - 2) + '" y="4" width="' + (iw + 4) + '" height="' + (ih + 4) + '" fill="#fff" stroke="#9aa8b8" stroke-width="' + sw + '" rx="4"/><svg x="' + ix + '" y="6" width="' + iw + '" height="' + ih + '" viewBox="0 0 ' + R.w + ' ' + R.h + '"><rect width="' + R.w + '" height="' + R.h + '" fill="#d4e6f1"/>';
+    Object.keys(R.P).forEach(k => { s += '<path d="' + R.P[k] + '" fill="#e3ddcf"/>'; });
+    s += '<rect x="' + r2(c[1] - bx / 2) + '" y="' + r2(c[2] - bx / 2) + '" width="' + bx + '" height="' + bx + '" fill="none" stroke="#d0382a" stroke-width="' + r2(R.w / 110) + '"/></svg>';
+    s += '<text x="8" y="' + (Z.h - 8) + '" font-size="' + r2(Z.w / 30) + '" fill="#5a6a7a" stroke="#fff" stroke-width="' + sw * 2 + '" paint-order="stroke">🔍 拡大図 (右上は ' + R.n + 'の 中の 位置)</text>';
+    return s + '</svg>';
+  }
   function wMap(r, hl, marks, pts) {
+    wzLoad(); if (hl && !marks && !pts && typeof WZ !== 'undefined' && WZ[hl]) return wMapZ(r, hl);
     const M = WM(), R = M.R[r], sw = r2(R.w / 480), rr = r2(R.w / 34);
     let s = '<svg viewBox="0 0 ' + R.w + ' ' + R.h + '" role="img" aria-label="' + R.n + 'の 地図"><rect width="' + R.w + '" height="' + R.h + '" fill="#d4e6f1"/>';
     Object.keys(R.P).forEach(k => { const home = M.K[k] && M.K[k][2] === r; s += '<path d="' + R.P[k] + '" fill="' + (k === hl ? '#d0382a' : home ? '#efe2c2' : '#e3ddcf') + '" stroke="' + (k === hl ? '#7a1a10' : '#fffdf6') + '" stroke-width="' + (k === hl ? sw * 1.6 : sw) + '" stroke-linejoin="round"/>'; });
@@ -977,5 +992,5 @@ const SCILAD = (function () {
   ];
   const ORD = GROUPS.map(g => g.id); U.sort((a, b) => ORD.indexOf(a.g) - ORD.indexOf(b.g));
   function make(u) { let r = null; for (let i = 0; i < 60 && !r; i++) { try { r = u.gen(); } catch (e) { r = null; } } return r; }
-  return { U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs, _wMap: wMap, title: '理科・社会 ラダー', icon: '🔬' };
+  return { U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs, _wMap: wMap, _wzLoad: wzLoad, title: '理科・社会 ラダー', icon: '🔬' };
 })();

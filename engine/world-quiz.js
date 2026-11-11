@@ -88,7 +88,7 @@ const WorldQuiz = (function () {
     $('wqMenu').onclick = () => { sfx('click'); menu(); };
   }
 
-  function open() { showPage('pageWQ'); menu(); }
+  function open() { try { SCILAD._wzLoad(); } catch (e) {} showPage('pageWQ'); menu(); }
   function stats() { const D = data(); const c = m => Object.keys(D[m]).filter(k => D[m][k][2] === 1 && M() && M().K[k]).length; return { map: c('map'), cap: c('cap'), rev: c('rev'), total: M() ? Object.keys(M().K).length : 237, capTotal: M() ? Object.keys(M().K).filter(k => K(k)[1]).length : 220 }; }
   return { open: open, stats: stats, _makeQ: makeQ };
 })();
