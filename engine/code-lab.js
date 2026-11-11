@@ -109,6 +109,7 @@ const CodeLab = (function () {
   function home() {
     const d = data();
     let h = header('🔐 暗号解読局', 'シーズン2 ・ 暗号と 論理で アジトを 開けろ');
+    h += '<img class="s2-banner" src="assets/img/s2/code/hq.webp" alt="" loading="lazy" onerror="this.remove()">';
     h += '<div class="cl-hero"><img src="' + SP + 'koradon_greet_01.webp" alt=""><div class="cl-say"><b>コラドン:</b> ブランク団の 暗号通信を キャッチした! 4つの 暗号を 解くと、金庫の 番号の ヒントが そろう。解読局の エージェントに なって 挑戦だ!</div></div>';
     h += '<button class="cl-big" data-go="cases">🕵️ 事件ファイル <small>解決 ' + Object.keys(d.cleared).length + ' / ' + CASES.length + '</small></button>';
     h += '<div class="cl-h2">🏋 トレーニング (10問)</div><div class="cl-menu">';

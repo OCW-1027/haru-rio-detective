@@ -67,9 +67,10 @@ const KidsCourt = (function () {
     c.evidence.forEach(e => { h += '<button class="kc-ev' + (sel === e.id ? ' on' : '') + '" data-ev="' + e.id + '"><span class="i">' + e.icon + '</span><b>' + esc(e.name) + '</b><small>' + esc(e.text) + '</small></button>'; });
     return h + '</div>';
   }
+  const pic = (f, cls) => '<img class="s2-banner' + (cls ? ' ' + cls : '') + '" src="assets/img/s2/' + f + '" alt="" loading="lazy" onerror="this.remove()">';
   function intro(ci) {
     const c = KC_CASES[ci]; top();
-    let h = header('第' + (ci + 1) + '事件 ' + esc(c.title), c.kind + '裁判 ・ ハルは ' + c.role, 'cases');
+    let h = header('第' + (ci + 1) + '事件 ' + esc(c.title), c.kind + '裁判 ・ ハルは ' + c.role, 'cases') + pic('court/courtroom.webp');
     h += '<div class="kc-intro">' + esc(c.intro) + '</div><div class="kc-h2">🗂 証拠ファイル</div>' + evidenceHtml(c);
     h += '<div class="kc-rules">証言を 1つ えらび → むじゅんする 証拠を 1つ えらび → 「異議あり!」。まちがえると ❤ が へる (3つ)。</div><button class="kc-go" id="kcStart">🔨 開廷!</button>';
     area().innerHTML = h; bindGo(area());

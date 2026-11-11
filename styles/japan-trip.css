@@ -83,3 +83,7 @@
 .hub-new-btn.s2 { border-color: #e7a6b8; background: linear-gradient(135deg, #fff, #fff0f4); box-shadow: 0 3px 0 #e7a6b8; }
 .hub-new-btn.s2 b { color: #a03a5a; }
 @media (max-width: 620px) { .jt-mapbox.tapme { overflow-x: auto; } .jt-mapbox.tapme .jt-map { min-width: 640px; } }
+/* シーズン2 共通: 絵の 差しこみ口 (ファイルが なければ onerror で 消える) */
+.s2-banner { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 16px; margin-bottom: 10px; box-shadow: 0 3px 10px rgba(0,0,0,.12); }
+.s2-banner.thin { aspect-ratio: 16 / 5; }
+.s2-banner.thief { width: 46%; aspect-ratio: 2 / 3; object-fit: contain; margin: 0 auto 10px; box-shadow: none; background: transparent; }

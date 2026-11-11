@@ -113,6 +113,7 @@ const NewsDetective = (function () {
   function home() {
     const d = data();
     let h = header('📰 ニュース探偵', 'シーズン2 ・ うその ニュースを 見ぬけ');
+    h += '<img class="s2-banner" src="assets/img/s2/news/newsroom.webp" alt="" loading="lazy" onerror="this.remove()">';
     h += '<div class="nd-hero"><img src="' + SP + 'korarin_greet_01.webp" alt=""><div class="nd-say"><b>コラリン:</b> ブランク団が 町じゅうに「まちがった ニュース」を ばらまいています。グラフの 目もり・数字・情報の 出どころを よく 見て、本当の ことを 見ぬきましょう!</div></div>';
     h += '<button class="nd-big" data-go="cases">🕵️ 事件ファイル <small>解決 ' + Object.keys(d.cleared).length + ' / ' + CASES.length + '</small></button>';
     h += '<div class="nd-h2">🏋 トレーニング (10問)</div><div class="nd-menu">';

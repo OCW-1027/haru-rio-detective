@@ -13,6 +13,8 @@ const TimeTravel = (function () {
   const pick = a => a[rnd(a.length)];
   const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const E = TT_ERAS;
+  const pic = (f, cls) => '<img class="s2-banner' + (cls ? ' ' + cls : '') + '" src="assets/img/s2/' + f + '" alt="" loading="lazy" onerror="this.remove()">';
+  const eraPic = (i, cls) => pic('era/era_' + String(i).padStart(2, '0') + '.webp', cls);
   const yr = y => y < 0 ? '紀元前' + (-y) + '年' : y + '年';
   function data() { if (!State.v2) State.v2 = {}; const d = State.v2.tt || (State.v2.tt = {}); d.cleared = d.cleared || {}; d.best = d.best || {}; return d; }
   function save() { try { saveState(); } catch (e) {} }
@@ -51,7 +53,7 @@ const TimeTravel = (function () {
     sel = sel || 0;
     const e = E[sel];
     let h = header('📖 時代 図鑑', '時代を タップ', 'home') + line({ click: true, sel: { [sel]: 'on' } });
-    h += '<div class="tt-card"><div class="tt-card-h">' + e[0] + '時代 <small>' + (e[1] < 0 ? '約' + (-e[1]) + '年前〜' : e[1] + '年〜') + (E[sel + 1] ? (E[sel + 1][1] < 0 ? '' : E[sel + 1][1] + '年') : '') + '</small></div><p class="tt-card-p">' + e[2] + '</p>';
+    h += eraPic(sel) + '<div class="tt-card"><div class="tt-card-h">' + e[0] + '時代 <small>' + (e[1] < 0 ? '約' + (-e[1]) + '年前〜' : e[1] + '年〜') + (E[sel + 1] ? (E[sel + 1][1] < 0 ? '' : E[sel + 1][1] + '年') : '') + '</small></div><p class="tt-card-p">' + e[2] + '</p>';
     const ev = TT_EVENTS.filter(x => x[1] === sel), th = TT_THINGS.filter(x => x[0] === sel), pp = TT_PEOPLE.filter(x => x[0] === sel);
     if (ev.length) { h += '<div class="tt-sec">📜 できごと</div>'; ev.forEach(x => { h += '<div class="tt-ev"><span>' + yr(x[0]) + '</span>' + esc(x[2]) + '</div>'; }); }
     if (pp.length) { h += '<div class="tt-sec">👤 人物</div><div class="tt-chips">'; pp.forEach(x => { h += '<span class="tt-chip"><b>' + esc(x[1]) + '</b> ' + esc(x[2]) + '</span>'; }); h += '</div>'; }
@@ -74,7 +76,7 @@ const TimeTravel = (function () {
   let run = null;
   function cases() {
     const d = data();
-    let h = header('🕰 事件ファイル', 'ルートは 毎回 変わる', 'home') + '<div class="tt-cases">';
+    let h = header('🕰 事件ファイル', 'ルートは 毎回 変わる', 'home') + pic('era/chrono.webp', 'thief') + '<div class="tt-cases">';
     CASES.forEach((c, i) => { const st = d.cleared[c.id]; h += '<button class="tt-case' + (st ? ' done' : '') + '" data-c="' + i + '"><span class="tt-cn">第' + (i + 1) + '事件</span><b>' + esc(c.title) + '</b><small>スタート: ' + E[c.start][0] + '時代 ・ ' + (c.hops + 1) + 'つの 時代</small><span class="tt-st">' + (st ? '⭐'.repeat(st) + '☆'.repeat(3 - st) : '') + '</span></button>'; });
     area().innerHTML = h + '</div>'; bindGo(area());
     area().querySelectorAll('[data-c]').forEach(b => b.onclick = () => { sound('click'); startCase(+b.dataset.c); });
@@ -96,7 +98,7 @@ const TimeTravel = (function () {
     const era = r.route[r.i], last = r.i === r.route.length - 1;
     let h = header('第' + (r.ci + 1) + '事件 ' + esc(r.c.title), '時代 ' + (r.i + 1) + ' / ' + r.route.length + ' ・ ' + '❤'.repeat(r.hearts) + '<span class="off">' + '❤'.repeat(3 - r.hearts) + '</span>', 'cases');
     h += line({ sel: r.route.slice(0, r.i + 1).reduce((o, k, n) => (o[k] = n === r.i ? 'here' : 'past', o), {}) });
-    h += '<div class="tt-now">⏳ いま: <b>' + E[era][0] + '時代</b> <small>(' + E[era][2] + ')</small></div>';
+    h += eraPic(era, 'thin') + '<div class="tt-now">⏳ いま: <b>' + E[era][0] + '時代</b> <small>(' + E[era][2] + ')</small></div>';
     if (r.phase === 'gap') {
       if (!r.scene) r.scene = gapScene(era);
       h += '<div class="tt-q">🔎 この 時代の 町に「時のゆがみ」が 1つ まぎれている! <b>' + E[era][0] + '時代に あるはずの ない もの</b>は どれ?</div><div class="tt-items">';

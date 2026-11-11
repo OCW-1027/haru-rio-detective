@@ -14,6 +14,9 @@ const JapanTrip = (function () {
   const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const P = id => JP_PREF.find(p => p.id === id);
   const REGS = ['北海道', '東北', '関東', '中部', '近畿', '中国', '四国', '九州・沖縄'];
+  const REG_IMG = { 北海道: 'hokkaido', 東北: 'tohoku', 関東: 'kanto', 中部: 'chubu', 近畿: 'kinki', 中国: 'chugoku', 四国: 'shikoku', '九州・沖縄': 'kyushu' };
+  // 絵の 差しこみ口 (ファイルが なければ 何も 出ない) — docs/GEMINI_ART_REQUEST_S2.md
+  const pic = (f, cls) => '<img class="s2-banner' + (cls ? ' ' + cls : '') + '" src="assets/img/s2/' + f + '" alt="" loading="lazy" onerror="this.remove()">';
   const TYPE = { 産: ['🍎', '名産・産業'], 所: ['🏞', '名所・自然'], 祭: ['🏮', '祭り・文化'], 史: ['🏯', '歴史・人物'], 地: ['🗺', '地理・交通'] };
   function data() { if (!State.v2) State.v2 = {}; const d = State.v2.jp || (State.v2.jp = {}); d.cleared = d.cleared || {}; d.seen = d.seen || {}; d.quiz = d.quiz || {}; return d; }
   function save() { try { saveState(); } catch (e) {} }
@@ -76,7 +79,7 @@ const JapanTrip = (function () {
   function card(id) {
     const p = P(id), d = data(); d.seen[id] = 1; save(); top();
     let h = header(esc(p.n), p.reg + '地方 ・ 県庁所在地 ' + esc(p.cap), 'zukan');
-    h += '<div class="jt-mapbox small">' + map({ hl: { [id]: 'hl' }, mark: id }) + '</div><div class="jt-card">';
+    h += pic('japan/reg_' + REG_IMG[p.reg] + '.webp') + '<div class="jt-mapbox small">' + map({ hl: { [id]: 'hl' }, mark: id }) + '</div><div class="jt-card">';
     p.c.forEach(([t, s]) => { h += '<div class="jt-fact"><span class="jt-ft">' + TYPE[t][0] + ' ' + TYPE[t][1] + '</span>' + esc(s) + '</div>'; });
     h += '</div>';
     const i = JP_PREF.indexOf(p);
@@ -111,6 +114,7 @@ const JapanTrip = (function () {
   function caseIntro(ci) {
     const c = CASES[ci], t = THIEF[c.thief];
     let h = header('第' + (ci + 1) + '事件 ' + esc(c.title), '', 'cases');
+    h += pic('japan/thief_' + c.thief + '.webp', 'thief');
     h += '<div class="jt-hero"><img src="' + SP + 'korarin_greet_01.webp" alt=""><div class="jt-say"><b>コラリン:</b> ' + esc(P(c.start).n) + 'で「' + esc(c.kakera) + '」が 盗まれました。犯人は ブランク団の <b>' + t[0] + '</b> (' + t[1] + ')。<br>町の 人に 聞きこみを して、次の 行き先を 推理しましょう。まちがえて いい のは 2回まで です。</div></div>';
     h += '<div class="jt-rules"><div>🗣 聞きこみ: 1地点で 3人まで 話を 聞ける</div><div>💡 コラドンの ヒント: 地方が わかる (⭐が へる)</div><div>❤ まちがえて 飛ぶと ❤ が 1つ へる。3つ なくなると 犯人は にげる</div><div>🏁 最後は 地図で かくれ家を タップ!</div></div>';
     h += '<button class="jt-go" id="jtStart">🚄 追跡 開始</button>';
@@ -146,7 +150,7 @@ const JapanTrip = (function () {
     top();
     let h = header('第' + (r.ci + 1) + '事件 ' + esc(r.c.title), '地点 ' + (r.i + 1) + ' / ' + (r.route.length - 1) + ' ・ ' + '❤'.repeat(r.hearts) + '<span class="off">' + '❤'.repeat(3 - r.hearts) + '</span>', 'cases');
     h += '<div class="jt-mapbox small">' + map({ line: r.route.slice(0, r.i + 1), mark: cur, hl: Object.assign({ [cur]: 'here' }, r.wrong) }) + '</div>';
-    h += '<div class="jt-now">📍 いま: <b>' + esc(pc.n) + '</b> (' + pc.reg + '地方)</div>';
+    h += pic('japan/reg_' + REG_IMG[pc.reg] + '.webp', 'thin') + '<div class="jt-now">📍 いま: <b>' + esc(pc.n) + '</b> (' + pc.reg + '地方)</div>';
     const WIT = [['🧳', '駅員さん'], ['🛍', 'おみやげ屋さん'], ['♨', '旅館の おかみさん'], ['🚕', 'タクシーの 運転手さん'], ['📸', '観光ガイドさん'], ['👵', '地元の おばあさん']];
     if (!r.wit) r.wit = shuffle(WIT).slice(0, 3);
     h += '<div class="jt-wits">';
