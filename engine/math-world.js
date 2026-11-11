@@ -37,6 +37,8 @@ const MathWorld = (function () {
     const corner = (id, flag, name, sub, prog, color) => '<button class="mw-corner" id="' + id + '" style="--cc:' + color + '"><span class="mw-flag">' + flag + '</span><span class="mw-cb"><b>' + name + '</b><small>' + sub + '</small></span><span class="mw-prog">' + prog + '</span></button>';
     h += '<div class="mw-corners">';
     const ladDone = LADDER.U.filter(u => ((D.lad || {})[u.id] || {}).best >= 8).length;
+    const elDone = ELAD.U.filter(u => ((D.lad || {})[u.id] || {}).best >= 8).length;
+    h += corner('mwElem', '🎒', '小学 算数 ラダー', '小4 〜 小6 ・ ' + ELAD.U.length + ' 単元 (教科書の 順)', elDone + ' / ' + ELAD.U.length, '#c0702a');
     h += corner('mwLad', '📈', '中学・高校 数学ラダー', '中1 〜 高2 + 発展 ・ ' + LADDER.U.length + ' 単元', ladDone + ' / ' + LADDER.U.length, '#2a6a9a');
     h += corner('mwIndian', '🇮🇳', 'インド式 計算道場 へ', '事務所の「インド式 計算道場」と 同じ 道場です', '→', '#d0702a');
     h += corner('mwSg', '🇸🇬', 'シンガポール式 線分図', '文章題を 図に して 解く', sgStars + ' / ' + MW.SG.length, '#c0392b');
@@ -47,6 +49,7 @@ const MathWorld = (function () {
     area().innerHTML = h;
     $('mwIndian').onclick = () => { sfx('click'); stop(); if (typeof IndianMath !== 'undefined') IndianMath.open(); };
     $('mwLad').onclick = () => { sfx('click'); ladList(LADDER); };
+    $('mwElem').onclick = () => { sfx('click'); ladList(ELAD); };
     $('mwSg').onclick = () => { sfx('click'); sgList(); };
     $('mwRu').onclick = () => { sfx('click'); ruList(); };
     $('mwFm').onclick = () => { sfx('click'); fmList(); };
@@ -243,14 +246,14 @@ const MathWorld = (function () {
     return /^-?\d+(\.\d+)?$/.test(s) ? +s : null;
   }
   const near = (x, y) => x != null && Math.abs(x - y) < 1e-9;
+  const DIAGN = { c: '中学', h: '高校', s: '社会', r: '理科', e: '小学' };
   function ladList(src) {
     stop(); if (src) L = src;
-    const isM = L === LADDER, D = ladData(); let h = head(L.icon + ' ' + L.title);
+    const isM = L.back === 'home', D = ladData(); let h = head(L.icon + ' ' + L.title);
     const done = L.U.filter(u => (D[u.id] || {}).best >= 8).length;
-    h += '<div class="mw-box"><b>' + (isM ? '中学1年 から 高校2年 (+ 発展) まで ' : '中学 理科 から 高校 物理基礎・化学基礎・生物基礎・地学基礎、社会まで ') + L.U.length + ' 単元</b><p>どの 単元からでも 始めて OK。「要点 → 例題 → 練習 10問」で、8問 以上 正解で ★、全問 正解で 🏅。' + (isM ? '問題の 数は 毎回 変わるよ。' : '理科は 数値が 毎回 変わり、社会は 解説つきの 厳選問題だよ。') + '</p><div class="mw-ladprog">' + '<i style="width:' + Math.round(done * 100 / L.U.length) + '%"></i></div><small class="mw-ladn">★ ' + done + ' / ' + L.U.length + '</small></div>';
-    const last = (data().diag || []).filter(d => isM ? (d.lv === 'c' || d.lv === 'h') : (d.lv === 's' || d.lv === 'r')).slice(-1)[0];
-    if (!isM) h += '<div class="mw-row"><button class="mw-primary" data-diag="r">🩺 理科 実力診断 (20問)</button><button class="mw-primary" data-diag="s">🩺 社会 実力診断 (20問)</button></div>';
-    if (isM) h += '<div class="mw-row"><button class="mw-primary" data-diag="c">🩺 実力診断 (中学 20問)</button><button class="mw-primary" data-diag="h">🩺 実力診断 (高校 20問)</button></div>' + (last ? '<p class="mw-note">前回の 診断: ' + esc(last.d) + ' ' + ({ c: '中学', h: '高校', s: '社会', r: '理科' })[last.lv] + ' ' + last.ok + ' / ' + last.n + '</p>' : '');
+    h += '<div class="mw-box"><b>' + esc(L.desc) + L.U.length + ' 単元</b><p>どの 単元からでも 始めて OK。「要点 → 例題 → 練習 10問」で、8問 以上 正解で ★、全問 正解で 🏅。' + esc(L.note) + '</p><div class="mw-ladprog">' + '<i style="width:' + Math.round(done * 100 / L.U.length) + '%"></i></div><small class="mw-ladn">★ ' + done + ' / ' + L.U.length + '</small></div>';
+    const lvs = L.diags.map(d => d[0]), last = (data().diag || []).filter(d => lvs.indexOf(d.lv) >= 0).slice(-1)[0];
+    h += '<div class="mw-row">' + L.diags.map(d => '<button class="mw-primary" data-diag="' + d[0] + '">' + d[1] + '</button>').join('') + '</div>' + (last ? '<p class="mw-note">前回の 診断: ' + esc(last.d) + ' ' + DIAGN[last.lv] + ' ' + last.ok + ' / ' + last.n + '</p>' : '');
     L.GROUPS.forEach(g => {
       const us = L.U.filter(u => u.g === g.id); if (!us.length) return;
       h += '<h3 class="mw-cat" style="color:' + g.color + '">' + g.name + ' <small>' + us.filter(u => (D[u.id] || {}).best >= 8).length + ' / ' + us.length + '</small></h3><div class="mw-grid">';
@@ -263,8 +266,8 @@ const MathWorld = (function () {
     area().querySelectorAll('[data-diag]').forEach(b => b.onclick = () => { sfx('click'); diagStart(b.dataset.diag); });
   }
   function diagStart(lv) {
-    const gs = lv === 'c' ? ['c1', 'c2', 'c3'] : lv === 's' ? ['sh', 'sg', 'sc2'] : lv === 'r' ? ['sj1', 'sj2', 'shp', 'shc', 'shb'] : ['h1', 'hA', 'h2', 'hB', 'h3'];
-    if (lv === 's' || lv === 'r') L = SCILAD; else L = LADDER;
+    const gs = lv === 'c' ? ['c1', 'c2', 'c3'] : lv === 's' ? ['sh', 'sg', 'sc2'] : lv === 'r' ? ['sj1', 'sj2', 'shp', 'shc', 'shb'] : lv === 'e' ? ['e4', 'e5', 'e6'] : ['h1', 'hA', 'h2', 'hB', 'h3'];
+    if (lv === 's' || lv === 'r') L = SCILAD; else if (lv === 'e') L = ELAD; else L = LADDER;
     const pool = L.U.filter(u => gs.indexOf(u.g) >= 0).sort(() => Math.random() - 0.5), units = [];
     while (units.length < 20) units.push(pool[units.length % pool.length]);
     units.sort((a, b) => L.U.indexOf(a) - L.U.indexOf(b));   // やさしい 順
@@ -396,7 +399,7 @@ const MathWorld = (function () {
 
   function open(where) {
     showPage('pageMathWorld');
-    if (where === 'sci') ladList(SCILAD); else if (where === 'lad') ladList(LADDER); else ({ sg: sgList, ru: ruList, fm: fmList, study: study }[where] || home)();
+    if (where === 'sci') ladList(SCILAD); else if (where === 'lad') ladList(LADDER); else if (where === 'elem') ladList(ELAD); else ({ sg: sgList, ru: ruList, fm: fmList, study: study }[where] || home)();
     const p = $('pageMathWorld'); if (p) p.scrollTop = 0;
   }
   return { open: open, stop: stop, _bar: barSVG, _fig: figSVG, _run: () => run };

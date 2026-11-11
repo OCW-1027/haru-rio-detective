@@ -992,5 +992,6 @@ const SCILAD = (function () {
   ];
   const ORD = GROUPS.map(g => g.id); U.sort((a, b) => ORD.indexOf(a.g) - ORD.indexOf(b.g));
   function make(u) { let r = null; for (let i = 0; i < 60 && !r; i++) { try { r = u.gen(); } catch (e) { r = null; } } return r; }
-  return { U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs, _wMap: wMap, _wzLoad: wzLoad, title: '理科・社会 ラダー', icon: '🔬' };
+  return { U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs, _wMap: wMap, _wzLoad: wzLoad, title: '理科・社会 ラダー', icon: '🔬',
+    desc: '中学 理科 から 高校 物理基礎・化学基礎・生物基礎・地学基礎、社会まで ', note: '理科は 数値が 毎回 変わり、社会は 解説つきの 厳選問題だよ。', diags: [['r', '🩺 理科 実力診断 (20問)'], ['s', '🩺 社会 実力診断 (20問)']], back: 'hub' };
 })();

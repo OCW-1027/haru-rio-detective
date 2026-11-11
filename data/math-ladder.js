@@ -635,5 +635,6 @@ const LADDER = (function () {
   ];
   function make(u) { let r = null; for (let i = 0; i < 60 && !r; i++) { try { r = u.gen(); } catch (e) { r = null; } } return r; }
   const ORD = GROUPS.map(g => g.id); U.sort((a, b) => ORD.indexOf(a.g) - ORD.indexOf(b.g));
-  return { title: '中学・高校 数学ラダー', icon: '📈', U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs };
+  return { title: '中学・高校 数学ラダー', icon: '📈', U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs,
+    desc: '中学1年 から 高校2年 (+ 発展) まで ', note: '問題の 数は 毎回 変わるよ。', diags: [['c', '🩺 実力診断 (中学 20問)'], ['h', '🩺 実力診断 (高校 20問)']], back: 'home' };
 })();

@@ -103,6 +103,7 @@ const Hub = (function () {
     const imd = (State.v2 && State.v2.indian && State.v2.indian.t) || {};
     h += '<button class="hub-new-btn" id="hubIndian"><span style="font-size:44px">🇮🇳</span><span><b>インド式 計算道場<span class="tag">NEW</span></b><small>' + (typeof IM !== 'undefined' ? IM.T.length : 26) + 'の ワザ · 4コース 検定 · ★ ' + Object.keys(imd).reduce((a, k) => a + (imd[k].stars || 0), 0) + ' / ' + (typeof IM !== 'undefined' ? IM.T.length * 3 : 78) + '</small></span></button>';
     const mwd = (State.v2 && State.v2.mw) || {};
+    h += '<button class="hub-new-btn" id="hubElem"><span style="font-size:44px">🎒</span><span><b>小学 算数 ラダー<span class="tag">NEW</span></b><small>4年 〜 6年 · ' + (typeof ELAD !== 'undefined' ? ELAD.U.length : 25) + ' 単元 · 図つき くわしい 解説</small></span></button>';
     h += '<button class="hub-new-btn" id="hubMathWorld"><span style="font-size:44px">🌏</span><span><b>世界の 算数道場<span class="tag">NEW</span></b><small>中学・高校 数学ラダー · シンガポール式 · ロシア式 · 公式図鑑</small></span></button>';
     let wqs = null; try { wqs = WorldQuiz.stats(); } catch (e) {}
     h += '<button class="hub-new-btn" id="hubWQ"><span style="font-size:44px">🌐</span><span><b>世界の 国 クイズ<span class="tag">NEW</span></b><small>237の 国・地域と 首都を 4択で 全部 制覇 · 覚えた ' + (wqs ? wqs.map : 0) + ' / ' + (wqs ? wqs.total : 237) + '</small></span></button>';
@@ -156,6 +157,8 @@ const Hub = (function () {
     if (hwq) hwq.onclick = () => { sfx('click'); WorldQuiz.open(); };
     const hsl = document.getElementById('hubSciLad');
     if (hsl) hsl.onclick = () => { sfx('click'); MathWorld.open('sci'); };
+    const hel = document.getElementById('hubElem');
+    if (hel) hel.onclick = () => { sfx('click'); MathWorld.open('elem'); };
     const hmw = document.getElementById('hubMathWorld');
     if (hmw) hmw.onclick = () => { sfx('click'); MathWorld.open(); };
     const hl = document.getElementById('hubLab');
