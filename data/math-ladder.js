@@ -336,10 +336,10 @@ const LADDER = (function () {
     if (kind === 'lin') { const v = a * n * (n + 1) / 2 + b * n; return { q: 'Σ (k = 1 から ' + n + ') (' + poly([a, b], 'k') + ') の 値は?', type: 'num', a: v, steps: [M(a) + ' × ' + n + '·' + (n + 1) + '/2 = ' + M(a * n * (n + 1) / 2), M(b) + ' × ' + n + ' = ' + M(b * n), '合計 ' + M(v)] }; }
     const v = n * (n + 1) * (2 * n + 1) / 6; return { q: 'Σ (k = 1 から ' + n + ') k² の 値は?', type: 'num', a: v, steps: [n + '·' + (n + 1) + '·' + (2 * n + 1) + '/6', '= ' + v] };
   });
-  add('hB', 'hBd', '➡', 'ベクトルの 内積', ['a⃗ = (a₁, a₂)、b⃗ = (b₁, b₂) の 内積 a⃗·b⃗ = a₁b₁ + a₂b₂', 'a⃗·b⃗ = |a⃗||b⃗|cosθ → 内積 0 は 垂直'], () => {
-    if (Math.random() < 0.6) { const a1 = NZ(-6, 6), a2 = NZ(-6, 6), b1 = NZ(-6, 6), b2 = NZ(-6, 6); return { q: 'a⃗ = (' + M(a1) + ', ' + M(a2) + ')、b⃗ = (' + M(b1) + ', ' + M(b2) + ') の 内積 a⃗·b⃗ は?', type: 'num', a: a1 * b1 + a2 * b2, steps: [M(a1) + '×' + P(b1) + ' + ' + M(a2) + '×' + P(b2), '= ' + M(a1 * b1 + a2 * b2)] }; }
+  add('hB', 'hBd', '➡', 'ベクトルの 内積', ['→a = (a₁, a₂)、→b = (b₁, b₂) の 内積 →a·→b = a₁b₁ + a₂b₂', '→a·→b = |→a||→b|cosθ → 内積 0 は 垂直'], () => {
+    if (Math.random() < 0.6) { const a1 = NZ(-6, 6), a2 = NZ(-6, 6), b1 = NZ(-6, 6), b2 = NZ(-6, 6); return { q: '→a = (' + M(a1) + ', ' + M(a2) + ')、→b = (' + M(b1) + ', ' + M(b2) + ') の 内積 →a·→b は?', type: 'num', a: a1 * b1 + a2 * b2, steps: [M(a1) + '×' + P(b1) + ' + ' + M(a2) + '×' + P(b2), '= ' + M(a1 * b1 + a2 * b2)] }; }
     const a1 = NZ(-5, 5), a2 = NZ(-5, 5), k = NZ(-3, 3), b1 = a2 * k, x = -a1 * k;   // (a1,a2)·(x, b?) — 垂直: a1*x + a2*y = 0 → choose b = (a2k, −a1k)
-    return { q: 'a⃗ = (' + M(a1) + ', ' + M(a2) + ')、b⃗ = (' + M(b1) + ', t) が 垂直に なる t は?', type: 'num', a: x, steps: ['垂直 ⇔ 内積 = 0', M(a1) + '×' + P(b1) + ' + ' + M(a2) + 't = 0 → t = ' + M(x)] };
+    return { q: '→a = (' + M(a1) + ', ' + M(a2) + ')、→b = (' + M(b1) + ', t) が 垂直に なる t は?', type: 'num', a: x, steps: ['垂直 ⇔ 内積 = 0', M(a1) + '×' + P(b1) + ' + ' + M(a2) + 't = 0 → t = ' + M(x)] };
   });
 
   // ======================= 発展 (数学III) =======================
@@ -593,17 +593,17 @@ const LADDER = (function () {
   const V3 = [[1, 2, 2, 3], [2, 3, 6, 7], [1, 4, 8, 9], [4, 4, 7, 9], [2, 6, 9, 11], [2, 1, 2, 3], [6, 2, 3, 7], [3, 4, 12, 13]];
   const vrand = () => { const v = pick(V3), s = [0, 1, 2].sort(() => Math.random() - 0.5), p = s.map(i => v[i] * pick([1, -1])); return [p, v[3]]; };
   const vs = v => '(' + v.map(M).join(', ') + ')';
-  add('hB', 'hBh', '🧊', '空間ベクトル', ['a⃗ = (a₁, a₂, a₃) の 大きさ |a⃗| = √(a₁² + a₂² + a₃²)', '内積 a⃗・b⃗ = a₁b₁ + a₂b₂ + a₃b₃ = |a⃗||b⃗| cos θ', '垂直 ⇔ 内積 = 0'], () => {
+  add('hB', 'hBh', '🧊', '空間ベクトル', ['→a = (a₁, a₂, a₃) の 大きさ |→a| = √(a₁² + a₂² + a₃²)', '内積 →a・→b = a₁b₁ + a₂b₂ + a₃b₃ = |→a||→b| cos θ', '垂直 ⇔ 内積 = 0'], () => {
     const k = pick(['len', 'dot', 'cos', 'cos', 'perp', 'dist']);
-    if (k === 'len') { const [v, n] = vrand(), c = R(1, 3), w = v.map(x => x * c); return { q: 'a⃗ = ' + vs(w) + ' の 大きさ |a⃗| は?', type: 'num', a: n * c, steps: ['|a⃗|² = ' + w.map(x => P(x) + '²').join(' + ') + ' = ' + (n * c) ** 2, '|a⃗| = ' + n * c] }; }
-    if (k === 'dot') { const a = [NZ(-5, 5), NZ(-5, 5), NZ(-5, 5)], b = [NZ(-5, 5), NZ(-5, 5), NZ(-5, 5)], d = a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; return { q: 'a⃗ = ' + vs(a) + '、b⃗ = ' + vs(b) + ' の 内積 a⃗・b⃗ は?', type: 'num', a: d, steps: [a.map((x, i) => P(x) + '×' + P(b[i])).join(' + ') + ' = ' + d] }; }
-    if (k === 'cos') { const [a, na] = vrand(), [b, nb] = vrand(), d = a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; if (!d) return null; return { q: 'a⃗ = ' + vs(a) + '、b⃗ = ' + vs(b) + ' の なす角を θ と する。cos θ は? (分数で)', type: 'num', a: fr(d, na * nb), steps: ['a⃗・b⃗ = ' + a.map((x, i) => P(x) + '×' + P(b[i])).join(' + ') + ' = ' + M(d), '|a⃗| = ' + na + '、|b⃗| = ' + nb, 'cos θ = ' + M(d) + ' / (' + na + ' × ' + nb + ') = ' + fs(fr(d, na * nb))] }; }
-    if (k === 'perp') { const a = [NZ(-4, 4), NZ(-4, 4), NZ(-4, 4)], b0 = NZ(-4, 4), b1 = NZ(-4, 4), base = a[0] * b0 + a[1] * b1; const ans = fr(-base, a[2]); return { q: 'a⃗ = ' + vs(a) + '、b⃗ = (' + M(b0) + ', ' + M(b1) + ', t) が 垂直に なる とき、t は? (分数 OK)', type: 'num', a: ans, steps: ['垂直 ⇔ a⃗・b⃗ = 0', P(a[0]) + '×' + P(b0) + ' + ' + P(a[1]) + '×' + P(b1) + ' + ' + P(a[2]) + 't = 0', base + ' + ' + P(a[2]) + 't = 0 → t = ' + fs(ans)] }; }
-    const A = [R(-3, 3), R(-3, 3), R(-3, 3)], [v, n] = vrand(), B = A.map((x, i) => x + v[i]); return { q: '2点 A' + vs(A) + '、B' + vs(B) + ' の 距離 AB は?', type: 'num', a: n, steps: ['AB⃗ = ' + vs(v), '|AB⃗| = √(' + v.map(x => P(x) + '²').join(' + ') + ') = ' + n] };
+    if (k === 'len') { const [v, n] = vrand(), c = R(1, 3), w = v.map(x => x * c); return { q: '→a = ' + vs(w) + ' の 大きさ |→a| は?', type: 'num', a: n * c, steps: ['|→a|² = ' + w.map(x => P(x) + '²').join(' + ') + ' = ' + (n * c) ** 2, '|→a| = ' + n * c] }; }
+    if (k === 'dot') { const a = [NZ(-5, 5), NZ(-5, 5), NZ(-5, 5)], b = [NZ(-5, 5), NZ(-5, 5), NZ(-5, 5)], d = a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; return { q: '→a = ' + vs(a) + '、→b = ' + vs(b) + ' の 内積 →a・→b は?', type: 'num', a: d, steps: [a.map((x, i) => P(x) + '×' + P(b[i])).join(' + ') + ' = ' + d] }; }
+    if (k === 'cos') { const [a, na] = vrand(), [b, nb] = vrand(), d = a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; if (!d) return null; return { q: '→a = ' + vs(a) + '、→b = ' + vs(b) + ' の なす角を θ と する。cos θ は? (分数で)', type: 'num', a: fr(d, na * nb), steps: ['→a・→b = ' + a.map((x, i) => P(x) + '×' + P(b[i])).join(' + ') + ' = ' + M(d), '|→a| = ' + na + '、|→b| = ' + nb, 'cos θ = ' + M(d) + ' / (' + na + ' × ' + nb + ') = ' + fs(fr(d, na * nb))] }; }
+    if (k === 'perp') { const a = [NZ(-4, 4), NZ(-4, 4), NZ(-4, 4)], b0 = NZ(-4, 4), b1 = NZ(-4, 4), base = a[0] * b0 + a[1] * b1; const ans = fr(-base, a[2]); return { q: '→a = ' + vs(a) + '、→b = (' + M(b0) + ', ' + M(b1) + ', t) が 垂直に なる とき、t は? (分数 OK)', type: 'num', a: ans, steps: ['垂直 ⇔ →a・→b = 0', P(a[0]) + '×' + P(b0) + ' + ' + P(a[1]) + '×' + P(b1) + ' + ' + P(a[2]) + 't = 0', base + ' + ' + P(a[2]) + 't = 0 → t = ' + fs(ans)] }; }
+    const A = [R(-3, 3), R(-3, 3), R(-3, 3)], [v, n] = vrand(), B = A.map((x, i) => x + v[i]); return { q: '2点 A' + vs(A) + '、B' + vs(B) + ' の 距離 AB は?', type: 'num', a: n, steps: ['A→B = ' + vs(v), '|A→B| = √(' + v.map(x => P(x) + '²').join(' + ') + ') = ' + n] };
   });
   const NT = { 0.5: 1915, 1: 3413, 1.5: 4332, 1.96: 4750, 2: 4772, 2.5: 4938, 3: 4987 };
   const ntab = '(正規分布表: P(0≦Z≦z) … z=0.5: 0.1915、1: 0.3413、1.5: 0.4332、1.96: 0.4750、2: 0.4772、2.5: 0.4938、3: 0.4987)';
-  add('hB', 'hBi', '🔔', '正規分布・統計的推測', ['X が 正規分布 N(m, σ²) に 従う とき、Z = (X − m)/σ は 標準正規分布 N(0, 1) に 従う', '標本平均の 標準偏差 = σ/√n', '母平均の 信頼度 95% の 信頼区間: x̄ ± 1.96 × σ/√n'], () => {
+  add('hB', 'hBi', '🔔', '正規分布・統計的推測', ['X が 正規分布 N(m, σ²) に 従う とき、Z = (X − m)/σ は 標準正規分布 N(0, 1) に 従う', '標本平均の 標準偏差 = σ/√n', '母平均の 信頼度 95% の 信頼区間: 標本平均 ± 1.96 × σ/√n'], () => {
     const k = pick(['up', 'mid', 'low', 'two', 'se', 'ci']), m = pick([50, 60, 100, 165, 500]), s = pick([5, 10, 4, 8, 20]);
     const zs = [0.5, 1, 1.5, 2, 2.5, 3], z = pick(zs), x = r => m + r * s, f = n => n / 10000;
     if (k === 'up') return { q: 'X が 正規分布 N(' + m + ', ' + s + '²) に 従う とき、P(X ≧ ' + x(z) + ') は? (小数第4位まで)\n' + ntab, type: 'num', a: f(5000 - NT[z]), steps: ['Z = (' + x(z) + ' − ' + m + ') / ' + s + ' = ' + z, 'P(Z ≧ ' + z + ') = 0.5 − ' + f(NT[z]) + ' = ' + f(5000 - NT[z])] };
@@ -611,7 +611,7 @@ const LADDER = (function () {
     if (k === 'mid') return { q: 'X が 正規分布 N(' + m + ', ' + s + '²) に 従う とき、P(' + x(-z) + ' ≦ X ≦ ' + x(z) + ') は? (小数第4位まで)\n' + ntab, type: 'num', a: f(2 * NT[z]), steps: ['Z に 直すと −' + z + ' ≦ Z ≦ ' + z, '左右対称なので 2 × ' + f(NT[z]) + ' = ' + f(2 * NT[z])] };
     if (k === 'two') { const z2 = pick(zs.filter(t => t !== z)); return { q: 'X が 正規分布 N(' + m + ', ' + s + '²) に 従う とき、P(' + x(-z) + ' ≦ X ≦ ' + x(z2) + ') は? (小数第4位まで)\n' + ntab, type: 'num', a: f(NT[z] + NT[z2]), steps: ['Z に 直すと −' + z + ' ≦ Z ≦ ' + z2, 'P(−' + z + ' ≦ Z ≦ 0) + P(0 ≦ Z ≦ ' + z2 + ') = ' + f(NT[z]) + ' + ' + f(NT[z2]) + ' = ' + f(NT[z] + NT[z2])] }; }
     const [sg, n] = pick([[12, 36], [10, 25], [15, 9], [20, 16], [18, 81], [24, 64], [30, 100], [14, 49]]), se = sg / Math.sqrt(n);
-    if (k === 'se') return { q: '母標準偏差 ' + sg + ' の 母集団から 大きさ ' + n + ' の 標本を 取り出す。標本平均 X̄ の 標準偏差は?', type: 'num', a: fr(sg, Math.sqrt(n)), steps: ['σ(X̄) = σ/√n = ' + sg + ' / √' + n + ' = ' + sg + ' / ' + Math.sqrt(n) + ' = ' + fs(fr(sg, Math.sqrt(n)))] };
+    if (k === 'se') return { q: '母標準偏差 ' + sg + ' の 母集団から 大きさ ' + n + ' の 標本を 取り出す。標本平均 の 標準偏差は?', type: 'num', a: fr(sg, Math.sqrt(n)), steps: ['σ(標本平均) = σ/√n = ' + sg + ' / √' + n + ' = ' + sg + ' / ' + Math.sqrt(n) + ' = ' + fs(fr(sg, Math.sqrt(n)))] };
     if (Math.round(se * 100) !== se * 100) return null;
     const xb = pick([50, 62, 120, 170, 300]), w = Math.round(196 * se) / 100, ask = pick(['lo', 'hi']), v = Math.round((ask === 'lo' ? xb - w : xb + w) * 100) / 100;
     return { q: '母標準偏差 ' + sg + ' の 母集団から 大きさ ' + n + ' の 標本を 取り出すと、標本平均は ' + xb + ' だった。母平均の 信頼度 95% の 信頼区間の ' + (ask === 'lo' ? '下限' : '上限') + 'は? (小数第2位まで)', type: 'num', a: v, steps: ['σ/√n = ' + sg + ' / ' + Math.sqrt(n) + ' = ' + fs(fr(sg, Math.sqrt(n))), '1.96 × ' + fs(fr(sg, Math.sqrt(n))) + ' = ' + w, xb + (ask === 'lo' ? ' − ' : ' + ') + w + ' = ' + v] };
