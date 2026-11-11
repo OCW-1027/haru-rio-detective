@@ -505,5 +505,5 @@ const LADDER = (function () {
   ];
   function make(u) { let r = null; for (let i = 0; i < 60 && !r; i++) { try { r = u.gen(); } catch (e) { r = null; } } return r; }
   const ORD = GROUPS.map(g => g.id); U.sort((a, b) => ORD.indexOf(a.g) - ORD.indexOf(b.g));
-  return { U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs };
+  return { title: '中学・高校 数学ラダー', icon: '📈', U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs };
 })();

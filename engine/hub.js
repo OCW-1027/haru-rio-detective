@@ -104,6 +104,7 @@ const Hub = (function () {
     h += '<button class="hub-new-btn" id="hubIndian"><span style="font-size:44px">🇮🇳</span><span><b>インド式 計算道場<span class="tag">NEW</span></b><small>20の ワザ · 検定 · ★ ' + Object.keys(imd).reduce((a, k) => a + (imd[k].stars || 0), 0) + ' / 60</small></span></button>';
     const mwd = (State.v2 && State.v2.mw) || {};
     h += '<button class="hub-new-btn" id="hubMathWorld"><span style="font-size:44px">🌏</span><span><b>世界の 算数道場<span class="tag">NEW</span></b><small>中学・高校 数学ラダー · シンガポール式 · ロシア式 · 公式図鑑</small></span></button>';
+    h += '<button class="hub-new-btn" id="hubSciLad"><span style="font-size:44px">🔬</span><span><b>理科・社会 ラダー<span class="tag">NEW</span></b><small>中学〜高校 · 物理・化学・生物・地学・歴史・地理・公民</small></span></button>';
     h += '</section>';
 
     // 사건 파일
@@ -145,6 +146,8 @@ const Hub = (function () {
     if (hi) hi.onclick = () => { sfx('click'); IndianMath.open(); };
     const hpr = document.getElementById('hubParent');
     if (hpr) hpr.onclick = () => { sfx('click'); ParentReport.open(); };
+    const hsl = document.getElementById('hubSciLad');
+    if (hsl) hsl.onclick = () => { sfx('click'); MathWorld.open('sci'); };
     const hmw = document.getElementById('hubMathWorld');
     if (hmw) hmw.onclick = () => { sfx('click'); MathWorld.open(); };
     const hl = document.getElementById('hubLab');

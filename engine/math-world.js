@@ -46,7 +46,7 @@ const MathWorld = (function () {
     h += '</div><p class="mw-note">💡 同じ 問題でも、国に よって 考え方が ちがう。いちばん わかりやすい 方法を 自分で 選べるのが 最強!</p>';
     area().innerHTML = h;
     $('mwIndian').onclick = () => { sfx('click'); stop(); if (typeof IndianMath !== 'undefined') IndianMath.open(); };
-    $('mwLad').onclick = () => { sfx('click'); ladList(); };
+    $('mwLad').onclick = () => { sfx('click'); ladList(LADDER); };
     $('mwSg').onclick = () => { sfx('click'); sgList(); };
     $('mwRu').onclick = () => { sfx('click'); ruList(); };
     $('mwFm').onclick = () => { sfx('click'); fmList(); };
@@ -231,7 +231,8 @@ const MathWorld = (function () {
     $('mwGoRu').onclick = () => { sfx('click'); ruList(); };
   }
 
-  // ================= 中学・高校 数学ラダー =================
+  // ================= 中学・高校 数学ラダー / 理科・社会 ラダー (L で 切り替え) =================
+  let L = LADDER;
   function ladData() { const d = data(); return d.lad || (d.lad = {}); }
   const ladStar = id => { const r = ladData()[id]; return !r ? '' : r.best >= 10 ? '🏅' : r.best >= 8 ? '★' : '·'; };
   function toVal(v) { return Array.isArray(v) ? v[0] / v[1] : v; }
@@ -242,28 +243,29 @@ const MathWorld = (function () {
     return /^-?\d+(\.\d+)?$/.test(s) ? +s : null;
   }
   const near = (x, y) => x != null && Math.abs(x - y) < 1e-9;
-  function ladList() {
-    stop();
-    const D = ladData(); let h = head('📈 中学・高校 数学ラダー');
-    const done = LADDER.U.filter(u => (D[u.id] || {}).best >= 8).length;
-    h += '<div class="mw-box"><b>中学1年 から 高校2年 (+ 発展) まで ' + LADDER.U.length + ' 単元</b><p>どの 単元からでも 始めて OK。「要点 → 例題 → 練習 10問」で、8問 以上 正解で ★、全問 正解で 🏅。問題の 数は 毎回 変わるよ。</p><div class="mw-ladprog">' + '<i style="width:' + Math.round(done * 100 / LADDER.U.length) + '%"></i></div><small class="mw-ladn">★ ' + done + ' / ' + LADDER.U.length + '</small></div>';
+  function ladList(src) {
+    stop(); if (src) L = src;
+    const isM = L === LADDER, D = ladData(); let h = head(L.icon + ' ' + L.title);
+    const done = L.U.filter(u => (D[u.id] || {}).best >= 8).length;
+    h += '<div class="mw-box"><b>' + (isM ? '中学1年 から 高校2年 (+ 発展) まで ' : '中学 理科 から 高校 物理基礎・化学基礎、社会まで ') + L.U.length + ' 単元</b><p>どの 単元からでも 始めて OK。「要点 → 例題 → 練習 10問」で、8問 以上 正解で ★、全問 正解で 🏅。' + (isM ? '問題の 数は 毎回 変わるよ。' : '理科は 数値が 毎回 変わり、社会は 解説つきの 厳選問題だよ。') + '</p><div class="mw-ladprog">' + '<i style="width:' + Math.round(done * 100 / L.U.length) + '%"></i></div><small class="mw-ladn">★ ' + done + ' / ' + L.U.length + '</small></div>';
     const last = (data().diag || []).slice(-1)[0];
-    h += '<div class="mw-row"><button class="mw-primary" data-diag="c">🩺 実力診断 (中学 20問)</button><button class="mw-primary" data-diag="h">🩺 実力診断 (高校 20問)</button></div>' + (last ? '<p class="mw-note">前回の 診断: ' + esc(last.d) + ' ' + (last.lv === 'c' ? '中学' : '高校') + ' ' + last.ok + ' / ' + last.n + '</p>' : '');
-    LADDER.GROUPS.forEach(g => {
-      const us = LADDER.U.filter(u => u.g === g.id); if (!us.length) return;
+    if (isM) h += '<div class="mw-row"><button class="mw-primary" data-diag="c">🩺 実力診断 (中学 20問)</button><button class="mw-primary" data-diag="h">🩺 実力診断 (高校 20問)</button></div>' + (last ? '<p class="mw-note">前回の 診断: ' + esc(last.d) + ' ' + (last.lv === 'c' ? '中学' : '高校') + ' ' + last.ok + ' / ' + last.n + '</p>' : '');
+    L.GROUPS.forEach(g => {
+      const us = L.U.filter(u => u.g === g.id); if (!us.length) return;
       h += '<h3 class="mw-cat" style="color:' + g.color + '">' + g.name + ' <small>' + us.filter(u => (D[u.id] || {}).best >= 8).length + ' / ' + us.length + '</small></h3><div class="mw-grid">';
       us.forEach(u => { h += '<button class="mw-card" data-lu="' + u.id + '" style="border-color:color-mix(in srgb,' + g.color + ' 30%,white)"><span class="mw-ci">' + u.icon + '</span><span class="mw-cn">' + esc(u.name) + '</span><span class="mw-cs">' + (ladStar(u.id) || '未挑戦') + ((D[u.id] || {}).best != null ? ' ' + D[u.id].best + '/10' : '') + '</span></button>'; });
       h += '</div>';
     });
-    area().innerHTML = h; bindBack();
-    area().querySelectorAll('[data-lu]').forEach(b => b.onclick = () => { sfx('click'); ladUnit(LADDER.byId(b.dataset.lu)); });
+    area().innerHTML = h; bindBack(isM ? home : () => { if (typeof Hub !== 'undefined') Hub.open(); });
+    if (!isM) { const b0 = $('mwBack'); if (b0) b0.textContent = '← 事務所'; }
+    area().querySelectorAll('[data-lu]').forEach(b => b.onclick = () => { sfx('click'); ladUnit(L.byId(b.dataset.lu)); });
     area().querySelectorAll('[data-diag]').forEach(b => b.onclick = () => { sfx('click'); diagStart(b.dataset.diag); });
   }
   function diagStart(lv) {
     const gs = lv === 'c' ? ['c1', 'c2', 'c3'] : ['h1', 'hA', 'h2', 'hB', 'h3'];
-    const pool = LADDER.U.filter(u => gs.indexOf(u.g) >= 0).sort(() => Math.random() - 0.5), units = [];
+    const pool = L.U.filter(u => gs.indexOf(u.g) >= 0).sort(() => Math.random() - 0.5), units = [];
     while (units.length < 20) units.push(pool[units.length % pool.length]);
-    units.sort((a, b) => LADDER.U.indexOf(a) - LADDER.U.indexOf(b));   // やさしい 順
+    units.sort((a, b) => L.U.indexOf(a) - L.U.indexOf(b));   // やさしい 順
     run = { diag: lv, units: units, u: units[0], i: 0, ok: 0, n: 20, wrong: [], res: [] }; ladQ();
   }
   function diagEnd() {
@@ -276,17 +278,17 @@ const MathWorld = (function () {
     let h = head('🩺 実力診断 — 結果', '一覧');
     const pct = Math.round(R.ok * 100 / R.n);
     h += '<div class="mw-result"><b>' + R.ok + ' / ' + R.n + '</b><p>' + (pct >= 85 ? '🏅 すばらしい! この レベルは ほぼ 完ぺき。次の 学年へ 進もう。' : pct >= 60 ? 'よく できました! 下の 苦手 単元を 練習すると 完成に 近づくよ。' : 'まずは 下の 単元の 要点と 例題から 始めよう。') + '</p></div>';
-    h += '<div class="mw-box"><b>学年別</b><table class="mw-dtbl">' + Object.keys(gs).map(g => { const G = LADDER.GROUPS.find(x => x.id === g); return '<tr><th style="color:' + G.color + '">' + G.name + '</th><td>' + gs[g][0] + ' / ' + gs[g][1] + '</td><td><span class="mw-dbar"><i style="width:' + Math.round(gs[g][0] * 100 / gs[g][1]) + '%;background:' + G.color + '"></i></span></td></tr>'; }).join('') + '</table></div>';
-    if (weak.length) h += '<div class="mw-box"><b>📌 おすすめ 単元 (まちがえた ところ)</b><div class="mw-grid" style="margin-top:8px">' + weak.map(id => { const u = LADDER.byId(id); return '<button class="mw-card" data-lu="' + id + '"><span class="mw-ci">' + u.icon + '</span><span class="mw-cn">' + esc(u.name) + '</span><span class="mw-cs">' + LADDER.GROUPS.find(x => x.id === u.g).name + '</span></button>'; }).join('') + '</div></div>';
+    h += '<div class="mw-box"><b>学年別</b><table class="mw-dtbl">' + Object.keys(gs).map(g => { const G = L.GROUPS.find(x => x.id === g); return '<tr><th style="color:' + G.color + '">' + G.name + '</th><td>' + gs[g][0] + ' / ' + gs[g][1] + '</td><td><span class="mw-dbar"><i style="width:' + Math.round(gs[g][0] * 100 / gs[g][1]) + '%;background:' + G.color + '"></i></span></td></tr>'; }).join('') + '</table></div>';
+    if (weak.length) h += '<div class="mw-box"><b>📌 おすすめ 単元 (まちがえた ところ)</b><div class="mw-grid" style="margin-top:8px">' + weak.map(id => { const u = L.byId(id); return '<button class="mw-card" data-lu="' + id + '"><span class="mw-ci">' + u.icon + '</span><span class="mw-cn">' + esc(u.name) + '</span><span class="mw-cs">' + L.GROUPS.find(x => x.id === u.g).name + '</span></button>'; }).join('') + '</div></div>';
     h += '<div class="mw-row"><button class="mw-secondary" id="mwList">一覧へ</button></div>';
     area().innerHTML = h; bindBack(ladList);
-    area().querySelectorAll('[data-lu]').forEach(b => b.onclick = () => { sfx('click'); ladUnit(LADDER.byId(b.dataset.lu)); });
+    area().querySelectorAll('[data-lu]').forEach(b => b.onclick = () => { sfx('click'); ladUnit(L.byId(b.dataset.lu)); });
     $('mwList').onclick = () => { sfx('click'); ladList(); };
   }
-  function fmtA(p) { return p.type === 'choice' ? p.opts[0] : p.type === 'num' ? LADDER._fs(p.a) : p.type === 'set' ? LADDER._fs(p.a[0]) + ', ' + LADDER._fs(p.a[1]) : (p.labels || ['', '']).map((l, i) => l + ' = ' + LADDER._fs(p.a[i])).join('、'); }
+  function fmtA(p) { return p.type === 'choice' ? p.opts[0] : p.type === 'num' ? L._fs(p.a) : p.type === 'set' ? L._fs(p.a[0]) + ', ' + L._fs(p.a[1]) : (p.labels || ['', '']).map((l, i) => l + ' = ' + L._fs(p.a[i])).join('、'); }
   function ladUnit(u) {
     stop();
-    const g = LADDER.GROUPS.find(x => x.id === u.g), ex = LADDER.make(u);
+    const g = L.GROUPS.find(x => x.id === u.g), ex = L.make(u);
     let h = head(u.icon + ' ' + esc(u.name), '一覧');
     h += '<div class="mw-tag" style="background:' + g.color + '">' + g.name + '</div>';
     h += '<div class="mw-box mw-point"><b>📌 要点</b><ul>' + u.point.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
@@ -299,7 +301,7 @@ const MathWorld = (function () {
     $('mwLadGo').onclick = () => { sfx('click'); run = { u: u, i: 0, ok: 0, n: 10, wrong: [] }; ladQ(); };
   }
   function ladQ() {
-    const R = run; if (R.diag) R.u = R.units[R.i]; const u = R.u, p = LADDER.make(u); R.p = p; R.done = false; R.miss = 0;
+    const R = run; if (R.diag) R.u = R.units[R.i]; const u = R.u, p = L.make(u); R.p = p; R.done = false; R.miss = 0;
     if (p.type === 'choice') { const idx = p.opts.map((o, i) => i); for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; } R.order = idx; }
     let h = head((R.diag ? '🩺 実力診断 ・ ' : '') + u.icon + ' ' + esc(u.name) + ' <small>' + (R.i + 1) + ' / ' + R.n + '</small>', R.diag ? '一覧' : '単元');
     h += '<div class="mw-dots">' + Array.from({ length: R.n }, (_, i) => '<i class="' + (i < R.i ? (R.res && R.res[i] ? 'ok' : 'ng') : i === R.i ? 'cur' : '') + '"></i>').join('') + '</div>';
@@ -337,7 +339,7 @@ const MathWorld = (function () {
     r.best = Math.max(r.best || 0, R.ok); r.n = (r.n || 0) + 1; save();
     let h = head(u.icon + ' ' + esc(u.name) + ' — 結果', '単元');
     h += '<div class="mw-result"><b>' + R.ok + ' / ' + R.n + '</b><p>' + (R.ok === 10 ? '🏅 パーフェクト! この 単元は 完全に マスター。' : R.ok >= 8 ? '★ 合格! 次の 単元へ 進もう。' : 'あと ' + (8 - R.ok) + '問で ★。まちがえた 問題の 解き方を 見直そう。') + (r.best > before && before ? '<br>(自己ベスト 更新)' : '') + '</p></div>';
-    const idx = LADDER.U.indexOf(u), nx = LADDER.U[idx + 1];
+    const idx = L.U.indexOf(u), nx = L.U[idx + 1];
     h += '<div class="mw-row"><button class="mw-primary" id="mwAgain">もう一度 (新しい 問題)</button>' + (nx ? '<button class="mw-secondary" id="mwNextU">次の 単元: ' + esc(nx.name) + '</button>' : '') + '<button class="mw-secondary" id="mwList">一覧へ</button></div>';
     area().innerHTML = h; bindBack(() => ladUnit(u));
     $('mwAgain').onclick = () => { sfx('click'); run = { u: u, i: 0, ok: 0, n: 10, wrong: [] }; ladQ(); };
@@ -347,7 +349,7 @@ const MathWorld = (function () {
 
   function open(where) {
     showPage('pageMathWorld');
-    ({ sg: sgList, ru: ruList, fm: fmList, study: study, lad: ladList }[where] || home)();
+    if (where === 'sci') ladList(SCILAD); else if (where === 'lad') ladList(LADDER); else ({ sg: sgList, ru: ruList, fm: fmList, study: study }[where] || home)();
     const p = $('pageMathWorld'); if (p) p.scrollTop = 0;
   }
   return { open: open, stop: stop, _bar: barSVG, _fig: figSVG, _run: () => run };
