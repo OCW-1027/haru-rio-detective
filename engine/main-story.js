@@ -1,12 +1,14 @@
 /* engine/main-story.js — メインストーリー シーズン1「知のカケラ」
  * 知の世界地図 (12地域): カケラの 光 (条件の 進み具合) が 満ちたら タップで 回収 → 会話 → 地域に 色が もどる。
  * 回収した カケラには 怪盗ブランクの メモカード。10枚で 幹部ゼロとの 対決 (5つの 試練: 英語·算数·地理·科学·推理)。
- * 画面: pageStoryMain (#msArea). 保存: State.v2.story = { seen: {prologue}, got: {id: 1}, boss: {won, tries} }
+ * 画面: pageStoryMain (#msArea). 保存: State.v2.story = { seen: {prologue}, got: {id: 1}, boss: {won, tries}, s2: {seen, got, boss} }
+ * シーズン2「白紙の ページ」(data/main-story-s2.js): 6つの 真実の カケラ → 怪盗ブランク (シロ) との 最終決戦 → 和解
  * 絵: 表情・ポーズの 絵 (assets/img/chars/expr/…, chars/spirits/…) が あれば 使い、なければ 今の 絵
  * Dependencies: MAIN_STORY, State, saveState, showPage, sfx, escapeHtml, CaseEngine, CHAR_IMAGES, SCENE_IMAGES,
  *               SCIENTISTS_STORY, EIKEN_G2_PART1, IM, WORLD_CITIES, WorldChase
  */
 const MainStory = (function () {
+  const pick = a => a[Math.floor(Math.random() * a.length)];
   const SP = 'assets/img/chars/spirits/';
   let timers = [], curB = null;
   const $ = id => document.getElementById(id);
@@ -77,11 +79,13 @@ const MainStory = (function () {
   }
 
   // ---------- 知の 世界地図 ----------
+  let season = 1;
   function map(flash) {
+    if (season === 2 && MAIN_STORY.s2) return mapS2(flash);
     stop();
     const D = data(), F = MAIN_STORY.frags, n = gotN();
     if (!D.seen.prologue) { D.seen.prologue = 1; save(); return talk(MAIN_STORY.prologue, 'プロローグ', () => map()); }
-    let h = '<div class="ms-hero"><div><div class="ms-kicker">メインストーリー シーズン1</div><h1 class="ms-h1">知のカケラ</h1><div class="ms-bar"><div style="width:' + (n / 12 * 100) + '%"></div></div><p>取りもどした カケラ <b>' + n + '</b> / 12</p></div>' + portrait('kr', n >= 10 ? 'happy' : 'card') + '</div>';
+    let h = (MAIN_STORY.s2 ? seasonTabs(1) : '') + '<div class="ms-hero"><div><div class="ms-kicker">メインストーリー シーズン1</div><h1 class="ms-h1">知のカケラ</h1><div class="ms-bar"><div style="width:' + (n / 12 * 100) + '%"></div></div><p>取りもどした カケラ <b>' + n + '</b> / 12</p></div>' + portrait('kr', n >= 10 ? 'happy' : 'card') + '</div>';
     if (flash) h += '<div class="ms-flash">' + flash + '</div>';
     h += '<div class="ms-map">';
     F.forEach(f => {
@@ -94,6 +98,7 @@ const MainStory = (function () {
     h += '<button class="ms-boss' + (bossOk ? '' : ' off') + '" id="msBoss">' + portrait('zero') + '<span><b>' + (D.boss.won ? '🏆 ゼロに 勝利' : '⚔ 幹部 ゼロとの 対決') + '</b><small>' + (bossOk ? (D.boss.won ? 'もう一度 挑戦できる' : '5つの 試練 · まちがいは 3回まで') : 'カケラ 10こで 出現 (あと ' + (10 - n) + ')') + '</small></span></button>';
     h += '<div class="ms-row"><button class="ms-sec" id="msNotes">🃏 ブランクの カード (' + Object.keys(D.got).length + ')</button><button class="ms-sec" id="msPro">📜 プロローグ</button></div>';
     area().innerHTML = h;
+    bindSeasons();
     area().querySelectorAll('[data-f]').forEach(b => b.onclick = () => { sfx('click'); tile(F.find(f => f.id === b.dataset.f)); });
     $('msBoss').onclick = () => { if (!bossOk) { sfx('wrong'); return; } sfx('click'); talk(MAIN_STORY.bossIntro, '幹部 ゼロ', boss); };
     $('msNotes').onclick = () => { sfx('click'); notes(); };
@@ -162,15 +167,15 @@ const MainStory = (function () {
     S.push({ name: '推理の 試練', icon: '🕵', qs: [{ q: '目撃情報: 「' + TRAIT.hat[m.hat] + '・' + TRAIT.acc[m.acc] + '・' + TRAIT.cape[m.cape] + '」。この 団員は だれ? (世界追跡の 団員ファイルを 思い出そう)', opts: opts.map(g => g.name), a: opts.indexOf(m), exp: m.name + ' — ' + m.who }] });
     return S;
   }
-  function boss() {
+  // 対決 (共通): cfg = { S: 試練[], who: 立ち絵, name: 名前, lose: セリフ, onWin: fn }
+  function battle(cfg) {
     stop();
-    const D = data(); D.boss.tries = (D.boss.tries || 0) + 1; save();
-    const S = bossQs(), maxHp = S.reduce((a, s) => a + s.qs.length, 0);
+    const S = cfg.S, maxHp = S.reduce((a, s) => a + s.qs.length, 0);
     const B = { S: S, si: 0, qi: 0, hp: maxHp, maxHp: maxHp, life: 3 }; curB = B;
     const ask = () => {
       const st = B.S[B.si], Q = st.qs[B.qi];
-      let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">⚔ 幹部 ゼロ — ' + st.icon + ' ' + st.name + ' (' + (B.si + 1) + '/5)</div></div>';
-      h += '<div class="ms-bossbar">' + portrait('zero') + '<div><div class="ms-hp"><div style="width:' + (B.hp / B.maxHp * 100) + '%"></div></div><small>ゼロ HP ' + B.hp + ' / ' + B.maxHp + '</small><div class="ms-life">' + '❤'.repeat(B.life) + '🤍'.repeat(3 - B.life) + '</div></div></div>';
+      let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">⚔ ' + cfg.name + ' — ' + st.icon + ' ' + st.name + ' (' + (B.si + 1) + '/' + B.S.length + ')</div></div>';
+      h += '<div class="ms-bossbar">' + portrait(cfg.who) + '<div><div class="ms-hp"><div style="width:' + (B.hp / B.maxHp * 100) + '%"></div></div><small>' + cfg.short + ' HP ' + B.hp + ' / ' + B.maxHp + '</small><div class="ms-life">' + '❤'.repeat(B.life) + '🤍'.repeat(3 - B.life) + '</div></div></div>';
       h += '<div class="ms-boxw ms-q"><p>' + esc(Q.q) + '</p><div class="ms-opts">' + Q.opts.map((o, i) => '<button data-o="' + i + '">' + esc(o) + '</button>').join('') + '</div><div id="msFb"></div></div>';
       area().innerHTML = h; $('msBack').onclick = () => { sfx('click'); map(); };
       let done = false;
@@ -179,12 +184,12 @@ const MainStory = (function () {
         const ok = +b.dataset.o === Q.a;
         area().querySelectorAll('[data-o]').forEach(x => { x.disabled = true; if (+x.dataset.o === Q.a) x.classList.add('ok'); });
         if (ok) { sfx('unlock'); B.hp--; } else { sfx('wrong'); b.classList.add('ng'); B.life--; }
-        $('msFb').innerHTML = '<div class="' + (ok ? 'ms-good' : 'ms-bad') + '">' + (ok ? '⚡ 命中! ゼロに 1ダメージ' : '💥 はずれ… ハートが 1つ へった') + '</div>' + (Q.exp ? '<p class="ms-small">' + esc(Q.exp) + '</p>' : '') + '<button class="ms-pri" id="msGo">次へ →</button>';
+        $('msFb').innerHTML = '<div class="' + (ok ? 'ms-good' : 'ms-bad') + '">' + (ok ? '⚡ 命中! ' + cfg.short + 'に 1ダメージ' : '💥 はずれ… ハートが 1つ へった') + '</div>' + (Q.exp ? '<p class="ms-small">' + esc(Q.exp) + '</p>' : '') + '<button class="ms-pri" id="msGo">次へ →</button>';
         $('msGo').onclick = () => {
           sfx('click');
-          if (B.life <= 0) return talk(MAIN_STORY.bossLose, '幹部 ゼロ', () => map('💪 また 挑戦しよう!'));
+          if (B.life <= 0) return talk(cfg.lose, cfg.name, () => map('💪 また 挑戦しよう!'));
           B.qi++; if (B.qi >= st.qs.length) { B.si++; B.qi = 0; }
-          if (B.si >= B.S.length) return win();
+          if (B.si >= B.S.length) return cfg.onWin();
           if (B.qi === 0) return stageBanner(ask);
           ask();
         };
@@ -195,13 +200,103 @@ const MainStory = (function () {
       area().innerHTML = '<div class="ms-stagebn"><div class="ms-big">' + st.icon + '</div><h2>試練 ' + (B.si + 1) + ' : ' + st.name + '</h2><p>' + st.qs.length + '問</p></div>';
       timers.push(setTimeout(next, 1100));
     };
-    const win = () => {
-      MAIN_STORY.frags.forEach(f => { D.got[f.id] = 1; }); D.boss.won = 1; save();
-      talk(MAIN_STORY.bossWin, '勝利', () => map('🏆 ゼロに 勝った! 12の カケラが すべて そろった!'));
-    };
     stageBanner(ask);
   }
+  function boss() {
+    const D = data(); D.boss.tries = (D.boss.tries || 0) + 1; save();
+    battle({ S: bossQs(), who: 'zero', name: '幹部 ゼロ', short: 'ゼロ', lose: MAIN_STORY.bossLose, onWin: () => {
+      MAIN_STORY.frags.forEach(f => { D.got[f.id] = 1; }); D.boss.won = 1; save();
+      talk(MAIN_STORY.bossWin, '勝利', () => map('🏆 ゼロに 勝った! 12の カケラが すべて そろった!'));
+    } });
+  }
 
-  function open() { showPage('pageStoryMain'); map(); const p = $('pageStoryMain'); if (p) p.scrollTop = 0; }
+  // ================= シーズン2「白紙の ページ」 =================
+  function d2() { const D = data(); D.s2 = D.s2 || {}; D.s2.got = D.s2.got || {}; D.s2.seen = D.s2.seen || {}; D.s2.boss = D.s2.boss || {}; return D.s2; }
+  const st2 = (k, f) => { try { return f(); } catch (e) { return 0; } };
+  const COND2 = {
+    s2japan: () => [[st2(0, () => JapanTrip.stats().cleared), 2], [st2(0, () => JapanTrip.stats().seen), 20]],
+    s2time: () => [[st2(0, () => TimeTravel.stats().cleared), 2], [((v2('tt').best) || {}).era || 0, 7]],
+    s2code: () => [[st2(0, () => CodeLab.stats().cleared), 2]],
+    s2news: () => [[st2(0, () => NewsDetective.stats().cleared), 2]],
+    s2court: () => [[st2(0, () => KidsCourt.stats().cleared), 2]],
+    s2math: () => { const L = (v2('mw').lad) || {}; return [[Object.keys(L).filter(k => (L[k] || {}).best >= 8).length, 5]]; },
+  };
+  const S2COVER = { s2japan: '🗾', s2time: '⏳', s2code: '🔐', s2news: '📰', s2court: '⚖', s2math: '🌏' };
+  function prog2(f) { const c = COND2[f.id](); return Math.min(1, Math.max(...c.map(x => x[0] / x[1]))); }
+  const got2N = () => Object.keys(d2().got).length;
+  function seasonTabs(n) { return '<div class="ms-seasons"><button class="ms-season' + (n === 1 ? ' on' : '') + '" data-season="1">シーズン1 知のカケラ</button><button class="ms-season' + (n === 2 ? ' on' : '') + '" data-season="2">🌸 シーズン2 白紙のページ</button></div>'; }
+  function bindSeasons() { area().querySelectorAll('[data-season]').forEach(b => b.onclick = () => { sfx('click'); season = +b.dataset.season; map(); }); }
+  function mapS2(flash) {
+    stop();
+    const D = d2(), F = MAIN_STORY.s2.frags, n = got2N();
+    if (!D.seen.prologue) { D.seen.prologue = 1; save(); return talk(MAIN_STORY.s2.prologue, 'シーズン2 プロローグ', () => map()); }
+    let h = seasonTabs(2) + '<div class="ms-hero s2"><div><div class="ms-kicker">メインストーリー シーズン2</div><h1 class="ms-h1">白紙の ページ</h1><div class="ms-bar"><div style="width:' + (n / F.length * 100) + '%"></div></div><small>真実の カケラ ' + n + ' / ' + F.length + '</small></div>' + portrait('bl') + '</div>';
+    if (flash) h += '<div class="ms-flash">' + flash + '</div>';
+    h += '<div class="ms-map s2">';
+    F.forEach(f => {
+      const got = D.got[f.id], p = prog2(f), ready = !got && p >= 1;
+      h += '<button class="ms-tile s2' + (got ? ' got' : ready ? ' ready' : '') + '" data-f="' + f.id + '" style="--fc:' + f.color + '"><span class="ms-emoji">' + S2COVER[f.id] + '</span><span class="ms-tl"><b>' + f.icon + ' ' + esc(f.name) + '</b><small>' + (got ? '✨ 回収ずみ' : ready ? '💡 タップで 回収!' : esc(f.need)) + '</small>' + (got ? '' : '<span class="ms-pg"><i style="width:' + Math.round(p * 100) + '%"></i></span>') + '</span></button>';
+    });
+    h += '</div>';
+    const ok = n >= 5;
+    h += '<button class="ms-boss' + (ok ? '' : ' off') + '" id="msFinal">' + portrait('bl') + '<span><b>' + (D.boss.won ? '🤝 シロと なかなおり' : '⚔ 怪盗ブランクとの 最終決戦') + '</b><small>' + (ok ? '6つの 試練 (日本・歴史・暗号・ニュース・法律・英語)' : '真実の カケラを 5つ 集めると 挑戦できる (いま ' + n + ')') + '</small></span></button>';
+    h += '<div class="ms-row"><button class="ms-sec" id="msNotes2">🃏 シロの カード (' + n + ')</button><button class="ms-sec" id="msPro2">📜 プロローグ</button></div>';
+    area().innerHTML = h; bindSeasons();
+    area().querySelectorAll('[data-f]').forEach(b => b.onclick = () => { sfx('click'); tile2(F.find(f => f.id === b.dataset.f)); });
+    $('msFinal').onclick = () => { if (!ok) { sfx('wrong'); return; } sfx('click'); talk(MAIN_STORY.s2.finalIntro, '怪盗ブランク', finalBoss); };
+    $('msNotes2').onclick = () => { sfx('click'); notes2(); };
+    $('msPro2').onclick = () => { sfx('click'); talk(MAIN_STORY.s2.prologue, 'シーズン2 プロローグ', () => map()); };
+  }
+  function tile2(f) {
+    const D = d2();
+    const view = fresh => {
+      let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">' + f.icon + ' ' + esc(f.name) + 'の カケラ</div></div>';
+      h += '<div class="ms-card s2' + (fresh ? ' bloom' : '') + '"><span class="ms-emoji big">' + S2COVER[f.id] + '</span><span class="ms-gem" style="--fc:' + f.color + '">' + f.icon + '</span></div>';
+      h += '<div class="ms-boxw"><div class="ms-lesson">📖 真実の ことば<br><b>' + esc(f.lesson) + '</b></div></div>';
+      h += '<div class="ms-note"><div class="ms-note-h">🃏 カケラの そばの 白い カード</div><p>「' + esc(f.note) + '」</p><small>— B</small></div><button class="ms-pri" id="msOk">地図へ もどる</button>';
+      area().innerHTML = h;
+      $('msBack').onclick = $('msOk').onclick = () => { sfx('click'); map(fresh ? '✨ ' + f.area + 'の 真実が 明らかに なった!' : null); };
+    };
+    if (D.got[f.id]) return view(false);
+    if (prog2(f) < 1) {
+      let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">' + f.icon + ' ' + esc(f.name) + 'の カケラ</div></div>';
+      h += '<div class="ms-boxw"><div class="ms-talk">' + portrait('kd', 'hint') + '<div><b>コラドン</b><p>この カケラは まだ 光が 弱いよ。<br>' + esc(f.need) + 'で 取りもどせる!</p></div></div></div>';
+      area().innerHTML = h; $('msBack').onclick = () => { sfx('click'); map(); }; return;
+    }
+    talk(f.lines, f.name + 'の カケラ', () => { D.got[f.id] = 1; save(); sfx('unlock'); view(true); });
+  }
+  function notes2() {
+    const D = d2();
+    let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">🃏 シロの カード</div></div><p class="ms-small">真実の カケラの そばに あった カード。ブランクの 本当の 気持ちが 少しずつ わかる。</p>';
+    MAIN_STORY.s2.frags.forEach((f, i) => { h += '<div class="ms-note sm' + (D.got[f.id] ? '' : ' locked') + '"><span>' + (i + 1) + '</span><p>' + (D.got[f.id] ? '「' + esc(f.note) + '」' : '? ? ?') + '</p></div>'; });
+    area().innerHTML = h; $('msBack').onclick = () => { sfx('click'); map(); };
+  }
+  function finalQs() {
+    const S = [], Q4 = (q, ans, wrong, exp) => { const opts = shuffle([ans].concat(wrong.slice(0, 3))); return { q: q, opts: opts, a: opts.indexOf(ans), exp: exp || '' }; };
+    // 1 日本 (県の 手がかり → 県)
+    if (typeof JP_PREF !== 'undefined') S.push({ name: '日本列島の 試練', icon: '🗾', qs: shuffle(JP_PREF).slice(0, 2).map(p => { const c = pick(p.c); return Q4('「' + c[1].split(p.n.replace(/[都道府県]$/, '')).join('〇〇') + '」で 有名な 都道府県は?', p.n, shuffle(JP_PREF.filter(x => x !== p && x.reg === p.reg).map(x => x.n).concat(shuffle(JP_PREF.filter(x => x !== p)).map(x => x.n))).filter((x, i, a) => a.indexOf(x) === i), p.n + ' (' + p.cap + ')'); }) });
+    // 2 歴史
+    if (typeof TT_EVENTS !== 'undefined') S.push({ name: '歴史の 試練', icon: '⏳', qs: shuffle(TT_EVENTS).slice(0, 2).map(e => { const near = TT_ERAS.map((x, i) => i).filter(i => i !== e[1]).sort((a, b) => Math.abs(a - e[1]) - Math.abs(b - e[1])).slice(0, 3).map(i => TT_ERAS[i][0] + '時代'); return Q4('「' + e[2] + '」は 何時代?', TT_ERAS[e[1]][0] + '時代', near, (e[0] < 0 ? '紀元前' + (-e[0]) : e[0]) + '年'); }) });
+    // 3 暗号
+    if (typeof CodeLab !== 'undefined') S.push({ name: '暗号の 試練', icon: '🔐', qs: ['seq2', 'caesar'].map(k => { const P = CodeLab._gen[k](); return { q: P.title + ': ' + P.q.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(), opts: P.opts, a: P.ans, exp: P.exp }; }) });
+    // 4 ニュース
+    if (typeof NewsDetective !== 'undefined') S.push({ name: 'ニュースの 試練', icon: '📰', qs: ['fact', 'cor'].map(k => { const P = NewsDetective._gen[k](); return { q: P.title + ': ' + P.q.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(), opts: P.opts, a: P.ans, exp: P.exp }; }) });
+    // 5 法律
+    if (typeof KC_QUIZ !== 'undefined') S.push({ name: '法律の 試練', icon: '⚖', qs: shuffle(KC_QUIZ).slice(0, 2).map(r => Q4(r[0], r[1], [r[2], r[3], r[4]], r[5])) });
+    // 6 英語 (準1級 大問1)
+    const E = shuffle(typeof EIKEN_P1_PART1 !== 'undefined' ? EIKEN_P1_PART1 : (typeof EIKEN_G2_PART1 !== 'undefined' ? EIKEN_G2_PART1 : [])).slice(0, 3);
+    S.push({ name: '英語の 試練 (準1級)', icon: '🔤', qs: E.map(it => ({ q: it.q, opts: it.options, a: it.answer, exp: it.exp || '' })) });
+    return S;
+  }
+  function finalBoss() {
+    const D = d2(); D.boss.tries = (D.boss.tries || 0) + 1; save();
+    battle({ S: finalQs(), who: 'bl', name: '怪盗ブランク', short: 'ブランク', lose: MAIN_STORY.s2.finalLose, onWin: () => {
+      MAIN_STORY.s2.frags.forEach(f => { D.got[f.id] = 1; }); D.boss.won = 1; save();
+      try { if (typeof triggerConfetti === 'function') triggerConfetti(); } catch (e) {}
+      talk(MAIN_STORY.s2.finalWin, 'エンディング', () => map('🤝 シロが なかまに なった! 知の図書館に 色が もどった!'));
+    } });
+  }
+
+  function open(s) { if (s) season = s; showPage('pageStoryMain'); map(); const p = $('pageStoryMain'); if (p) p.scrollTop = 0; }
   return { open: open, stop: stop, gotCount: gotN, _progress: () => MAIN_STORY.frags.map(f => [f.id, progress(f)]), _bossQs: bossQs, _boss: () => curB };
 })();

@@ -111,3 +111,13 @@
 .ms-stagebn p { font-family: 'Klee One'; }
 .ms-big { font-size: 56px; }
 @media (max-width: 520px) { .ms-map { grid-template-columns: repeat(2, 1fr); } .ms-stage { height: 280px; } .ms-ptwrap .ms-pt.boy { width: 160px; } .ms-ptwrap .ms-pt.sp { width: 170px; } .ms-ptwrap.left { left: 4%; } .ms-ptwrap.right { right: 4%; } }
+/* シーズン2 */
+.ms-seasons { display: flex; gap: 6px; margin-bottom: 10px; }
+.ms-season { flex: 1; padding: 9px 4px; white-space: nowrap; font-size: 12px !important; border-radius: 999px; border: 2px solid #c9b8e8; background: #fff; font-family: 'RocknRoll One'; font-size: 13px; color: #4a3a6a; cursor: pointer; }
+.ms-season.on { background: #4a3a7a; color: #fff; border-color: #4a3a7a; }
+.ms-hero.s2 { background: linear-gradient(120deg, #3a2850, #8a4a78); }
+.ms-tile.s2 { position: relative; }
+.ms-emoji { display: flex; align-items: center; justify-content: center; height: 86px; font-size: 52px; background: linear-gradient(135deg, #eee, #ddd); filter: grayscale(1); opacity: 0.7; }
+.ms-tile.s2.got .ms-emoji, .ms-tile.s2.ready .ms-emoji { filter: none; opacity: 1; background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--fc) 25%, #fff)); }
+.ms-card.s2 { display: flex; align-items: center; justify-content: center; min-height: 160px; background: linear-gradient(135deg, #fff, #f3ecff); }
+.ms-emoji.big { height: auto; font-size: 96px; background: none; filter: none; opacity: 1; }

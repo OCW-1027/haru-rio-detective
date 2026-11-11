@@ -92,9 +92,26 @@ const Hub = (function () {
     const sg = (State.v2 && State.v2.story && State.v2.story.got) ? Object.keys(State.v2.story.got).length : 0;
     h += '<button class="hub-story" id="hubStory"><span class="hub-story-k">メインストーリー シーズン1</span><b>📖 知のカケラ — 怪盗ブランクを 追え</b><span class="hub-story-bar"><span style="width:' + (sg / 12 * 100) + '%"></span></span><small>取りもどした カケラ ' + sg + ' / 12' + (sg >= 10 ? ' · ⚔ 幹部ゼロが 待っている' : '') + '</small></button>';
 
+    // シーズン2
+    let jts = null; try { jts = JapanTrip.stats(); } catch (e) {}
+    h += '<h2 class="hub-h">🌸 シーズン2 <small class="hub-h-sub">新しい 冒険が 始まる</small></h2>';
+    const s2g = (State.v2 && State.v2.story && State.v2.story.s2 && State.v2.story.s2.got) ? Object.keys(State.v2.story.s2.got).length : 0;
+    h += '<button class="hub-story s2" id="hubStory2"><span class="hub-story-k">メインストーリー シーズン2</span><b>📖 白紙の ページ — 怪盗ブランクの 正体</b><span class="hub-story-bar"><span style="width:' + (s2g / 6 * 100) + '%"></span></span><small>真実の カケラ ' + s2g + ' / 6</small></button>';
+    h += '<section class="hub-new">';
+    h += '<button class="hub-new-btn s2" id="hubJapan"><span style="font-size:44px">🗾</span><span><b>日本列島ミステリー紀行<span class="tag">NEW</span></b><small>47都道府県を 推理で 追え · 解決 ' + (jts ? jts.cleared : 0) + ' / 6 · 図鑑 ' + (jts ? jts.seen : 0) + ' / 47</small></span></button>';
+    let tts = null; try { tts = TimeTravel.stats(); } catch (e) {}
+    h += '<button class="hub-new-btn s2" id="hubTime"><span style="font-size:44px">⏳</span><span><b>タイムトラベル探偵<span class="tag">NEW</span></b><small>縄文〜令和を 追跡 · 時のゆがみ さがし · 年表 ならべかえ · 解決 ' + (tts ? tts.cleared : 0) + ' / 6</small></span></button>';
+    let cls = null; try { cls = CodeLab.stats(); } catch (e) {}
+    h += '<button class="hub-new-btn s2" id="hubCode"><span style="font-size:44px">🔐</span><span><b>暗号解読局<span class="tag">NEW</span></b><small>シーザー暗号・数列・モールス・うそつきパズル · 解決 ' + (cls ? cls.cleared : 0) + ' / 6</small></span></button>';
+    let nds = null; try { nds = NewsDetective.stats(); } catch (e) {}
+    h += '<button class="hub-new-btn s2" id="hubNews2"><span style="font-size:44px">📰</span><span><b>ニュース探偵<span class="tag">NEW</span></b><small>グラフの わな・事実と 意見・相関と 因果を 見ぬけ · 解決 ' + (nds ? nds.cleared : 0) + ' / 6</small></span></button>';
+    let kcs = null; try { kcs = KidsCourt.stats(); } catch (e) {}
+    h += '<button class="hub-new-btn s2" id="hubCourt"><span style="font-size:44px">⚖</span><span><b>こども裁判所<span class="tag">NEW</span></b><small>証言の むじゅんを 証拠で つけ「異議あり!」· 法と 権利 · 解決 ' + (kcs ? kcs.cleared : 0) + ' / 5</small></span></button>';
+    h += '</section>';
+
     // 새 콘텐츠 (시즌1)
     const wd = (State.v2 && State.v2.world && State.v2.world.cleared) || {};
-    h += '<h2 class="hub-h">✨ 新しい 冒険</h2><section class="hub-new">';
+    h += '<h2 class="hub-h">✨ シーズン1の 冒険</h2><section class="hub-new">';
     h += '<button class="hub-new-btn" id="hubWorld"><img src="' + KORADON + '" alt=""><span><b>✈ コラドン航空 世界追跡<span class="tag">NEW</span></b><small>怪盗を 追って 世界を 飛ぼう · 解決 ' + Object.keys(wd).length + ' / 6</small></span></button>';
     const wxd = (State.v2 && State.v2.wx) || {};
     h += '<button class="hub-new-btn" id="hubWx"><img src="' + KORARIN + '" alt=""><span><b>🌤 お天気予報チャレンジ<span class="tag">NEW</span></b><small>本物の データで あしたを 予報 · 記録 ' + ((wxd.done || []).length) + '回</small></span></button>';
@@ -108,20 +125,6 @@ const Hub = (function () {
     let wqs = null; try { wqs = WorldQuiz.stats(); } catch (e) {}
     h += '<button class="hub-new-btn" id="hubWQ"><span style="font-size:44px">🌐</span><span><b>世界の 国 クイズ<span class="tag">NEW</span></b><small>237の 国・地域と 首都を 4択で 全部 制覇 · 覚えた ' + (wqs ? wqs.map : 0) + ' / ' + (wqs ? wqs.total : 237) + '</small></span></button>';
     h += '<button class="hub-new-btn" id="hubSciLad"><span style="font-size:44px">🔬</span><span><b>理科・社会 ラダー<span class="tag">NEW</span></b><small>中学〜高校 · 物理・化学・生物・地学・歴史・地理・公民</small></span></button>';
-    h += '</section>';
-
-    // シーズン2
-    let jts = null; try { jts = JapanTrip.stats(); } catch (e) {}
-    h += '<h2 class="hub-h">🌸 シーズン2 <small class="hub-h-sub">新しい 冒険が 始まる</small></h2><section class="hub-new">';
-    h += '<button class="hub-new-btn s2" id="hubJapan"><span style="font-size:44px">🗾</span><span><b>日本列島ミステリー紀行<span class="tag">NEW</span></b><small>47都道府県を 推理で 追え · 解決 ' + (jts ? jts.cleared : 0) + ' / 6 · 図鑑 ' + (jts ? jts.seen : 0) + ' / 47</small></span></button>';
-    let tts = null; try { tts = TimeTravel.stats(); } catch (e) {}
-    h += '<button class="hub-new-btn s2" id="hubTime"><span style="font-size:44px">⏳</span><span><b>タイムトラベル探偵<span class="tag">NEW</span></b><small>縄文〜令和を 追跡 · 時のゆがみ さがし · 年表 ならべかえ · 解決 ' + (tts ? tts.cleared : 0) + ' / 6</small></span></button>';
-    let cls = null; try { cls = CodeLab.stats(); } catch (e) {}
-    h += '<button class="hub-new-btn s2" id="hubCode"><span style="font-size:44px">🔐</span><span><b>暗号解読局<span class="tag">NEW</span></b><small>シーザー暗号・数列・モールス・うそつきパズル · 解決 ' + (cls ? cls.cleared : 0) + ' / 6</small></span></button>';
-    let nds = null; try { nds = NewsDetective.stats(); } catch (e) {}
-    h += '<button class="hub-new-btn s2" id="hubNews2"><span style="font-size:44px">📰</span><span><b>ニュース探偵<span class="tag">NEW</span></b><small>グラフの わな・事実と 意見・相関と 因果を 見ぬけ · 解決 ' + (nds ? nds.cleared : 0) + ' / 6</small></span></button>';
-    let kcs = null; try { kcs = KidsCourt.stats(); } catch (e) {}
-    h += '<button class="hub-new-btn s2" id="hubCourt"><span style="font-size:44px">⚖</span><span><b>こども裁判所<span class="tag">NEW</span></b><small>証言の むじゅんを 証拠で つけ「異議あり!」· 法と 権利 · 解決 ' + (kcs ? kcs.cleared : 0) + ' / 5</small></span></button>';
     h += '</section>';
 
     // 사건 파일
@@ -159,8 +162,10 @@ const Hub = (function () {
     root.querySelectorAll('[data-study]').forEach(b => {
       b.onclick = () => { sfx('click'); STUDY.find(s => s.id === b.dataset.study).go(); };
     });
+    const hs2 = document.getElementById('hubStory2');
+    if (hs2) hs2.onclick = () => { sfx('click'); MainStory.open(2); };
     const hs = document.getElementById('hubStory');
-    if (hs) hs.onclick = () => { sfx('click'); MainStory.open(); };
+    if (hs) hs.onclick = () => { sfx('click'); MainStory.open(1); };
     const hi = document.getElementById('hubIndian');
     if (hi) hi.onclick = () => { sfx('click'); IndianMath.open(); };
     const hpr = document.getElementById('hubParent');
