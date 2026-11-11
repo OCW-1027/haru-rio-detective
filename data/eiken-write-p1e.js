@@ -1,0 +1,31 @@
+/* 英検準1級 ライティング バンク E (オリジナル) */
+EIKEN_P1_WRITE.push(
+  { type: 'summary', id: 'p1sum9', title: '要約: 書店の 減少',
+    passage: [
+      'The number of bookstores in Japan has fallen sharply over the past two decades. According to industry data, more than a quarter of municipalities now have no bookstore at all. Online retailers, which offer a wide selection and fast delivery, and the growing popularity of e-books are often cited as the main causes.',
+      'Many people argue that the loss of local bookstores is more serious than it appears. Unlike online shops, which tend to recommend books similar to those a customer has already bought, physical bookstores allow people to discover unexpected titles while browsing. Bookstores also serve as community spaces where people can attend readings and talk with knowledgeable staff.',
+      'In response, the national government has launched a project to support bookstores, and some new types of stores have emerged. Some combine books with cafés or sell carefully selected titles chosen by the owner. However, rising rents and low profit margins mean that many independent stores still struggle to survive.' ],
+    instruction: '上の 英文の 要約を 60〜70語の 英語で 書きなさい。', min: 60, max: 70,
+    model: 'Japanese bookstores have declined greatly, leaving many towns without one, largely because of online retailers and e-books. Critics stress that physical stores let people discover unexpected books, unlike online recommendations, and function as community hubs. Although the government now supports bookstores and new formats such as book cafés and curated shops have appeared, high rents and thin profits continue to threaten many independent stores.',
+    tips: ['現状と 原因 → 書店の 価値 → 対策と 課題', 'more than a quarter … → leaving many towns without one と 言い換え', 'Although … , … で 対策と 課題を 1文に'] },
+  { type: 'summary', id: 'p1sum10', title: '要約: 森林の 管理と 花粉',
+    passage: [
+      'After World War II, the Japanese government encouraged the planting of cedar and cypress trees across the country to supply wood for reconstruction. Today, these forests cover a large part of Japan\'s mountains. However, cheaper imported wood reduced demand for domestic timber, and many of these forests have been left unmanaged.',
+      'Unmanaged forests cause several problems. Because the trees are too close together, sunlight cannot reach the ground, which prevents other plants from growing and makes the soil more likely to wash away during heavy rain. In addition, mature cedar trees release huge amounts of pollen each spring, causing allergies for millions of people.',
+      'To address these issues, the government plans to cut down a significant portion of cedar forests and replace them with trees that produce less pollen. It is also promoting the use of domestic wood in public buildings. Nevertheless, a shortage of forestry workers makes it difficult to carry out these plans quickly.' ],
+    instruction: '上の 英文の 要約を 60〜70語の 英語で 書きなさい。', min: 60, max: 70,
+    model: 'Cedar and cypress forests planted across Japan after the war have largely been neglected since cheaper imported timber reduced demand. These dense forests block sunlight, hindering other plants and increasing soil erosion, while their pollen causes widespread allergies. The government intends to replace many cedars with low-pollen trees and encourage domestic wood in public buildings, but a lack of forestry workers is slowing progress.',
+    tips: ['歴史的背景 → 問題 2つ → 対策と 障害', 'left unmanaged → neglected と 言い換え', 'while で 問題を 並べる / but で 障害'] },
+  { type: 'opinion', id: 'p1op11', title: '意見: 小学生に 宿題は 必要?',
+    question: 'Agree or disagree: Elementary schools should stop giving homework.',
+    points: ['Family time', 'Study habits', 'Educational inequality', 'Academic performance'],
+    instruction: 'TOPIC について あなたの 意見と その理由を 2つ 書きなさい。POINTS は 参考。120〜150語。', min: 120, max: 150,
+    model: 'I disagree that elementary schools should stop giving homework. First, homework helps children develop good study habits. When students spend a short time every day reviewing what they learned in class, they learn to manage their time and work independently. These habits become essential in junior high school and beyond, when the amount of material increases significantly. Second, homework allows teachers and parents to identify problems early. If a child repeatedly makes the same mistakes in math homework, teachers can provide extra support before the child falls too far behind. Admittedly, too much homework can take away valuable family time and cause stress. However, this problem can be solved by limiting the amount of homework rather than eliminating it completely. For these reasons, I believe that elementary schools should continue to give a moderate amount of homework.',
+    tips: ['Admittedly, … However, … で 反論 (Family time) に 対処', '「やめる」ではなく「量を 減らす」という 代案を 出す', '結論に a moderate amount と 条件を つける'] },
+  { type: 'opinion', id: 'p1op12', title: '意見: 使い捨てプラスチックを 禁止すべき?',
+    question: 'Should the government ban single-use plastic products?',
+    points: ['Environment', 'Convenience', 'Business costs', 'Alternatives'],
+    instruction: 'TOPIC について あなたの 意見と その理由を 2つ 書きなさい。POINTS は 参考。120〜150語。', min: 120, max: 150,
+    model: 'I believe the government should ban single-use plastic products. First, these products cause serious environmental damage. Items such as plastic straws, cups, and cutlery are used for only a few minutes but can remain in the environment for hundreds of years. Much of this waste ends up in the ocean, where it harms marine animals and breaks down into microplastics that can enter the food chain. Second, practical alternatives are already widely available. Paper straws, wooden cutlery, and reusable containers can replace most single-use plastics without causing major inconvenience. Some people argue that a ban would increase costs for businesses. However, as demand for alternatives grows, their prices are likely to fall, and governments could offer temporary support to small businesses. For these reasons, I am convinced that banning single-use plastics is a necessary step.',
+    tips: ['使用時間 (数分) と 残る 時間 (数百年) の 対比が 効果的', 'Business costs への 反論を Some people argue … However, … で', 'I am convinced that … で 強く 締める'] }
+);

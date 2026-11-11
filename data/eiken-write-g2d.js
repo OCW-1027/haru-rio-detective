@@ -1,0 +1,37 @@
+/* 英検2級 ライティング バンク D (オリジナル) */
+EIKEN_G2_WRITE.push(
+  { type: 'summary', id: 'sum11', title: '要約: 学校の 夏休みの 長さ',
+    passage: [
+      'In Japan, summer vacation for elementary and junior high school students usually lasts about 40 days. Recently, however, some cities have made summer vacation shorter. In these cities, students go back to school in the middle of August instead of at the beginning of September.',
+      'There are several reasons for this change. Schools now have to teach more subjects, such as English and programming, so they need more class days. Also, many classrooms now have air conditioners, so it is possible to study comfortably even in hot weather.',
+      'However, some people are against shorter vacations. They say that children need a long break to rest and enjoy activities such as camping or visiting relatives. In addition, some families with working parents worry about the cost of after-school care.' ],
+    instruction: '上の 英文の 要約を 45〜55語で 書きなさい。', min: 45, max: 55,
+    model: 'Some Japanese cities have shortened summer vacation, starting school in mid-August. This is because schools must teach more subjects like English and programming, and air-conditioned classrooms make studying possible in summer. However, critics argue that children need long breaks for rest and activities, and some working families worry about childcare costs.',
+    tips: ['変化 → 理由 2つ → 反対意見 の 順', 'This is because … and … で 理由を 1文に', 'some people are against → critics argue that'] },
+  { type: 'summary', id: 'sum12', title: '要約: 商店街の 再生',
+    passage: [
+      'Many shopping streets in Japanese towns, called shotengai, have become quiet in recent decades. Large shopping malls with free parking have opened in the suburbs, and many people now shop online. As a result, a lot of small shops have closed, and some streets are full of shutters.',
+      'Some shopping streets are trying new ideas to bring people back. For example, they hold monthly markets where local farmers sell vegetables, and they rent empty shops to young people who want to start cafés or craft stores at a low price.',
+      'These efforts have been successful in some places. However, it is not easy to keep them going. Many shop owners are elderly, and they have little time or energy to organize events. Finding new leaders is an important challenge for the future.' ],
+    instruction: '上の 英文の 要約を 45〜55語で 書きなさい。', min: 45, max: 55,
+    model: 'Many Japanese shopping streets have declined because of suburban malls and online shopping. To attract people again, some hold markets with local farmers and rent empty shops cheaply to young business owners. Although this has worked in some areas, aging shop owners struggle to continue such efforts, so finding new leaders is a key challenge.',
+    tips: ['衰退の 理由 → 取り組み (例 2つ) → 課題', 'As a result の 内容は declined に まとめる', 'Although … , … で 成功と 課題を 1文に'] },
+  { type: 'opinion', id: 'op13', title: '意見: 学校は 給食を 無料に すべき?',
+    question: 'Do you think school lunches should be free for all students?',
+    points: ['Family budgets', 'Health', 'Cost for cities'],
+    instruction: 'あなたの 意見と その理由を 2つ 書きなさい。POINTS は 参考。80〜100語。', min: 80, max: 100,
+    model: 'I think school lunches should be free for all students. First, free lunches would help families save money. Food prices have been rising, and some families find it difficult to pay for school lunches every month. If lunches were free, parents could spend that money on other important things, such as books or clothes. Second, free lunches would protect children\'s health. Some children do not eat enough at home, and a balanced school lunch may be their most nutritious meal of the day. For these reasons, I believe school lunches should be free.',
+    tips: ['If lunches were free, … (仮定法) で 効果を 具体的に', 'Some children … で 本当に 困っている 人の 例', '反対なら Cost for cities (税金) を 使う'] },
+  { type: 'opinion', id: 'op14', title: '意見: 大人に なっても 勉強を 続けるべき?',
+    question: 'Do you think people should continue studying after they start working?',
+    points: ['Career', 'Technology', 'Free time'],
+    instruction: 'あなたの 意見と その理由を 2つ 書きなさい。POINTS は 参考。80〜100語。', min: 80, max: 100,
+    model: 'I think people should continue studying after they start working. First, studying can help people improve their careers. For example, workers who learn a foreign language or get a new qualification may be able to get a better position or a higher salary. Second, technology is changing very quickly. Skills that people learned at school may become old in a few years, so they need to keep learning to do their jobs well. For these reasons, I believe it is important for people to keep studying throughout their lives.',
+    tips: ['For example, で 具体的な 勉強 (語学・資格) を', 'Technology → 学校の 知識が 古くなる と つなげる', 'throughout their lives (生涯) で 締める'] },
+  { type: 'opinion', id: 'op15', title: '意見: 電車の 中で 電話を しても よい?',
+    question: 'Do you think people should be allowed to talk on their phones on trains?',
+    points: ['Manners', 'Emergencies', 'Noise'],
+    instruction: 'あなたの 意見と その理由を 2つ 書きなさい。POINTS は 参考。80〜100語。', min: 80, max: 100,
+    model: 'I do not think people should be allowed to talk on their phones on trains. First, talking on the phone can disturb other passengers. Trains are often crowded, and many people want to read, sleep, or relax quietly. A loud phone conversation can make them feel uncomfortable. Second, there are other ways to communicate. People can send text messages or call back after they get off the train. In an emergency, they can move to the area between the cars. For these reasons, I think phone calls on trains should not be allowed.',
+    tips: ['反対の 立場: I do not think … で 始める', '代わりの 方法 (メール・降りてから) を 示すと 説得力', 'Emergencies への 反論も 1文 入れる'] }
+);
