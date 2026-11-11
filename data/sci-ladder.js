@@ -951,6 +951,25 @@ const SCILAD = (function () {
     return o && Object.assign(o, { fig: wMap(r, null, marks) });
   });
 
+  function wMapF(r, pts) {   // 地形用: pts = [[x, y, 記号]]
+    const vb = WORLDMAP.VB[r], sw = r2(vb[2] / 380); let s = wMap(r).replace('</svg>', '');
+    pts.forEach(([x, y, t]) => { const rr = r2(vb[2] / 34); s += t === '★' ? '<text x="' + x + '" y="' + r2(y + rr * 0.55) + '" text-anchor="middle" font-size="' + r2(rr * 2.4) + '" fill="#d0382a" stroke="#fff" stroke-width="' + sw * 1.2 + '" paint-order="stroke">★</text>'
+      : '<circle cx="' + x + '" cy="' + y + '" r="' + rr + '" fill="#fff" stroke="#2e5fa8" stroke-width="' + sw * 2 + '"/><text x="' + x + '" y="' + r2(y + rr * 0.42) + '" text-anchor="middle" font-size="' + r2(rr * 1.25) + '" font-weight="700" fill="#2e5fa8">' + t + '</text>'; });
+    return s + '</svg>';
+  }
+  add('sg', 'xg7', '🏔', '世界の 地形と 海', ['大陸の 形と 海の 位置を セットで 覚えよう', '山脈: ヒマラヤ・アルプス・ロッキー・アンデス (新期造山帯)、ウラル・アパラチア (古期造山帯)', '砂漠: サハラ・ゴビ・カラハリ、草原: パンパ・グレートプレーンズ'], () => {
+    if (typeof WORLDMAP === 'undefined' || !WORLDMAP.F) return null;
+    const M = WORLDMAP, F = M.F, r = pick(Object.keys(M.VB)), here = F.filter(f => f[1] === r); if (!here.length) return null;
+    const x = pick(here), RN = M.RN[r], others = n => { const same = F.filter(f => f !== x && f[4] === x[4]), loc = here.filter(f => f !== x); return loc.concat(same).sort(() => Math.random() - 0.5).map(f => f[0]).filter((v, i, a) => a.indexOf(v) === i).slice(0, n); };
+    const k = pick(['star', 'star', 'abcd', 'desc']);
+    if (k === 'star') { const o = chq('地図 (' + RN + ') の ★ の 地形・海の 名前は?', x[0], others(5), [x[0] + ' (' + x[4] + ')', x[5]]); return o && Object.assign(o, { fig: wMapF(r, [[x[2], x[3], '★']]) }); }
+    if (k === 'abcd') { const minD = M.VB[r][2] / 8, sel = [x]; here.filter(f => f !== x).sort(() => Math.random() - 0.5).forEach(f => { if (sel.length < 4 && sel.every(s => Math.hypot(s[2] - f[2], s[3] - f[3]) >= minD)) sel.push(f); });
+      if (sel.length < 3) return null; const L = ['A', 'B', 'C', 'D'], ord = sel.slice().sort(() => Math.random() - 0.5), li = L[ord.indexOf(x)];
+      const o = chq('地図 (' + RN + ') の ' + li + ' の 地形・海の 名前は?', x[0], ord.filter(f => f !== x).map(f => f[0]).concat(others(4)), [ord.map((f, i) => L[i] + ' = ' + f[0]).join('、'), x[5]]); return o && Object.assign(o, { fig: wMapF(r, ord.map((f, i) => [f[2], f[3], L[i]])) }); }
+    const hide = t => t.split(x[0].replace(/ \(.*\)/, '')).join('〇〇').replace(/アマゾン川/g, '〇〇川');
+    const o = chq('次の 説明に あてはまる ' + x[4] + 'は? (' + RN + ')\n「' + hide(x[5]) + '」', x[0], others(5), [x[0] + ' — 地図で 位置も 確認しよう']); return o && Object.assign(o, { fig: wMapF(r, [[x[2], x[3], '★']]) });
+  });
+
   const GROUPS = [
     { id: 'sj1', name: '中学 理科 (物理・化学)', color: '#2a7aa8' }, { id: 'sj2', name: '中学 理科 (生物・地学)', color: '#3a8a5a' },
     { id: 'shp', name: '高校 物理基礎', color: '#5a5ab0' }, { id: 'shc', name: '高校 化学基礎', color: '#a0582a' }, { id: 'shb', name: '高校 生物基礎・地学基礎', color: '#2a8a7a' },
