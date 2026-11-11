@@ -120,6 +120,8 @@ const Hub = (function () {
     h += '<button class="hub-new-btn s2" id="hubCode"><span style="font-size:44px">🔐</span><span><b>暗号解読局<span class="tag">NEW</span></b><small>シーザー暗号・数列・モールス・うそつきパズル · 解決 ' + (cls ? cls.cleared : 0) + ' / 6</small></span></button>';
     let nds = null; try { nds = NewsDetective.stats(); } catch (e) {}
     h += '<button class="hub-new-btn s2" id="hubNews2"><span style="font-size:44px">📰</span><span><b>ニュース探偵<span class="tag">NEW</span></b><small>グラフの わな・事実と 意見・相関と 因果を 見ぬけ · 解決 ' + (nds ? nds.cleared : 0) + ' / 6</small></span></button>';
+    let kcs = null; try { kcs = KidsCourt.stats(); } catch (e) {}
+    h += '<button class="hub-new-btn s2" id="hubCourt"><span style="font-size:44px">⚖</span><span><b>こども裁判所<span class="tag">NEW</span></b><small>証言の むじゅんを 証拠で つけ「異議あり!」· 法と 権利 · 解決 ' + (kcs ? kcs.cleared : 0) + ' / 5</small></span></button>';
     h += '</section>';
 
     // 사건 파일
@@ -177,6 +179,8 @@ const Hub = (function () {
     if (hl) hl.onclick = () => { sfx('click'); LabDetective.open(); };
     const hx = document.getElementById('hubWx');
     if (hx) hx.onclick = () => { sfx('click'); WeatherChallenge.open(); };
+    const hkc = document.getElementById('hubCourt');
+    if (hkc) hkc.onclick = () => { sfx('click'); KidsCourt.open(); };
     const hnd = document.getElementById('hubNews2');
     if (hnd) hnd.onclick = () => { sfx('click'); NewsDetective.open(); };
     const hcl = document.getElementById('hubCode');

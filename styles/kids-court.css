@@ -1,0 +1,93 @@
+/* styles/code-lab.css — こども裁判所 (engine/kids-court.js) */
+.kc-page { background: linear-gradient(180deg, #f8f1ea, #efe3d6); }
+.kc-area { width: 100%; box-sizing: border-box; min-width: 0; max-width: 720px; margin: 0 auto; padding: 56px 14px 50px; }
+.kc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.kc-back { padding: 8px 14px; border-radius: 999px; border: 2px solid #c89070; background: #fff; font-family: 'RocknRoll One'; font-size: 13px; color: #5a2a10; cursor: pointer; white-space: nowrap; }
+.kc-title { font-family: 'RocknRoll One'; font-size: 20px; color: #3a1a08; }
+.kc-sub { font-family: 'Klee One'; font-size: 13px; color: #7a5a42; }
+.kc-hero { display: flex; gap: 10px; align-items: flex-start; background: #fff; border: 2px solid #e6ccb4; border-radius: 16px; padding: 10px; margin-bottom: 12px; }
+.kc-hero img { width: 70px; flex: none; }
+.kc-say { font-family: 'Klee One'; font-size: 14px; line-height: 1.7; color: #1a2e26; }
+.kc-big { width: 100%; padding: 16px; border: none; border-radius: 16px; background: #7a3a1a; color: #fff; font-family: 'RocknRoll One'; font-size: 18px; box-shadow: 0 4px 0 #4a2008; cursor: pointer; margin-bottom: 14px; }
+.kc-big small { display: block; font-family: 'Klee One'; font-size: 12px; opacity: 0.85; }
+.kc-h2 { font-family: 'RocknRoll One'; font-size: 15px; color: #5a2a10; margin: 6px 0 8px; }
+.kc-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.kc-mbtn { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px; border-radius: 14px; border: 2px solid #d8b090; background: #fff; box-shadow: 0 3px 0 #d8b090; text-align: left; cursor: pointer; }
+.kc-mbtn .i { font-size: 24px; font-family: 'RocknRoll One'; }
+.kc-mbtn b { font-family: 'RocknRoll One'; font-size: 14px; color: #3a1a08; }
+.kc-mbtn small { font-family: 'Klee One'; font-size: 11px; color: #7a5a42; }
+.kc-card { background: #fff; border: 2px solid #e6ccb4; border-radius: 16px; padding: 14px; margin-bottom: 10px; }
+.kc-kind { font-family: 'RocknRoll One'; font-size: 12px; color: #a0522d; margin-bottom: 6px; }
+.kc-cipher { font-family: 'Courier New', monospace; font-size: 32px; font-weight: 700; letter-spacing: 6px; text-align: center; color: #0f2f24; background: #0f2f24; color: #7cf2b8; border-radius: 12px; padding: 14px 8px; word-break: break-all; }
+.kc-cipher.kana { font-family: 'Klee One'; letter-spacing: 4px; }
+.kc-cipher.seq { letter-spacing: 1px; font-size: 26px; }
+.kc-cipher.seq span { color: #ffd76a; }
+.kc-cipher.morse { font-size: 20px; letter-spacing: 2px; line-height: 1.6; }
+.kc-p { font-family: 'Klee One'; font-size: 14px; line-height: 1.7; color: #1a2e26; margin: 8px 0 0; }
+.kc-says { display: grid; gap: 6px; margin-top: 8px; }
+.kc-say { font-family: 'Klee One'; font-size: 15px; background: #f2f8f5; border-radius: 10px; padding: 8px 10px; }
+.kc-say b { font-family: 'RocknRoll One'; color: #7a3a1a; margin-right: 6px; }
+.kc-tool { background: #fff; border-radius: 12px; border: 1px solid #c8e0d4; padding: 6px 10px; margin-bottom: 10px; font-family: 'Klee One'; font-size: 13px; }
+.kc-tool summary { cursor: pointer; font-family: 'RocknRoll One'; color: #2a6a52; }
+.kc-abc { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 4px; margin-top: 6px; }
+.kc-abc span { display: flex; flex-direction: column; align-items: center; background: #f2f8f5; border-radius: 6px; padding: 3px 0; font-size: 10px; color: #5a7a6e; }
+.kc-abc b { font-size: 15px; color: #3a1a08; }
+.kc-abc.morse { grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); }
+.kc-abc.morse span { font-size: 12px; letter-spacing: 1px; }
+.kc-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kc-opt { padding: 13px 8px; border-radius: 14px; border: 2px solid #d8b090; background: #fff; font-family: 'RocknRoll One'; font-size: 16px; color: #3a1a08; box-shadow: 0 3px 0 #d8b090; cursor: pointer; word-break: break-all; }
+.kc-opt.code { font-family: 'Courier New', monospace; font-size: 24px; letter-spacing: 4px; }
+.kc-opt.ok { background: #dff3e6; border-color: #3a9a5a; }
+.kc-opt.ng { background: #f6e2e0; border-color: #b85a5a; }
+.kc-ok, .kc-ng { margin-top: 10px; padding: 10px 12px; border-radius: 12px; font-family: 'Klee One'; font-size: 14px; line-height: 1.6; }
+.kc-ok { background: #e2f5e8; color: #1a5a2e; }
+.kc-ng { background: #fbe6e0; color: #8a2a1a; }
+.kc-go { width: 100%; margin-top: 8px; padding: 14px; border: none; border-radius: 14px; background: #7a3a1a; color: #fff; font-family: 'RocknRoll One'; font-size: 17px; box-shadow: 0 4px 0 #4a2008; cursor: pointer; }
+.kc-res { text-align: center; font-family: 'RocknRoll One'; font-size: 30px; margin: 10px 0; color: #3a1a08; }
+.kc-res b { font-size: 48px; color: #1f8a5e; }
+.kc-res .off { opacity: 0.25; }
+.kc-cases { display: grid; gap: 10px; }
+.kc-case { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; padding: 14px; border-radius: 16px; border: 2px solid #d8b090; background: #fff; box-shadow: 0 3px 0 #d8b090; text-align: left; cursor: pointer; }
+.kc-case.done { background: #fbf3ec; }
+.kc-cn { font-family: 'RocknRoll One'; font-size: 12px; color: #a0522d; }
+.kc-case b { font-family: 'RocknRoll One'; font-size: 16px; color: #3a1a08; }
+.kc-case small { font-family: 'Klee One'; font-size: 13px; color: #7a5a42; }
+.kc-st { position: absolute; right: 12px; top: 10px; font-size: 14px; }
+.kc-prog { display: flex; gap: 6px; justify-content: center; margin-bottom: 10px; }
+.kc-prog span { width: 38px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background: #0f2f24; color: #3a6a5a; font-family: 'Courier New', monospace; font-size: 22px; font-weight: 700; }
+.kc-prog span.ok { color: #7cf2b8; }
+.kc-prog span.now { box-shadow: 0 0 0 3px #ffd76a; }
+.kc-prog span.lock { background: transparent; font-size: 26px; }
+.kc-prog.big span { width: 52px; height: 60px; font-size: 32px; }
+.kc-digit { margin-top: 8px; font-family: 'Klee One'; font-size: 14px; text-align: center; }
+.kc-digit b { font-family: 'Courier New', monospace; font-size: 24px; color: #1f8a5e; }
+.kc-digit small { color: #6a8a7e; }
+.kc-menu { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.kc-cards { display: grid; gap: 8px; }
+.kc-card { background: #fff; border: 2px solid #e6ccb4; border-radius: 14px; padding: 10px 12px; }
+.kc-card b { font-family: 'RocknRoll One'; font-size: 15px; color: #5a2a10; }
+.kc-card p { margin: 4px 0 0; font-family: 'Klee One'; font-size: 14px; line-height: 1.7; color: #3a1a08; }
+.kc-intro { background: #fff; border-radius: 14px; border: 2px solid #e6ccb4; padding: 12px; font-family: 'Klee One'; font-size: 15px; line-height: 1.8; color: #3a1a08; }
+.kc-rules { margin: 10px 0; font-family: 'Klee One'; font-size: 13px; color: #7a5a42; background: #fff8f0; border-radius: 10px; padding: 8px 10px; }
+.kc-evs { display: grid; gap: 6px; }
+.kc-ev { display: grid; grid-template-columns: 34px 1fr; grid-template-rows: auto auto; column-gap: 8px; text-align: left; padding: 8px 10px; border-radius: 12px; border: 2px solid #e6ccb4; background: #fff; cursor: pointer; font: inherit; }
+.kc-ev .i { grid-row: span 2; font-size: 26px; }
+.kc-ev b { font-family: 'RocknRoll One'; font-size: 13px; color: #5a2a10; }
+.kc-ev small { font-family: 'Klee One'; font-size: 13px; color: #3a1a08; line-height: 1.5; }
+.kc-ev.on { border-color: #c8552b; background: #fff2e6; box-shadow: 0 0 0 2px #f0a070; }
+.kc-wit { font-family: 'RocknRoll One'; font-size: 16px; color: #5a2a10; margin: 4px 0 6px; }
+.kc-lines { display: grid; gap: 6px; }
+.kc-line { display: flex; gap: 8px; align-items: flex-start; text-align: left; padding: 10px; border-radius: 12px; border: 2px solid #d8b090; background: #fffdf8; font-family: 'Klee One'; font-size: 15px; line-height: 1.6; color: #2a1408; cursor: pointer; }
+.kc-line span { flex: none; width: 24px; height: 24px; border-radius: 50%; background: #a0522d; color: #fff; font-family: 'RocknRoll One'; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+.kc-line.on { border-color: #c8552b; background: #fff0e0; box-shadow: 0 0 0 2px #f0a070; }
+.kc-row { display: flex; gap: 8px; margin-top: 12px; }
+.kc-hint { flex: 1; padding: 12px; border-radius: 14px; border: 2px solid #d8b090; background: #fff; font-family: 'RocknRoll One'; font-size: 14px; color: #5a2a10; cursor: pointer; }
+.kc-objection { flex: 2; padding: 14px; border: none; border-radius: 14px; background: #c8241a; color: #fff; font-family: 'RocknRoll One'; font-size: 20px; letter-spacing: 2px; box-shadow: 0 4px 0 #7a1008; cursor: pointer; }
+.kc-objection:disabled { background: #d8c0b0; box-shadow: 0 4px 0 #b8a090; cursor: default; }
+.kc-tip { margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: #fff8dc; font-family: 'Klee One'; font-size: 14px; color: #5a4a10; }
+.kc-boom { font-family: 'RocknRoll One'; font-size: 44px; color: #c8241a; text-align: center; margin: 20px 0 10px; transform: rotate(-4deg); text-shadow: 3px 3px 0 #ffd76a; animation: kcBoom 0.4s ease-out; }
+@keyframes kcBoom { from { transform: scale(2) rotate(-4deg); opacity: 0; } to { transform: scale(1) rotate(-4deg); opacity: 1; } }
+.kc-ok.big, .kc-ng.big { font-size: 16px; padding: 14px; }
+.kc-q { font-family: 'Klee One'; font-size: 17px; font-weight: 700; line-height: 1.7; color: #2a1408; background: #fff; border-radius: 14px; border: 2px solid #e6ccb4; padding: 12px; margin-bottom: 10px; }
+.kc-opts { grid-template-columns: 1fr; }
+.kc-opt { font-family: 'Klee One'; font-weight: 700; font-size: 15px; text-align: left; }
