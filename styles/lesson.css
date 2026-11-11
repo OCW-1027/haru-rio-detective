@@ -1,0 +1,33 @@
+/* くわしい 解説 */
+.lf-lesson { font-family: 'Klee One', sans-serif; color: #2a2a3a; }
+.lf-lead { background: linear-gradient(135deg, #fff8e2, #fdeccc); border: 2px solid #ecc979; border-radius: 16px; padding: 12px 14px; margin-bottom: 14px; }
+.lf-lead span { font-family: 'RocknRoll One'; font-size: 13px; color: #a07020; }
+.lf-lead p { margin: 4px 0 0; font-size: 16.5px; line-height: 1.7; font-weight: 700; }
+.lf-sec { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 12px 14px; margin-bottom: 12px; }
+.lf-sec h3 { font-family: 'RocknRoll One'; font-size: 16px; color: #1f3f5c; margin: 0 0 8px; display: flex; align-items: center; gap: 8px; line-height: 1.45; }
+.lf-no { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: #2e5fa8; color: #fff; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+.lf-sec p { font-size: 15px; line-height: 1.85; margin: 6px 0; }
+.lf-fig { margin: 10px 0; text-align: center; }
+.lf-svg { width: 100%; max-width: 520px; height: auto; font-family: 'Klee One', sans-serif; }
+.lf-graph { max-width: 340px; }
+.lf-cap { font-size: 12.5px; color: #6a7a8a; margin-top: 4px; }
+.lf-tblw { overflow-x: auto; margin: 10px 0; }
+.lf-tbl { border-collapse: collapse; margin: 0 auto; font-size: 14.5px; min-width: 60%; }
+.lf-tbl th { background: #eef3f9; color: #1f3f5c; font-family: 'RocknRoll One'; font-size: 13px; padding: 7px 10px; border: 1px solid #d0dbe8; }
+.lf-tbl td { padding: 7px 10px; border: 1px solid #e0e6ee; text-align: center; line-height: 1.5; }
+.lf-ex { background: #f4f8fc; border-left: 4px solid #2e5fa8; border-radius: 0 12px 12px 0; padding: 10px 12px; margin: 10px 0; }
+.lf-exq { font-weight: 700; font-size: 15px; line-height: 1.6; }
+.lf-ex ol { margin: 6px 0 0; padding-left: 22px; font-size: 14.5px; line-height: 1.8; }
+.lf-exa { margin-top: 6px; font-family: 'RocknRoll One'; color: #2f8a4f; font-size: 15px; }
+.lf-tip { background: #eef8ef; border-radius: 12px; padding: 8px 12px; font-size: 14.5px; line-height: 1.7; margin-top: 8px; }
+.lf-miss { background: #fdf0ee; border: 1.5px solid #f0c4bc; border-radius: 16px; padding: 10px 14px; margin-bottom: 12px; font-size: 14.5px; line-height: 1.75; }
+.lf-miss ul { margin: 6px 0 0; padding-left: 20px; }
+.lf-check { background: #fff; border: 1.5px solid #cfe0cf; border-radius: 16px; padding: 10px 14px; margin-bottom: 12px; font-size: 14.5px; }
+.lf-check details { border-top: 1px dashed #d8e4d8; padding: 8px 0; }
+.lf-check summary { cursor: pointer; line-height: 1.6; }
+.lf-check details div { color: #2f8a4f; font-weight: 700; padding: 4px 0 0 16px; line-height: 1.6; }
+.lf-r { color: #d0382a; font-weight: 700; } .lf-b { color: #2e5fa8; font-weight: 700; } .lf-g { color: #2f8a4f; font-weight: 700; } .lf-o { color: #d9822b; font-weight: 700; }
+.mw-lessonbtn { display: flex; align-items: center; gap: 10px; width: 100%; border: 2px solid #ecc979; background: linear-gradient(135deg, #fff8e2, #fdeccc); border-radius: 16px; padding: 12px 14px; cursor: pointer; text-align: left; margin-bottom: 10px; box-shadow: 0 3px 0 #e2c27a; }
+.mw-lessonbtn span:first-child { font-size: 30px; }
+.mw-lessonbtn b { display: block; font-family: 'RocknRoll One'; font-size: 15px; color: #6a4a10; }
+.mw-lessonbtn small { font-family: 'Klee One'; font-size: 12px; color: #8a6a3a; }

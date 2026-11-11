@@ -293,6 +293,7 @@ const MathWorld = (function () {
     const g = L.GROUPS.find(x => x.id === u.g), ex = L.make(u);
     let h = head(u.icon + ' ' + esc(u.name), '一覧');
     h += '<div class="mw-tag" style="background:' + g.color + '">' + g.name + '</div>';
+    if (typeof Lesson !== 'undefined' && Lesson.has(u.id)) h += '<button class="mw-lessonbtn" id="mwLesson"><span>📖</span><span><b>くわしい 解説を 読む</b><small>図・表・例題つきで ゼロから わかる</small></span></button>';
     h += '<div class="mw-box mw-point"><b>📌 要点</b><ul>' + u.point.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
     h += '<div class="mw-box"><b>📝 例題</b><div class="mw-q mw-pre">' + esc(ex.q) + (ex.fig ? '<div class="mw-qfig">' + ex.fig + '</div>' : '') + (ex.type === 'choice' ? '<div class="mw-exopts">' + ex.opts.map((o, i) => '<span>' + ['ア', 'イ', 'ウ', 'エ'][i] + ' ' + esc(o) + '</span>').join('') + '</div>' : '') + '</div><ol class="mw-steps" id="mwExSteps"></ol><div class="mw-row"><button class="mw-secondary" id="mwExNext">次の ステップ ▶</button><button class="mw-secondary" id="mwExNew">別の 例題</button></div></div>';
     h += '<div class="mw-row"><button class="mw-primary" id="mwLadGo">' + (u.ta ? '⏱ スタート (' + u.ta + '秒)' + (ladData()[u.id] ? ' ・ 自己ベスト ' + (ladData()[u.id].ta || 0) + '問' : '') : '✏ 練習 10問') + '</button></div>';
@@ -300,7 +301,16 @@ const MathWorld = (function () {
     let k = 0; const steps = ex.steps.concat(['答え: ' + fmtA(ex)]);
     $('mwExNext').onclick = () => { sfx('click'); if (k < steps.length) { $('mwExSteps').insertAdjacentHTML('beforeend', '<li>' + esc(steps[k]) + '</li>'); k++; } if (k >= steps.length) $('mwExNext').disabled = true; };
     $('mwExNew').onclick = () => { sfx('click'); ladUnit(u); };
+    const lb = $('mwLesson'); if (lb) lb.onclick = () => { sfx('click'); ladLesson(u); };
     $('mwLadGo').onclick = () => { sfx('click'); if (u.ta) { taStart(u); return; } run = { u: u, i: 0, ok: 0, n: 10, wrong: [] }; ladQ(); };
+  }
+  function ladLesson(u) {   // くわしい 解説
+    stop();
+    let h = head('📖 ' + u.icon + ' ' + esc(u.name), '単元');
+    h += Lesson.html(u.id) + '<div class="mw-row"><button class="mw-secondary" id="mwLsBack">← 例題に もどる</button><button class="mw-primary" id="mwLsGo">' + (u.ta ? '⏱ スタート' : '✏ 練習 10問') + '</button></div>';
+    area().innerHTML = h; bindBack(() => ladUnit(u)); const pg = area().closest('.page'); if (pg) pg.scrollTop = 0;
+    $('mwLsBack').onclick = () => { sfx('click'); ladUnit(u); };
+    $('mwLsGo').onclick = () => { sfx('click'); if (u.ta) { taStart(u); return; } run = { u: u, i: 0, ok: 0, n: 10, wrong: [] }; ladQ(); };
   }
   function ladQ() {
     const R = run; if (R.diag) R.u = R.units[R.i]; const u = R.u, p = L.make(u); R.p = p; R.done = false; R.miss = 0;
