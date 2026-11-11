@@ -498,6 +498,58 @@ const LADDER = (function () {
     return { q: '偏角 ' + t1 + '° の 複素数と 偏角 ' + t2 + '° の 複素数を かけた 数の 偏角は 何度?', type: 'num', a: s, steps: ['積の 偏角 = 偏角の 和', t1 + ' + ' + t2 + ' = ' + s + '°'] };
   });
 
+  // ======================= 追加 単元 (v3: 高難度) =======================
+  add('c2', 'c2h', '🧪', '連立方程式の 文章題', ['わからない 量を 2つ x, y と おく', '「合計」の 式と「もう1つの 関係」の 式を 立てる', '濃度: 食塩の 量 = 食塩水 × 濃度'], () => {
+    const kind = pick(['coin', 'salt', 'speed']);
+    if (kind === 'coin') { const x = R(3, 15), y = R(3, 15), a = pick([50, 80, 100, 120]), b = pick([150, 200, 250].filter(v => v !== a)); return { q: '1個 ' + a + '円の ノートと 1個 ' + b + '円の ペンを 合わせて ' + (x + y) + '個 買い、代金は ' + (a * x + b * y) + '円 だった。ノートと ペンを それぞれ 何個 買った?', type: 'pair', labels: ['ノート', 'ペン'], a: [x, y], steps: ['x + y = ' + (x + y) + '、' + a + 'x + ' + b + 'y = ' + (a * x + b * y), '1つ目 × ' + a + ' を ひく: ' + (b - a) + 'y = ' + ((a * x + b * y) - a * (x + y)) + ' → y = ' + y, 'x = ' + (x + y) + ' − ' + y + ' = ' + x] }; }
+    if (kind === 'salt') { const p1 = pick([4, 5, 6]), p2 = pick([10, 12, 15]), x = R(1, 6) * 50, y = R(1, 6) * 50, salt = (p1 * x + p2 * y) / 100, tot = x + y; const pc = salt * 100 / tot; if (!Number.isInteger(pc * 10)) return null;
+      return { q: p1 + '% の 食塩水と ' + p2 + '% の 食塩水を 混ぜて、' + Math.round(pc * 10) / 10 + '% の 食塩水を ' + tot + 'g つくった。' + p1 + '% と ' + p2 + '% を それぞれ 何g 混ぜた?', type: 'pair', labels: [p1 + '% (g)', p2 + '% (g)'], a: [x, y], steps: ['x + y = ' + tot, '食塩: ' + (p1 / 100) + 'x + ' + (p2 / 100) + 'y = ' + salt + ' (= ' + tot + ' × ' + Math.round(pc * 10) / 10 + '%)', '解くと x = ' + x + '、y = ' + y] }; }
+    const v1 = pick([3, 4, 5]), v2 = pick([10, 12, 15]), t1 = R(1, 3), t2 = R(1, 3); const d1 = v1 * t1, d2 = v2 * t2;
+    return { q: '家から ' + (d1 + d2) + 'km 離れた 町まで、はじめは 時速 ' + v1 + 'km で 歩き、途中から 時速 ' + v2 + 'km の 自転車に 乗ったら、全体で ' + (t1 + t2) + '時間 かかった。歩いた 道のりと 自転車の 道のりは それぞれ 何km?', type: 'pair', labels: ['歩き (km)', '自転車 (km)'], a: [d1, d2], steps: ['x + y = ' + (d1 + d2) + '、x/' + v1 + ' + y/' + v2 + ' = ' + (t1 + t2), '解くと x = ' + d1 + '、y = ' + d2] };
+  });
+  add('hA', 'hAh', '🔢', '約数の 個数と 総和', ['n = pᵃ qᵇ (素因数分解) の とき、約数の 個数 = (a + 1)(b + 1)', '約数の 総和 = (1 + p + … + pᵃ)(1 + q + … + qᵇ)'], () => {
+    const ps = pick([[2, 3], [2, 5], [3, 5], [2, 7]]), a = R(1, 4), b = R(1, 3), n = ps[0] ** a * ps[1] ** b;
+    if (Math.random() < 0.6) return { q: n + ' の 正の 約数は 何個?', type: 'num', a: (a + 1) * (b + 1), steps: [n + ' = ' + ps[0] + '^' + a + ' × ' + ps[1] + '^' + b, '(' + a + ' + 1)(' + b + ' + 1) = ' + ((a + 1) * (b + 1)) + '個'] };
+    const s1 = (ps[0] ** (a + 1) - 1) / (ps[0] - 1), s2 = (ps[1] ** (b + 1) - 1) / (ps[1] - 1);
+    return { q: n + ' の 正の 約数の 総和は?', type: 'num', a: s1 * s2, steps: [n + ' = ' + ps[0] + '^' + a + ' × ' + ps[1] + '^' + b, '(1 + … + ' + ps[0] + '^' + a + ') × (1 + … + ' + ps[1] + '^' + b + ') = ' + s1 + ' × ' + s2 + ' = ' + (s1 * s2)] };
+  });
+  add('hA', 'hAi', '🎲', '反復試行の 確率', ['確率 p の 試行を n 回 くり返して ちょうど k 回 起こる 確率 = ₙCₖ pᵏ (1 − p)ⁿ⁻ᵏ'], () => {
+    const n = R(3, 6), k = R(1, n - 1), [pn, pd] = pick([[1, 2], [1, 3], [1, 6], [2, 3]]);
+    const num = C(n, k) * pn ** k * (pd - pn) ** (n - k), den = pd ** n, v = fr(num, den);
+    const ev = { '1/2': 'コインを 投げて 表が 出る', '1/3': 'サイコロで 1 か 2 が 出る', '1/6': 'サイコロで 6 が 出る', '2/3': 'サイコロで 3 以上が 出る' }[pn + '/' + pd];
+    return { q: ev + ' 試行を ' + n + '回 くり返す とき、ちょうど ' + k + '回 起こる 確率は?', type: 'num', a: v, steps: ['p = ' + pn + '/' + pd, n + 'C' + k + ' × (' + pn + '/' + pd + ')^' + k + ' × (' + (pd - pn) + '/' + pd + ')^' + (n - k), '= ' + C(n, k) + ' × ' + (pn ** k * (pd - pn) ** (n - k)) + '/' + den + ' = ' + fs(v)] };
+  });
+  add('h2', 'h2o', '〰', '三角関数の 合成', ['a sinθ + b cosθ = √(a² + b²) sin(θ + α)', '最大値 √(a² + b²)、最小値 −√(a² + b²)'], () => {
+    const [a, b, r] = pick([[3, 4, 5], [4, 3, 5], [5, 12, 13], [12, 5, 13], [1, 1, null], [8, 6, 10], [6, 8, 10]]); if (!r) return null;
+    const sa = pick([1, -1]), sb = pick([1, -1]), mx = Math.random() < 0.6;
+    return { q: 'y = ' + (sa < 0 ? '−' : '') + a + 'sinθ ' + (sb < 0 ? '− ' : '+ ') + b + 'cosθ の ' + (mx ? '最大値' : '最小値') + 'は?', type: 'num', a: mx ? r : -r, steps: ['合成: √(' + a + '² + ' + b + '²) = ' + r, 'y = ' + r + ' sin(θ + α) → ' + (mx ? '最大 ' + r : '最小 −' + r)] };
+  });
+  add('h2', 'h2p', '÷', '剰余の 定理・因数定理', ['P(x) を x − a で わった 余りは P(a)', 'P(a) = 0 ⇔ P(x) は x − a で わり切れる (因数定理)'], () => {
+    const c = [NZ(-3, 3), R(-5, 5), R(-6, 6), R(-9, 9)], a = NZ(-3, 3), v = ((c[0] * a + c[1]) * a + c[2]) * a + c[3];
+    if (Math.random() < 0.6) return { q: 'P(x) = ' + poly(c) + ' を x ' + (a < 0 ? '+ ' + (-a) : '− ' + a) + ' で わった 余りは?', type: 'num', a: v, steps: ['余り = P(' + M(a) + ')', '= ' + M(c[0]) + '×' + P(a) + '³ + ' + P(c[1]) + '×' + P(a) + '² + ' + P(c[2]) + '×' + P(a) + ' + ' + P(c[3]) + ' = ' + M(v)] };
+    const k = -(c[0] * a ** 3 + c[1] * a * a + c[2] * a);
+    return { q: 'P(x) = ' + poly([c[0], c[1], c[2], 0]) + ' + k が x ' + (a < 0 ? '+ ' + (-a) : '− ' + a) + ' で わり切れる ような 定数 k は?', type: 'num', a: k, steps: ['因数定理: P(' + M(a) + ') = 0', M(c[0] * a ** 3 + c[1] * a * a + c[2] * a) + ' + k = 0 → k = ' + M(k)] };
+  });
+  add('hB', 'hBg', '📍', '内分点・重心 (ベクトル・座標)', ['A, B を m : n に 内分する 点 = (nA + mB)/(m + n)', '三角形の 重心 = (A + B + C)/3'], () => {
+    if (Math.random() < 0.6) { const m = R(1, 4), n = R(1, 4), Ax = R(-6, 6), Ay = R(-6, 6), s = m + n, Bx = Ax + s * R(-3, 3), By = Ay + s * R(-3, 3);
+      const Px = (n * Ax + m * Bx) / s, Py = (n * Ay + m * By) / s;
+      return { q: 'A(' + M(Ax) + ', ' + M(Ay) + ')、B(' + M(Bx) + ', ' + M(By) + ') を ' + m + ' : ' + n + ' に 内分する 点の 座標は?', type: 'pair', labels: ['x', 'y'], a: [Px, Py], steps: ['x = (' + n + '×' + P(Ax) + ' + ' + m + '×' + P(Bx) + ')/' + s + ' = ' + M(Px), 'y = (' + n + '×' + P(Ay) + ' + ' + m + '×' + P(By) + ')/' + s + ' = ' + M(Py)] }; }
+    const xs = [R(-6, 6), R(-6, 6)], ys = [R(-6, 6), R(-6, 6)], gx = R(-4, 4), gy = R(-4, 4), x3 = 3 * gx - xs[0] - xs[1], y3 = 3 * gy - ys[0] - ys[1];
+    return { q: 'A(' + M(xs[0]) + ', ' + M(ys[0]) + ')、B(' + M(xs[1]) + ', ' + M(ys[1]) + ')、C(' + M(x3) + ', ' + M(y3) + ') の 三角形の 重心の 座標は?', type: 'pair', labels: ['x', 'y'], a: [gx, gy], steps: ['x = (' + M(xs[0]) + ' + ' + P(xs[1]) + ' + ' + P(x3) + ')/3 = ' + M(gx), 'y = (' + M(ys[0]) + ' + ' + P(ys[1]) + ' + ' + P(y3) + ')/3 = ' + M(gy)] };
+  });
+  add('h3', 'h3e', 'ℯ', '微分 (指数・対数・三角関数)', ['(eˣ)′ = eˣ、(log x)′ = 1/x', '(sin x)′ = cos x、(cos x)′ = −sin x', '合成関数: {f(ax + b)}′ = a f′(ax + b)'], () => {
+    const kind = pick(['exp', 'log', 'sin']);
+    if (kind === 'exp') { const a = NZ(-4, 4), c = R(2, 5); return { q: 'f(x) = ' + c + 'e^(' + (a === 1 ? '' : a === -1 ? '−' : M(a)) + 'x) の とき、f′(0) は?', type: 'num', a: c * a, steps: ['f′(x) = ' + c + ' × ' + P(a) + ' × e^(' + M(a) + 'x)', 'x = 0: e⁰ = 1 → ' + M(c * a)] }; }
+    if (kind === 'log') { const a = R(1, 4), b = R(0, 4), x = R(1, 3); const v = fr(a, a * x + b); return { q: 'f(x) = log(' + poly([a, b]) + ') の とき、f′(' + x + ') は? (log は 自然対数)', type: 'num', a: v, steps: ['f′(x) = ' + a + '/(' + poly([a, b]) + ')', 'x = ' + x + ': ' + a + '/' + (a * x + b) + ' = ' + fs(v)] }; }
+    const a = R(1, 5), c = R(2, 4); return { q: 'f(x) = ' + c + 'sin(' + (a === 1 ? '' : a) + 'x) の とき、f′(0) は?', type: 'num', a: c * a, steps: ['f′(x) = ' + c + ' × ' + a + ' × cos(' + a + 'x)', 'cos 0 = 1 → ' + (c * a)] };
+  });
+  add('h3', 'h3f', '∫', '定積分 (指数・対数・三角関数)', ['∫sin x dx = −cos x、∫cos x dx = sin x', '∫(1/x) dx = log|x|、∫eˣ dx = eˣ', '∫₀^π sin x dx = 2 は 有名'], () => {
+    const kind = pick(['sin', 'cos', 'inv']);
+    if (kind === 'sin') { const n = R(1, 5), c = R(2, 4); const v = n % 2 ? fr(2 * c, n) : 0; return { q: '∫ (0 から π まで) ' + c + 'sin(' + (n === 1 ? '' : n) + 'x) dx の 値は? (分数 OK)', type: 'num', a: v, steps: ['原始関数: −(' + c + '/' + n + ')cos(' + n + 'x)', '[−(' + c + '/' + n + ')cos(' + n + 'π)] − [−(' + c + '/' + n + ')cos 0] = ' + c + '/' + n + ' × (1 − cos ' + n + 'π)', 'cos ' + n + 'π = ' + (n % 2 ? '−1' : '1') + ' → ' + fs(v)] }; }
+    if (kind === 'cos') { const c = R(2, 6); return { q: '∫ (0 から π/2 まで) ' + c + 'cos x dx の 値は?', type: 'num', a: c, steps: ['[' + c + 'sin x] = ' + c + '(sin(π/2) − sin 0) = ' + c] }; }
+    const k = R(1, 4), c = R(1, 5); return { q: '∫ (1 から e^' + k + ' まで) (' + c + '/x) dx の 値は?', type: 'num', a: c * k, steps: ['[' + c + ' log x]', c + '(log e^' + k + ' − log 1) = ' + c + ' × ' + k + ' = ' + (c * k)] };
+  });
+
   const GROUPS = [
     { id: 'c1', name: '中学1年', color: '#3a8a5a' }, { id: 'c2', name: '中学2年', color: '#2e7aa8' }, { id: 'c3', name: '中学3年', color: '#5a5ab0' },
     { id: 'h1', name: '高校 数学I', color: '#b05a3a' }, { id: 'hA', name: '高校 数学A', color: '#a0702a' }, { id: 'h2', name: '高校 数学II', color: '#9a3a7a' },
