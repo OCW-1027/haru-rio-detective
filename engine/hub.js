@@ -110,6 +110,12 @@ const Hub = (function () {
     h += '<button class="hub-new-btn" id="hubSciLad"><span style="font-size:44px">🔬</span><span><b>理科・社会 ラダー<span class="tag">NEW</span></b><small>中学〜高校 · 物理・化学・生物・地学・歴史・地理・公民</small></span></button>';
     h += '</section>';
 
+    // シーズン2
+    let jts = null; try { jts = JapanTrip.stats(); } catch (e) {}
+    h += '<h2 class="hub-h">🌸 シーズン2 <small class="hub-h-sub">新しい 冒険が 始まる</small></h2><section class="hub-new">';
+    h += '<button class="hub-new-btn s2" id="hubJapan"><span style="font-size:44px">🗾</span><span><b>日本列島ミステリー紀行<span class="tag">NEW</span></b><small>47都道府県を 推理で 追え · 解決 ' + (jts ? jts.cleared : 0) + ' / 6 · 図鑑 ' + (jts ? jts.seen : 0) + ' / 47</small></span></button>';
+    h += '</section>';
+
     // 사건 파일
     h += '<h2 class="hub-h">🗂 事件ファイル</h2><section class="hub-cases">';
     list.forEach(c => {
@@ -165,6 +171,8 @@ const Hub = (function () {
     if (hl) hl.onclick = () => { sfx('click'); LabDetective.open(); };
     const hx = document.getElementById('hubWx');
     if (hx) hx.onclick = () => { sfx('click'); WeatherChallenge.open(); };
+    const hjp = document.getElementById('hubJapan');
+    if (hjp) hjp.onclick = () => { sfx('click'); JapanTrip.open(); };
     const hw = document.getElementById('hubWorld');
     if (hw) hw.onclick = () => { sfx('click'); WorldChase.open(); };
     const rv = document.getElementById('hubReview');

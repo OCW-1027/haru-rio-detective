@@ -24,6 +24,7 @@
 <link rel="stylesheet" href="styles/components.css">
 <link rel="stylesheet" href="styles/game.css">
 <link rel="stylesheet" href="styles/mini-learn.css">
+<link rel="stylesheet" href="styles/japan-trip.css">
 <link rel="stylesheet" href="styles/learn.css">
 <link rel="stylesheet" href="styles/chat.css">
 <link rel="stylesheet" href="styles/vocab-learn.css">
@@ -232,6 +233,12 @@
   <div class="page free-quiz-page" id="pageFreeQuiz">
     <button class="back-btn" id="btnBackFreeQuiz">← もくじ</button>
     <div class="free-quiz-area" id="freeQuizArea"></div>
+  </div>
+
+  <!-- 🗾 日本列島ミステリー紀行 (シーズン2) -->
+  <div class="page jt-page" id="pageJapanTrip">
+    <button class="back-btn" id="btnJapanBack">← 事務所</button>
+    <div class="jt-area" id="jtArea"></div>
   </div>
 
   <!-- 🧠 学習ミニゲーム -->
@@ -493,6 +500,9 @@
 <script src="engine/quiz.js"></script>
 <script src="engine/games.js"></script>
 <script src="engine/mini-learn.js"></script>
+<script src="data/japan-pref.js"></script>
+<script src="data/japan-map.js"></script>
+<script src="engine/japan-trip.js"></script>
 <script src="engine/game-v2.js"></script>
 <script src="engine/case-engine.js"></script>
 <script src="engine/detectives-A.js"></script>
