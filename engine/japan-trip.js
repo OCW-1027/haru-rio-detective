@@ -143,11 +143,12 @@ const JapanTrip = (function () {
     if (!run) return;
     const r = run, cur = r.route[r.i], nxt = r.route[r.i + 1], last = r.i === r.route.length - 2;
     const pc = P(cur);
+    const fresh = r.asked === 0 && !r.clues.length && r.topAt !== r.i;
     if (r.asked === 0 && !r.clues.length) {
       // この 地点で 使う 手がかり (次の 県の 5つから 3つ)
       r.pool = shuffle(P(nxt).c.slice()).slice(0, 3);
     }
-    top();
+    if (fresh) { r.topAt = r.i; top(); }   // 同じ 地点での 再描画 (証言・ヒント・まちがい) では 位置を 動かさない
     let h = header('第' + (r.ci + 1) + '事件 ' + esc(r.c.title), '地点 ' + (r.i + 1) + ' / ' + (r.route.length - 1) + ' ・ ' + '❤'.repeat(r.hearts) + '<span class="off">' + '❤'.repeat(3 - r.hearts) + '</span>', 'cases');
     h += '<div class="jt-mapbox small">' + map({ line: r.route.slice(0, r.i + 1), mark: cur, hl: Object.assign({ [cur]: 'here' }, r.wrong) }) + '</div>';
     h += pic('japan/reg_' + REG_IMG[pc.reg] + '.webp', 'thin') + '<div class="jt-now">📍 いま: <b>' + esc(pc.n) + '</b> (' + pc.reg + '地方)</div>';

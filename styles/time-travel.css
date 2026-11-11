@@ -1,5 +1,5 @@
 /* styles/time-travel.css — タイムトラベル探偵 (engine/time-travel.js) */
-.tt-page { background: linear-gradient(180deg, #f4f0ff, #ece4f8); }
+.tt-page { background: linear-gradient(180deg, #f4f0ff, #ece4f8); overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 0 0 48px; }
 .tt-area { width: 100%; box-sizing: border-box; min-width: 0; max-width: 760px; margin: 0 auto; padding: 56px 14px 50px; }
 .tt-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .tt-back { padding: 8px 14px; border-radius: 999px; border: 2px solid #a48ad0; background: #fff; font-family: 'RocknRoll One'; font-size: 13px; color: #4a2a7a; cursor: pointer; white-space: nowrap; }
@@ -54,6 +54,7 @@
 .tt-ok, .tt-ng { margin-top: 10px; padding: 10px 12px; border-radius: 12px; font-family: 'Klee One'; font-size: 14px; line-height: 1.6; }
 .tt-ok { background: #e6f6df; color: #1f5a1a; }
 .tt-ng { background: #fbe6e0; color: #8a2a1a; }
+.tt-tip { margin-top: 10px; padding: 10px 12px; border-radius: 12px; font-family: "Klee One"; font-size: 14px; line-height: 1.6; background: #fff8e0; border: 2px solid #f0d080; color: #7a5a10; }
 .tt-go { width: 100%; margin-top: 8px; padding: 14px; border: none; border-radius: 14px; background: #6a42b8; color: #fff; font-family: 'RocknRoll One'; font-size: 17px; box-shadow: 0 4px 0 #42228a; cursor: pointer; }
 .tt-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
 .tt-row > * { flex: 1; }

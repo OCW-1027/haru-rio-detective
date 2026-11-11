@@ -77,8 +77,9 @@ const KidsCourt = (function () {
     $('kcStart').onclick = () => { sound('click'); run = { ci: ci, r: 0, hearts: 3, miss: 0, line: -1, ev: null, phase: 'round' }; court(); };
   }
   function court() {
-    const R = run, c = KC_CASES[R.ci]; top();
+    const R = run, c = KC_CASES[R.ci];
     if (R.phase === 'verdict' || R.phase === 'law') return judge();
+    if (R.topAt !== R.r) { R.topAt = R.r; top(); }   // 証言・証拠を えらぶ たびに 上へ 飛ばない
     const rd = c.rounds[R.r];
     let h = header('第' + (R.ci + 1) + '事件 ' + esc(c.title), '証言 ' + (R.r + 1) + ' / ' + c.rounds.length + ' ・ ' + '❤'.repeat(R.hearts) + '<span class="off">' + '❤'.repeat(3 - R.hearts) + '</span>', 'cases');
     h += '<div class="kc-wit">' + esc(rd.who) + ' の 証言</div><div class="kc-lines">';

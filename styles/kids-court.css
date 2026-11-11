@@ -1,5 +1,5 @@
 /* styles/code-lab.css — こども裁判所 (engine/kids-court.js) */
-.kc-page { background: linear-gradient(180deg, #f8f1ea, #efe3d6); }
+.kc-page { background: linear-gradient(180deg, #f8f1ea, #efe3d6); overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 0 0 48px; }
 .kc-area { width: 100%; box-sizing: border-box; min-width: 0; max-width: 720px; margin: 0 auto; padding: 56px 14px 50px; }
 .kc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .kc-back { padding: 8px 14px; border-radius: 999px; border: 2px solid #c89070; background: #fff; font-family: 'RocknRoll One'; font-size: 13px; color: #5a2a10; cursor: pointer; white-space: nowrap; }

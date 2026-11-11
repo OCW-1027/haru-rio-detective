@@ -1,5 +1,5 @@
 /* styles/code-lab.css — ニュース探偵 (engine/news-detective.js) */
-.nd-page { background: linear-gradient(180deg, #eef2f8, #e2e8f2); }
+.nd-page { background: linear-gradient(180deg, #eef2f8, #e2e8f2); overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 0 0 48px; }
 .nd-area { width: 100%; box-sizing: border-box; min-width: 0; max-width: 720px; margin: 0 auto; padding: 56px 14px 50px; }
 .nd-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .nd-back { padding: 8px 14px; border-radius: 999px; border: 2px solid #7a90c8; background: #fff; font-family: 'RocknRoll One'; font-size: 13px; color: #1f2f5f; cursor: pointer; white-space: nowrap; }

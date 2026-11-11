@@ -223,6 +223,14 @@ const MainStory = (function () {
     s2math: () => { const L = (v2('mw').lad) || {}; return [[Object.keys(L).filter(k => (L[k] || {}).best >= 8).length, 5]]; },
   };
   const S2COVER = { s2japan: '🗾', s2time: '⏳', s2code: '🔐', s2news: '📰', s2court: '⚖', s2math: '🌏' };
+  const GO2 = {   // まだ 光が 弱い カケラ → その コンテンツへ 直接 行ける
+    s2japan: ['日本列島ミステリー紀行', () => JapanTrip.open()],
+    s2time: ['タイムトラベル探偵', () => TimeTravel.open()],
+    s2code: ['暗号解読局', () => CodeLab.open()],
+    s2news: ['ニュース探偵', () => NewsDetective.open()],
+    s2court: ['こども裁判所', () => KidsCourt.open()],
+    s2math: ['世界の 算数道場', () => MathWorld.open()],
+  };
   function prog2(f) { const c = COND2[f.id](); return Math.min(1, Math.max(...c.map(x => x[0] / x[1]))); }
   const got2N = () => Object.keys(d2().got).length;
   function seasonTabs(n) { return '<div class="ms-seasons"><button class="ms-season' + (n === 1 ? ' on' : '') + '" data-season="1">シーズン1 知のカケラ</button><button class="ms-season' + (n === 2 ? ' on' : '') + '" data-season="2">🌸 シーズン2 白紙のページ</button></div>'; }
@@ -236,7 +244,7 @@ const MainStory = (function () {
     h += '<div class="ms-map s2">';
     F.forEach(f => {
       const got = D.got[f.id], p = prog2(f), ready = !got && p >= 1;
-      h += '<button class="ms-tile s2' + (got ? ' got' : ready ? ' ready' : '') + '" data-f="' + f.id + '" style="--fc:' + f.color + '"><span class="ms-emoji">' + S2COVER[f.id] + '</span><span class="ms-tl"><b>' + f.icon + ' ' + esc(f.name) + '</b><small>' + (got ? '✨ 回収ずみ' : ready ? '💡 タップで 回収!' : esc(f.need)) + '</small>' + (got ? '' : '<span class="ms-pg"><i style="width:' + Math.round(p * 100) + '%"></i></span>') + '</span></button>';
+      h += '<button class="ms-tile s2' + (got ? ' got' : ready ? ' ready' : '') + '" data-f="' + f.id + '" style="--fc:' + f.color + '"><span class="ms-emoji">' + S2COVER[f.id] + '</span><span class="ms-tl"><b>' + f.icon + ' ' + esc(f.name) + '</b><small>' + (got ? '✨ 回収ずみ' : ready ? '💡 タップで 回収!' : '▶ ' + esc(f.need)) + '</small>' + (got ? '' : '<span class="ms-pg"><i style="width:' + Math.round(p * 100) + '%"></i></span>') + '</span></button>';
     });
     h += '</div>';
     const ok = n >= 5;
@@ -244,7 +252,7 @@ const MainStory = (function () {
     h += '<div class="ms-row"><button class="ms-sec" id="msNotes2">🃏 シロの カード (' + n + ')</button><button class="ms-sec" id="msPro2">📜 プロローグ</button></div>';
     area().innerHTML = h; bindSeasons();
     area().querySelectorAll('[data-f]').forEach(b => b.onclick = () => { sfx('click'); tile2(F.find(f => f.id === b.dataset.f)); });
-    $('msFinal').onclick = () => { if (!ok) { sfx('wrong'); return; } sfx('click'); talk(MAIN_STORY.s2.finalIntro, '怪盗ブランク', finalBoss); };
+    $('msFinal').onclick = () => { if (!ok) { sfx('wrong'); map('🔒 最終決戦は 真実の カケラを 5つ 集めると 挑戦できるよ (いま ' + n + ' / 5)。上の カケラを タップして、それぞれの 事件に 挑戦しよう!'); return; } sfx('click'); talk(MAIN_STORY.s2.finalIntro, '怪盗ブランク', finalBoss); };
     $('msNotes2').onclick = () => { sfx('click'); notes2(); };
     $('msPro2').onclick = () => { sfx('click'); talk(MAIN_STORY.s2.prologue, 'シーズン2 プロローグ', () => map()); };
   }
@@ -260,9 +268,14 @@ const MainStory = (function () {
     };
     if (D.got[f.id]) return view(false);
     if (prog2(f) < 1) {
+      const c = COND2[f.id](), g = GO2[f.id];
       let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">' + f.icon + ' ' + esc(f.name) + 'の カケラ</div></div>';
-      h += '<div class="ms-boxw"><div class="ms-talk">' + portrait('kd', 'hint') + '<div><b>コラドン</b><p>この カケラは まだ 光が 弱いよ。<br>' + esc(f.need) + 'で 取りもどせる!</p></div></div></div>';
-      area().innerHTML = h; $('msBack').onclick = () => { sfx('click'); map(); }; return;
+      h += '<div class="ms-card s2"><span class="ms-emoji big">' + S2COVER[f.id] + '</span></div>';
+      h += '<div class="ms-boxw"><div class="ms-talk">' + portrait('kd', 'hint') + '<div><b>コラドン</b><p>この カケラは まだ 光が 弱いよ。<br>' + esc(f.need) + 'で 取りもどせる!</p>' + c.map(x => '<div class="ms-cond"><span class="ms-pg"><span style="width:' + Math.min(100, Math.round(x[0] / x[1] * 100)) + '%"></span></span> ' + Math.min(x[0], x[1]) + ' / ' + x[1] + '</div>').join('') + '</div></div></div>';
+      if (g) h += '<button class="ms-pri" id="msGo2">▶ ' + esc(g[0]) + 'へ 行く</button>';
+      area().innerHTML = h; $('msBack').onclick = () => { sfx('click'); map(); };
+      const gb = $('msGo2'); if (gb) gb.onclick = () => { sfx('click'); stop(); try { g[1](); } catch (e) { map(); } };
+      return;
     }
     talk(f.lines, f.name + 'の カケラ', () => { D.got[f.id] = 1; save(); sfx('unlock'); view(true); });
   }

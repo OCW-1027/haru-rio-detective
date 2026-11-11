@@ -111,6 +111,9 @@ const TimeTravel = (function () {
     h += '<div id="ttFb"></div>';
     area().innerHTML = h; bindGo(area());
     const here = area().querySelector('.tt-era.here'); if (here) here.scrollIntoView({ inline: 'center', block: 'nearest' });
+    if (r.phase === 'gap') area().querySelectorAll('[data-era]').forEach(b => b.onclick = () => {   // 年表は まだ 押せない → 何を すれば いいか 教える
+      if (r.lock) return; const fb = $('ttFb'); if (fb) { fb.innerHTML = '<div class="tt-tip">💡 まず 下の 中から「' + E[era][0] + '時代に あるはずの ない もの」を 1つ タップしよう。年表は その あとで 使うよ。</div>'; fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+    });
     if (r.phase === 'gap') area().querySelectorAll('.tt-item').forEach(b => b.onclick = () => {
       if (r.lock) return; r.lock = true;
       const x = r.scene.items[+b.dataset.k], ok = x === r.scene.odd;
