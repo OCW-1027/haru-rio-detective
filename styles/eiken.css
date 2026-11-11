@@ -206,3 +206,8 @@
 .iv-good { font-family: 'Klee One'; color: #2e7d4f; margin: 6px 0; }
 @media (max-width: 520px) { .iv-panels { grid-template-columns: 1fr; } .iv-panels.n4 { grid-template-columns: 1fr 1fr; } }
 .ek-card.done { background: #f2fbf8; }
+.ek-mock-grid { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+.ek-mock-grid .ek-card { padding: 9px 10px; border-radius: 13px; min-width: 0; }
+.ek-mock-grid .ek-card-icon { font-size: 18px; }
+.ek-mock-grid .ek-card-name { font-size: 14px; }
+.ek-mock-grid .ek-card-sub { font-size: 10.5px; line-height: 1.35; }
