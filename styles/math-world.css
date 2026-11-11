@@ -101,3 +101,8 @@
 .mw-dbar { display: block; height: 8px; background: #eef2f8; border-radius: 999px; overflow: hidden; } .mw-dbar i { display: block; height: 100%; }
 .mw-qfig { white-space: normal; margin-top: 8px; text-align: center; } .mw-qfig svg { width: 100%; max-width: 420px; height: auto; font-family: sans-serif; }
 .mw-ta { display: flex; justify-content: space-between; font-family: "RocknRoll One"; font-size: 15px; color: #5a3a3a; background: #fff3e8; border: 2px solid #f0c8a0; border-radius: 12px; padding: 8px 14px; margin-bottom: 10px; } .mw-ta b { font-size: 22px; color: #c0392b; }
+.mw-text { width: 100%; box-sizing: border-box; font-family: 'Klee One'; font-size: 16px; line-height: 1.7; padding: 10px 12px; border: 2px solid #b8c8e0; border-radius: 12px; resize: vertical; }
+.mw-text.shake { animation: mwshake .35s; border-color: #e07a5a; }
+.mw-keyhit { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.mw-keyhit span { font-family: 'RocknRoll One'; font-size: 13px; border-radius: 999px; padding: 3px 10px; }
+.mw-keyhit .ok { background: #e6f6ea; color: #2a7a4a; } .mw-keyhit .ng { background: #fdeee8; color: #b04a2a; }
