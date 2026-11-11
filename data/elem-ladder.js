@@ -40,12 +40,12 @@ const ELAD = (function () {
     const k = pick(['add', 'sub', 'mul', 'div']);
     if (k === 'add') { const a = R(11, 999) / 100, b = R(1, 99) / 10; return { q: a + ' + ' + b + ' = ?', type: 'num', a: r3(a + b), steps: ['小数点を そろえる (' + a + ' と ' + b.toFixed(2) + ')', '= ' + r3(a + b)] }; }
     if (k === 'sub') { const a = R(100, 999) / 100, b = R(1, 99) / 100; if (b >= a) return null; return { q: a + ' − ' + b + ' = ?', type: 'num', a: r3(a - b), steps: ['小数点を そろえて 引く', '= ' + r3(a - b)] }; }
-    if (k === 'mul') { const a = R(11, 99) / 10, b = R(3, 24); return { q: a + ' × ' + b + ' = ?', type: 'num', a: r3(a * b), steps: [String(a * 10) + ' × ' + b + ' = ' + (a * 10 * b) + ' と 計算', '小数点以下 1けた → ' + r3(a * b)] }; }
+    if (k === 'mul') { const a = R(11, 99) / 10, b = R(3, 24); if (Number.isInteger(a)) return null; return { q: a + ' × ' + b + ' = ?', type: 'num', a: r3(a * b), steps: [Math.round(a * 10) + ' × ' + b + ' = ' + Math.round(a * 10) * b + ' と 計算', '小数点以下 1けた → ' + r3(a * b)] }; }
     const b = R(3, 9), q = R(11, 99) / 10, a = r3(b * q); return { q: a + ' ÷ ' + b + ' = ? (わりきれるよ)', type: 'num', a: q, steps: ['整数の わり算と 同じように 計算', '商の 小数点は ' + a + ' の 小数点の 真上に うつ → ' + q] };
   });
   add('e4', 'e4e', '🍰', '分数 (同じ 分母)', ['仮分数: 分子 ≧ 分母 (例: 7/3)、帯分数: 整数 + 真分数 (例: 2 と 1/3)', '帯分数 → 仮分数: 整数 × 分母 + 分子', '分母が 同じなら 分子だけ たし算・ひき算'], () => {
     const k = pick(['toI', 'add', 'sub']), d = R(3, 9);
-    if (k === 'toI') { const w = R(1, 4), n = R(1, d - 1); return { q: '帯分数 ' + w + ' と ' + n + '/' + d + ' を 仮分数に すると? (□/□ で 答えよう)', type: 'num', a: fr(w * d + n, d), steps: ['整数 ' + w + ' = ' + (w * d) + '/' + d, (w * d) + ' + ' + n + ' = ' + (w * d + n) + ' → ' + (w * d + n) + '/' + d] }; }
+    if (k === 'toI') { const w = R(1, 4), n = R(1, d - 1); if (gcd(n, d) > 1) return null; return { q: '帯分数 ' + w + ' と ' + n + '/' + d + ' を 仮分数に すると? (□/□ で 答えよう)', type: 'num', a: fr(w * d + n, d), steps: ['整数 ' + w + ' = ' + (w * d) + '/' + d, (w * d) + ' + ' + n + ' = ' + (w * d + n) + ' → ' + (w * d + n) + '/' + d] }; }
     const a = R(1, 2 * d), b = R(1, 2 * d); if (k === 'sub' && a <= b) return null;
     const v = k === 'add' ? a + b : a - b; return { q: a + '/' + d + ' ' + (k === 'add' ? '+' : '−') + ' ' + b + '/' + d + ' = ? (仮分数・整数で 答えよう)', type: 'num', a: fr(v, d), steps: ['分母は そのまま、分子を ' + (k === 'add' ? '足す' : '引く') + ': ' + a + (k === 'add' ? ' + ' : ' − ') + b + ' = ' + v, '= ' + v + '/' + d + (v % d === 0 ? ' = ' + v / d : v > d ? ' (帯分数なら ' + mixed(v, d) + ')' : '')] };
   });
@@ -130,7 +130,7 @@ const ELAD = (function () {
   // ======================= 5年 =======================
   add('e5', 'e5a', '✖', '小数の かけ算・わり算', ['小数 × 小数: 小数点以下の けた数を 合わせた ぶんだけ、答えの 小数点を うつ', '÷ 小数: わる数が 整数に なるよう、両方の 小数点を 同じ けただけ 右へ', '1より 小さい 数で わると、答えは わられる数より 大きく なる'], () => {
     const k = pick(['mul', 'mul', 'div', 'div']);
-    if (k === 'mul') { const a = R(11, 99) / 10, b = R(11, 99) / 10; return { q: a + ' × ' + b + ' = ?', type: 'num', a: r3(a * b), steps: [Math.round(a * 10) + ' × ' + Math.round(b * 10) + ' = ' + Math.round(a * 10) * Math.round(b * 10), '小数点以下は 1 + 1 = 2けた → ' + r3(a * b)] }; }
+    if (k === 'mul') { const a = R(11, 99) / 10, b = R(11, 99) / 10; if (Number.isInteger(a) || Number.isInteger(b)) return null; return { q: a + ' × ' + b + ' = ?', type: 'num', a: r3(a * b), steps: [Math.round(a * 10) + ' × ' + Math.round(b * 10) + ' = ' + Math.round(a * 10) * Math.round(b * 10), '小数点以下は 1 + 1 = 2けた → ' + r3(a * b)] }; }
     const b = R(2, 9) / 10 + pick([0, 1, 2]), q = R(2, 40); const bb = r3(b), a = r3(bb * q); return { q: a + ' ÷ ' + bb + ' = ? (わりきれるよ)', type: 'num', a: q, steps: ['わる数を 整数に: 両方を 10倍 → ' + r3(a * 10) + ' ÷ ' + r3(bb * 10), '= ' + q] };
   });
   add('e5', 'e5b', '🔁', '倍数・約数 (公倍数・公約数)', ['倍数: その 数に 1, 2, 3 … を かけた 数。約数: その 数を わりきれる 数', '最小公倍数: 共通な 倍数の いちばん 小さい 数', '最大公約数: 共通な 約数の いちばん 大きい 数'], () => {
@@ -141,7 +141,7 @@ const ELAD = (function () {
     const g = R(3, 8), x = g * R(2, 6), y = g * R(2, 6); if (x === y) return null; const G = gcd(x, y); return { q: 'えんぴつ ' + x + '本 と ノート ' + y + '冊 を、あまりが 出ないように できるだけ 多くの 人に 同じ 数ずつ 分ける。何人に 分けられる?', type: 'num', a: G, steps: [x + ' と ' + y + ' の 最大公約数', '= ' + G + '人 (1人 えんぴつ ' + x / G + '本、ノート ' + y / G + '冊)'] };
   });
   add('e5', 'e5c', '🥧', '分数の たし算・ひき算 (通分)', ['分母が ちがう ときは 通分 (分母を そろえる) — 最小公倍数を 使う', '答えは 約分して いちばん 簡単に する', '帯分数は 仮分数に 直すと まちがえにくい'], () => {
-    const d1 = R(2, 9), d2 = R(2, 9); if (d1 === d2) return null; const n1 = R(1, d1 - 1), n2 = R(1, d2 - 1), op = pick(['+', '−']), L = lcm(d1, d2), a = n1 * L / d1, b = n2 * L / d2; if (op === '−' && a <= b) return null;
+    const d1 = R(2, 9), d2 = R(2, 9); if (d1 === d2) return null; const n1 = R(1, d1 - 1), n2 = R(1, d2 - 1), op = pick(['+', '−']), L = lcm(d1, d2), a = n1 * L / d1, b = n2 * L / d2; if ((op === '−' && a <= b) || gcd(n1, d1) > 1 || gcd(n2, d2) > 1) return null;
     const v = op === '+' ? a + b : a - b, ans = fr(v, L);
     return { q: n1 + '/' + d1 + ' ' + op + ' ' + n2 + '/' + d2 + ' = ? (約分して 答えよう)', type: 'num', a: ans, steps: ['通分: 分母を ' + d1 + ' と ' + d2 + ' の 最小公倍数 ' + L + ' に そろえる', n1 + '/' + d1 + ' = ' + a + '/' + L + '、' + n2 + '/' + d2 + ' = ' + b + '/' + L, a + (op === '+' ? ' + ' : ' − ') + b + ' = ' + v + ' → ' + v + '/' + L + (fs(ans) !== v + '/' + L ? ' = ' + fs(ans) + ' (約分)' : '')] };
   });
@@ -210,7 +210,7 @@ const ELAD = (function () {
   });
   add('e5', 'e5k', '🔄', '分数と 小数・整数', ['わり算の 商は 分数で 表せる: a ÷ b = a/b', '分数 → 小数: 分子 ÷ 分母 (3/4 = 3 ÷ 4 = 0.75)', '小数 → 分数: 0.1 = 1/10、0.01 = 1/100 を 使って 約分'], () => {
     const k = pick(['div', 'toD', 'toF', 'cmp']);
-    if (k === 'div') { const a = R(1, 9), b = R(2, 9); if (a === b) return null; return { q: a + ' ÷ ' + b + ' の 商を 分数で 表すと?', type: 'num', a: fr(a, b), steps: ['a ÷ b = a/b', a + ' ÷ ' + b + ' = ' + a + '/' + b + (fs(fr(a, b)) !== a + '/' + b ? ' = ' + fs(fr(a, b)) : '')] }; }
+    if (k === 'div') { const a = R(1, 9), b = R(2, 9); if (a % b === 0) return null; return { q: a + ' ÷ ' + b + ' の 商を 分数で 表すと?', type: 'num', a: fr(a, b), steps: ['a ÷ b = a/b', a + ' ÷ ' + b + ' = ' + a + '/' + b + (fs(fr(a, b)) !== a + '/' + b ? ' = ' + fs(fr(a, b)) : '')] }; }
     if (k === 'toD') { const [n, d] = pick([[1, 2], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 8], [3, 8], [5, 8], [7, 20], [9, 25], [3, 2], [7, 4]]); return { q: n + '/' + d + ' を 小数で 表すと?', type: 'num', a: r3(n / d), steps: ['分子 ÷ 分母', n + ' ÷ ' + d + ' = ' + r3(n / d)] }; }
     if (k === 'toF') { const v = pick([0.2, 0.25, 0.4, 0.5, 0.6, 0.75, 0.8, 0.125, 1.2, 0.35, 0.45, 2.5]), den = String(v).split('.')[1].length === 1 ? 10 : String(v).split('.')[1].length === 2 ? 100 : 1000; return { q: v + ' を 分数で 表すと? (約分して)', type: 'num', a: fr(Math.round(v * den), den), steps: [v + ' = ' + Math.round(v * den) + '/' + den, '約分 → ' + fs(fr(Math.round(v * den), den))] }; }
     const P = [['3/4', 0.75], ['0.7', 0.7], ['2/3', 2 / 3], ['0.68', 0.68], ['5/8', 0.625], ['0.6', 0.6]].sort(() => Math.random() - 0.5).slice(0, 4), mx = P.reduce((a, b) => b[1] > a[1] ? b : a);
@@ -433,6 +433,205 @@ const ELAD = (function () {
     if (k === 'kafusoku') { const n = R(6, 20), p = R(3, 6), r = R(2, Math.min(9, 2 * n - 1)), s = 2 * n - r; return { q: 'みかんを 子どもに 配る。1人 ' + p + 'こずつ だと ' + r + 'こ 余り、' + (p + 2) + 'こずつ だと ' + s + 'こ 足りない。子どもは 何人?', type: 'num', a: (r + s) / 2, steps: ['1人分の 差 2こ、全体の 差 ' + r + ' + ' + s + ' = ' + (r + s) + 'こ', (r + s) + ' ÷ 2 = ' + (r + s) / 2 + '人'] }; }
     const n = R(5, 15), p = R(3, 6), r = R(10, 30), q = p + R(1, 3), extra = q * n - (p * n + r); if (extra <= 0) return null; return { q: 'あめを 1人 ' + p + 'こずつ 配ると ' + r + 'こ 余る。1人 ' + q + 'こずつ 配ると ' + extra + 'こ 足りない。あめは 何こ?', type: 'num', a: p * n + r, steps: ['1人分の 差 ' + (q - p) + 'こ、全体の 差 ' + r + ' + ' + extra + ' = ' + (r + extra), '人数 = ' + (r + extra) + ' ÷ ' + (q - p) + ' = ' + n + '人', 'あめ = ' + p + ' × ' + n + ' + ' + r + ' = ' + (p * n + r) + 'こ'] };
   });
+
+  // ======================= 問題の 種類を ふやす (既存 単元への 追加) =======================
+  const more = (id, fns) => { const u = U.find(x => x.id === id); if (!u) return; const g0 = u.gen; u.gen = () => Math.random() < fns.length / (fns.length + 4) ? pick(fns)() : g0(); };
+  const shuf = a => a.slice().sort(() => Math.random() - 0.5);
+  const fq = v => fs(v);
+  // 4年
+  more('e4a', [
+    () => { const a = R(2, 9) * 1e8 + R(1, 9) * 1e7, b = R(1, 9) * 1e8 + R(1, 9) * 1e7, op = pick(['+', '−']); if (op === '−' && a <= b) return null; const v = op === '+' ? a + b : a - b; return choice(kan(a) + ' ' + op + ' ' + kan(b) + ' は?', kan(v), shuf([kan(v + 1e8), kan(Math.abs(v - 1e8)) || '0', kan(v + 1e7), kan(v * 10)]), ['億の 位、千万の 位 ごとに 計算する', '→ ' + kan(v)]); },
+    () => { const a = R(2, 9), b = R(2, 9); return choice(a + '万 × ' + b + '万 は?', kan(a * b * 1e8), shuf([kan(a * b * 1e4), kan(a * b * 1e7), kan(a * b * 1e12)]), ['万 × 万 = 億', a + ' × ' + b + ' = ' + a * b + ' → ' + kan(a * b * 1e8)]); },
+    () => { const t = R(1, 9), o = R(1, 9) * 1000; return { q: t + '兆' + o + '億 は、1億を 何こ 集めた 数?', type: 'num', a: t * 10000 + o, steps: ['1兆 = 1億 の 10000こ分', t + '兆 = 1億 × ' + t * 10000 + '、それに ' + o + '億', t * 10000 + ' + ' + o + ' = ' + (t * 10000 + o) + 'こ'] }; },
+  ]);
+  more('e4b', [
+    () => { const d = R(12, 35), q = R(11, 39), n = d * q; return { q: n + 'まいの 色紙を ' + d + '人で 同じ 数ずつ 分ける。1人 何まい?', type: 'num', a: q, steps: [n + ' ÷ ' + d + ' = ' + q] }; },
+    () => { const d = R(13, 39), q = R(11, 29), r = R(1, d - 1); return { q: '□ ÷ ' + d + ' = ' + q + ' あまり ' + r + ' の □ は?', type: 'num', a: d * q + r, steps: ['たしかめ算: わる数 × 商 + あまり = わられる数', d + ' × ' + q + ' + ' + r + ' = ' + (d * q + r)] }; },
+    () => { const d = R(12, 30), q = R(8, 25), r = R(1, d - 1), n = d * q + r; return { q: n + 'この りんごを 1箱に ' + d + 'こずつ つめる。全部 つめるには 箱は 何箱 いる?', type: 'num', a: q + 1, steps: [n + ' ÷ ' + d + ' = ' + q + ' あまり ' + r, 'あまりの ' + r + 'こにも 1箱 いる → ' + q + ' + 1 = ' + (q + 1) + '箱'] }; },
+  ]);
+  more('e4c', [
+    () => { const h = R(12, 98) * 100, lo = pick([true, false]); return { q: '四捨五入して 百の位までの がい数に すると ' + cm(h) + ' に なる 整数の うち、いちばん ' + (lo ? '小さい' : '大きい') + ' 数は?', type: 'num', a: lo ? h - 50 : h + 49, steps: ['十の位で 四捨五入 → ' + cm(h - 50) + ' 以上 ' + cm(h + 50) + ' 未満', lo ? 'いちばん 小さい = ' + (h - 50) : 'いちばん 大きい = ' + (h + 49)] }; },
+    () => { const a = R(2, 9) * 100 + pick([-2, -1, 1, 2]), b = R(2, 9) * 10 + pick([-1, 1, 2]); const ea = Math.round(a / 100) * 100, eb = Math.round(b / 10) * 10; return { q: a + ' × ' + b + ' を、それぞれ 上から 1けたの がい数に して 見積もると?', type: 'num', a: ea * eb, steps: [a + ' → ' + ea + '、' + b + ' → ' + eb, ea + ' × ' + eb + ' = ' + ea * eb] }; },
+    () => { const n = R(1000, 9999), up = pick([true, false]); if (n % 100 === 0) return null; const v = up ? Math.ceil(n / 100) * 100 : Math.floor(n / 100) * 100; return { q: n + ' を ' + (up ? '切り上げ' : '切り捨て') + 'で 百の位までの がい数に すると?', type: 'num', a: v, steps: [up ? '百の位より 下が 0 で なければ 百の位を 1 ふやす' : '百の位より 下を 0 に する', '→ ' + v] }; },
+  ]);
+  more('e4d', [
+    () => { const v = R(105, 395) / 100, n = R(3, 9); return { q: '1本 ' + v + 'L の ジュースが ' + n + '本。全部で 何 L?', type: 'num', a: r3(v * n), steps: [v + ' × ' + n + ' = ' + r3(v * n)] }; },
+    () => { const L = R(51, 199) / 10, w = R(2, 4), q = Math.floor(L / w), r = r3(L - q * w); if (r === 0) return null; return { q: L + 'm の リボンを ' + w + 'm ずつ 切る。何本 とれて、あまりは 何 m? (あまりを 答えよう)', type: 'num', a: r, steps: [L + ' ÷ ' + w + ' = ' + q + ' あまり ' + r, 'たしかめ: ' + w + ' × ' + q + ' + ' + r + ' = ' + L] }; },
+    () => { const a = R(50, 199) / 10, d = R(3, 9), v = Math.round(a / d * 10) / 10; if (Math.abs(a / d * 100 % 10 - 5) < 1e-6) return null; return { q: a + ' ÷ ' + d + ' の 商を、四捨五入で 1/10の位 までの がい数で 求めよう。', type: 'num', a: v, steps: ['1/100の位 まで 計算: ' + (Math.floor(a / d * 100) / 100), '1/100の位を 四捨五入 → ' + v] }; },
+  ]);
+  more('e4e', [
+    () => { const d = pick([3, 4, 5, 6, 7]), w1 = R(1, 3), n1 = R(1, d - 1), w2 = R(1, 3), n2 = R(1, d - 1); const t = (w1 + w2) * d + n1 + n2; return { q: w1 + ' と ' + n1 + '/' + d + ' + ' + w2 + ' と ' + n2 + '/' + d + ' = ? (仮分数で)', type: 'num', a: fr(t, d), steps: ['整数どうし: ' + w1 + ' + ' + w2 + ' = ' + (w1 + w2) + '、分数どうし: ' + n1 + '/' + d + ' + ' + n2 + '/' + d + ' = ' + (n1 + n2) + '/' + d, '合わせて ' + mixed(t, d) + ' = ' + fs(fr(t, d))] }; },
+    () => { const d = pick([5, 6, 7, 8, 9]), a = R(2, d - 1), b = R(1, d - 1); return { q: '牛にゅうが ' + a + '/' + d + ' L、ジュースが ' + b + '/' + d + ' L ある。合わせて 何 L? (仮分数・整数で)', type: 'num', a: fr(a + b, d), steps: [a + '/' + d + ' + ' + b + '/' + d + ' = ' + (a + b) + '/' + d + (gcd(a + b, d) > 1 ? ' = ' + fs(fr(a + b, d)) : '')] }; },
+    () => { const d = pick([4, 5, 6, 7]), vals = shuf([d + 1, d + 2, 2 * d - 1, 2 * d + 1]).slice(0, 4), mx = Math.max(...vals), f = v => v % d === 0 ? String(v / d) : (Math.random() < 0.5 && v > d ? mixed(v, d) : v + '/' + d); const ss = vals.map(f); return choice('いちばん 大きい 数は どれ?', ss[vals.indexOf(mx)], ss.filter((_, i) => vals[i] !== mx), ['帯分数は 仮分数に そろえて 分子で くらべる', vals.map((v, i) => ss[i] === v + '/' + d ? ss[i] : ss[i] + ' = ' + v + '/' + d).join('、')]); },
+  ]);
+  more('e4f', [
+    () => { const a = R(2, 9) * 10, b = R(2, 9) * 10; return { q: 'たて ' + a + 'm、よこ ' + b + 'm の 畑の 面積は 何 a (アール)?', type: 'num', a: a * b / 100, steps: [a + ' × ' + b + ' = ' + a * b + 'm²', '1a = 100m² → ' + a * b / 100 + 'a'] }; },
+    () => { const a = R(3, 15), b = R(3, 15); return { q: '面積が ' + a * b + 'cm² で、たてが ' + a + 'cm の 長方形の よこは 何 cm?', type: 'num', a: b, steps: ['たて × よこ = 面積 → よこ = 面積 ÷ たて', a * b + ' ÷ ' + a + ' = ' + b] }; },
+    () => { const a = R(8, 20), b = R(8, 20), w = pick([1, 2]); return { q: 'たて ' + a + 'm、よこ ' + b + 'm の 長方形の 土地に、はば ' + w + 'm の 道が たてと よこに 1本ずつ 十字に 通っている。道を のぞいた 面積は 何 m²?', type: 'num', a: (a - w) * (b - w), steps: ['道を はしに よせても 残りの 面積は 同じ', '(' + a + ' − ' + w + ') × (' + b + ' − ' + w + ') = ' + (a - w) + ' × ' + (b - w) + ' = ' + (a - w) * (b - w)] }; },
+  ]);
+  more('e4g', [
+    () => { const m = pick([5, 10, 15, 20, 25, 35, 40, 45, 50]); return { q: '時計の 長いはりが ' + m + '分間に 回る 角度は 何度?', type: 'num', a: m * 6, steps: ['60分で 1回転 = 360° → 1分で 6°', m + ' × 6 = ' + m * 6 + '°'] }; },
+    () => { const x = R(25, 155), k = pick(['opp', 'adj']); return { q: '2本の 直線が 交わって できる 角の 1つが ' + x + '°。' + (k === 'opp' ? 'その 向かい合う 角' : 'その となりの 角') + 'は 何度?', type: 'num', a: k === 'opp' ? x : 180 - x, steps: k === 'opp' ? ['向かい合う 角 (対頂角) は 等しい', '→ ' + x + '°'] : ['となり合う 2つの 角で 一直線 (180°)', '180 − ' + x + ' = ' + (180 - x) + '°'] }; },
+  ]);
+  more('e4h', [
+    () => { const p = R(8, 15) * 10, n = R(2, 4), j = R(6, 12) * 10, M = pick([500, 1000]); if (p * n + j >= M) return null; return choice(M + '円 出して、' + p + '円の パンを ' + n + 'こと ' + j + '円の ジュースを 買った ときの おつりを 1つの 式に すると?', M + ' − (' + p + ' × ' + n + ' + ' + j + ')', [M + ' − ' + p + ' × ' + n + ' + ' + j, '(' + M + ' − ' + p + ') × ' + n + ' + ' + j, M + ' − ' + p + ' + ' + j + ' × ' + n], ['代金 = ' + p + ' × ' + n + ' + ' + j + ' (まとまりは ( ) に)', 'おつり = ' + M + ' − (代金) → ' + (M - p * n - j) + '円']); },
+    () => { const a = R(2, 9), b = R(2, 9), c = R(2, 9), d = R(2, 5), e = d * R(2, 9); return { q: a + ' × (' + b + ' + ' + c + ') − ' + e + ' ÷ ' + d + ' = ?', type: 'num', a: a * (b + c) - e / d, steps: ['( ) の 中: ' + b + ' + ' + c + ' = ' + (b + c), '× ÷ を 先に: ' + a + ' × ' + (b + c) + ' = ' + a * (b + c) + '、' + e + ' ÷ ' + d + ' = ' + e / d, a * (b + c) + ' − ' + e / d + ' = ' + (a * (b + c) - e / d)] }; },
+    () => { const n = R(12, 88), m = pick([99, 101, 98]); return { q: n + ' × ' + m + ' を くふうして 計算しよう。', type: 'num', a: n * m, steps: [m + ' = 100 ' + (m < 100 ? '− ' + (100 - m) : '+ ' + (m - 100)), n + ' × 100 ' + (m < 100 ? '− ' : '+ ') + n + ' × ' + Math.abs(100 - m) + ' = ' + n * 100 + (m < 100 ? ' − ' : ' + ') + n * Math.abs(100 - m) + ' = ' + n * m] }; },
+  ]);
+  const FALL = ['8月', '9月', '10月', '11月', '12月', '1月', '2月', '3月'];
+  more('e4i', [
+    () => { const v = [27, 24, 18, 13, 8, 5, 6, 9].map(x => x + R(-1, 1)), i = R(0, 4); if (v[i + 1] >= v[i]) return null; return { q: 'グラフで ' + FALL[i] + 'から ' + FALL[i + 1] + 'の 間に 気温は 何度 下がった?', type: 'num', a: v[i] - v[i + 1], fig: lineChart(FALL, v, '度', '月ごとの 気温 (秋〜春)'), steps: [FALL[i] + ' ' + v[i] + '度 → ' + FALL[i + 1] + ' ' + v[i + 1] + '度', v[i] + ' − ' + v[i + 1] + ' = ' + (v[i] - v[i + 1]) + '度 下がった'] }; },
+    () => { const v = [27, 24, 18, 13, 8, 5, 6, 9].map(x => x + R(-1, 1)), mx = Math.max(...v), mn = Math.min(...v); return { q: 'グラフで、いちばん 高い 気温と いちばん 低い 気温の 差は 何度?', type: 'num', a: mx - mn, fig: lineChart(FALL, v, '度', '月ごとの 気温 (秋〜春)'), steps: ['いちばん 高い ' + mx + '度、いちばん 低い ' + mn + '度', mx + ' − ' + mn + ' = ' + (mx - mn) + '度'] }; },
+    () => { const v = [27, 24, 18, 13, 8, 5, 6, 9].map(x => x + R(-1, 1)), d = v.slice(1).map((x, i) => x - v[i]), i = d.findIndex(x => x > 0); if (i < 0 || d.filter(x => x > 0).length !== d.slice(i).filter(x => x > 0).length) return null; return choice('グラフで、気温が 上がり 始めるのは どの 月の 間?', FALL[i] + '〜' + FALL[i + 1], shuf(d.map((_, j) => FALL[j] + '〜' + FALL[j + 1]).filter((_, j) => j !== i)), ['線が 右上がりに なる ところを さがす', FALL[i] + ' ' + v[i] + '度 → ' + FALL[i + 1] + ' ' + v[i + 1] + '度']); },
+  ]);
+  more('e4j', [
+    () => { const P = [['対角線の 長さが 等しい', '長方形', ['ひし形', '平行四辺形', '台形']], ['対角線が 垂直に 交わる', 'ひし形', ['長方形', '平行四辺形', '台形']], ['2本の 対角線が それぞれの まん中で 交わる', '平行四辺形', ['台形', 'ふつうの 四角形', 'たこ形']], ['4つの 角が 直角で 4つの 辺が 等しい', '正方形', ['ひし形', '長方形', '平行四辺形']]], p = pick(P); return choice('「' + p[0] + '」 四角形は どれ?', p[1], p[2], ['対角線の せいしつ: 平行四辺形は まん中で 交わる、長方形は 長さが 等しい、ひし形は 垂直', '→ ' + p[1]]); },
+  ]);
+  more('e4k', [
+    () => { const k = pick(['垂直', '平行']); return { q: '直方体で、1つの 面に ' + k + 'な 面は いくつ ある?', type: 'num', a: k === '垂直' ? 4 : 1, steps: [k === '垂直' ? 'となりに ある 4つの 面が 垂直' : '向かい合う 1つの 面だけが 平行'] }; },
+    () => { const k = pick(['辺', '面']); return { q: '直方体で、1つの 辺に 平行な ' + k + 'は いくつ?', type: 'num', a: k === '辺' ? 3 : 2, steps: [k === '辺' ? '同じ 向きの 辺は 4本 → 自分を のぞいて 3本' : 'その 辺を ふくまない 面の うち 2つ'] }; },
+  ]);
+  more('e4l', [
+    () => { const n = R(5, 30); return { q: 'マッチぼうで 正三角形を 横に つなげて ならべる (1こ 3本、2こ 5本、3こ 7本 …)。正三角形を ' + n + 'こ つくるには 何本?', type: 'num', a: 2 * n + 1, steps: ['1こ ふえる ごとに 2本 ふえる', '3 + 2 × (' + n + ' − 1) = ' + (2 * n + 1) + '本 (= 2 × ' + n + ' + 1)'] }; },
+    () => { const n = R(4, 15); return { q: 'ご石を 三角形に ならべる。1だん目 1こ、2だん目 2こ、3だん目 3こ …。' + n + 'だん まで ならべると 全部で 何こ?', type: 'num', a: n * (n + 1) / 2, steps: ['1 + 2 + … + ' + n, '(1 + ' + n + ') × ' + n + ' ÷ 2 = ' + n * (n + 1) / 2] }; },
+  ]);
+  more('e4m', [
+    () => { const d = R(3, 9), q = R(12, 99), r = R(1, d - 1); return { q: '□ ÷ ' + d + ' = ' + q + ' あまり ' + r + ' の □ は?', type: 'num', a: d * q + r, steps: [d + ' × ' + q + ' + ' + r + ' = ' + (d * q + r)] }; },
+    () => { const d = R(3, 8), q = R(10, 40), r = R(1, d - 1), n = d * q + r; return { q: n + 'cm の テープから ' + d + 'cm の テープは 何本 とれる?', type: 'num', a: q, steps: [n + ' ÷ ' + d + ' = ' + q + ' あまり ' + r, 'あまりの ' + r + 'cm では 1本 できない → ' + q + '本'] }; },
+  ]);
+  more('e4n', [
+    () => { const P = pick([['km', 'm', 1000], ['kg', 'g', 1000], ['L', 'mL', 1000], ['m', 'cm', 100]]), v = R(105, 9950) / 1000 * (P[2] === 100 ? 10 : 1); const x = r3(Math.round(v * 100) / 100); return { q: x + P[0] + ' は 何 ' + P[1] + '?', type: 'num', a: r3(x * P[2]), steps: ['1' + P[0] + ' = ' + P[2] + P[1], x + ' × ' + P[2] + ' = ' + r3(x * P[2]) + P[1]] }; },
+    () => { const P = pick([['g', 'kg', 1000], ['m', 'km', 1000], ['mL', 'L', 1000]]), v = R(105, 9950); return { q: v + P[0] + ' は 何 ' + P[1] + '?', type: 'num', a: r3(v / P[2]), steps: ['1' + P[1] + ' = ' + P[2] + P[0], v + ' ÷ ' + P[2] + ' = ' + r3(v / P[2]) + P[1]] }; },
+  ]);
+  // 5年
+  more('e5a', [
+    () => { const p = R(12, 48) * 10, m = R(12, 45) / 10; if (!Number.isInteger(p * m)) return null; return { q: '1m ' + p + '円の リボンを ' + m + 'm 買った。代金は 何円?', type: 'num', a: p * m, steps: [p + ' × ' + m + ' = ' + p * m + '円'] }; },
+    () => { const a = R(12, 60) / 10, b = R(12, 60) / 10; return { q: 'たて ' + a + 'm、よこ ' + b + 'm の 長方形の 面積は 何 m²?', type: 'num', a: r3(a * b), steps: [a + ' × ' + b + ' = ' + r3(a * b)] }; },
+    () => { const q = R(2, 9), d = R(2, 9) / 10, r = R(1, d * 10 - 1) / 10, n = r3(d * q + r); return { q: n + ' ÷ ' + d + ' の 商を 一の位まで 求めると、あまりは いくつ?', type: 'num', a: r, steps: [n + ' ÷ ' + d + ' = ' + q + ' あまり ' + r, 'あまりの 小数点は もとの ' + n + ' の 位置に そろえる', 'たしかめ: ' + d + ' × ' + q + ' + ' + r + ' = ' + n] }; },
+    () => { const L = R(12, 48) / 10, k = R(2, 9) / 2; const a = r3(L * k); if (!Number.isInteger(a * 100)) return null; return { q: L + 'L で ' + a + 'm² ぬれる ペンキが ある。1L で 何 m² ぬれる?', type: 'num', a: k, steps: [a + ' ÷ ' + L + ' = ' + k] }; },
+  ]);
+  more('e5b', [
+    () => { const n = R(3, 15), M = pick([50, 100, 200]); return { q: '1 から ' + M + ' までの 整数の 中に、' + n + 'の 倍数は 何こ?', type: 'num', a: Math.floor(M / n), steps: [M + ' ÷ ' + n + ' = ' + Math.floor(M / n) + (M % n ? ' あまり ' + M % n : ''), '→ ' + Math.floor(M / n) + 'こ'] }; },
+    () => { const P = pick([[4, 6], [6, 8], [6, 9], [4, 10], [8, 12], [3, 4]]), M = pick([100, 200]), L = lcm(P[0], P[1]); return { q: '1 から ' + M + ' までで、' + P[0] + 'でも ' + P[1] + 'でも わり切れる 数は 何こ?', type: 'num', a: Math.floor(M / L), steps: ['両方で わり切れる = 公倍数 = ' + L + 'の 倍数', M + ' ÷ ' + L + ' → ' + Math.floor(M / L) + 'こ'] }; },
+    () => { const n = pick([12, 18, 20, 24, 28, 30, 36, 40, 48, 60]), ds = []; for (let i = 1; i <= n; i++) if (n % i === 0) ds.push(i); return { q: n + ' の 約数は 何こ?', type: 'num', a: ds.length, steps: ['ペアで さがす: ' + ds.filter(d => d * d <= n).map(d => d + '×' + n / d).join('、'), '→ ' + ds.join(', ') + ' の ' + ds.length + 'こ'] }; },
+    () => { const g = R(3, 9), a = g * R(2, 5), b = g * R(2, 5); if (a === b || gcd(a, b) !== g) return null; return { q: 'たて ' + a + 'cm、よこ ' + b + 'cm の 長方形の 紙を、あまりなく 同じ 大きさの できるだけ 大きい 正方形に 切り分ける。正方形は 何まい できる?', type: 'num', a: (a / g) * (b / g), steps: ['正方形の 1辺 = ' + a + ' と ' + b + ' の 最大公約数 = ' + g + 'cm', 'たて ' + a / g + 'まい × よこ ' + b / g + 'まい = ' + (a / g) * (b / g) + 'まい'] }; },
+  ]);
+  more('e5c', [
+    () => { const P = pick([[2, 3, 4], [2, 3, 6], [3, 4, 6], [2, 5, 10], [3, 4, 12], [4, 6, 3]]), n = P.map(d => R(1, d - 1)), L = lcm(lcm(P[0], P[1]), P[2]), v = n[0] * L / P[0] + n[1] * L / P[1] - n[2] * L / P[2]; if (v <= 0 || n.some((x, i) => gcd(x, P[i]) > 1)) return null; return { q: n[0] + '/' + P[0] + ' + ' + n[1] + '/' + P[1] + ' − ' + n[2] + '/' + P[2] + ' = ?', type: 'num', a: fr(v, L), steps: ['分母を ' + L + ' に そろえる', (n[0] * L / P[0]) + '/' + L + ' + ' + (n[1] * L / P[1]) + '/' + L + ' − ' + (n[2] * L / P[2]) + '/' + L + ' = ' + v + '/' + L + (gcd(v, L) > 1 ? ' = ' + fs(fr(v, L)) : '')] }; },
+    () => { const d1 = pick([3, 4, 5, 6]), d2 = pick([2, 3, 4, 8].filter(x => x !== d1)), w1 = R(2, 4), n1 = R(1, d1 - 1), w2 = R(1, w1 - 1), n2 = R(1, d2 - 1), L = lcm(d1, d2), A = (w1 * d1 + n1) * L / d1, B = (w2 * d2 + n2) * L / d2; if (A <= B) return null; return { q: w1 + ' と ' + n1 + '/' + d1 + ' − ' + w2 + ' と ' + n2 + '/' + d2 + ' = ? (仮分数で)', type: 'num', a: fr(A - B, L), steps: ['仮分数に: ' + (w1 * d1 + n1) + '/' + d1 + ' − ' + (w2 * d2 + n2) + '/' + d2, '通分: ' + A + '/' + L + ' − ' + B + '/' + L + ' = ' + (A - B) + '/' + L + (gcd(A - B, L) > 1 ? ' = ' + fs(fr(A - B, L)) : '')] }; },
+    () => { const d1 = pick([3, 4, 5]), d2 = pick([2, 3, 6, 10].filter(x => x !== d1)), n1 = R(1, d1 - 1), n2 = R(1, d2 - 1), L = lcm(d1, d2), A = n1 * L / d1, B = n2 * L / d2; if (A <= B) return null; return { q: '牛にゅうが ' + n1 + '/' + d1 + ' L あった。' + n2 + '/' + d2 + ' L 飲むと 残りは 何 L?', type: 'num', a: fr(A - B, L), steps: [A + '/' + L + ' − ' + B + '/' + L + ' = ' + fs(fr(A - B, L))] }; },
+  ]);
+  more('e5d', [
+    () => { const n = R(4, 6), a = R(50, 70), xs = Array.from({ length: n - 1 }, () => a + R(-6, 6)), last = a * n - xs.reduce((p, c) => p + c, 0); if (last < 30 || last > 99) return null; return { q: n + '人の 体重の 平均は ' + a + 'kg。そのうち ' + (n - 1) + '人は ' + xs.join('kg、') + 'kg。残りの 1人は 何 kg?', type: 'num', a: last, steps: ['合計 = ' + a + ' × ' + n + ' = ' + a * n, a * n + ' − (' + xs.join(' + ') + ') = ' + last] }; },
+    () => { const s = R(55, 70) / 100, n = R(300, 700); return { q: '歩はばの 平均が ' + s + 'm の 人が ' + n + '歩 歩いた。何 m 歩いた ことに なる?', type: 'num', a: r3(s * n), steps: ['歩はば × 歩数 = きょり', s + ' × ' + n + ' = ' + r3(s * n) + 'm'] }; },
+    () => { const v = Array.from({ length: 5 }, () => R(0, 6)), s = v.reduce((p, c) => p + c, 0); if (s % 5) return null; return { q: '5日間の 欠席者は ' + v.join('人、') + '人。1日 平均 何人?', type: 'num', a: s / 5, steps: ['0人の 日も 1日に 数える', s + ' ÷ 5 = ' + s / 5] }; },
+  ]);
+  more('e5e', [
+    () => { const v = pick([18, 36, 54, 72, 90]); return { q: '時速 ' + v + 'km は 秒速 何 m?', type: 'num', a: v / 3.6, steps: ['時速 ' + v + 'km = 時速 ' + v * 1000 + 'm', '÷ 60 → 分速 ' + v * 1000 / 60 + 'm、さらに ÷ 60 → 秒速 ' + v / 3.6 + 'm'] }; },
+    () => { const a = [R(3, 6) * 100, R(3, 8)], b = [R(3, 6) * 100, R(3, 8)]; const va = a[0] / a[1], vb = b[0] / b[1]; if (va === vb || !Number.isInteger(va * 10) || !Number.isInteger(vb * 10)) return null; return choice('A は ' + a[0] + 'm を ' + a[1] + '分、B は ' + b[0] + 'm を ' + b[1] + '分 で 走った。速いのは?', va > vb ? 'A' : 'B', [va > vb ? 'B' : 'A', '同じ', 'くらべられない'], ['1分あたりに そろえる', 'A: ' + a[0] + ' ÷ ' + a[1] + ' = 分速 ' + r3(va) + 'm、B: ' + b[0] + ' ÷ ' + b[1] + ' = 分速 ' + r3(vb) + 'm']); },
+    () => { const v = R(40, 90), t = R(2, 5), m = pick([15, 30, 45]); const d = v * (t + m / 60); if (!Number.isInteger(d * 10)) return null; return { q: '時速 ' + v + 'km の 車が ' + t + '時間' + m + '分 走ると 何 km?', type: 'num', a: r3(d), steps: [m + '分 = ' + m / 60 + '時間 → ' + t + '時間' + m + '分 = ' + (t + m / 60) + '時間', v + ' × ' + (t + m / 60) + ' = ' + r3(d) + 'km'] }; },
+  ]);
+  more('e5f', [
+    () => { const b = R(4, 30) * 20, p = pick([5, 10, 15, 20, 25]), up = pick([true, false]), v = b * (100 + (up ? p : -p)) / 100; if (!Number.isInteger(v)) return null; return { q: '去年の 入場者は ' + b + '人。今年は ' + p + '% ' + (up ? '増えた' : '減った') + '。今年は 何人?', type: 'num', a: v, steps: [up ? '100% + ' + p + '% = ' + (100 + p) + '%' : '100% − ' + p + '% = ' + (100 - p) + '%', b + ' × ' + (100 + (up ? p : -p)) / 100 + ' = ' + v + '人'] }; },
+    () => { const t = R(4, 30) * 100, p = pick([10, 15, 20, 25, 30, 40]), s = t * (100 - p) / 100; return { q: '定価 ' + t + '円の 品物を ' + s + '円で 買った。定価の 何% 引き?', type: 'num', a: p, steps: ['引かれた 金額: ' + t + ' − ' + s + ' = ' + (t - s) + '円', (t - s) + ' ÷ ' + t + ' = ' + p / 100 + ' → ' + p + '%'] }; },
+    () => { const n = R(20, 40), p = pick([20, 25, 30, 40, 50, 60, 75]), c = n * p / 100; if (!Number.isInteger(c)) return null; return { q: 'クラス ' + n + '人の うち ' + c + '人が 犬を かっている。何% ?', type: 'num', a: p, steps: [c + ' ÷ ' + n + ' = ' + p / 100, '× 100 → ' + p + '%'] }; },
+  ]);
+  more('e5g', [
+    () => { const b = R(4, 16), h = R(3, 12) * 2; return { q: '面積が ' + b * h / 2 + 'cm²、底辺が ' + b + 'cm の 三角形の 高さは 何 cm?', type: 'num', a: h, steps: ['底辺 × 高さ ÷ 2 = 面積 → 高さ = 面積 × 2 ÷ 底辺', b * h / 2 + ' × 2 ÷ ' + b + ' = ' + h] }; },
+    () => { const a = R(8, 16), b = R(6, 12), c = R(2, a - 2), d = R(2, b - 2); return { q: 'たて ' + b + 'cm、よこ ' + a + 'cm の 長方形から、直角を はさむ 2辺が ' + c + 'cm と ' + d + 'cm の 直角三角形を 切り取った。残りの 面積は 何 cm²?', type: 'num', a: a * b - c * d / 2, steps: ['長方形: ' + a + ' × ' + b + ' = ' + a * b, '三角形: ' + c + ' × ' + d + ' ÷ 2 = ' + c * d / 2, a * b + ' − ' + c * d / 2 + ' = ' + (a * b - c * d / 2)] }; },
+    () => { const u = R(2, 8), l = u + R(2, 8), h = R(2, 10); if ((u + l) * h % 2) return null; return { q: '上底 ' + u + 'cm、下底 ' + l + 'cm、面積 ' + (u + l) * h / 2 + 'cm² の 台形の 高さは 何 cm?', type: 'num', a: h, steps: ['(上底 + 下底) × 高さ ÷ 2 = 面積', '高さ = ' + (u + l) * h / 2 + ' × 2 ÷ ' + (u + l) + ' = ' + h] }; },
+  ]);
+  more('e5h', [
+    () => { const a = R(3, 12), b = R(3, 12), h = R(2, 15); return { q: '体積が ' + a * b * h + 'cm³、たて ' + a + 'cm、よこ ' + b + 'cm の 直方体の 高さは 何 cm?', type: 'num', a: h, steps: ['高さ = 体積 ÷ (たて × よこ)', a * b * h + ' ÷ ' + a * b + ' = ' + h] }; },
+    () => { const a = R(2, 5) * 10, b = R(2, 5) * 10, L = R(2, 8), h = L * 1000 / (a * b); if (!Number.isInteger(h * 10)) return null; return { q: '内のり たて ' + a + 'cm、よこ ' + b + 'cm の 水そうに 水を ' + L + 'L 入れると、水の 深さは 何 cm?', type: 'num', a: r3(h), steps: [L + 'L = ' + L * 1000 + 'cm³', L * 1000 + ' ÷ (' + a + ' × ' + b + ') = ' + r3(h) + 'cm'] }; },
+  ]);
+  more('e5i', [
+    () => { const d = R(2, 20); return { q: '円周が ' + r3(d * 3.14) + 'cm の 円の 直径は 何 cm? (円周率 3.14)', type: 'num', a: d, steps: ['直径 = 円周 ÷ 3.14', r3(d * 3.14) + ' ÷ 3.14 = ' + d] }; },
+    () => { const d = R(2, 10) * 2; return { q: '直径 ' + d + 'cm の 半円の まわりの 長さは 何 cm? (円周率 3.14)', type: 'num', a: r3(d * 3.14 / 2 + d), steps: ['曲線部分: ' + d + ' × 3.14 ÷ 2 = ' + r3(d * 3.14 / 2), '直径の 直線も 足す: + ' + d + ' = ' + r3(d * 3.14 / 2 + d)] }; },
+    () => { const n = pick([5, 6, 8, 9, 10, 12]); return { q: '正' + n + '角形の 1つの 角は 何度?', type: 'num', a: 180 * (n - 2) / n, steps: ['角の 和 = 180 × (' + n + ' − 2) = ' + 180 * (n - 2), '÷ ' + n + ' = ' + 180 * (n - 2) / n + '°'] }; },
+  ]);
+  more('e5j', [
+    () => { const a = R(60, 120), b = R(60, 120), c = R(60, 120); const d = 360 - a - b - c; if (d < 30 || d > 170) return null; return { q: '2つの 四角形が 合同。片方の 四角形の 角が ' + a + '°、' + b + '°、' + c + '° の とき、もう 片方の 四角形で 残りの 角に 対応する 角は 何度?', type: 'num', a: d, steps: ['四角形の 角の 和は 360°', '360 − (' + a + ' + ' + b + ' + ' + c + ') = ' + d + '°', '合同なら 対応する 角は 等しい'] }; },
+  ]);
+  more('e5k', [
+    () => { const w = R(1, 5), P = pick([[1, 4], [3, 4], [1, 2], [2, 5], [1, 8], [3, 5]]); return { q: w + ' と ' + P[0] + '/' + P[1] + ' を 小数で 表すと?', type: 'num', a: r3(w + P[0] / P[1]), steps: [P[0] + '/' + P[1] + ' = ' + P[0] + ' ÷ ' + P[1] + ' = ' + r3(P[0] / P[1]), w + ' + ' + r3(P[0] / P[1]) + ' = ' + r3(w + P[0] / P[1])] }; },
+    () => { const a = R(2, 15), b = R(2, 15); if (a === b) return null; return { q: a + 'm は ' + b + 'm の 何倍? (分数で)', type: 'num', a: fr(a, b), steps: ['何倍 = くらべる量 ÷ もとにする量', a + ' ÷ ' + b + ' = ' + fs(fr(a, b))] }; },
+    () => { const P = pick([[3, 8], [5, 8], [7, 8], [1, 16], [7, 20], [11, 25], [9, 40]]); return { q: P[0] + ' ÷ ' + P[1] + ' の 商を 小数で 表すと?', type: 'num', a: r3(P[0] / P[1]), steps: ['わり切れるまで 0 を つけて 計算', P[0] + ' ÷ ' + P[1] + ' = ' + r3(P[0] / P[1])] }; },
+  ]);
+  more('e5m', [
+    () => { const d = R(2, 10), h = R(3, 12); return { q: '直径 ' + d + 'cm、高さ ' + h + 'cm の 円柱の 側面の 面積は 何 cm²? (円周率 3.14)', type: 'num', a: r3(d * 3.14 * h), steps: ['側面を 開くと 長方形: よこ = 円周 ' + d + ' × 3.14 = ' + r3(d * 3.14), r3(d * 3.14) + ' × ' + h + ' = ' + r3(d * 3.14 * h)] }; },
+    () => { const P = pick([['合同な 円 2つと 長方形 1つ', '円柱'], ['合同な 三角形 2つと 長方形 3つ', '三角柱'], ['合同な 五角形 2つと 長方形 5つ', '五角柱'], ['合同な 正方形 2つと 長方形 4つ', '四角柱']]); return choice(P[0] + 'で できた 展開図を 組み立てると?', P[1], ['円柱', '三角柱', '四角柱', '五角柱', '六角柱'].filter(x => x !== P[1]), ['底面 (2つ) の 形で 名前が 決まる', '→ ' + P[1]]); },
+    () => { const n = R(3, 8), NM = { 3: '三', 4: '四', 5: '五', 6: '六', 7: '七', 8: '八' }, a = R(2, 6), h = R(3, 10); return { q: '底面が 1辺 ' + a + 'cm の 正' + NM[n] + '角形で、高さ ' + h + 'cm の 角柱。側面の 面積の 合計は 何 cm²?', type: 'num', a: n * a * h, steps: ['側面は たて ' + h + 'cm、よこ ' + a + 'cm の 長方形が ' + n + 'まい', a + ' × ' + h + ' × ' + n + ' = ' + n * a * h] }; },
+  ]);
+  more('e5n', [
+    () => { const n = pick([10, 20, 25, 50]), g = pick([4, 5, 6, 8]) * n, tot = R(3, 12) * g; return { q: '画用紙 ' + n + 'まいの 重さは ' + g + 'g。重さが ' + tot + 'g の とき、画用紙は 何まい? (重さは まい数に 比例)', type: 'num', a: tot / g * n, steps: [tot + ' ÷ ' + g + ' = ' + tot / g + '倍', n + ' × ' + tot / g + ' = ' + tot / g * n + 'まい'] }; },
+    () => { const k = R(2, 9), x = R(2, 9); return { q: 'y が x に 比例し、x が 1 増えると y は ' + k + ' 増える。x = ' + x + ' の とき y は? (x = 0 の とき y = 0)', type: 'num', a: k * x, steps: ['y = ' + k + ' × x', k + ' × ' + x + ' = ' + k * x] }; },
+  ]);
+  // 6年
+  more('e6a', [
+    () => { const a = pick([[2, 5], [3, 4], [5, 6], [4, 7], [3, 8]]), b = pick([[3, 4], [2, 3], [5, 8], [7, 10], [4, 5]]); return { q: '1dL で ' + a[0] + '/' + a[1] + ' m² ぬれる ペンキ。' + b[0] + '/' + b[1] + ' dL では 何 m² ぬれる?', type: 'num', a: fr(a[0] * b[0], a[1] * b[1]), steps: [a[0] + '/' + a[1] + ' × ' + b[0] + '/' + b[1] + ' = ' + fs(fr(a[0] * b[0], a[1] * b[1]))] }; },
+    () => { const P = pick([[3, 7, 'f'], [5, 2, 'f'], [1, 9, 'f'], [0.4, 0, 'd'], [0.25, 0, 'd'], [1.5, 0, 'd'], [6, 0, 'i']]); const inv = P[2] === 'f' ? fr(P[1], P[0]) : P[2] === 'i' ? fr(1, P[0]) : fr(Math.round(1000 / (P[0] * 1000) * 1000), 1000); const lab = P[2] === 'f' ? P[0] + '/' + P[1] : String(P[0]); const val = P[2] === 'd' ? fr(1000, Math.round(P[0] * 1000)) : inv; return { q: lab + ' の 逆数は? (分数・整数で)', type: 'num', a: val, steps: [P[2] === 'f' ? '分子と 分母を 入れかえる' : P[2] === 'd' ? P[0] + ' = ' + fs(fr(Math.round(P[0] * 1000), 1000)) + ' → 入れかえる' : P[0] + ' = ' + P[0] + '/1 → 入れかえる', '→ ' + fs(val) + ' (かけると 1 に なる)'] }; },
+    () => { const a = [R(1, 5), R(2, 7)], b = [R(1, 5), R(2, 7)], c = [R(1, 5), R(2, 7)]; if (a[0] >= a[1] || b[0] >= b[1] || c[0] >= c[1]) return null; const n = a[0] * b[0] * c[1], d = a[1] * b[1] * c[0]; return { q: a[0] + '/' + a[1] + ' × ' + b[0] + '/' + b[1] + ' ÷ ' + c[0] + '/' + c[1] + ' = ?', type: 'num', a: fr(n, d), steps: ['÷ ' + c[0] + '/' + c[1] + ' は × ' + c[1] + '/' + c[0], a[0] + '×' + b[0] + '×' + c[1] + ' / ' + a[1] + '×' + b[1] + '×' + c[0] + ' (約分してから かける)', '= ' + fs(fr(n, d))] }; },
+  ]);
+  more('e6b', [
+    () => { const a = R(2, 9), b = R(2, 9), k = R(2, 8); if (gcd(a, b) !== 1 || a === b) return null; return { q: 'たてと よこの 長さの 比が ' + a + ' : ' + b + ' の 長方形。たてが ' + a * k + 'cm の とき、よこは 何 cm?', type: 'num', a: b * k, steps: [a + ' → ' + a * k + ' は ' + k + '倍', b + ' × ' + k + ' = ' + b * k + 'cm'] }; },
+    () => { const a = R(5, 9), b = R(2, a - 1), u = R(2, 30) * 10; if (gcd(a, b) !== 1) return null; return { q: '兄と 弟の 所持金の 比は ' + a + ' : ' + b + '。2人の 差は ' + (a - b) * u + '円。兄は 何円?', type: 'num', a: a * u, steps: ['比の 差 ' + (a - b) + ' が ' + (a - b) * u + '円 → 1 あたり ' + u + '円', a + ' × ' + u + ' = ' + a * u + '円'] }; },
+    () => { const a = R(1, 9), b = R(2, 9); if (a === b) return null; return { q: a + ' : ' + b + ' の 比の 値は? (分数で)', type: 'num', a: fr(a, b), steps: ['比の 値 = 前 ÷ 後ろ', a + ' ÷ ' + b + ' = ' + fs(fr(a, b))] }; },
+  ]);
+  more('e6c', [
+    () => { const R1 = R(4, 10), r = R(1, R1 - 2); return { q: '半径 ' + R1 + 'cm の 円から、同じ 中心で 半径 ' + r + 'cm の 円を くりぬいた ドーナツ形の 面積は 何 cm²? (円周率 3.14)', type: 'num', a: r3((R1 * R1 - r * r) * 3.14), steps: ['大きい 円 − 小さい 円', '(' + R1 + ' × ' + R1 + ' − ' + r + ' × ' + r + ') × 3.14 = ' + (R1 * R1 - r * r) + ' × 3.14 = ' + r3((R1 * R1 - r * r) * 3.14)] }; },
+    () => { const r = R(2, 10); return { q: '1辺 ' + 2 * r + 'cm の 正方形の 中に ぴったり 入る 円が ある。正方形の 中で 円の 外側の 部分の 面積は 何 cm²? (円周率 3.14)', type: 'num', a: r3(4 * r * r - r * r * 3.14), steps: ['正方形: ' + 2 * r + ' × ' + 2 * r + ' = ' + 4 * r * r, '円 (半径 ' + r + '): ' + r + ' × ' + r + ' × 3.14 = ' + r3(r * r * 3.14), 4 * r * r + ' − ' + r3(r * r * 3.14) + ' = ' + r3(4 * r * r - r * r * 3.14)] }; },
+    () => { const r = pick([3, 6, 9, 12]), a = pick([60, 120, 30, 45, 135, 270]); const v = r * r * 3.14 * a / 360; if (!Number.isInteger(v * 100)) return null; return { q: '半径 ' + r + 'cm、中心角 ' + a + '° の おうぎ形の 面積は 何 cm²? (円周率 3.14)', type: 'num', a: r3(v), steps: [a + '° は 円の ' + fs(fr(a, 360)), r + ' × ' + r + ' × 3.14 × ' + fs(fr(a, 360)) + ' = ' + r3(v)] }; },
+    () => { const d = R(2, 10) * 2; return { q: '円周が ' + r3(d * 3.14) + 'cm の 円の 面積は 何 cm²? (円周率 3.14)', type: 'num', a: r3(d * d / 4 * 3.14), steps: ['直径 = ' + r3(d * 3.14) + ' ÷ 3.14 = ' + d + ' → 半径 ' + d / 2, d / 2 + ' × ' + d / 2 + ' × 3.14 = ' + r3(d * d / 4 * 3.14)] }; },
+  ]);
+  more('e6d', [
+    () => { const r = R(2, 5), h = R(2, 10), V = r3(r * r * 3.14 * h); return { q: '底面の 半径 ' + r + 'cm、体積 ' + V + 'cm³ の 円柱の 高さは 何 cm? (円周率 3.14)', type: 'num', a: h, steps: ['底面積: ' + r + ' × ' + r + ' × 3.14 = ' + r3(r * r * 3.14), '高さ = ' + V + ' ÷ ' + r3(r * r * 3.14) + ' = ' + h] }; },
+    () => { const a = R(6, 12), b = R(6, 12), c = R(2, a - 2), d = R(2, b - 2), h = R(3, 10); const S = a * b - c * d; return { q: 'L字形の 底面 (たて ' + b + 'cm・よこ ' + a + 'cm の 長方形から たて ' + d + 'cm・よこ ' + c + 'cm の 長方形を 切り取った 形) で、高さ ' + h + 'cm の 角柱の 体積は 何 cm³?', type: 'num', a: S * h, steps: ['底面積: ' + a + ' × ' + b + ' − ' + c + ' × ' + d + ' = ' + S, S + ' × ' + h + ' = ' + S * h] }; },
+    () => { const r = pick([5, 10]), h = R(2, 20); return { q: '底面の 半径 ' + r + 'cm、高さ ' + h + 'cm の 円柱の 容器には 何 L 入る? (円周率 3.14)', type: 'num', a: r3(r * r * 3.14 * h / 1000), steps: [r + ' × ' + r + ' × 3.14 × ' + h + ' = ' + r3(r * r * 3.14 * h) + 'cm³', '÷ 1000 → ' + r3(r * r * 3.14 * h / 1000) + 'L'] }; },
+  ]);
+  more('e6e', [
+    () => { const s = pick([500, 1000, 2000]), a = R(2, 6), b = R(2, 6); const A = a * s / 100, B = b * s / 100; return { q: '縮尺 1/' + cm(s) + ' の 地図で、たて ' + a + 'cm・よこ ' + b + 'cm の 長方形の 土地。実際の 面積は 何 m²?', type: 'num', a: A * B, steps: ['実際の たて ' + a + ' × ' + s + ' = ' + a * s + 'cm = ' + A + 'm、よこ ' + B + 'm', A + ' × ' + B + ' = ' + A * B + 'm² (面積は 縮尺の 2乗倍)'] }; },
+    () => { const s = pick([10000, 20000, 25000, 50000]), c = R(2, 8), m = c * s / 100; return { q: '地図上の ' + c + 'cm が、実際には ' + cm(m) + 'm。この 地図の 縮尺は 1/□。□ は?', type: 'num', a: s, steps: [cm(m) + 'm = ' + cm(m * 100) + 'cm', cm(m * 100) + ' ÷ ' + c + ' = ' + cm(s)] }; },
+    () => { const st = pick([1, 1.5, 2]), sh = pick([1.5, 2, 2.5, 3]), tree = R(3, 12); const tsh = r3(tree * sh / st); if (!Number.isInteger(tsh * 10)) return null; return { q: '長さ ' + st + 'm の 棒の かげが ' + sh + 'm の とき、かげが ' + tsh + 'm の 木の 高さは 何 m?', type: 'num', a: tree, steps: ['棒と かげで できる 三角形と、木と かげの 三角形は 拡大・縮小の 関係', 'かげが ' + tsh + ' ÷ ' + sh + ' = ' + r3(tsh / sh) + '倍 → 高さも ' + st + ' × ' + r3(tsh / sh) + ' = ' + tree + 'm'] }; },
+  ]);
+  more('e6f', [
+    () => { const K = pick([24, 36, 48, 60]), a = pick([12, 18, 24, 20, 30].filter(v => K % v === 0 || (K * 2) % v === 0)), A = R(2, 4) * 6, rA = R(2, 5), B = pick([8, 9, 12, 15, 10]); const rB = A * rA / B; if (!Number.isInteger(rB) || A === B) return null; return { q: 'かみ合っている 歯車 A (歯数 ' + A + ') と B (歯数 ' + B + ')。A が ' + rA + '回転 する と B は 何回転?', type: 'num', a: rB, steps: ['かみ合った 歯の 数は 同じ → 歯数 × 回転数 が 等しい (反比例)', A + ' × ' + rA + ' = ' + A * rA + ' → ' + A * rA + ' ÷ ' + B + ' = ' + rB + '回転'] }; },
+    () => { const Vt = pick([120, 180, 240, 360]), x1 = pick([10, 12, 15, 20, 30].filter(v => Vt % v === 0)), x2 = pick([6, 8, 20, 24, 40].filter(v => Vt % v === 0 && v !== x1)); return { q: '水そうに 毎分 ' + x1 + 'L ずつ 入れると ' + Vt / x1 + '分で いっぱいに なる。毎分 ' + x2 + 'L ずつ だと 何分?', type: 'num', a: Vt / x2, steps: ['水そうの 量 = ' + x1 + ' × ' + Vt / x1 + ' = ' + Vt + 'L (いつも 同じ → 反比例)', Vt + ' ÷ ' + x2 + ' = ' + Vt / x2 + '分'] }; },
+    () => { const pr = pick([true, false]), k = R(2, 6), xs = [1, 2, 3, 4], ys = pr ? xs.map(x => k * x) : xs.map(x => 12 * k / x); return choice('x: ' + xs.join(', ') + ' の とき y: ' + ys.map(v => r3(v)).join(', ') + '。y は x に?', pr ? '比例する' : '反比例する', [pr ? '反比例する' : '比例する', 'どちらでも ない', '両方'], [pr ? 'y ÷ x = ' + k + ' (いつも 同じ) → 比例' : 'x × y = ' + 12 * k + ' (いつも 同じ) → 反比例']); },
+  ]);
+  more('e6g', [
+    () => { const n = pick([4, 5, 6]), k = 3, P = n * (n - 1) * (n - 2); return { q: n + '色の 中から 3色を 選んで、3だんの 旗 (上・中・下) を ぬる。全部 ちがう 色に する ぬり方は 何通り?', type: 'num', a: P, steps: ['上 ' + n + '通り → 中 ' + (n - 1) + '通り → 下 ' + (n - 2) + '通り', n + ' × ' + (n - 1) + ' × ' + (n - 2) + ' = ' + P] }; },
+    () => { const n = pick([5, 6, 7]); return { q: n + '人から 3人の 当番を 選ぶ 選び方は 何通り?', type: 'num', a: n * (n - 1) * (n - 2) / 6, steps: ['順番を つけると ' + n + ' × ' + (n - 1) + ' × ' + (n - 2) + ' = ' + n * (n - 1) * (n - 2), '同じ 3人の 並び方 3 × 2 × 1 = 6通りで わる → ' + n * (n - 1) * (n - 2) / 6] }; },
+    () => { const s = R(4, 10), w = []; for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) if (a + b === s) w.push(a + '-' + b); return { q: '大小 2つの さいころを ふる。目の 和が ' + s + ' に なるのは 何通り?', type: 'num', a: w.length, steps: ['(大-小) で 書き出す: ' + w.join('、'), '→ ' + w.length + '通り'] }; },
+    () => ({ q: '0, 1, 2, 3 の 4まいの カードから 3まい 使って 3けたの 整数を つくる。何通り できる?', type: 'num', a: 18, steps: ['百の位に 0 は おけない → 3通り', '十の位 3通り (0 も OK)、一の位 2通り', '3 × 3 × 2 = 18'] }),
+    () => { const c = pick([[10, 50, 100], [1, 5, 10], [10, 100, 500]]); return { q: c[0] + '円玉・' + c[1] + '円玉・' + c[2] + '円玉が 1まいずつ ある。1まい 以上 使って できる 金額は 何通り?', type: 'num', a: 7, steps: ['1まい: 3通り、2まい: 3通り、3まい: 1通り', '3 + 3 + 1 = 7通り (金額が 重ならない)'] }; },
+  ]);
+  more('e6h', [
+    () => { const Y = ['正方形', '長方形', 'ひし形', '正六角形', '円'], N = ['正三角形', '平行四辺形', '二等辺三角形', '正五角形']; return choice('線対称でも 点対称でも ある 図形は どれ?', pick(Y), shuf(N), ['線対称だけ: 正三角形・二等辺三角形・正五角形', '点対称だけ: 平行四辺形', '両方: 正方形・長方形・ひし形・正六角形・円']); },
+    () => { const pt = pick([true, false]), Y = pt ? ['N', 'S', 'Z', 'H', 'O', 'X'] : ['A', 'M', 'T', 'U', 'V', 'W', 'Y'], N = pt ? ['A', 'B', 'C', 'E', 'K', 'T', 'U', 'V', 'Y'] : ['F', 'G', 'J', 'L', 'N', 'P', 'R', 'S', 'Z']; return choice('アルファベットの 大文字で ' + (pt ? '点対称' : '線対称 (たての 軸)') + 'な ものは どれ?', pick(Y), shuf(N), [pt ? '180° 回して 同じ 形 → N・S・Z・H・O・X' : 'たての 線で 折って 重なる → A・M・T・U・V・W・Y']); },
+    () => { const n = pick([3, 4, 5, 6, 8]), NM = { 3: '正三角形', 4: '正方形', 5: '正五角形', 6: '正六角形', 8: '正八角形' }; return choice(NM[n] + 'は 点対称?', n % 2 === 0 ? '点対称 (線対称でも ある)' : '点対称では ない (線対称だけ)', [n % 2 === 0 ? '点対称では ない (線対称だけ)' : '点対称 (線対称でも ある)', 'どちらでも ない', '点対称だけ (線対称では ない)'], ['正多角形は すべて 線対称', '辺の 数が 偶数の ときだけ 点対称']); },
+  ]);
+  // 発展
+  more('ej1', [
+    () => { const n = R(10, 25), b = R(2, n - 2), tot = 120 * b + 80 * (n - b); return { q: '80円 切手と 120円 切手を 合わせて ' + n + 'まい 買い、' + tot + '円 はらった。120円 切手は 何まい?', type: 'num', a: b, steps: ['全部 80円だと ' + 80 * n + '円', '差 ' + (tot - 80 * n) + '円 ÷ 40 = ' + b + 'まい'] }; },
+    () => { const n = R(15, 30), c = R(3, n - 3), t = n - c; const w = 3 * c + 4 * t; return { q: '三輪車と 四輪車 (自動車) が 合わせて ' + n + '台。タイヤは 合わせて ' + w + 'こ。三輪車は 何台?', type: 'num', a: c, steps: ['全部 四輪車だと ' + 4 * n + 'こ', '差 ' + (4 * n - w) + 'こ ÷ 1 = ' + c + '台 (1台 入れかえると 1こ 減る)'] }; },
+  ]);
+  more('ej5', [
+    () => { const a = pick([15, 20, 25]), b = pick([10, 15, 20]), La = pick([120, 150, 180]), Lb = pick([100, 150, 200]), t = (La + Lb) / (a + b); if (!Number.isInteger(t)) return null; return { q: '長さ ' + La + 'm・秒速 ' + a + 'm の 電車と、長さ ' + Lb + 'm・秒速 ' + b + 'm の 電車が すれちがう。出会ってから はなれるまで 何秒?', type: 'num', a: t, steps: ['すれちがう きょり = 2つの 長さの 和 ' + (La + Lb) + 'm', '速さの 和 ' + (a + b) + 'm/秒 → ' + (La + Lb) + ' ÷ ' + (a + b) + ' = ' + t + '秒'] }; },
+    () => { const a = pick([25, 30]), b = pick([15, 20]), La = pick([150, 180, 200]), Lb = pick([100, 120, 150]), t = (La + Lb) / (a - b); if (!Number.isInteger(t)) return null; return { q: '長さ ' + La + 'm・秒速 ' + a + 'm の 急行が、前を 走る 長さ ' + Lb + 'm・秒速 ' + b + 'm の 普通電車に 追いついて から 追いこすまで 何秒?', type: 'num', a: t, steps: ['追いこす きょり = 2つの 長さの 和 ' + (La + Lb) + 'm', '速さの 差 ' + (a - b) + 'm/秒 → ' + (La + Lb) + ' ÷ ' + (a - b) + ' = ' + t + '秒'] }; },
+  ]);
+  more('ej7', [
+    () => { const T = pick([[10, 15, 30], [6, 10, 15], [4, 6, 12], [10, 12, 15], [12, 15, 20], [9, 12, 18], [20, 30, 60]]), W = lcm(lcm(T[0], T[1]), T[2]), s = W / T[0] + W / T[1] + W / T[2], t = W / s; if (!Number.isInteger(t * 10)) return null; return { q: 'ある 仕事を A は ' + T[0] + '日、B は ' + T[1] + '日、C は ' + T[2] + '日で 終える。3人で すると 何日?', type: 'num', a: r3(t), steps: ['全体 = ' + W + ' (最小公倍数)', '1日に A ' + W / T[0] + '、B ' + W / T[1] + '、C ' + W / T[2] + ' → 合計 ' + s, W + ' ÷ ' + s + ' = ' + r3(t) + '日'] }; },
+    () => { const a = pick([10, 12, 15, 20]), b = pick([20, 30, 60]); if (b <= a) return null; const W = lcm(a, b), net = W / a - W / b, t = W / net; if (!Number.isInteger(t)) return null; return { q: '水そうを A 管で 入れると ' + a + '分で いっぱい、B 管で ぬくと ' + b + '分で 空に なる。空の 水そうに A で 入れながら B で ぬくと、何分で いっぱい?', type: 'num', a: t, steps: ['水そう = ' + W + '、A は 1分 +' + W / a + '、B は 1分 −' + W / b, '1分に ' + net + ' ずつ 増える → ' + W + ' ÷ ' + net + ' = ' + t + '分'] }; },
+  ]);
+  more('ej9', [
+    () => { const c = R(5, 30) * 100, up = pick([20, 25, 30]), off = pick([30, 40, 50]); const t = c * (100 + up) / 100, s = t * (100 - off) / 100; if (s >= c || !Number.isInteger(s)) return null; return { q: '原価 ' + c + '円に ' + up + '% の 利益を 見こんで 定価を つけたが、' + off + '% 引きで 売った。何円の 損?', type: 'num', a: c - s, steps: ['定価 ' + t + '円 → 売り値 ' + t + ' × ' + (100 - off) / 100 + ' = ' + s + '円', '損 = ' + c + ' − ' + s + ' = ' + (c - s) + '円'] }; },
+    () => { const c = R(2, 10) * 100, n = R(20, 50), sold = R(Math.ceil(n / 2), n - 2), p = c * pick([15, 18, 20]) / 10; if (!Number.isInteger(p)) return null; const prof = p * sold - c * n; return { q: '1こ ' + c + '円で ' + n + 'こ 仕入れ、1こ ' + p + '円で 売ったら ' + sold + 'こ 売れた (残りは すてた)。利益は 何円? (損なら マイナス)', type: 'num', a: prof, steps: ['仕入れ: ' + c + ' × ' + n + ' = ' + c * n, '売り上げ: ' + p + ' × ' + sold + ' = ' + p * sold, '利益 = ' + p * sold + ' − ' + c * n + ' = ' + prof + '円'] }; },
+  ]);
+  more('ej11', [
+    () => { const n = pick([10, 20, 30, 40, 50, 60, 100]); return { q: '1 + 2 + 3 + … + ' + n + ' = ?', type: 'num', a: n * (n + 1) / 2, steps: ['逆に 並べて 足すと (1 + ' + n + ') が ' + n + 'こ', '(1 + ' + n + ') × ' + n + ' ÷ 2 = ' + n * (n + 1) / 2] }; },
+    () => { const b = pick([2, 3, 7]), n = R(10, 50), cyc = { 2: [2, 4, 8, 6], 3: [3, 9, 7, 1], 7: [7, 9, 3, 1] }[b]; return { q: b + ' を ' + n + 'こ かけ合わせた 数の 一の位は?', type: 'num', a: cyc[(n - 1) % 4], steps: ['一の位は ' + cyc.join(' → ') + ' と 4こで くり返す', n + ' ÷ 4 = ' + Math.floor(n / 4) + ' あまり ' + n % 4 + ' → ' + (n % 4 ? n % 4 + '番目' : '4番目') + ' = ' + cyc[(n - 1) % 4]] }; },
+  ]);
 
   const GROUPS = [{ id: 'e4', name: '小学 4年', color: '#c0702a' }, { id: 'e5', name: '小学 5年', color: '#3a8a6a' }, { id: 'e6', name: '小学 6年', color: '#5a6ab0' }, { id: 'ej', name: '発展 (中学受験 算数)', color: '#8a3a5a' }];
   function make(u) { let r = null; for (let i = 0; i < 60 && !r; i++) { try { r = u.gen(); } catch (e) { r = null; } } return r; }
