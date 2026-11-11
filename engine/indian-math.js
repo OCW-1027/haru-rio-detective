@@ -156,7 +156,7 @@ const IndianMath = (function () {
     const R0 = run; if (!R0 || R0.cur.done) return;
     const { t, ex } = R0.cur, ok = isRight(t, ex, v), sec = (Date.now() - R0.cur.t0) / 1000;
     R0.cur.done = true;
-    const r = tr(t.id); r.n++; if (ok) r.ok++; else r.ng++;
+    const r = tr(t.id); r.n++; if (ok) r.ok++; else r.ng++; if (typeof Study !== 'undefined') Study.log('indian', ok); 
     if (ok) {
       R0.ok++; R0.times.push(sec); sfx('unlock');
       $('imFb').innerHTML = '<div class="im-good">⭕ 正解! ' + sec.toFixed(1) + '秒</div>';
@@ -206,7 +206,7 @@ const IndianMath = (function () {
       area().innerHTML = h; bindBack(() => techView(t, 'sprint')); tick();
       bindInput(t, v => {
         if (S.cur.done || run !== S) return; S.cur.done = true;
-        const ok = isRight(t, ex, v); const r = tr(t.id); r.n++; if (ok) { r.ok++; S.ok++; sfx('click'); } else { r.ng++; S.ng++; sfx('wrong'); }
+        const ok = isRight(t, ex, v); if (typeof Study !== 'undefined') Study.log('indian', ok); const r = tr(t.id); r.n++; if (ok) { r.ok++; S.ok++; sfx('click'); } else { r.ng++; S.ng++; sfx('wrong'); }
         if (ok) return ask();
         $('imFb').innerHTML = '<div class="im-bad">✗ ' + fmtA(t, ex.a) + '</div>';
         timers.push(setTimeout(ask, 900));
@@ -264,7 +264,7 @@ const IndianMath = (function () {
     const finish = timeUp => {
       if (X.done) return; X.done = true;
       const D = data(); let ok = 0;
-      const rows = qs.map((q, i) => { const v = X.ans[i], r = v != null && isRight(q.t, q.ex, v); if (r) ok++; const tt = tr(q.t.id); if (v != null) { tt.n++; if (r) tt.ok++; else tt.ng++; } return { q: q, v: v, r: r }; });
+      const rows = qs.map((q, i) => { const v = X.ans[i], r = v != null && isRight(q.t, q.ex, v); if (r) ok++; const tt = tr(q.t.id); if (v != null) { tt.n++; if (r) tt.ok++; else tt.ng++; if (typeof Study !== 'undefined') Study.log('indian', r); } return { q: q, v: v, r: r }; });
       const pass = ok >= E.pass; D.exam[cid] = Math.max(D.exam[cid] || 0, ok); if (pass) D.badge[cid] = 1; save();
       stop(); sfx(pass ? 'unlock' : 'wrong');
       let h = head('📝 ' + c.name + ' 検定 — 結果');

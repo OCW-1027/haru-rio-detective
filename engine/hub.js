@@ -126,6 +126,7 @@ const Hub = (function () {
       h += '<button class="hub-study-btn' + (s.hot ? ' hot' : '') + '" data-study="' + s.id + '"><span class="hub-study-icon">' + s.icon + '</span><span class="hub-study-name">' + s.name + '</span><span class="hub-study-sub">' + s.sub + '</span></button>';
     });
     h += '</section>';
+    h += '<button class="hub-parent" id="hubParent">👪 保護者レポート</button>';
     root.innerHTML = h;
 
     root.querySelectorAll('[data-case]').forEach(b => {
@@ -142,6 +143,8 @@ const Hub = (function () {
     if (hs) hs.onclick = () => { sfx('click'); MainStory.open(); };
     const hi = document.getElementById('hubIndian');
     if (hi) hi.onclick = () => { sfx('click'); IndianMath.open(); };
+    const hpr = document.getElementById('hubParent');
+    if (hpr) hpr.onclick = () => { sfx('click'); ParentReport.open(); };
     const hmw = document.getElementById('hubMathWorld');
     if (hmw) hmw.onclick = () => { sfx('click'); MathWorld.open(); };
     const hl = document.getElementById('hubLab');

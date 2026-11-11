@@ -248,7 +248,7 @@ const Eiken = (function () {
       const ok = opts[+b.dataset.k] === w;
       root.querySelectorAll('.ek-opt').forEach((x, k) => { x.disabled = true; if (opts[k] === w) x.classList.add('ok'); });
       if (!ok) b.classList.add('ng');
-      sfx(ok ? 'unlock' : 'wrong');
+      sfx(ok ? 'unlock' : 'wrong'); if (typeof Study !== 'undefined') Study.log('eiken', ok, 'vocab'); 
       if (vq.mode === 'quiz') {
         if (ok) vq.ok++; else { vq.ng++; if (e.srs[key]) e.srs[key] = [Math.max(0, s[0] - 1), Date.now()]; }
       } else {
@@ -337,7 +337,7 @@ const Eiken = (function () {
       const ok = +b.dataset.o === q.answer;
       root.querySelectorAll('.ek-opt').forEach(x => { x.disabled = true; if (+x.dataset.o === q.answer) x.classList.add('ok'); });
       if (!ok) b.classList.add('ng');
-      sfx(ok ? 'unlock' : 'wrong');
+      sfx(ok ? 'unlock' : 'wrong'); if (typeof Study !== 'undefined') Study.log('eiken', ok, 'p1'); 
       const rec = P1REC(); const r = rec[qi] || [0, 0]; r[ok ? 0 : 1]++; rec[qi] = r; save();
       if (ok) pq.ok++;
       const full = q.q.replace('( )', q.options[q.answer]);
@@ -410,7 +410,7 @@ const Eiken = (function () {
         const ok = +b.dataset.k === q.answer;
         wrap.querySelectorAll('.ek-opt').forEach(x => { x.disabled = true; if (+x.dataset.k === q.answer) x.classList.add('ok'); });
         if (!ok) b.classList.add('ng');
-        sfx(ok ? 'unlock' : 'wrong');
+        sfx(ok ? 'unlock' : 'wrong'); if (typeof Study !== 'undefined') Study.log('eiken', ok, 'listen'); 
         wrap.querySelector('.ek-qtext').textContent = qlabel + q.q;
         lq.total++; if (ok) lq.ok++;
         const rec = REC('listen'); const key = it.qs.length > 1 ? li + '.' + qi : li; const r = rec[key] || [0, 0]; r[ok ? 0 : 1]++; rec[key] = r; save();
@@ -468,7 +468,7 @@ const Eiken = (function () {
       let done = false;
       box.querySelectorAll('.ek-opt').forEach(b => b.onclick = () => {
         if (done) return; done = true; answered++;
-        const good = +b.dataset.o === q.answer; if (good) ok++;
+        const good = +b.dataset.o === q.answer; if (good) ok++; if (typeof Study !== 'undefined') Study.log('eiken', good, 'read'); 
         box.querySelectorAll('.ek-opt').forEach(x => { x.disabled = true; if (+x.dataset.o === q.answer) x.classList.add('ok'); });
         if (!good) b.classList.add('ng');
         sfx(good ? 'unlock' : 'wrong');
@@ -627,6 +627,7 @@ const Eiken = (function () {
     mk.lis.forEach(idx => { const it = normListen(SET('listen')[idx]); it.qs.forEach((q, qi) => { lTotal++; if (mk.lans[idx + '.' + qi] === q.answer) lc++; else wrong.push({ sec: 'リスニング Part' + it.part, q: q.q, a: q.options[q.answer], exp: q.exp }); }); });
     const rr = r1 + r23, pr = Math.round(rr * 100 / rTotal), pl = Math.round(lc * 100 / lTotal);
     const e = data(); e.mock = e.mock || []; e.mock.push({ lv: mk.level, d: today(), r: [rr, rTotal], l: [lc, lTotal] }); save();
+    if (typeof Study !== 'undefined') { for (let i = 0; i < rTotal; i++) Study.log('eiken', i < rr, 'mockR'); for (let i = 0; i < lTotal; i++) Study.log('eiken', i < lc, 'mockL'); }
     const judge = p => p >= 75 ? '🟢 合格圏' : p >= 60 ? '🟡 あと少し' : '🔴 要復習';
     let h = header('⏱ 模擬試験 ・ 結果', (mk.level === 'p1' ? '準1級' : '2級') + ' ・ 筆記 ' + (mk.rmin || 0) + '分');
     h += '<div class="ek-box"><div class="ek-mres"><div><b>' + rr + '</b> / ' + rTotal + '<span>リーディング ' + pr + '% ' + judge(pr) + '</span></div><div><b>' + lc + '</b> / ' + lTotal + '<span>リスニング ' + pl + '% ' + judge(pl) + '</span></div></div>';

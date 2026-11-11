@@ -68,6 +68,7 @@ document.getElementById('btnWorldBack').onclick = () => { WorldChase.stop(); Hub
 document.getElementById('btnWxBack').onclick = () => { WeatherChallenge.stop(); Hub.open(); };
 document.getElementById('btnLabBack').onclick = () => { LabDetective.stop(); Hub.open(); };
 document.getElementById('btnIndianBack').onclick = () => { IndianMath.stop(); Hub.open(); };
+document.getElementById('btnParentBack').onclick = () => { Hub.open(); };
 document.getElementById('btnMwBack').onclick = () => { MathWorld.stop(); Hub.open(); };
 document.getElementById('btnStoryBack').onclick = () => { MainStory.stop(); Hub.open(); };
 document.getElementById('btnHubBack').onclick = () => { stopVoice(); showPage('pageTitle'); };
