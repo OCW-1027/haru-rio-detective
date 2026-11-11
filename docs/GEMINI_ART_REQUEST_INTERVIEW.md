@@ -1,7 +1,7 @@
 # 英検 面接 イラスト — Gemini 지시서 (v3)
 
 **대상**: 英検道場「面接 (二次)」 문제 카드의 그림
-**총 62장** (+ 선택 6장)
+**총 62장** (+ 선택 6장, 인도 수학 도장 선생님 2장)
 - 2級: 10스토리 × 3コマ = 30장
 - 準1級: 8스토리 × 4コマ = 32장
 - 선택: 세계추적 증인 다시 그리기 6장 (지난번에 얼굴이 비슷하게 나온 것)
@@ -132,6 +132,14 @@ Make these 6 people clearly DIFFERENT from each other in age, gender and backgro
 #66 witness_taxi — middle-aged white man taxi driver with a flat cap and a gray mustache, hands on a steering wheel.
 #67 witness_guide — East Asian woman museum guide in her twenties with short hair, holding a small flag and a guidebook.
 #68 witness_traveler — Middle Eastern young man backpacker with curly hair, holding a map, big backpack.
+
+
+========== GROUP 4: India-style math dojo teacher (square 1:1, head-and-shoulders, soft plain warm cream background) ==========
+An original character "Aarya": a cheerful, clever 10-year-old girl from Bengaluru, India. Warm brown skin, big bright
+dark eyes, long black hair in a single braid with a small marigold flower, a mustard-yellow kurta with a simple teal
+pattern, holding a small chalkboard with only drawn math symbols (plus, times, equals signs; no numbers or letters).
+#69 aarya_idle — friendly smile, looking at the viewer, waving one hand ("Namaste!" mood).
+#70 aarya_cheer — delighted, both hands raised, eyes sparkling, celebrating a correct answer.
 
 Start now with #1 to #4.
 ```

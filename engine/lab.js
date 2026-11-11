@@ -15,8 +15,9 @@ const LabDetective = (function () {
   function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
   function data() { if (!State.v2) State.v2 = {}; const d = State.v2.lab || (State.v2.lab = {}); d.cleared = d.cleared || {}; return d; }
   function save() { try { saveState(); } catch (e) {} }
-  function sayEn(t) { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.85; speechSynthesis.speak(u); } catch (e) {} }
-  function stop() { cancelAnimationFrame(raf); raf = 0; try { speechSynthesis.cancel(); } catch (e) {} }
+  function ttsEn(t) { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.85; speechSynthesis.speak(u); } catch (e) {} }
+  function sayEn(t) { try { speechSynthesis.cancel(); } catch (e) {} if (typeof VoicePack !== 'undefined' && VoicePack.play(t, 'N', 1, null, () => ttsEn(t))) return; ttsEn(t); }
+  function stop() { cancelAnimationFrame(raf); raf = 0; try { speechSynthesis.cancel(); } catch (e) {} if (typeof VoicePack !== 'undefined') VoicePack.stop(); }
   function art(src, fb, cls) { return '<span class="art-w ' + (cls || '') + '"><img class="art-main" src="' + src + '" alt="" onload="this.parentNode.classList.add(\'ok\')" onerror="this.remove()"><span class="art-fb">' + (fb || '') + '</span></span>'; }
   const near = (a, b) => Math.abs(+a - +b) < 1e-6;
 
@@ -419,5 +420,5 @@ const LabDetective = (function () {
   }
 
   function open() { showPage('pageLab'); list(); const p = document.getElementById('pageLab'); if (p) p.scrollTop = 0; }
-  return { open: open, stop: stop, _cases: CASES, _solub: solub, _period: period, _lag: dayLagMin, _circuit: circuit, _dissolve: dissolve, _cur: () => cur };
+  return { open: open, stop: stop, _speechTexts: () => CASES.flatMap(c => c.vocab.map(v => ['N', v[0]])), _cases: CASES, _solub: solub, _period: period, _lag: dayLagMin, _circuit: circuit, _dissolve: dissolve, _cur: () => cur };
 })();

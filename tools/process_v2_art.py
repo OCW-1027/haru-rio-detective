@@ -11,6 +11,9 @@
   lab_hero          ラボ探偵 표지                               → lab/hero.webp             384x384
   lab_case_<id>     사건 장면                                  → lab/case_<id>.webp        960x540
   lab_sus_<case>_<s>  라보 용의자 상반신                        → lab/sus_<case>_<s>.webp   384x384
+  haru_* / rio_*    ハル·リオ 表情 (회색 배경 → 배경 제거)    → chars/expr/<name>.webp    512x768 투명
+  koradon_* / korarin_* / blank_*  정령 포즈                  → chars/spirits/<name>.webp 512x512 투명
+  aarya_<pose>      インド式 計算道場の 先生 アーリヤ          → indian/aarya_<pose>.webp  384x384
   int_<cardid>_<n>  英検 面接 イラスト (コマ)                  → eiken/int/<cardid>_<n>.webp 640x480
 
 사용법:
@@ -39,6 +42,9 @@ def target(name):
     if name == 'lab_hero':              return ('cover', 'lab/hero.webp', 384, 384, 0.5)
     if name.startswith('lab_case_'):    return ('cover', 'lab/case_%s.webp' % name[9:], 960, 540, 0.5)
     if name.startswith('lab_sus_'):     return ('cover', 'lab/sus_%s.webp' % name[8:], 384, 384, 0.2)
+    if re.match(r'^(haru|rio)_', name):  return ('cut', 'chars/expr/%s.webp' % name, 512, 768, 0)
+    if re.match(r'^(koradon|korarin|blank)_', name): return ('cut', 'chars/spirits/%s.webp' % name, 512, 512, 0)
+    if name.startswith('aarya_'):       return ('cover', 'indian/%s.webp' % name, 384, 384, 0.15)
     if name.startswith('int_'):         return ('cover', 'eiken/int/%s.webp' % name[4:], 640, 480, 0.5)
     return None
 

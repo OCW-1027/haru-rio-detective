@@ -202,6 +202,12 @@ const EikenInterview = (function () {
     if (opt.timer && opt.limit) { const el = $('ivTimer'); if (el) el.textContent = '⏱ ' + opt.limit + '秒 以内'; }
     nx.onclick = () => { if (recording) return; if (txt && txt.value.trim() && !st.ans[key]) st.ans[key] = txt.value.trim(); sfx('click'); api.stopSpeak(); next(); };
   }
+  // 指示を 読んでから 準備時間。読み上げ中でも「先へ」で すぐ 進める
+  function prepThen(t, sec, label, next) {
+    let gone = false; const go = () => { if (gone) return; gone = true; api.stopSpeak(); clearTimers(); next(); };
+    const sk = $('ivSkip'); if (sk) sk.onclick = () => { sfx('click'); go(); };
+    api.speak(t, 'W', () => { if (!gone) countdown(sec, label, go); });
+  }
   function countdown(sec, label, done) {
     let left = sec; const el = $('ivCount');
     const upd = () => { if (el) el.innerHTML = label + ' <b>' + left + '</b>秒'; };
@@ -223,7 +229,7 @@ const EikenInterview = (function () {
   function g2Silent() {
     const t = 'Let\'s start the test. Here is your card. First, please read the passage silently for 20 seconds.';
     screen(0, t, cardHTML(st.c, { passage: true, pics: true }) + '<div class="ek-box ek-center iv-count" id="ivCount"></div><button class="ek-secondary" id="ivSkip">読めた (先へ)</button>', true);
-    api.speak(t, 'W', () => countdown(20, '📖 黙読', g2Read));
+    prepThen(t, 20, '📖 黙読', g2Read);
   }
   function g2Read() {
     const t = 'All right. Now, please read it aloud.';
@@ -238,7 +244,7 @@ const EikenInterview = (function () {
   function g2Prep() {
     const t = 'No. 2. Now, please look at the pictures and describe the situation. You have 20 seconds to prepare. Your story should begin with the sentence on the card.';
     screen(2, t, cardHTML(st.c, { pics: true }) + '<div class="ek-box ek-center iv-count" id="ivCount"></div><button class="ek-secondary" id="ivSkip">準備できた (先へ)</button>', true);
-    api.speak(t, 'W', () => countdown(20, '📝 準備', g2Q2));
+    prepThen(t, 20, '📝 準備', g2Q2);
   }
   function g2Q2() {
     const t = 'All right. Please begin.';
@@ -277,7 +283,7 @@ const EikenInterview = (function () {
   function p1Prep() {
     const t = 'Now, let\'s start the test. Here is your card. You have one minute to prepare before you start your narration.';
     screen(1, t, cardHTML(st.c, { pics: true }) + '<div class="ek-box ek-center iv-count" id="ivCount"></div><button class="ek-secondary" id="ivSkip">準備できた (先へ)</button>', true);
-    api.speak(t, 'W', () => countdown(60, '📝 準備', p1Narr));
+    prepThen(t, 60, '📝 準備', p1Narr);
   }
   function p1Narr() {
     const t = 'All right. Please begin your narration. You have two minutes.';
@@ -346,5 +352,18 @@ const EikenInterview = (function () {
   function stop() { clearTimers(); recAbort(); if (api) api.stopSpeak(); }
   function open(a, lv) { api = a; level = lv; list(); }
   document.addEventListener('visibilitychange', () => { if (document.hidden) recAbort(); });
-  return { open: open, stop: stop, _score: { read: scoreRead, story: scoreStory, opinion: scoreOpinion, keys: scoreKeys }, _st: () => st };
+  // 音声 生成用 (面接委員 = W, 模範解答 = N)
+  function speechTexts() {
+    const o = [], W = t => o.push(['W', t]), N = t => o.push(['N', t]);
+    W('Hello. My name is Ms. Green. May I have your name, please? ... Thank you, ' + NAME + '. Please have a seat.');
+    W('Let\'s start the test. Here is your card. First, please read the passage silently for 20 seconds.'); W('All right. Now, please read it aloud.');
+    W('No. 2. Now, please look at the pictures and describe the situation. You have 20 seconds to prepare. Your story should begin with the sentence on the card.');
+    W('All right. Please begin.'); W('Please answer Yes or No.'); W('Why?'); W('Why not?'); W('That\'s all. Thank you. You may go now.'); W('Thank you. Time\'s up.');
+    W('Now, let\'s start the test. Here is your card. You have one minute to prepare before you start your narration.'); W('All right. Please begin your narration. You have two minutes.');
+    EIKEN_INTERVIEW.free.forEach(W);
+    EIKEN_INTERVIEW.g2.forEach(c => { W('Now, I\'ll ask you four questions. No. 1. ' + c.q1.q); W(turnText() + 'No. 3. ' + c.q3.q); W('No. 4. ' + c.q4.q); N(c.passage); N(c.q1.model); N(c.model2); N(c.q3.model); N(c.q4.yes); N(c.q4.no); });
+    EIKEN_INTERVIEW.p1.forEach(c => { W('Now, I\'ll ask you four questions. No. 1. ' + c.q1.q); W(turnText() + 'No. 2. ' + c.q2.q); W('No. 3. ' + c.q3.q); W('No. 4. ' + c.q4.intro + ' ' + c.q4.q); N(c.model); N(c.q1.model); N(c.q2.model); N(c.q3.model); N(c.q4.model); });
+    return o;
+  }
+  return { open: open, stop: stop, _speechTexts: speechTexts, _score: { read: scoreRead, story: scoreStory, opinion: scoreOpinion, keys: scoreKeys }, _st: () => st };
 })();

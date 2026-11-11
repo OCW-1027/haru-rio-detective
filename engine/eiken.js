@@ -66,10 +66,13 @@ const Eiken = (function () {
   if ('speechSynthesis' in window) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
   const FEMALE = /female|samantha|zira|susan|karen|moira|tessa|victoria|aria|jenny|google us english|serena|fiona/i;
   const MALE = /\bmale|david|daniel|alex|fred|guy|mark|george|james|tom|google uk english male|arthur|rishi/i;
+  // ブラウザ音声: 自然な 声 (Natural / Neural / Enhanced / Premium / Google) を 優先
+  const GOOD = /natural|neural|enhanced|premium|google|siri/i;
   function voiceFor(role) {
     if (!voices.length) loadVoices();
     const us = voices.filter(v => /en-(US|GB|AU|CA)/i.test(v.lang));
-    const pool = us.length ? us : voices;
+    const base = us.length ? us : voices, good = base.filter(v => GOOD.test(v.name));
+    const pool = good.length >= 2 ? good.concat(base.filter(v => !good.includes(v))) : base;
     if (role === 'M') return pool.find(v => MALE.test(v.name)) || pool[1] || pool[0];
     if (role === 'W') return pool.find(v => FEMALE.test(v.name)) || pool[0];
     return pool.find(v => /en-US/i.test(v.lang)) || pool[0];
@@ -80,7 +83,13 @@ const Eiken = (function () {
   function speak(text, role, onEnd, rate) {
     const gen = speakGen;
     const end = () => { if (gen === speakGen && onEnd) onEnd(); };
-    if (!('speechSynthesis' in window) || !onEikenPage()) { end(); return; }
+    if (!onEikenPage()) { end(); return; }
+    // 事前生成の 高音質音声 (Kokoro) が あれば それを 再生、なければ ブラウザ音声
+    if (typeof VoicePack !== 'undefined' && VoicePack.play(text, role || 'N', (rate || 0.92) / 0.92, end, () => { if (gen === speakGen) tts(text, role, end, rate); })) return;
+    tts(text, role, end, rate);
+  }
+  function tts(text, role, end, rate) {
+    if (!('speechSynthesis' in window)) { end(); return; }
     const u = new SpeechSynthesisUtterance(text);
     const v = voiceFor(role || 'N');
     if (v) { u.voice = v; u.lang = v.lang; } else u.lang = 'en-US';
@@ -90,7 +99,7 @@ const Eiken = (function () {
     u.onerror = end;
     speechSynthesis.speak(u);
   }
-  function stopSpeak() { speakGen++; try { speechSynthesis.cancel(); } catch (e) {} }
+  function stopSpeak() { speakGen++; try { speechSynthesis.cancel(); } catch (e) {} if (typeof VoicePack !== 'undefined') VoicePack.stop(); }
   function speakSeq(items, done) {
     stopSpeak();
     const gen = speakGen;
@@ -699,5 +708,16 @@ const Eiken = (function () {
   }
   function interview() { EikenInterview.open({ area: area, header: header, bindGo: bindGo, speak: speak, stopSpeak: stopSpeak, data: data, save: () => { try { saveState(); } catch (e) {} }, esc: esc }, level); }
   function stopAll() { stopSpeak(); if (typeof EikenInterview !== 'undefined') EikenInterview.stop(); }
-  return { open: open, stop: stopAll, _speak: speak, _vocabStats: vocabStats, _wordList: wordList };
+  // 音声 生成用: ゲームで 読み上げる 文の 一覧 [役, 文]
+  function speechTexts() {
+    const out = [], keep = level;
+    ['g2', 'p1'].forEach(lv => {
+      level = lv;
+      SET('listen').forEach(x => { const it = normListen(x); it.lines.forEach(l => out.push([l[0], l[1]])); it.qs.forEach((q, k) => { out.push(['N', (it.qs.length > 1 ? 'Number ' + (k + 1) + '. ' : 'Question. ') + q.q]); out.push(['N', q.q]); }); });
+      wordList(lv).forEach(w => out.push(['N', w.en]));
+      SET('write').forEach(w => { if (w.model) out.push(['N', w.model]); });
+    });
+    level = keep; return out;
+  }
+  return { open: open, stop: stopAll, _speechTexts: speechTexts, _speak: speak, _vocabStats: vocabStats, _wordList: wordList };
 })();

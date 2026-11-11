@@ -44,5 +44,6 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;       // Firebase·글꼴 CDN 등은 브라우저에 맡김
+  if (/\.(mp3|m4a|ogg)$/i.test(url.pathname)) return;    // 음성 파일은 브라우저에 맡김 (부분 요청 206 은 캐시에 넣을 수 없음)
   event.respondWith(IMG_RE.test(url.pathname) ? cacheFirst(req) : networkFirst(req));
 });

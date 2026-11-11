@@ -331,9 +331,9 @@ const WorldChase = (function () {
       if (w.trait) st.memo.push({ at: here.name, who: r.ja, k: w.trait[0], v: w.trait[1], step: st.pos, idx: i });
       st.log.push(here.name + ': ' + r.ja + 'に 聞いた');
       cityView(slept ? { ok: false, msg: '🌙 夜に なったので ホテルで 眠った (+' + fmtH(slept) + ')。現地 ' + clockStr(st.t, here.tz) } : null);
-      if (w.en) say(w.en[0] + (w.traitEn ? ' ' + w.traitEn[0] : ''));
+      if (w.en) say([w.en[0]].concat(w.traitEn ? [w.traitEn[0]] : []));
     });
-    area().querySelectorAll('[data-say]').forEach(b => b.onclick = () => { const w = S.w[+b.dataset.say]; say(w.en[0] + (w.traitEn ? ' ' + w.traitEn[0] : '')); });
+    area().querySelectorAll('[data-say]').forEach(b => b.onclick = () => { const w = S.w[+b.dataset.say]; say([w.en[0]].concat(w.traitEn ? [w.traitEn[0]] : [])); });
     const tk = document.getElementById('wcTicket');
     if (tk) tk.onclick = () => {
       sfx('click');
@@ -344,10 +344,26 @@ const WorldChase = (function () {
     document.getElementById('wcFly').onclick = () => { sfx('click'); chooseView(); };
   }
   function fmtH(h) { const H = Math.floor(h + 1e-6), m = Math.round((h - H) * 60); return (H ? H + '時間' : '') + (m ? m + '分' : ''); }
-  function say(t) {
-    try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; const v = speechSynthesis.getVoices().find(v => /en-US/i.test(v.lang)); if (v) u.voice = v; speechSynthesis.speak(u); } catch (e) {}
+  // 英語の 証言を 読む: 文ごとに 事前生成音声 (VoicePack)、なければ ブラウザ音声
+  let sayGen = 0;
+  function say(list) {
+    stopSay(); const g = sayGen; list = [].concat(list);
+    const tts = (t, done) => { try { const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.9; const v = speechSynthesis.getVoices().find(v => /en-US/i.test(v.lang)); if (v) u.voice = v; u.onend = u.onerror = done; speechSynthesis.speak(u); } catch (e) { done(); } };
+    let i = 0;
+    (function next() {
+      if (g !== sayGen || i >= list.length) return;
+      const t = list[i++], done = () => { if (g === sayGen) setTimeout(next, 250); };
+      if (typeof VoicePack !== 'undefined' && VoicePack.play(t, 'N', 1, done, () => tts(t, done))) return;
+      tts(t, done);
+    })();
   }
-  function stopSay() { try { speechSynthesis.cancel(); } catch (e) {} }
+  function stopSay() { sayGen++; try { speechSynthesis.cancel(); } catch (e) {} if (typeof VoicePack !== 'undefined') VoicePack.stop(); }
+  function speechTexts() {
+    const o = [];
+    WORLD_CITIES.forEach(c => Object.keys(EN).forEach(k => o.push(['N', EN[k](c)[0]])));
+    TK.forEach(k => Object.keys(T[k].v).forEach(v => o.push(['N', traitEn(k, v)[0]])));
+    return o;
+  }
 
   // ---------- 捜査メモ ----------
   function memoView(back) {
@@ -507,5 +523,5 @@ const WorldChase = (function () {
   }
 
   function open() { showPage('pageWorldChase'); list(); const p = document.getElementById('pageWorldChase'); if (p) p.scrollTop = 0; }
-  return { open: open, stop: stopSay, _city: city, _cases: CASES, _gang: GANG, _st: () => st, _build: buildRun };
+  return { open: open, stop: stopSay, _speechTexts: speechTexts, _city: city, _cases: CASES, _gang: GANG, _st: () => st, _build: buildRun };
 })();
