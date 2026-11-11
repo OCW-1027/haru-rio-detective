@@ -550,6 +550,84 @@ const LADDER = (function () {
     const k = R(1, 4), c = R(1, 5); return { q: '∫ (1 から e^' + k + ' まで) (' + c + '/x) dx の 値は?', type: 'num', a: c * k, steps: ['[' + c + ' log x]', c + '(log e^' + k + ' − log 1) = ' + c + ' × ' + k + ' = ' + (c * k)] };
   });
 
+  // ---- 数学III・数学B/C の 発展 ----
+  add('h3', 'h3g', '🧩', '部分積分', ['∫f(x)g′(x)dx = f(x)g(x) − ∫f′(x)g(x)dx', 'x × (eˣ, sin x, cos x) は x を 微分する 側に', 'log x は 1 × log x と 見て log x を 微分する 側に'], () => {
+    const k = pick(['xe', 'log', 'xsin', 'xcos', 'xcospi', 'x2e']), c = R(1, 6), cs = c === 1 ? '' : String(c);
+    if (k === 'xe') return { q: '∫ (0 から 1 まで) ' + cs + 'x eˣ dx の 値は?', type: 'num', a: c, steps: ['∫x eˣ dx = x eˣ − ∫eˣ dx = (x − 1)eˣ', '[(x − 1)eˣ] (0〜1) = 0 − (−1) = 1', '× ' + c + ' → ' + c] };
+    if (k === 'log') return { q: '∫ (1 から e まで) ' + cs + 'log x dx の 値は?', type: 'num', a: c, steps: ['∫log x dx = ∫1・log x dx = x log x − ∫x・(1/x) dx = x log x − x', '[x log x − x] (1〜e) = (e − e) − (0 − 1) = 1', '× ' + c + ' → ' + c] };
+    if (k === 'xsin') return { q: '∫ (0 から π まで) ' + cs + 'x sin x dx = Aπ + B の とき、A と B は?', type: 'pair', a: [c, 0], labels: ['A', 'B'], steps: ['∫x sin x dx = −x cos x + ∫cos x dx = −x cos x + sin x', '[−x cos x + sin x] (0〜π) = (−π × (−1) + 0) − 0 = π', '× ' + c + ' → ' + c + 'π → A = ' + c + '、B = 0'] };
+    if (k === 'xcos') return { q: '∫ (0 から π/2 まで) ' + cs + 'x cos x dx = Aπ + B の とき、A と B は? (分数 OK)', type: 'pair', a: [fr(c, 2), -c], labels: ['A', 'B'], steps: ['∫x cos x dx = x sin x − ∫sin x dx = x sin x + cos x', '[x sin x + cos x] (0〜π/2) = (π/2 + 0) − (0 + 1) = π/2 − 1', '× ' + c + ' → A = ' + fs(fr(c, 2)) + '、B = ' + M(-c)] };
+    if (k === 'xcospi') return { q: '∫ (0 から π まで) ' + cs + 'x cos x dx の 値は?', type: 'num', a: -2 * c, steps: ['原始関数: x sin x + cos x', '[x sin x + cos x] (0〜π) = (0 + (−1)) − (0 + 1) = −2', '× ' + c + ' → ' + M(-2 * c)] };
+    return { q: '∫ (0 から 1 まで) ' + cs + 'x² eˣ dx = Ae + B の とき、A と B は?', type: 'pair', a: [c, -2 * c], labels: ['A', 'B'], steps: ['部分積分を 2回: ∫x² eˣ dx = x² eˣ − 2∫x eˣ dx = (x² − 2x + 2)eˣ', '[(x² − 2x + 2)eˣ] (0〜1) = (1 − 2 + 2)e − 2 = e − 2', '× ' + c + ' → A = ' + c + '、B = ' + M(-2 * c)] };
+  });
+  add('h3', 'h3h', '🏺', '回転体の 体積', ['x 軸の まわり: V = π∫ y² dx', 'y 軸の まわり: V = π∫ x² dy', '答えは「V = kπ」の k を 入力 (分数 OK)'], () => {
+    const k = pick(['x2', 'cone', 'sqrt', 'yax', 'ball', 'sin']);
+    if (k === 'x2') { const a = R(1, 3); return { q: '曲線 y = x² と x 軸、直線 x = ' + a + ' で 囲まれた 部分を x 軸の まわりに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(a ** 5, 5), steps: ['V = π∫ (0〜' + a + ') (x²)² dx = π∫ x⁴ dx', '= π[x⁵/5] = π × ' + (a ** 5) + '/5', 'k = ' + fs(fr(a ** 5, 5))] }; }
+    if (k === 'cone') { const c = R(1, 3), a = R(2, 4); return { q: '直線 y = ' + (c === 1 ? '' : c) + 'x と x 軸、直線 x = ' + a + ' で 囲まれた 三角形を x 軸の まわりに 1回転 させた 立体 (円すい) の 体積を V = kπ と する。k は?', type: 'num', a: fr(c * c * a ** 3, 3), steps: ['V = π∫ (0〜' + a + ') ' + (c * c) + 'x² dx = π × ' + (c * c) + ' × ' + (a ** 3) + '/3', 'k = ' + fs(fr(c * c * a ** 3, 3)), '確認: 円すいの 公式 (1/3)πr²h、r = ' + (c * a) + '、h = ' + a + ' と 一致'] }; }
+    if (k === 'sqrt') { const a = R(2, 6); return { q: '曲線 y = √x と x 軸、直線 x = ' + a + ' で 囲まれた 部分を x 軸の まわりに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(a * a, 2), steps: ['y² = x なので V = π∫ (0〜' + a + ') x dx', '= π[x²/2] = π × ' + (a * a) + '/2', 'k = ' + fs(fr(a * a, 2))] }; }
+    if (k === 'yax') { const b = R(2, 6); return { q: '曲線 y = x² (x ≧ 0) と y 軸、直線 y = ' + b + ' で 囲まれた 部分を y 軸の まわりに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(b * b, 2), steps: ['y 軸の まわりは x² を y で 表して 積分: x² = y', 'V = π∫ (0〜' + b + ') y dy = π × ' + (b * b) + '/2', 'k = ' + fs(fr(b * b, 2))] }; }
+    if (k === 'ball') { const r = R(1, 4); return { q: '半円 y = √(' + (r * r) + ' − x²) と x 軸で 囲まれた 部分を x 軸の まわりに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(4 * r ** 3, 3), steps: ['V = π∫ (−' + r + '〜' + r + ') (' + (r * r) + ' − x²) dx = 2π[' + (r * r) + 'x − x³/3] (0〜' + r + ')', '= 2π(' + (r ** 3) + ' − ' + fs(fr(r ** 3, 3)) + ') = (' + fs(fr(4 * r ** 3, 3)) + ')π', '球の 体積 (4/3)πr³ と 一致'] }; }
+    return { q: '曲線 y = sin x (0 ≦ x ≦ π) と x 軸で 囲まれた 部分を x 軸の まわりに 1回転 させた 立体の 体積を V = kπ² と する。k は?', type: 'num', a: [1, 2], steps: ['V = π∫ (0〜π) sin²x dx', 'sin²x = (1 − cos 2x)/2 (半角の 公式)', '= π[x/2 − sin 2x/4] (0〜π) = π × π/2 → k = 1/2'] };
+  });
+  add('h3', 'h3i', '♾', '無限級数', ['無限等比級数 a + ar + ar² + … = a/(1 − r) (|r| < 1 の とき 収束)', '部分分数分解: 1/(n(n+1)) = 1/n − 1/(n+1) (となりどうし 消える)', '循環小数: 0.ȧ = a/9、0.ȧḃ = ab/99'], () => {
+    const k = pick(['geo', 'geo', 'rep', 'tel', 'tel2', 'part']);
+    if (k === 'geo') { const [p, q] = pick([[1, 2], [1, 3], [2, 3], [-1, 2], [1, 4], [3, 4], [-1, 3], [-2, 3]]), a = R(1, 9) * (q === 4 ? 1 : 1); const v = fr(a * q, q - p);
+      return { q: '無限等比級数 ' + a + ' + ' + a + '×(' + fs(fr(p, q)) + ') + ' + a + '×(' + fs(fr(p, q)) + ')² + … の 和は? (分数 OK)', type: 'num', a: v, steps: ['初項 a = ' + a + '、公比 r = ' + fs(fr(p, q)) + ' (|r| < 1 なので 収束)', '和 = a/(1 − r) = ' + a + ' ÷ (1 − (' + fs(fr(p, q)) + ')) = ' + a + ' ÷ ' + fs(fr(q - p, q)), '= ' + fs(v)] }; }
+    if (k === 'rep') { if (Math.random() < 0.4) { const a = R(1, 8); return { q: '循環小数 0.' + String(a).repeat(4) + '… (' + a + ' の くり返し) を 分数で 表すと?', type: 'num', a: fr(a, 9), steps: ['x = 0.' + a + a + a + '… と おくと 10x − x = ' + a, 'x = ' + a + '/9 = ' + fs(fr(a, 9))] }; }
+      const ab = R(10, 98); if (ab % 11 === 0) return null; return { q: '循環小数 0.' + String(ab).repeat(3) + '… (' + ab + ' の くり返し) を 分数で 表すと? (約分して)', type: 'num', a: fr(ab, 99), steps: ['x = 0.' + ab + ab + '… と おくと 100x − x = ' + ab, 'x = ' + ab + '/99 = ' + fs(fr(ab, 99))] }; }
+    if (k === 'tel') { const c = R(1, 6); return { q: 'Σ (n = 1 から ∞) ' + (c === 1 ? '' : c) + '/(n(n+1)) の 値は?', type: 'num', a: c, steps: ['1/(n(n+1)) = 1/n − 1/(n+1)', '部分和 = (1 − 1/2) + (1/2 − 1/3) + … + (1/N − 1/(N+1)) = 1 − 1/(N+1)', 'N → ∞ で 1 → × ' + c + ' = ' + c] }; }
+    if (k === 'tel2') { const c = R(1, 4) * 4; return pick([0, 1]) ? { q: 'Σ (n = 1 から ∞) ' + c + '/(n(n+2)) の 値は?', type: 'num', a: fr(3 * c, 4), steps: ['1/(n(n+2)) = (1/2)(1/n − 1/(n+2))', '部分和で 残るのは (1/2)(1 + 1/2 − 1/(N+1) − 1/(N+2))', 'N → ∞ で (1/2)(3/2) = 3/4 → × ' + c + ' = ' + fs(fr(3 * c, 4))] }
+      : { q: 'Σ (n = 1 から ∞) ' + c + '/((2n−1)(2n+1)) の 値は?', type: 'num', a: fr(c, 2), steps: ['1/((2n−1)(2n+1)) = (1/2)(1/(2n−1) − 1/(2n+1))', '部分和 = (1/2)(1 − 1/(2N+1)) → 1/2', '× ' + c + ' = ' + fs(fr(c, 2))] }; }
+    const N = R(5, 30); return { q: 'Σ (n = 1 から ' + N + ') 1/(n(n+1)) の 値は? (分数で)', type: 'num', a: fr(N, N + 1), steps: ['1/(n(n+1)) = 1/n − 1/(n+1) で となりどうし 消える', '= 1 − 1/' + (N + 1) + ' = ' + fs(fr(N, N + 1))] };
+  });
+  add('h3', 'h3j', '🎯', '関数の 極限', ['lim (x→0) sin x / x = 1', 'lim (x→0) (eˣ − 1)/x = 1、lim (x→0) log(1+x)/x = 1', 'lim (n→∞) (1 + 1/n)ⁿ = e', '√ の 差は 有理化 (分子・分母に 和を かける)'], () => {
+    const k = pick(['sin', 'cos', 'tan', 'root', 'exp', 'log', 'e']), a = R(2, 6), b = R(2, 5);
+    if (k === 'sin') return { q: 'lim (x→0) sin ' + a + 'x / ' + b + 'x の 値は? (分数 OK)', type: 'num', a: fr(a, b), steps: ['sin ' + a + 'x / ' + b + 'x = (sin ' + a + 'x / ' + a + 'x) × ' + a + '/' + b, 'sin ' + a + 'x / ' + a + 'x → 1', '→ ' + fs(fr(a, b))] };
+    if (k === 'cos') return { q: 'lim (x→0) (1 − cos ' + a + 'x) / x² の 値は? (分数 OK)', type: 'num', a: fr(a * a, 2), steps: ['1 − cos θ = 2 sin²(θ/2)', '= 2 sin²(' + (a === 2 ? '' : fs(fr(a, 2))) + 'x) / x² = 2 × (sin(' + (a === 2 ? '' : fs(fr(a, 2))) + 'x) / x)²', '→ 2 × (' + fs(fr(a, 2)) + ')² = ' + fs(fr(a * a, 2))] };
+    if (k === 'tan') return { q: 'lim (x→0) tan ' + a + 'x / x の 値は?', type: 'num', a: a, steps: ['tan ' + a + 'x / x = (sin ' + a + 'x / ' + a + 'x) × ' + a + ' / cos ' + a + 'x', '→ 1 × ' + a + ' / 1 = ' + a] };
+    if (k === 'root') return { q: 'lim (x→∞) (√(x² + ' + a + 'x) − x) の 値は? (分数 OK)', type: 'num', a: fr(a, 2), steps: ['分子・分母に √(x² + ' + a + 'x) + x を かける (有理化)', '= ' + a + 'x / (√(x² + ' + a + 'x) + x) = ' + a + ' / (√(1 + ' + a + '/x) + 1)', '→ ' + a + ' / 2 = ' + fs(fr(a, 2))] };
+    if (k === 'exp') return { q: 'lim (x→0) (e^(' + a + 'x) − 1) / ' + b + 'x の 値は? (分数 OK)', type: 'num', a: fr(a, b), steps: ['(e^(' + a + 'x) − 1) / ' + a + 'x → 1', '× ' + a + '/' + b + ' → ' + fs(fr(a, b))] };
+    if (k === 'log') return { q: 'lim (x→0) log(1 + ' + a + 'x) / x の 値は?', type: 'num', a: a, steps: ['log(1 + ' + a + 'x) / ' + a + 'x → 1', '× ' + a + ' → ' + a] };
+    const o = choices('e^' + a, ['e^(1/' + a + ')', a + 'e', '1', '∞', 'e']); return { q: 'lim (n→∞) (1 + ' + a + '/n)ⁿ の 値は?', type: 'choice', a: 0, opts: o, steps: ['m = n/' + a + ' と おくと (1 + 1/m)^(' + a + 'm) = ((1 + 1/m)^m)^' + a, 'm → ∞ で e^' + a] };
+  });
+  const V3 = [[1, 2, 2, 3], [2, 3, 6, 7], [1, 4, 8, 9], [4, 4, 7, 9], [2, 6, 9, 11], [2, 1, 2, 3], [6, 2, 3, 7], [3, 4, 12, 13]];
+  const vrand = () => { const v = pick(V3), s = [0, 1, 2].sort(() => Math.random() - 0.5), p = s.map(i => v[i] * pick([1, -1])); return [p, v[3]]; };
+  const vs = v => '(' + v.map(M).join(', ') + ')';
+  add('hB', 'hBh', '🧊', '空間ベクトル', ['a⃗ = (a₁, a₂, a₃) の 大きさ |a⃗| = √(a₁² + a₂² + a₃²)', '内積 a⃗・b⃗ = a₁b₁ + a₂b₂ + a₃b₃ = |a⃗||b⃗| cos θ', '垂直 ⇔ 内積 = 0'], () => {
+    const k = pick(['len', 'dot', 'cos', 'cos', 'perp', 'dist']);
+    if (k === 'len') { const [v, n] = vrand(), c = R(1, 3), w = v.map(x => x * c); return { q: 'a⃗ = ' + vs(w) + ' の 大きさ |a⃗| は?', type: 'num', a: n * c, steps: ['|a⃗|² = ' + w.map(x => P(x) + '²').join(' + ') + ' = ' + (n * c) ** 2, '|a⃗| = ' + n * c] }; }
+    if (k === 'dot') { const a = [NZ(-5, 5), NZ(-5, 5), NZ(-5, 5)], b = [NZ(-5, 5), NZ(-5, 5), NZ(-5, 5)], d = a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; return { q: 'a⃗ = ' + vs(a) + '、b⃗ = ' + vs(b) + ' の 内積 a⃗・b⃗ は?', type: 'num', a: d, steps: [a.map((x, i) => P(x) + '×' + P(b[i])).join(' + ') + ' = ' + d] }; }
+    if (k === 'cos') { const [a, na] = vrand(), [b, nb] = vrand(), d = a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; if (!d) return null; return { q: 'a⃗ = ' + vs(a) + '、b⃗ = ' + vs(b) + ' の なす角を θ と する。cos θ は? (分数で)', type: 'num', a: fr(d, na * nb), steps: ['a⃗・b⃗ = ' + a.map((x, i) => P(x) + '×' + P(b[i])).join(' + ') + ' = ' + M(d), '|a⃗| = ' + na + '、|b⃗| = ' + nb, 'cos θ = ' + M(d) + ' / (' + na + ' × ' + nb + ') = ' + fs(fr(d, na * nb))] }; }
+    if (k === 'perp') { const a = [NZ(-4, 4), NZ(-4, 4), NZ(-4, 4)], b0 = NZ(-4, 4), b1 = NZ(-4, 4), base = a[0] * b0 + a[1] * b1; const ans = fr(-base, a[2]); return { q: 'a⃗ = ' + vs(a) + '、b⃗ = (' + M(b0) + ', ' + M(b1) + ', t) が 垂直に なる とき、t は? (分数 OK)', type: 'num', a: ans, steps: ['垂直 ⇔ a⃗・b⃗ = 0', P(a[0]) + '×' + P(b0) + ' + ' + P(a[1]) + '×' + P(b1) + ' + ' + P(a[2]) + 't = 0', base + ' + ' + P(a[2]) + 't = 0 → t = ' + fs(ans)] }; }
+    const A = [R(-3, 3), R(-3, 3), R(-3, 3)], [v, n] = vrand(), B = A.map((x, i) => x + v[i]); return { q: '2点 A' + vs(A) + '、B' + vs(B) + ' の 距離 AB は?', type: 'num', a: n, steps: ['AB⃗ = ' + vs(v), '|AB⃗| = √(' + v.map(x => P(x) + '²').join(' + ') + ') = ' + n] };
+  });
+  const NT = { 0.5: 1915, 1: 3413, 1.5: 4332, 1.96: 4750, 2: 4772, 2.5: 4938, 3: 4987 };
+  const ntab = '(正規分布表: P(0≦Z≦z) … z=0.5: 0.1915、1: 0.3413、1.5: 0.4332、1.96: 0.4750、2: 0.4772、2.5: 0.4938、3: 0.4987)';
+  add('hB', 'hBi', '🔔', '正規分布・統計的推測', ['X が 正規分布 N(m, σ²) に 従う とき、Z = (X − m)/σ は 標準正規分布 N(0, 1) に 従う', '標本平均の 標準偏差 = σ/√n', '母平均の 信頼度 95% の 信頼区間: x̄ ± 1.96 × σ/√n'], () => {
+    const k = pick(['up', 'mid', 'low', 'two', 'se', 'ci']), m = pick([50, 60, 100, 165, 500]), s = pick([5, 10, 4, 8, 20]);
+    const zs = [0.5, 1, 1.5, 2, 2.5, 3], z = pick(zs), x = r => m + r * s, f = n => n / 10000;
+    if (k === 'up') return { q: 'X が 正規分布 N(' + m + ', ' + s + '²) に 従う とき、P(X ≧ ' + x(z) + ') は? (小数第4位まで)\n' + ntab, type: 'num', a: f(5000 - NT[z]), steps: ['Z = (' + x(z) + ' − ' + m + ') / ' + s + ' = ' + z, 'P(Z ≧ ' + z + ') = 0.5 − ' + f(NT[z]) + ' = ' + f(5000 - NT[z])] };
+    if (k === 'low') return { q: 'X が 正規分布 N(' + m + ', ' + s + '²) に 従う とき、P(X ≦ ' + x(z) + ') は? (小数第4位まで)\n' + ntab, type: 'num', a: f(5000 + NT[z]), steps: ['Z = (' + x(z) + ' − ' + m + ') / ' + s + ' = ' + z, 'P(Z ≦ ' + z + ') = 0.5 + ' + f(NT[z]) + ' = ' + f(5000 + NT[z])] };
+    if (k === 'mid') return { q: 'X が 正規分布 N(' + m + ', ' + s + '²) に 従う とき、P(' + x(-z) + ' ≦ X ≦ ' + x(z) + ') は? (小数第4位まで)\n' + ntab, type: 'num', a: f(2 * NT[z]), steps: ['Z に 直すと −' + z + ' ≦ Z ≦ ' + z, '左右対称なので 2 × ' + f(NT[z]) + ' = ' + f(2 * NT[z])] };
+    if (k === 'two') { const z2 = pick(zs.filter(t => t !== z)); return { q: 'X が 正規分布 N(' + m + ', ' + s + '²) に 従う とき、P(' + x(-z) + ' ≦ X ≦ ' + x(z2) + ') は? (小数第4位まで)\n' + ntab, type: 'num', a: f(NT[z] + NT[z2]), steps: ['Z に 直すと −' + z + ' ≦ Z ≦ ' + z2, 'P(−' + z + ' ≦ Z ≦ 0) + P(0 ≦ Z ≦ ' + z2 + ') = ' + f(NT[z]) + ' + ' + f(NT[z2]) + ' = ' + f(NT[z] + NT[z2])] }; }
+    const [sg, n] = pick([[12, 36], [10, 25], [15, 9], [20, 16], [18, 81], [24, 64], [30, 100], [14, 49]]), se = sg / Math.sqrt(n);
+    if (k === 'se') return { q: '母標準偏差 ' + sg + ' の 母集団から 大きさ ' + n + ' の 標本を 取り出す。標本平均 X̄ の 標準偏差は?', type: 'num', a: fr(sg, Math.sqrt(n)), steps: ['σ(X̄) = σ/√n = ' + sg + ' / √' + n + ' = ' + sg + ' / ' + Math.sqrt(n) + ' = ' + fs(fr(sg, Math.sqrt(n)))] };
+    if (Math.round(se * 100) !== se * 100) return null;
+    const xb = pick([50, 62, 120, 170, 300]), w = Math.round(196 * se) / 100, ask = pick(['lo', 'hi']), v = Math.round((ask === 'lo' ? xb - w : xb + w) * 100) / 100;
+    return { q: '母標準偏差 ' + sg + ' の 母集団から 大きさ ' + n + ' の 標本を 取り出すと、標本平均は ' + xb + ' だった。母平均の 信頼度 95% の 信頼区間の ' + (ask === 'lo' ? '下限' : '上限') + 'は? (小数第2位まで)', type: 'num', a: v, steps: ['σ/√n = ' + sg + ' / ' + Math.sqrt(n) + ' = ' + fs(fr(sg, Math.sqrt(n))), '1.96 × ' + fs(fr(sg, Math.sqrt(n))) + ' = ' + w, xb + (ask === 'lo' ? ' − ' : ' + ') + w + ' = ' + v] };
+  });
+  add('hB', 'hBj', '🥚', '2次曲線 (楕円・双曲線・放物線)', ['楕円 x²/a² + y²/b² = 1 (a > b): 焦点 (±√(a² − b²), 0)、焦点からの 距離の 和 = 2a', '双曲線 x²/a² − y²/b² = 1: 焦点 (±√(a² + b²), 0)、漸近線 y = ±(b/a)x', '放物線 y² = 4px: 焦点 (p, 0)、準線 x = −p'], () => {
+    const k = pick(['ef', 'esum', 'hf', 'hasy', 'para']);
+    if (k === 'ef' || k === 'esum') { const [a, b, c] = pick([[5, 4, 3], [5, 3, 4], [13, 12, 5], [13, 5, 12], [10, 6, 8], [10, 8, 6], [17, 15, 8], [25, 24, 7]]), eq = 'x²/' + a * a + ' + y²/' + b * b + ' = 1';
+      return k === 'ef' ? { q: '楕円 ' + eq + ' の 焦点を (±c, 0) と する。c は?', type: 'num', a: c, steps: ['c = √(a² − b²) = √(' + a * a + ' − ' + b * b + ') = √' + c * c + ' = ' + c] }
+        : { q: '楕円 ' + eq + ' 上の 点 P と 2つの 焦点 F、F′ に ついて、PF + PF′ は?', type: 'num', a: 2 * a, steps: ['楕円は「2焦点からの 距離の 和が 一定」の 点の 集まり', 'その 和 = 長軸の 長さ = 2a = 2 × ' + a + ' = ' + 2 * a] }; }
+    if (k === 'hf' || k === 'hasy') { const [a, b, c] = pick([[3, 4, 5], [4, 3, 5], [5, 12, 13], [12, 5, 13], [6, 8, 10], [8, 15, 17], [8, 6, 10]]), eq = 'x²/' + a * a + ' − y²/' + b * b + ' = 1';
+      return k === 'hf' ? { q: '双曲線 ' + eq + ' の 焦点を (±c, 0) と する。c は?', type: 'num', a: c, steps: ['双曲線は c = √(a² + b²) (楕円と 符号が 逆)', '√(' + a * a + ' + ' + b * b + ') = √' + c * c + ' = ' + c] }
+        : { q: '双曲線 ' + eq + ' の 漸近線を y = ±kx (k > 0) と する。k は? (分数 OK)', type: 'num', a: fr(b, a), steps: ['漸近線は x²/a² − y²/b² = 0 → y = ±(b/a)x', 'k = ' + b + '/' + a + ' = ' + fs(fr(b, a))] }; }
+    const q4 = NZ(-12, 12), p = fr(q4, 4); return pick([0, 1]) ? { q: '放物線 y² = ' + (q4 === 1 ? '' : q4 === -1 ? '−' : M(q4)) + 'x の 焦点を (p, 0) と する。p は? (分数 OK)', type: 'num', a: p, steps: ['y² = 4px と 比べて 4p = ' + q4, 'p = ' + fs(p)] }
+      : { q: '放物線 y² = ' + (q4 === 1 ? '' : q4 === -1 ? '−' : M(q4)) + 'x の 準線を x = d と する。d は? (分数 OK)', type: 'num', a: fr(-q4, 4), steps: ['4p = ' + q4 + ' → p = ' + fs(p), '準線は x = −p = ' + fs(fr(-q4, 4))] };
+  });
+
   const GROUPS = [
     { id: 'c1', name: '中学1年', color: '#3a8a5a' }, { id: 'c2', name: '中学2年', color: '#2e7aa8' }, { id: 'c3', name: '中学3年', color: '#5a5ab0' },
     { id: 'h1', name: '高校 数学I', color: '#b05a3a' }, { id: 'hA', name: '高校 数学A', color: '#a0702a' }, { id: 'h2', name: '高校 数学II', color: '#9a3a7a' },
