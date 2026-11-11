@@ -31,3 +31,6 @@
 .mw-lessonbtn span:first-child { font-size: 30px; }
 .mw-lessonbtn b { display: block; font-family: 'RocknRoll One'; font-size: 15px; color: #6a4a10; }
 .mw-lessonbtn small { font-family: 'Klee One'; font-size: 12px; color: #8a6a3a; }
+/* インド式 道場の 解説タブ内 */
+.im-lesson { margin: 14px 0 6px; }
+.im-lesson-h { font-size: 1.05rem; margin: 6px 2px 10px; color: #2e5fa8; }

@@ -69,6 +69,7 @@ const IndianMath = (function () {
     const box = $('imTab');
     if (tab === 'why') {
       let s = '<div class="im-box im-rule"><b>ワザ</b><p>' + esc(t.short) + '</p></div><div class="im-box"><div class="im-talk">' + aarya('sm') + '<div><b>なぜ そうなる?</b>' + t.why.map(p => '<p>' + p + '</p>').join('') + '</div></div>' + (t.area ? '<div class="im-center">' + areaSVG(t.area) + '<p class="im-small">面積図: 4つの 長方形の 合計が 答え</p></div>' : '') + '</div>';
+      if (typeof Lesson !== 'undefined' && Lesson.has('im_' + t.id)) s += '<div class="im-lesson"><h3 class="im-lesson-h">📖 くわしい 解説</h3>' + Lesson.html('im_' + t.id) + '</div>';
       s += '<button class="im-primary" id="imGoEx">👀 例題を 見る</button>';
       box.innerHTML = s; $('imGoEx').onclick = () => { sfx('click'); techView(t, 'ex'); };
     } else if (tab === 'ex') exampleView(t, box, t.make(t.ex));
