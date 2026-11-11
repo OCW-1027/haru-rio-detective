@@ -56,10 +56,11 @@ const MainStory = (function () {
     if (who === 'kd') return art(SP + 'koradon_' + (pose || 'idle2') + '.webp', '<img src="' + SP + 'koradon_greet_01.webp" alt="">', 'ms-pt sp');
     if (who === 'kr') return art(SP + 'korarin_' + (pose || 'idle2') + '.webp', '<img src="' + SP + 'korarin_greet_01.webp" alt="">', 'ms-pt sp');
     if (who === 'bl') return art(SP + 'blank_villain.webp', BLANK_SVG, 'ms-pt sp dark');
+    if (who === 'shiro') return art(SP + 'blank_friend.webp', BLANK_SVG, 'ms-pt sp');
     if (who === 'zero') return art('assets/img/world/gang/zero.webp', '<span class="ms-emo">🎩</span>', 'ms-pt boy');
     return '';
   }
-  const NAME = { haru: 'ハル', rio: 'リオ', kd: 'コラドン', kr: 'コラリン', bl: '怪盗ブランク', zero: 'ゼロ', nar: '' };
+  const NAME = { haru: 'ハル', rio: 'リオ', kd: 'コラドン', kr: 'コラリン', bl: '怪盗ブランク', shiro: 'シロ', zero: 'ゼロ', nar: '' };
 
   // ---------- 会話 ----------
   function talk(lines, title, done) {
@@ -68,7 +69,7 @@ const MainStory = (function () {
     const draw = () => {
       const [who, pose, text] = lines[i];
       let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">' + esc(title) + '</div><button class="ms-skip" id="msSkip">スキップ ▶▶</button></div>';
-      h += '<div class="ms-stage' + (who === 'bl' || who === 'zero' ? ' night' : '') + '" style="--g:' + (1 - gotN() / 12).toFixed(2) + '"><div class="ms-bg" style="background-image:url(\'' + SCENE_IMAGES.library + '\')"></div>' + (who !== 'nar' ? '<div class="ms-ptwrap ' + (who === 'haru' || who === 'kd' ? 'left' : 'right') + '">' + portrait(who, pose) + '</div>' : '') + '</div>';
+      h += '<div class="ms-stage' + (who === 'bl' || who === 'zero' ? ' night' : '') + '" style="--g:' + (season === 2 ? 1 - got2N() / 6 : 1 - gotN() / 12).toFixed(2) + '"><div class="ms-bg" style="background-image:url(\'' + SCENE_IMAGES.library + '\')"></div>' + (who !== 'nar' ? '<div class="ms-ptwrap ' + (who === 'haru' || who === 'kd' ? 'left' : 'right') + '">' + portrait(who, pose) + '</div>' : '') + '</div>';
       h += '<button class="ms-box' + (who === 'nar' ? ' nar' : '') + '" id="msNext">' + (NAME[who] ? '<b>' + NAME[who] + '</b>' : '') + '<span>' + esc(text) + '</span><small>' + (i + 1) + ' / ' + lines.length + ' ▼</small></button>';
       area().innerHTML = h;
       $('msBack').onclick = () => { sfx('click'); map(); };
@@ -230,7 +231,7 @@ const MainStory = (function () {
     stop();
     const D = d2(), F = MAIN_STORY.s2.frags, n = got2N();
     if (!D.seen.prologue) { D.seen.prologue = 1; save(); return talk(MAIN_STORY.s2.prologue, 'シーズン2 プロローグ', () => map()); }
-    let h = seasonTabs(2) + '<div class="ms-hero s2"><div><div class="ms-kicker">メインストーリー シーズン2</div><h1 class="ms-h1">白紙の ページ</h1><div class="ms-bar"><div style="width:' + (n / F.length * 100) + '%"></div></div><small>真実の カケラ ' + n + ' / ' + F.length + '</small></div>' + portrait('bl') + '</div>';
+    let h = seasonTabs(2) + '<div class="ms-hero s2"><div><div class="ms-kicker">メインストーリー シーズン2</div><h1 class="ms-h1">白紙の ページ</h1><div class="ms-bar"><div style="width:' + (n / F.length * 100) + '%"></div></div><small>真実の カケラ ' + n + ' / ' + F.length + '</small></div>' + portrait(D.boss.won ? 'shiro' : 'bl') + '</div>';
     if (flash) h += '<div class="ms-flash">' + flash + '</div>';
     h += '<div class="ms-map s2">';
     F.forEach(f => {
@@ -239,7 +240,7 @@ const MainStory = (function () {
     });
     h += '</div>';
     const ok = n >= 5;
-    h += '<button class="ms-boss' + (ok ? '' : ' off') + '" id="msFinal">' + portrait('bl') + '<span><b>' + (D.boss.won ? '🤝 シロと なかなおり' : '⚔ 怪盗ブランクとの 最終決戦') + '</b><small>' + (ok ? '6つの 試練 (日本・歴史・暗号・ニュース・法律・英語)' : '真実の カケラを 5つ 集めると 挑戦できる (いま ' + n + ')') + '</small></span></button>';
+    h += '<button class="ms-boss' + (ok ? '' : ' off') + '" id="msFinal">' + portrait(D.boss.won ? 'shiro' : 'bl') + '<span><b>' + (D.boss.won ? '🤝 シロと なかなおり' : '⚔ 怪盗ブランクとの 最終決戦') + '</b><small>' + (ok ? '6つの 試練 (日本・歴史・暗号・ニュース・法律・英語)' : '真実の カケラを 5つ 集めると 挑戦できる (いま ' + n + ')') + '</small></span></button>';
     h += '<div class="ms-row"><button class="ms-sec" id="msNotes2">🃏 シロの カード (' + n + ')</button><button class="ms-sec" id="msPro2">📜 プロローグ</button></div>';
     area().innerHTML = h; bindSeasons();
     area().querySelectorAll('[data-f]').forEach(b => b.onclick = () => { sfx('click'); tile2(F.find(f => f.id === b.dataset.f)); });
