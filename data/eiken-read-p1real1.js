@@ -22,7 +22,7 @@ EIKEN_P1_READING.push(
         exp: '狩猟採集民が すぐに 定住 → 明らかな 利点が あったから 熱心に 取り入れた (という 旧来の 見方)。' },
       { q: '(2)', options: ['Moreover', 'Otherwise', 'Instead', 'Conversely'], answer: 0,
         exp: '旧説を 揺るがす 証拠の 追加 → Moreover。' },
-      { q: '(3)', options: ['allowed populations to grow larger', 'made people healthier and taller', 'required less work than hunting', 'was forced on people by kings'], answer: 0,
+      { q: '(3)', options: ['allowed populations to grow larger', 'made people healthier and taller than hunters', 'required less work than hunting', 'was forced on people by kings'], answer: 0,
         exp: '個人の 生活が 良くならなくても 広まった 理由 → 人口を 増やせたから。' } ] },
   { id: 'p1x3', real: true, type: 'content', title: 'The Psychology of Tipping',
     paragraphs: [
@@ -32,9 +32,9 @@ EIKEN_P1_READING.push(
     questions: [
       { q: 'What is one reason economists find tipping puzzling?', options: ['People tip even when they have no financial reason to do so.', 'Tips in the United States are lower than in Japan.', 'Workers prefer to receive higher wages instead.', 'Restaurants refuse to accept tips from tourists.'], answer: 0,
         exp: '第2段落: 二度と 来ない 客にも 経済的理由は ないのに チップを 払う。' },
-      { q: 'According to researchers, why do people mainly tip?', options: ['To avoid guilt and follow social expectations.', 'To guarantee better service next time.', 'Because tips are required by law.', 'To reward excellent service.'], answer: 0,
+      { q: 'According to researchers, why do people mainly tip?', options: ['To avoid guilt and follow social expectations.', 'To guarantee better service on their next visit.', 'Because tips are required by law.', 'To reward excellent service.'], answer: 0,
         exp: '第2段落: 罪悪感・気まずさを 避け、社会的期待に 従うため。' },
-      { q: 'Why do critics consider tipping unfair?', options: ['Workers\' income can depend on things unrelated to their work.', 'Customers are forced to pay too much.', 'Tips are taxed more heavily than wages.', 'Restaurants keep most of the tips.'], answer: 0,
+      { q: 'Why do critics consider tipping unfair?', options: ['Workers\' income can depend on things unrelated to their work.', 'Customers are forced to pay too much.', 'Tips are taxed more heavily than wages.', 'Restaurant owners keep most of the tips for themselves.'], answer: 0,
         exp: '第3段落: 収入が 本人の 管理外の 要因 (外見・偏見など) に 左右される。' } ] },
   { id: 'p1x4', real: true, type: 'content', title: 'The Battle Over Rare Earth Elements',
     paragraphs: [
@@ -43,12 +43,12 @@ EIKEN_P1_READING.push(
       'This dependence became a serious concern in 2010, when China temporarily restricted exports of rare earths to Japan during a territorial dispute. Prices rose sharply, and Japanese manufacturers struggled to obtain the materials they needed. In response, Japan adopted a strategy to reduce its reliance on China. It invested in mines in Australia, developed technology to recycle rare earths from old electronics, and encouraged companies to design products that use fewer rare earths. Within a decade, Japan\'s dependence on Chinese rare earths had fallen significantly.',
       'Other countries have since followed Japan\'s example. The United States has reopened rare earth mining in California and is supporting the construction of new refining facilities, while the European Union has set targets for domestic production and recycling. Nevertheless, experts warn that reducing dependence will take many years. Building a mine and refinery can take more than a decade because of environmental reviews and opposition from local residents, and China still controls most of the world\'s refining capacity. Some scientists are also researching alternative materials that could replace rare earths entirely, although such technologies are still at an early stage.' ],
     questions: [
-      { q: 'Why is extracting rare earth elements difficult?', options: ['They are mixed with other minerals in low concentrations.', 'They are found only in a few countries.', 'They are extremely rare in the Earth\'s crust.', 'They cannot be refined using modern technology.'], answer: 0,
+      { q: 'Why is extracting rare earth elements difficult?', options: ['They are mixed with other minerals in low concentrations.', 'They are found only in a few countries.', 'They are extremely rare in the Earth\'s crust.', 'They cannot be refined using any modern technology.'], answer: 0,
         exp: '第1段落: 名前と 違い 希少ではないが、低濃度で 他の 鉱物と 混ざっている。' },
       { q: 'Why did many mines outside China close?', options: ['They could not compete with cheap Chinese production.', 'Their supplies of rare earths ran out.', 'Governments banned rare earth mining.', 'Demand for rare earths decreased.'], answer: 0,
         exp: '第2段落: 中国の 安価な 生産と 競争できなかった。' },
-      { q: 'What did Japan do after 2010?', options: ['It took several steps to reduce its reliance on China.', 'It stopped using rare earths completely.', 'It built many rare earth mines in Japan.', 'It signed a long-term contract with China.'], answer: 0,
+      { q: 'What did Japan do after 2010?', options: ['It took several steps to reduce its reliance on China.', 'It stopped using rare earths completely.', 'It built many rare earth mines in Japan.', 'It signed a long-term supply contract with China.'], answer: 0,
         exp: '第3段落: 豪州の 鉱山投資・リサイクル・使用量削減で 依存を 減らした。' },
-      { q: 'Why do experts warn that reducing dependence will take time?', options: ['New mines and refineries take many years to develop.', 'Other countries refuse to cooperate.', 'Recycling technology has been banned.', 'Demand for electric vehicles is falling.'], answer: 0,
+      { q: 'Why do experts warn that reducing dependence will take time?', options: ['New mines and refineries take many years to develop.', 'Other countries refuse to cooperate with one another.', 'Recycling technology has been banned.', 'Demand for electric vehicles is falling.'], answer: 0,
         exp: '第4段落: 環境審査や 住民の 反対で 鉱山・精錬所の 建設に 10年以上 かかる。' } ] }
 );

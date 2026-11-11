@@ -10,7 +10,7 @@ EIKEN_G2_READING.push(
         exp: '人前では 恥ずかしい ⇔ However → ロボット相手だと リラックスできる。' },
       { q: '(2)', options: ['In addition', 'However', 'Instead', 'For this reason'], answer: 0,
         exp: '利点の 追加 (疲れない + 記録できる) → In addition。' },
-      { q: '(3)', options: ['support human teachers', 'teach all the classes', 'speak only Japanese', 'stay at home'], answer: 0,
+      { q: '(3)', options: ['support human teachers', 'teach all the classes alone', 'speak only Japanese', 'stay at home'], answer: 0,
         exp: 'rather than replace them (先生に 取って代わるのではなく) → 先生を 支える。' } ] },
   { id: 'g2r6', type: 'cloze', title: 'The Town That Banned Cars',
     paragraphs: [
@@ -22,7 +22,7 @@ EIKEN_G2_READING.push(
         exp: '中心部から 車を 締め出す → 大きな 変化を 起こした。' },
       { q: '(2)', options: ['However', 'As a result', 'For example', 'In the same way'], answer: 0,
         exp: '客が 減ると 心配 ⇔ 逆の ことが 起きた → However。' },
-      { q: '(3)', options: ['cities can be better places without many cars', 'shops always need parking', 'walking is bad for business', 'small cities cannot change'], answer: 0,
+      { q: '(3)', options: ['cities can be better places without many cars', 'shops always need large parking lots', 'walking is bad for business', 'small cities cannot change'], answer: 0,
         exp: '大気汚染・事故が 減り、店も 増えた → 車が 少なくても 良い 街に なれる。' } ] },
   { id: 'g2r7', type: 'cloze', title: 'Why Do We Yawn?',
     paragraphs: [
@@ -30,11 +30,11 @@ EIKEN_G2_READING.push(
       'One newer idea is that yawning helps to cool the brain. When we yawn, we take in a large amount of air, which may lower the temperature of the blood going to the brain. (2), people yawn more often in spring and fall than in hot summer weather, when the outside air is too warm to cool the brain.',
       'Yawning is also famous for being contagious. When we see someone yawn, we often yawn too. Interestingly, studies show that people are more likely to catch a yawn from family and friends than from strangers. Some researchers think this shows that yawning is (3).' ],
     questions: [
-      { q: '(1)', options: ['reduce the number of yawns', 'make people sleepy', 'change body temperature', 'help people breathe'], answer: 0,
+      { q: '(1)', options: ['reduce the number of yawns', 'make people sleepy', 'change our body temperature', 'help people breathe'], answer: 0,
         exp: '酸素説の 否定 → 酸素を 吸っても あくびは 減らない。' },
       { q: '(2)', options: ['Supporting this idea', 'Despite this', 'On the other hand', 'In contrast'], answer: 0,
         exp: '脳を 冷やす説を 支持する 事実 → Supporting this idea。' },
-      { q: '(3)', options: ['connected to our feelings for others', 'a sign of illness', 'only seen in humans', 'caused by hot weather'], answer: 0,
+      { q: '(3)', options: ['connected to our feelings for others', 'a sign of illness', 'only seen in humans', 'caused mainly by hot or humid weather'], answer: 0,
         exp: '家族・友人から うつりやすい → 他人への 感情 (共感) と 関係。' } ] },
   { id: 'g2r8', type: 'content', title: 'From: Daniel Moore / To: Members of the Riverside Running Club',
     paragraphs: [
@@ -46,11 +46,11 @@ EIKEN_G2_READING.push(
       'Best regards,',
       'Daniel Moore, Club Leader' ],
     questions: [
-      { q: 'Why will the Saturday runs start later?', options: ['Members said it was too dark and cold early in the morning.', 'The park gate opens at 8 a.m.', 'The marathon will be held on Saturdays.', 'The club leader is busy at 7 a.m.'], answer: 0,
+      { q: 'Why will the Saturday runs start later?', options: ['Members said it was too dark and cold early in the morning.', 'The park gate opens at 8 a.m.', 'The marathon will be held on Saturdays.', 'The club leader is too busy at 7 a.m. on most Saturdays.'], answer: 0,
         exp: '"it was too dark and cold at 7" 7時は 暗くて 寒い。' },
       { q: 'What should members do if they want to volunteer?', options: ['Reply to the e-mail by October 20.', 'Buy a club T-shirt.', 'Run in the marathon.', 'Go to the 20-kilometer point on October 5.'], answer: 0,
         exp: '"please reply to this e-mail by October 20"' },
-      { q: 'What is Daniel looking for?', options: ['A restaurant for the year-end party.', 'New members for the club.', 'A new place to run.', 'A sponsor for the marathon.'], answer: 0,
+      { q: 'What is Daniel looking for?', options: ['A restaurant for the year-end party.', 'New members for the club.', 'A new place to run.', 'A company to sponsor the marathon.'], answer: 0,
         exp: '40人入れる レストランを 探している。' } ] },
   { id: 'g2r9', type: 'content', title: 'The Story of Instant Noodles',
     paragraphs: [
@@ -59,11 +59,11 @@ EIKEN_G2_READING.push(
       'In 1958, Ando began selling the world\'s first instant noodles, called Chicken Ramen. At first, they were more expensive than fresh noodles, but they quickly became popular because they were so convenient. In 1971, he introduced Cup Noodles, which came in a cup that could be used as a bowl. He got this idea after seeing people in the United States break noodles into cups because they did not have bowls.',
       'Ando believed that "peace will come to the world when people have enough food." Instant noodles have been used as emergency food after natural disasters, and a special type was even developed for astronauts to eat in space in 2005.' ],
     questions: [
-      { q: 'Why did Ando want to create a new kind of food?', options: ['He wanted to help hungry people eat cheaply and easily.', 'He wanted to open a ramen shop.', 'His wife asked him to.', 'He wanted to sell food to astronauts.'], answer: 0,
+      { q: 'Why did Ando want to create a new kind of food?', options: ['He wanted to help hungry people eat cheaply and easily.', 'He wanted to open a ramen shop.', 'His wife asked him to.', 'He wanted to sell easy food to astronauts in space.'], answer: 0,
         exp: '戦後の 空腹な 人々を 見て、安く 簡単な 食べ物を 作りたかった。' },
-      { q: 'What gave Ando the idea for frying noodles?', options: ['Watching his wife cook tempura.', 'Visiting a food stand.', 'Talking with American people.', 'Reading a cookbook.'], answer: 0,
+      { q: 'What gave Ando the idea for frying noodles?', options: ['Watching his wife cook tempura.', 'Visiting a food stand after the war.', 'Talking with American people.', 'Reading a cookbook.'], answer: 0,
         exp: '妻が 天ぷらを 揚げるのを 見た。' },
-      { q: 'How did Ando get the idea for Cup Noodles?', options: ['He saw people in the US putting noodles in cups.', 'He wanted food for space.', 'He could not find bowls in Japan.', 'His customers asked for cheaper noodles.'], answer: 0,
+      { q: 'How did Ando get the idea for Cup Noodles?', options: ['He saw people in the US putting noodles in cups.', 'He wanted food for space.', 'He could not find bowls in Japan.', 'His customers asked him to make cheaper noodles.'], answer: 0,
         exp: 'アメリカで 器が なく カップに 麺を 割り入れるのを 見た。' } ] },
   { id: 'g2r10', type: 'content', title: 'The Return of the Wolves to Germany',
     paragraphs: [
@@ -74,8 +74,8 @@ EIKEN_G2_READING.push(
     questions: [
       { q: 'How did wolves return to Germany?', options: ['Wolves from Poland moved there and had babies.', 'Scientists brought them from Russia.', 'A zoo released them into the forest.', 'They had been hiding in Germany for 150 years.'], answer: 0,
         exp: 'ポーランドから 来た つがいが 東部に 定住し 子を 産んだ。' },
-      { q: 'Why are nature lovers happy about the wolves?', options: ['Wolves help control deer and wild boar numbers.', 'Wolves attract many tourists.', 'Wolves protect sheep.', 'Wolves eat insects that damage trees.'], answer: 0,
+      { q: 'Why are nature lovers happy about the wolves?', options: ['Wolves help control deer and wild boar numbers.', 'Wolves attract many tourists.', 'Wolves protect sheep.', 'Wolves eat the insects that damage young trees.'], answer: 0,
         exp: 'シカ・イノシシの 数を 抑え、若木を 守る。' },
-      { q: 'What does the government do to help farmers?', options: ['It pays for electric fences and gives compensation.', 'It allows farmers to hunt wolves freely.', 'It moves wolves to other countries.', 'It buys all the sheep.'], answer: 0,
+      { q: 'What does the government do to help farmers?', options: ['It pays for electric fences and gives compensation.', 'It allows farmers to hunt wolves whenever they like.', 'It moves wolves to other countries.', 'It buys all the sheep.'], answer: 0,
         exp: '電気柵の 費用と 被害の 補償を 支払う。' } ] }
 );

@@ -10,7 +10,7 @@ EIKEN_G2_READING.push(
         exp: '昼休みに 屋外で くつろげる 場所。' },
       { q: '(2)', options: ['As a result', 'However', 'Instead', 'Even so'], answer: 0,
         exp: '建物が 涼しくなる → その結果 冷房の 電気が 減る。' },
-      { q: '(3)', options: ['offer financial support', 'give strict warnings', 'sell more land', 'refuse permission'], answer: 0,
+      { q: '(3)', options: ['offer financial support', 'give strict warnings to owners', 'sell more land', 'refuse permission'], answer: 0,
         exp: 'コストが かかる → 補助金を 出す 都市も ある。' } ] },
   { id: 'g2r12', type: 'cloze', title: 'The Power of a Nap',
     paragraphs: [
@@ -18,7 +18,7 @@ EIKEN_G2_READING.push(
       'The length of the nap is important. If people sleep for more than 30 minutes, they may enter deep sleep. (2), they often feel tired and confused when they wake up. Experts recommend napping in the early afternoon, as napping in the evening can make it hard to fall asleep at night.',
       'Some companies have started to encourage napping. In Japan, a few firms have created special rooms where employees can rest for a short time. These companies believe that (3), because rested workers make fewer mistakes.' ],
     questions: [
-      { q: '(1)', options: ['help people work better', 'make people lazy', 'cause health problems', 'replace night sleep'], answer: 0,
+      { q: '(1)', options: ['help people work better', 'make people lazy', 'cause serious health problems', 'replace night sleep'], answer: 0,
         exp: '記憶力・集中力・気分が 改善 → よりよく 働ける。' },
       { q: '(2)', options: ['In this case', 'For example', 'On the other hand', 'In contrast'], answer: 0,
         exp: '深い 眠りに 入った 場合 → 起きると だるい。In this case。' },
@@ -36,9 +36,9 @@ EIKEN_G2_READING.push(
     questions: [
       { q: 'What will Ms. Green do during the interview?', options: ['Give a short sample lesson.', 'Take a Japanese test.', 'Visit the school.', 'Teach a class of advanced students.'], answer: 0,
         exp: '10分の 模擬授業 (初級向け・日課)。' },
-      { q: 'What should Ms. Green do if she cannot attend at that time?', options: ['Contact the school by June 3.', 'Call the director on June 6.', 'Send a video of her lesson.', 'Apply again next year.'], answer: 0,
+      { q: 'What should Ms. Green do if she cannot attend at that time?', options: ['Contact the school by June 3.', 'Call the school director on June 6.', 'Send a video of her lesson.', 'Apply again next year.'], answer: 0,
         exp: '"let us know by June 3"' },
-      { q: 'What must Ms. Green send before the interview?', options: ['A copy of her teaching certificate.', 'Pictures for the lesson.', 'Her passport.', 'A list of her students.'], answer: 0,
+      { q: 'What must Ms. Green send before the interview?', options: ['A copy of her teaching certificate.', 'Pictures for the lesson.', 'Her passport.', 'A list of the students she has taught.'], answer: 0,
         exp: '"send us a copy of your teaching certificate"' } ] },
   { id: 'g2r14', type: 'content', title: 'The History of Chocolate',
     paragraphs: [
@@ -49,9 +49,9 @@ EIKEN_G2_READING.push(
     questions: [
       { q: 'How did the Aztecs use cacao beans?', options: ['As money.', 'As medicine only.', 'To make sweet desserts.', 'To feed animals.'], answer: 0,
         exp: '第1段落: お金として 使った。' },
-      { q: 'Why did chocolate become cheaper in the 19th century?', options: ['Factories began producing it in large amounts.', 'Cacao began to grow in Europe.', 'Sugar became more expensive.', 'The Spanish stopped importing it.'], answer: 0,
+      { q: 'Why did chocolate become cheaper in the 19th century?', options: ['Factories began producing it in large amounts.', 'Cacao trees began to grow well in southern Europe.', 'Sugar became more expensive.', 'The Spanish stopped importing it.'], answer: 0,
         exp: '第3段落: 発明と 工場の 大量生産。' },
-      { q: 'Why are more consumers choosing fair trade chocolate?', options: ['To make sure farmers receive a fair price.', 'Because it tastes sweeter.', 'Because it is cheaper.', 'Because it is made in Switzerland.'], answer: 0,
+      { q: 'Why are more consumers choosing fair trade chocolate?', options: ['To make sure farmers receive a fair price.', 'Because it tastes sweeter.', 'Because it is cheaper.', 'Because it is all made in Switzerland.'], answer: 0,
         exp: '第4段落: 農家に 公正な 価格を 保証。' } ] },
   { id: 'g2r15', type: 'content', title: 'Guide Dogs and Their Training',
     paragraphs: [
@@ -60,11 +60,11 @@ EIKEN_G2_READING.push(
       'Not every dog becomes a guide dog. Only dogs that are calm, healthy, and able to concentrate pass the final tests. Dogs that do not pass are often adopted by families as pets or trained for other jobs. Guide dogs usually work for about eight to ten years and then retire.',
       'Even though guide dogs are allowed by law in public places, some restaurants and hotels still refuse to let them in. Groups that support blind people are working to increase public understanding. They ask people not to touch or feed guide dogs while they are working, because this can distract them.' ],
     questions: [
-      { q: 'What do puppies learn while living with puppy walkers?', options: ['To stay calm around people and in busy places.', 'To lead blind people across roads.', 'To pass the final test.', 'To find lost items.'], answer: 0,
+      { q: 'What do puppies learn while living with puppy walkers?', options: ['To stay calm around people and in busy places.', 'To lead blind people safely across busy roads.', 'To pass the final test.', 'To find lost items.'], answer: 0,
         exp: '第2段落: 人に 慣れ、混雑した 場所でも 落ち着いて いられる ように なる。' },
-      { q: 'What happens to dogs that do not pass the final tests?', options: ['They often become pets or do other jobs.', 'They return to puppy walkers forever.', 'They are trained again for ten years.', 'They work at train stations.'], answer: 0,
+      { q: 'What happens to dogs that do not pass the final tests?', options: ['They often become pets or do other jobs.', 'They return to puppy walkers forever.', 'They are trained again for up to ten more years.', 'They work at train stations.'], answer: 0,
         exp: '第3段落: ペットとして 引き取られるか 別の 仕事。' },
-      { q: 'What do support groups ask people to do?', options: ['Not touch or feed working guide dogs.', 'Donate money for training.', 'Become puppy walkers.', 'Keep guide dogs out of restaurants.'], answer: 0,
+      { q: 'What do support groups ask people to do?', options: ['Not touch or feed working guide dogs.', 'Donate money for training.', 'Become puppy walkers.', 'Keep all guide dogs out of restaurants and shops.'], answer: 0,
         exp: '第4段落: 仕事中の 盲導犬に 触れたり エサを あげたり しない。' } ] },
   { id: 'g2r16', type: 'content', title: 'The Mystery of the Moai',
     paragraphs: [
@@ -73,10 +73,10 @@ EIKEN_G2_READING.push(
       'However, in 2012, a team of researchers tested a different idea. They made a copy of a moai and tied ropes to its head. By pulling the ropes from both sides in turn, a small group of people could make the statue "walk" forward, rocking from side to side. This matched local legends that said the moai walked to their places.',
       'Today, many researchers believe that the decline of the Rapa Nui population was caused mainly by diseases and slavery brought by Europeans after 1722, rather than by the islanders themselves. The moai remain a symbol of the creativity of the Rapa Nui people.' ],
     questions: [
-      { q: 'What did some people believe about how the moai were moved?', options: ['They were moved using wooden rollers.', 'They were carried by boats.', 'They were carved at the coast.', 'They were moved by animals.'], answer: 0,
+      { q: 'What did some people believe about how the moai were moved?', options: ['They were moved using wooden rollers.', 'They were carried by boats.', 'They were carved at the coast.', 'They were pulled to their places by large animals.'], answer: 0,
         exp: '第2段落: 木の ころを 使った (多くの 木を 切る 必要)。' },
-      { q: 'What did the 2012 experiment show?', options: ['A small group could make a statue "walk" using ropes.', 'The statues were too heavy to move.', 'The statues were made of wood.', 'Local legends were not true.'], answer: 0,
+      { q: 'What did the 2012 experiment show?', options: ['A small group could make a statue "walk" using ropes.', 'The statues were far too heavy for any group to move.', 'The statues were made of wood.', 'Local legends were not true.'], answer: 0,
         exp: '第3段落: ロープで 左右に 揺らし「歩かせ」られた。' },
-      { q: 'What do many researchers now believe?', options: ['Diseases and slavery from outside caused the population decline.', 'The islanders destroyed all their forests.', 'The moai were made by Europeans.', 'The population grew after 1722.'], answer: 0,
+      { q: 'What do many researchers now believe?', options: ['Diseases and slavery from outside caused the population decline.', 'The islanders cut down and destroyed all of their own forests.', 'The moai were made by Europeans.', 'The population grew after 1722.'], answer: 0,
         exp: '第4段落: ヨーロッパ人が 持ち込んだ 病気と 奴隷化が 主因。' } ] }
 );

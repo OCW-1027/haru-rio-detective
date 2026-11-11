@@ -6,11 +6,11 @@ EIKEN_G2_READING.push(
       'These changes have been popular with young people. Teenagers who rarely visited the library now come to make videos or join programming classes. (2), elderly people can get help using smartphones and online services from library staff.',
       'Not everyone is happy about these changes, though. Some people worry that libraries will become too noisy and that there will be less space for books. Librarians say they are trying to (3) by creating quiet areas for reading and study.' ],
     questions: [
-      { q: '(1)', options: ['find new roles in the community', 'sell more books', 'close earlier', 'stop lending books'], answer: 0,
+      { q: '(1)', options: ['find new roles in the community', 'sell more books', 'close earlier', 'stop lending books to children'], answer: 0,
         exp: '3Dプリンターや 録音室を 提供 → 地域で 新しい 役割を 見つける。' },
       { q: '(2)', options: ['At the same time', 'Instead', 'However', 'Otherwise'], answer: 0,
         exp: '若者に 加えて 高齢者にも 利点 → At the same time。' },
-      { q: '(3)', options: ['meet the needs of all users', 'remove all books', 'ban young people', 'raise fees'], answer: 0,
+      { q: '(3)', options: ['meet the needs of all users', 'remove all books', 'ban young people from the building', 'raise fees'], answer: 0,
         exp: '静かな エリアを 作って 全利用者の 要望に 応える。' } ] },
   { id: 'g2r18', type: 'cloze', title: 'Saving the Bees in the City',
     paragraphs: [
@@ -22,7 +22,7 @@ EIKEN_G2_READING.push(
         exp: '後の 段落で 都市の 利点を 説明 → 実は 良い 場所に なりうる。' },
       { q: '(2)', options: ['As a result', 'Even so', 'In contrast', 'For instance'], answer: 0,
         exp: '都市は 花が 多い・農村は 単一作物と 農薬 → その結果 都市の ハチの 方が エサが 多い。' },
-      { q: '(3)', options: ['leave too little food for wild bees', 'make the honey sweeter', 'help farmers', 'reduce air pollution'], answer: 0,
+      { q: '(3)', options: ['leave too little food for wild bees', 'make the honey sweeter', 'help farmers', 'reduce air pollution in the city'], answer: 0,
         exp: '「花を 植えることも 大切」→ ミツバチが 多すぎると 野生の ハチの エサが 足りなくなる。' } ] },
   { id: 'g2r19', type: 'content', title: 'From: Green Town City Office / To: Residents',
     paragraphs: [
@@ -35,7 +35,7 @@ EIKEN_G2_READING.push(
     questions: [
       { q: 'What change will happen to plastic collection?', options: ['It will be collected every week.', 'It will stop completely.', 'It will be collected on Mondays.', 'Residents must take it to the city office.'], answer: 0,
         exp: '隔週水曜 → 毎週水曜。' },
-      { q: 'Who will receive a green bin?', options: ['Residents of the North and East districts.', 'All residents of the city.', 'Local farmers.', 'Residents who call the city office.'], answer: 0,
+      { q: 'Who will receive a green bin?', options: ['Residents of the North and East districts.', 'All residents of the city.', 'Local farmers.', 'Residents who call the city office to ask for one.'], answer: 0,
         exp: '北・東地区の 住民。' },
       { q: 'What is new about collecting large items?', options: ['Residents can reserve collection online.', 'It is now free of charge.', 'It happens every Monday.', 'Residents must call during business hours.'], answer: 0,
         exp: '粗大ごみの 回収を オンラインで 予約できる。' } ] },
@@ -46,10 +46,10 @@ EIKEN_G2_READING.push(
       'This discovery, published in 1912, gave astronomers a way to measure distances in space. By observing how long a star took to change, they could calculate its true brightness and then work out how far away it was. Using Leavitt\'s method, the astronomer Edwin Hubble later proved that there are other galaxies beyond our own Milky Way.',
       'Leavitt did not receive much recognition during her lifetime, and she died in 1921. Years later, a Swedish mathematician wanted to nominate her for the Nobel Prize, but he learned that she had already passed away. Today, she is remembered as one of the most important astronomers in history.' ],
     questions: [
-      { q: 'Why were the women at the observatory called "computers"?', options: ['Their job was to do calculations.', 'They used early computers.', 'They built machines.', 'They wrote computer programs.'], answer: 0,
+      { q: 'Why were the women at the observatory called "computers"?', options: ['Their job was to do calculations.', 'They used early computers in their work.', 'They built machines.', 'They wrote computer programs.'], answer: 0,
         exp: '第1段落: 計算を する 仕事だったから。' },
-      { q: 'What did Leavitt discover?', options: ['Brighter changing stars take longer to change.', 'All stars have the same brightness.', 'Stars never change brightness.', 'There are no other galaxies.'], answer: 0,
+      { q: 'What did Leavitt discover?', options: ['Brighter changing stars take longer to change.', 'All stars have exactly the same brightness.', 'Stars never change brightness.', 'There are no other galaxies.'], answer: 0,
         exp: '第2段落: 明るい 星ほど 明暗の 周期が 長い。' },
-      { q: 'How did Leavitt\'s discovery help Edwin Hubble?', options: ['It helped him prove that other galaxies exist.', 'It helped him build a telescope.', 'It helped him win a Nobel Prize.', 'It helped him find a new planet.'], answer: 0,
+      { q: 'How did Leavitt\'s discovery help Edwin Hubble?', options: ['It helped him prove that other galaxies exist.', 'It helped him build a telescope.', 'It helped him win a Nobel Prize in physics.', 'It helped him find a new planet.'], answer: 0,
         exp: '第3段落: 銀河系の 外に 別の 銀河が あることを 証明。' } ] }
 );

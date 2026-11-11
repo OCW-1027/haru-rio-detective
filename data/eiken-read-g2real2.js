@@ -10,7 +10,7 @@ EIKEN_G2_READING.push(
         exp: '後の 段落で 健康 (栄養バランス) と 見た目 (キャラ弁) の 話 → 栄養と 見た目の 両方。' },
       { q: '(2)', options: ['In this way', 'Instead', 'Even so', 'On the other hand'], answer: 0,
         exp: '野菜を 動物の 形に する → そう することで (In this way) 苦手な 野菜を 食べてほしい。' },
-      { q: '(3)', options: ['tell parents that simple bento are fine', 'ban bento completely', 'serve only bread for lunch', 'hold bento contests every week'], answer: 0,
+      { q: '(3)', options: ['tell parents that simple bento are fine', 'ban bento completely', 'serve only bread for lunch', 'hold bento contests among the children every week'], answer: 0,
         exp: '「シンプルな 弁当でも 同じくらい 健康的」と 先生が 説明 → 簡単な 弁当で よいと 伝える。' } ] },
   { id: 'g2x6', real: true, type: 'cloze', title: 'Why Cities Are Planting Tiny Forests',
     paragraphs: [
@@ -33,9 +33,9 @@ EIKEN_G2_READING.push(
     questions: [
       { q: 'Why did Mary collect fossils after 1810?', options: ['To earn money for her family.', 'To win a science prize.', 'Because her school asked her to.', 'Because tourists gave fossils to her.'], answer: 0,
         exp: '第1段落: 父の 死後、家族を 支えるため。' },
-      { q: 'What was the Ichthyosaurus?', options: ['An animal that looked like a mix of a fish and a lizard.', 'A sea reptile with a very long neck.', 'A kind of shell found on beaches.', 'A large bird that lived near cliffs.'], answer: 0,
+      { q: 'What was the Ichthyosaurus?', options: ['An animal that looked like a mix of a fish and a lizard.', 'A sea reptile with a very long neck and small head.', 'A kind of shell found on beaches.', 'A large bird that lived near cliffs.'], answer: 0,
         exp: '第2段落: 魚と トカゲを 合わせたような 動物。首の 長いのは Plesiosaurus。' },
-      { q: 'Why were Mary\'s discoveries important?', options: ['They helped show that some animals had become extinct.', 'They proved that dinosaurs could swim.', 'They helped her join scientific societies.', 'They made fossils cheaper for tourists.'], answer: 0,
+      { q: 'Why were Mary\'s discoveries important?', options: ['They helped show that some animals had become extinct.', 'They proved that dinosaurs could swim.', 'They helped her join scientific societies.', 'They made fossils much cheaper for tourists to buy.'], answer: 0,
         exp: '第3段落: 昔 生きていて 絶滅した 動物が いたことの 証明に 役立った。' },
       { q: 'What happened in 2022?', options: ['A statue of Mary was put up in her hometown.', 'Mary was allowed to join a scientific society.', 'A new fossil was named after Mary.', 'Mary\'s shop was opened again.'], answer: 0,
         exp: '第4段落: 少女の キャンペーンで ライム・リージスに 像が 建った。' } ] },
@@ -46,12 +46,12 @@ EIKEN_G2_READING.push(
       'Night markets have changed in some ways, however. In Taiwan, some markets have introduced cashless payment systems, and many stalls now advertise their food on social media. Some markets have also started to reduce plastic waste by asking customers to bring their own containers or by offering reusable cups. These changes are partly a response to complaints from local residents about noise and garbage. In addition, some organizers now hold music performances or craft workshops to attract families. They hope that these events will encourage visitors to stay longer and spend more money at the stalls.',
       'Not everyone welcomes the growth of night markets. Some restaurant owners say that stalls take customers away from them, and residents living nearby sometimes complain that they cannot sleep. To deal with these problems, some cities limit the hours of night markets or move them to areas away from houses. Some cities also require stall owners to clean the area before they go home. Supporters believe that with careful planning, night markets can continue to bring people together while respecting the needs of the local community.' ],
     questions: [
-      { q: 'What is one reason night markets are popular with tourists?', options: ['They are a good way to experience local food and culture.', 'They are open only during holidays.', 'They sell expensive brand-name goods.', 'They are held inside large shopping malls.'], answer: 0,
+      { q: 'What is one reason night markets are popular with tourists?', options: ['They are a good way to experience local food and culture.', 'They are open only during holidays.', 'They sell expensive brand-name goods.', 'They are held inside large shopping malls near the station.'], answer: 0,
         exp: '第1段落: 地元の 食べ物と 文化を 体験できる。' },
-      { q: 'Why do local governments support night markets?', options: ['They bring people into areas that are usually quiet at night.', 'They help reduce the price of food.', 'They make parking lots safer during the day.', 'They allow shops to pay higher rent.'], answer: 0,
+      { q: 'Why do local governments support night markets?', options: ['They bring people into areas that are usually quiet at night.', 'They help reduce the price of food.', 'They make parking lots safer during the day.', 'They allow shops in the area to pay much higher rent.'], answer: 0,
         exp: '第2段落: 夜は 静かな 場所に 人を 呼び込む。' },
       { q: 'What have some night markets in Taiwan done?', options: ['Introduced cashless payments and reduced plastic waste.', 'Stopped selling food.', 'Moved all stalls indoors.', 'Banned tourists from visiting.'], answer: 0,
         exp: '第3段落: キャッシュレス決済・容器持参や リユースカップ。' },
-      { q: 'How have some cities dealt with problems caused by night markets?', options: ['By limiting their hours or moving them away from houses.', 'By closing all restaurants nearby.', 'By making the markets larger.', 'By asking residents to move.'], answer: 0,
+      { q: 'How have some cities dealt with problems caused by night markets?', options: ['By limiting their hours or moving them away from houses.', 'By closing all restaurants nearby.', 'By making the markets larger.', 'By asking the residents living nearby to move somewhere else.'], answer: 0,
         exp: '第4段落: 営業時間を 制限、または 住宅から 離れた 場所へ 移す。' } ] }
 );

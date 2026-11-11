@@ -10,7 +10,7 @@ EIKEN_G2_READING.push(
         exp: '後の 段落で 駅を カフェや 図書館に 再生した 例 → 駅を よみがえらせる。' },
       { q: '(2)', options: ['In response', 'Even so', 'On the other hand', 'For instance'], answer: 0,
         exp: '地域の 取り組みを 受けて 鉄道会社も 支援を 始めた → In response (それに 応じて)。' },
-      { q: '(3)', options: ['find younger people to take over the work', 'raise the price of train tickets', 'close the cafés during winter', 'ask the government to build new stations'], answer: 0,
+      { q: '(3)', options: ['find younger people to take over the work', 'raise the price of train tickets', 'close the cafés during winter', 'ask the government to build new stations nearby'], answer: 0,
         exp: '高齢の ボランティアが 続けられなくなる 問題 → 若い 担い手を 見つける (大学生・起業家)。' } ] },
   { id: 'g2x2', real: true, type: 'cloze', title: 'The Science of Spicy Food',
     paragraphs: [
@@ -18,11 +18,11 @@ EIKEN_G2_READING.push(
       'Scientists have long wondered why chili plants produce capsaicin. One popular theory is that it protects the plants from animals. Mammals such as mice feel the burning sensation and avoid eating chili peppers. Birds, however, do not react to capsaicin. (2), birds eat the peppers and spread the seeds over wide areas through their droppings. In this way, the plants make sure that their seeds are carried by the animals that help them most.',
       'If capsaicin causes pain, why do so many people enjoy it? Some researchers believe that the pain causes the brain to release natural chemicals called endorphins, which make people feel good. Others suggest that people enjoy the "safe danger" of spicy food, in the same way that some people enjoy roller coasters. Whatever the reason, studies show that people who eat spicy food regularly (3), so they can gradually enjoy hotter and hotter dishes.' ],
     questions: [
-      { q: '(1)', options: ['tricks nerves into sending heat signals', 'raises the temperature of food', 'causes small burns inside the mouth', 'makes our taste buds stop working'], answer: 0,
+      { q: '(1)', options: ['tricks nerves into sending heat signals', 'raises the temperature of food', 'causes small burns inside the mouth', 'makes our taste buds stop working for a while'], answer: 0,
         exp: '実際に 傷つけず、熱い ものに 触れた ときと 同じ 信号を 脳に 送らせる。' },
       { q: '(2)', options: ['As a result', 'In contrast', 'Nevertheless', 'In other words'], answer: 0,
         exp: '鳥は 反応しない → その結果 唐辛子を 食べて 種を 広げる。' },
-      { q: '(3)', options: ['become less sensitive to its effects', 'stop sweating completely', 'lose their sense of taste', 'prefer sweet food later in life'], answer: 0,
+      { q: '(3)', options: ['become less sensitive to its effects', 'stop sweating completely', 'lose their sense of taste', 'prefer sweet food to spicy food later in life'], answer: 0,
         exp: 'だんだん 辛い 料理を 楽しめる → 刺激に 鈍感に なる。' } ] },
   { id: 'g2x3', real: true, type: 'content', title: 'The Woman Who Saved the Hula',
     paragraphs: [
@@ -31,13 +31,13 @@ EIKEN_G2_READING.push(
       'Hula made a dramatic return in 1874, when David Kalākaua became king of Hawaii. Kalākaua strongly believed that Hawaiians should be proud of their culture. At his coronation celebration in 1883, he invited hula dancers to perform in public, and he encouraged experts to teach the old chants to young people. Because of his efforts, he became known as the "Merrie Monarch." Today, the most important hula competition in the world, held every year in the town of Hilo, is named the Merrie Monarch Festival in his honor.',
       'In the 20th century, hula changed again. As tourism grew, a modern style of hula, often performed with ukuleles and songs in English, became popular with visitors. Some Hawaiians worried that this style was replacing the traditional form. Since the 1970s, however, a movement known as the Hawaiian Renaissance has encouraged people to learn the Hawaiian language and ancient forms of hula. Now, both traditional and modern hula are taught in schools across the islands.' ],
     questions: [
-      { q: 'Why did Hawaiian leaders ban public hula performances in 1830?', options: ['They were influenced by missionaries who disliked the dance.', 'Hula dancers were asking for too much money.', 'Tourists complained about the performances.', 'The king wanted people to spend more time working.'], answer: 0,
+      { q: 'Why did Hawaiian leaders ban public hula performances in 1830?', options: ['They were influenced by missionaries who disliked the dance.', 'Hula dancers were asking for too much money.', 'Tourists complained about the performances.', 'The king wanted people to spend more time working in the fields.'], answer: 0,
         exp: '第1段落: 宣教師の 影響で 1830年に 禁止。' },
-      { q: 'Why was hula important for recording history?', options: ['Chants used in hula passed down stories before Hawaiian was written.', 'Dancers wrote books about the islands.', 'Missionaries recorded the dances in English.', 'It was performed only at royal ceremonies.'], answer: 0,
+      { q: 'Why was hula important for recording history?', options: ['Chants used in hula passed down stories before Hawaiian was written.', 'Dancers wrote books about the islands.', 'Missionaries recorded the dances and chants in English for later use.', 'It was performed only at royal ceremonies.'], answer: 0,
         exp: '第2段落: 文字が なかったため、詠唱で 歴史や 神話を 伝えた。' },
       { q: 'What did King Kalākaua do?', options: ['He encouraged public hula and the teaching of old chants.', 'He banned modern styles of hula.', 'He moved the capital to Hilo.', 'He invited missionaries back to the islands.'], answer: 0,
         exp: '第3段落: 戴冠式で 公の 場に フラを 呼び戻し、古い 詠唱の 継承を 奨励。' },
-      { q: 'What has the Hawaiian Renaissance done?', options: ['Encouraged people to learn the Hawaiian language and traditional hula.', 'Replaced traditional hula with modern hula.', 'Stopped hula from being taught in schools.', 'Made hula songs available only in English.'], answer: 0,
+      { q: 'What has the Hawaiian Renaissance done?', options: ['Encouraged people to learn the Hawaiian language and traditional hula.', 'Replaced all of the traditional hula with modern styles of hula.', 'Stopped hula from being taught in schools.', 'Made hula songs available only in English.'], answer: 0,
         exp: '第4段落: ハワイ語と 古典フラの 学習を 促した。' } ] },
   { id: 'g2x4', real: true, type: 'content', title: 'Can Seaweed Help Save the Planet?',
     paragraphs: [
@@ -48,10 +48,10 @@ EIKEN_G2_READING.push(
     questions: [
       { q: 'Why do some scientists think seaweed can help fight climate change?', options: ['It grows quickly and absorbs carbon dioxide.', 'It produces more oxygen than any tree.', 'It can be used as fuel for electric cars.', 'It lowers the temperature of the ocean.'], answer: 0,
         exp: '第1段落: 成長が 速く、成長時に CO2 を 吸収。' },
-      { q: 'How can seaweed farms improve the health of the ocean?', options: ['By absorbing extra nutrients that can cause harmful algae.', 'By removing plastic from the water.', 'By keeping large fish away from the coast.', 'By adding fertilizer to the water.'], answer: 0,
+      { q: 'How can seaweed farms improve the health of the ocean?', options: ['By absorbing extra nutrients that can cause harmful algae.', 'By removing plastic from the water.', 'By keeping large fish away from the coast where people swim.', 'By adding fertilizer to the water to feed more fish.'], answer: 0,
         exp: '第2段落: 陸から 来る 栄養分を 吸収し、有害な 藻の 発生を 防ぐ。' },
       { q: 'What happens when a certain red seaweed is added to cattle feed?', options: ['Cows release less methane.', 'Cows grow more quickly.', 'Cows produce more milk.', 'Cows need less water.'], answer: 0,
         exp: '第3段落: 牛の げっぷに 含まれる メタンが 大幅に 減る。' },
-      { q: 'What do many researchers believe about seaweed farming?', options: ['It should be only one part of efforts against climate change.', 'It can solve climate change by itself.', 'It should be stopped because it harms the deep sea.', 'It is less useful than planting trees on land.'], answer: 0,
+      { q: 'What do many researchers believe about seaweed farming?', options: ['It should be only one part of efforts against climate change.', 'It can solve climate change by itself.', 'It should be stopped because it harms life in the deep sea.', 'It is less useful than planting trees on land.'], answer: 0,
         exp: '第4段落: 唯一の 答えではなく、温室効果ガス削減の 一部と 考えるべき。' } ] }
 );

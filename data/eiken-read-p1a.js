@@ -10,7 +10,7 @@ EIKEN_P1_READING.push(
         exp: '利用者減・赤字で 廃止が 続いた → 夜行列車は 消えると 思われた。' },
       { q: '(2)', options: ['For example', 'Nevertheless', 'In contrast', 'Otherwise'], answer: 0,
         exp: '政府が 鉄道を 支援し始めた ことの 具体例 (オーストリア) → For example。' },
-      { q: '(3)', options: ['be able to compete on price', 'no longer need passengers', 'become less comfortable', 'stop crossing borders'], answer: 0,
+      { q: '(3)', options: ['be able to compete on price', 'no longer need passengers', 'become less comfortable', 'stop crossing national borders'], answer: 0,
         exp: '「切符が 飛行機より 高い」という 批判への 反論 → 航空燃料に 課税すれば 価格で 競争できる。' } ] },
   { id: 'p1r2', type: 'cloze', title: 'Learning from Failure',
     paragraphs: [
@@ -22,7 +22,7 @@ EIKEN_P1_READING.push(
         exp: '間違いを 恐れる → 難しい 課題を 避けるように なる。' },
       { q: '(2)', options: ['However', 'Similarly', 'Therefore', 'In addition'], answer: 0,
         exp: 'ほとんど 失敗した (マイナス) ⇔ 後で 深く 理解した (プラス) → 逆接 However。' },
-      { q: '(3)', options: ['teachers provide support afterward', 'students work completely alone', 'the problems are very easy', 'grades are not given'], answer: 0,
+      { q: '(3)', options: ['teachers provide support afterward', 'students work completely on their own', 'the problems are very easy', 'grades are not given'], answer: 0,
         exp: '次の 文「指導が なければ 挫折する」→ 教師が 後で 支える ときだけ 有益。' } ] },
   { id: 'p1r3', type: 'content', title: 'The Mystery of Bird Migration',
     paragraphs: [
@@ -31,11 +31,11 @@ EIKEN_P1_READING.push(
       'Perhaps the most remarkable ability is magnetic sensing. Researchers believe that a protein in birds\' eyes reacts to the Earth\'s magnetic field, allowing birds to "see" the direction of north. This theory explains why birds can navigate even on cloudy nights. Interestingly, studies have found that electromagnetic noise from electronic devices in cities can confuse this sense, causing some birds to lose their way.',
       'Understanding migration has practical importance. Many migratory bird populations are declining because of habitat loss along their routes. Since birds depend on a chain of resting places, the destruction of a single wetland can affect birds that breed thousands of kilometers away. Conservationists therefore argue that protecting migratory birds requires international cooperation.' ],
     questions: [
-      { q: 'What did the planetarium experiments show?', options: ['Young birds learn to use star patterns by watching the sky rotate.', 'Birds cannot navigate at night without the moon.', 'Birds are born knowing every route.', 'Birds rely mainly on the sun even at night.'], answer: 0,
+      { q: 'What did the planetarium experiments show?', options: ['Young birds learn to use star patterns by watching the sky rotate.', 'Birds cannot navigate at night without the moon.', 'Birds are born knowing every route.', 'Birds rely mainly on the position of the sun even at night.'], answer: 0,
         exp: '第2段落: 北極星の 周りを 回る 夜空を 見て 星の パターンを 覚える。' },
-      { q: 'What is one effect of electronic devices in cities?', options: ['They may interfere with birds\' magnetic sense.', 'They help birds find resting places.', 'They make birds fly faster.', 'They attract birds to wetlands.'], answer: 0,
+      { q: 'What is one effect of electronic devices in cities?', options: ['They may interfere with birds\' magnetic sense.', 'They help birds find resting places.', 'They make birds fly faster.', 'They attract birds to wetlands near cities.'], answer: 0,
         exp: '第3段落: 電磁ノイズが 磁気感覚を 混乱させる。' },
-      { q: 'Why do conservationists call for international cooperation?', options: ['Birds rely on resting places in many different countries.', 'Birds only live in one country.', 'Wetlands are increasing too quickly.', 'Scientists disagree about migration routes.'], answer: 0,
+      { q: 'Why do conservationists call for international cooperation?', options: ['Birds rely on resting places in many different countries.', 'Birds only live in one country.', 'Wetlands are increasing too quickly.', 'Scientists still disagree about the exact migration routes.'], answer: 0,
         exp: '第4段落: 休息地の 連鎖に 依存 → 1つの 湿地の 破壊が 遠くの 鳥にも 影響。' } ] },
   { id: 'p1r4', type: 'content', title: 'The Four-Day Workweek',
     paragraphs: [
@@ -46,7 +46,7 @@ EIKEN_P1_READING.push(
     questions: [
       { q: 'What did many companies in the 2022 UK study find?', options: ['Fewer employees left the company.', 'Productivity decreased sharply.', 'Salaries had to be reduced.', 'Workers wanted to return to five days.'], answer: 0,
         exp: '第2段落: 辞める 人が 減り、採用・研修コストが 減った。' },
-      { q: 'What concern do some managers have?', options: ['Employees might feel they must do five days of work in four.', 'Employees will spend too much time on hobbies.', 'The trials are too short.', 'Technology will replace most workers.'], answer: 0,
+      { q: 'What concern do some managers have?', options: ['Employees might feel they must do five days of work in four.', 'Employees will spend too much of their free time on hobbies.', 'The trials are too short.', 'Technology will replace most workers.'], answer: 0,
         exp: '第3段落: 5日分を 4日で こなす 圧力を 感じるかも しれない。' },
       { q: 'According to experts, what matters most for a shorter week to succeed?', options: ['How work is organized.', 'Choosing Friday as the day off.', 'Increasing salaries.', 'Hiring more managers.'], answer: 0,
         exp: '第4段落: 日数より 仕事の 組み立て方 (会議削減・自動化)。' } ] }

@@ -10,7 +10,7 @@ EIKEN_P1_READING.push(
         exp: '作物と 治療での 成果 → 医療と 農業を 一変させうる。' },
       { q: '(2)', options: ['Furthermore', 'Nonetheless', 'Consequently', 'In contrast'], answer: 0,
         exp: '懸念の 追加 → Furthermore。' },
-      { q: '(3)', options: ['stricter international regulations', 'more funding for such research', 'the release of the scientist', 'faster approval of experiments'], answer: 0,
+      { q: '(3)', options: ['stricter international regulations', 'more government funding for such research', 'the release of the scientist', 'faster approval of experiments'], answer: 0,
         exp: '同様の 実験を 防ぐ → より厳しい 国際的規制。' } ] },
   { id: 'p1r14', type: 'cloze', title: 'Why Some Languages Sound Faster',
     paragraphs: [
@@ -22,7 +22,7 @@ EIKEN_P1_READING.push(
         exp: '速く 聞こえる → 1秒あたり 多くの 音節を 発する。' },
       { q: '(2)', options: ['As a result', 'For example', 'On the contrary', 'Even so'], answer: 0,
         exp: '速い言語 = 音節あたり 情報少 / 遅い言語 = 情報多 → 結果として 1秒あたりの 情報量は 同じ。' },
-      { q: '(3)', options: ['take place at a similar rate', 'become faster over time', 'depend only on culture', 'require more effort in Asia'], answer: 0,
+      { q: '(3)', options: ['take place at a similar rate', 'become faster over time', 'depend only on culture', 'require more effort in Asian languages'], answer: 0,
         exp: '脳の 処理速度の 限界 → どの 言語でも 似た 速さで 伝達。' } ] },
   { id: 'p1r15', type: 'content', title: 'The Rise of Microcredentials',
     paragraphs: [
@@ -31,11 +31,11 @@ EIKEN_P1_READING.push(
       'Critics, however, question the value of these qualifications. Because there are thousands of programs offered by different organizations, it can be difficult for employers to judge their quality. Some educators also argue that university education provides broader benefits, such as critical thinking and communication skills, that short courses cannot offer.',
       'Many experts believe the future will involve a combination of both. Some universities have begun offering microcredentials that can be combined to count toward a full degree. This approach allows students to gain practical skills quickly while still working toward a broader education.' ],
     questions: [
-      { q: 'What is one advantage of microcredentials mentioned by supporters?', options: ['People can learn skills while continuing to work.', 'They guarantee higher salaries.', 'They replace all university courses.', 'They take several years to complete.'], answer: 0,
+      { q: 'What is one advantage of microcredentials mentioned by supporters?', options: ['People can learn skills while continuing to work.', 'They guarantee higher salaries for everyone who completes them.', 'They replace all university courses.', 'They take several years to complete.'], answer: 0,
         exp: '第2段落: 仕事を 辞めずに 安く 学べる。' },
       { q: 'Why is it difficult for employers to judge microcredentials?', options: ['There are so many different programs.', 'They are only offered in English.', 'They are too expensive.', 'Universities refuse to recognize them.'], answer: 0,
         exp: '第3段落: 何千もの 講座が あり 質を 判断しにくい。' },
-      { q: 'What have some universities started doing?', options: ['Offering microcredentials that can count toward a degree.', 'Stopping all online courses.', 'Rejecting students with microcredentials.', 'Charging higher tuition fees.'], answer: 0,
+      { q: 'What have some universities started doing?', options: ['Offering microcredentials that can count toward a degree.', 'Stopping all online courses.', 'Rejecting applicants who have microcredentials.', 'Charging higher tuition fees.'], answer: 0,
         exp: '第4段落: 組み合わせて 学位に 算入できる。' } ] },
   { id: 'p1r16', type: 'content', title: 'The Disappearing Night Sky',
     paragraphs: [
@@ -44,10 +44,10 @@ EIKEN_P1_READING.push(
       'Human health may also be at risk. Exposure to artificial light at night can disrupt the production of melatonin, a hormone that regulates sleep. Some studies have suggested links between nighttime light exposure and sleep disorders, though more research is needed to understand the full effects.',
       'Fortunately, light pollution is one of the easiest forms of pollution to reduce. Using shielded lights that point downward, turning off unnecessary lights, and choosing warmer-colored bulbs can make a big difference. Some communities have been certified as "dark sky places," attracting tourists who want to experience a truly dark sky.' ],
     questions: [
-      { q: 'How does artificial light affect sea turtle hatchlings?', options: ['It can lead them away from the ocean.', 'It helps them find food.', 'It makes them grow faster.', 'It protects them from predators.'], answer: 0,
+      { q: 'How does artificial light affect sea turtle hatchlings?', options: ['It can lead them away from the ocean.', 'It helps them find food.', 'It makes them grow faster.', 'It protects them from predators on the beach.'], answer: 0,
         exp: '第2段落: 海と 違う 方向へ 誘導してしまう。' },
       { q: 'What does the passage say about human health?', options: ['Night light may disrupt a sleep hormone.', 'Artificial light improves sleep.', 'Light pollution has no effect on people.', 'Melatonin causes light pollution.'], answer: 0,
         exp: '第3段落: メラトニンの 分泌を 乱す 可能性。' },
-      { q: 'Why is light pollution described as easy to reduce?', options: ['Simple changes to lighting can make a big difference.', 'Governments have already banned lights.', 'Cities are becoming smaller.', 'Stars are becoming brighter.'], answer: 0,
+      { q: 'Why is light pollution described as easy to reduce?', options: ['Simple changes to lighting can make a big difference.', 'Governments around the world have already banned bright lights.', 'Cities are becoming smaller.', 'Stars are becoming brighter.'], answer: 0,
         exp: '第4段落: 下向きの 照明・消灯・暖色電球など 簡単な 対策。' } ] }
 );

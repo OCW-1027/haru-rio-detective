@@ -159,9 +159,9 @@ const EIKEN_G2_READING = [
     questions: [
       { q: '(1)', options: ['solve this problem', 'build a large school', 'stop writing books', 'move to the city'], answer: 0,
         exp: '子どもが 図書館に 行けない という「問題」を 解決するため、本を 運び始めた。' },
-      { q: '(2)', options: ['Despite these difficulties', 'Because of this success', 'In the same way', 'For this reason'], answer: 0,
+      { q: '(2)', options: ['Despite these difficulties', 'Because of this great success', 'In the same way', 'For this reason'], answer: 0,
         exp: '距離が 長く 寒い という 困難 → それでも 続けた。逆接 Despite these difficulties。' },
-      { q: '(3)', options: ['books can reach children almost anywhere', 'animals are better than cars', 'libraries are no longer needed', 'reading is only popular in Asia'], answer: 0,
+      { q: '(3)', options: ['books can reach children almost anywhere', 'animals are better than cars', 'libraries are no longer needed in villages', 'reading is only popular in Asia'], answer: 0,
         exp: 'ラクダや ロバで 本を 届ける 例 → どこにいる 子どもにも 本は 届けられる。' } ] },
   { id: 'r3', type: 'content', title: 'From: Emma Clark / To: Kenji Sato — Science Club Visit',
     paragraphs: [
@@ -174,7 +174,7 @@ const EIKEN_G2_READING = [
     questions: [
       { q: 'Why is Emma writing to Kenji?', options: ['To plan her club\'s visit to his school.', 'To ask him to join a robot contest.', 'To invite him to her school festival.', 'To tell him that the trip has been canceled.'], answer: 0,
         exp: '「来月 あなたの 学校を 訪問する」件で、到着時間や 入口を 確認している。' },
-      { q: 'What does Emma want to know?', options: ['Whether her students can take pictures of the robot.', 'How many members are in Kenji\'s club.', 'What time the train leaves.', 'Where she can buy sand and charcoal.'], answer: 0,
+      { q: 'What does Emma want to know?', options: ['Whether her students can take pictures of the robot.', 'How many members are in Kenji\'s club.', 'What time the train leaves.', 'Where she can buy the sand and charcoal for the robot.'], answer: 0,
         exp: '"is it OK if our students take photos of your robot?" → 写真を 撮っても よいか。入口も 聞いている。' },
       { q: 'What does Emma ask Kenji\'s club to prepare?', options: ['A table and some water.', 'Sand and charcoal.', 'Lunch for twelve students.', 'A room for the festival.'], answer: 0,
         exp: '"you only have to prepare a table and some water" → 机と 水だけ。' } ] },
@@ -185,10 +185,10 @@ const EIKEN_G2_READING = [
       'In 1995 and 1996, scientists brought 31 wolves from Canada to the park. The wolves hunted elk, and the elk began to avoid open areas near rivers. As a result, trees grew back, birds returned, and the number of beavers increased. Some scientists say that even the shape of the rivers changed because the riverbanks became stronger.',
       'The story of Yellowstone is often used to explain that every animal plays an important role in nature. However, some researchers believe that other factors, such as changes in rainfall, also helped the park recover. They say that nature is complicated and that we should be careful about giving one simple reason.' ],
     questions: [
-      { q: 'What happened after all the wolves were killed?', options: ['The number of elk increased and many young trees were eaten.', 'Visitors stopped coming to see the hot springs.', 'Hunters began to protect the deer and elk.', 'Beavers built more dams than before.'], answer: 0,
+      { q: 'What happened after all the wolves were killed?', options: ['The number of elk increased and many young trees were eaten.', 'Visitors stopped coming to see the famous hot springs in the park.', 'Hunters began to protect the deer and elk.', 'Beavers built more dams than before.'], answer: 0,
         exp: '第2段落: オオカミが いなくなり エルクが 急増 → 川辺の 若木を 食べ尽くした。' },
-      { q: 'Why did the trees near the rivers grow back?', options: ['Elk began to stay away from those areas.', 'Scientists planted new trees there.', 'Beavers stopped cutting them down.', 'More rain fell in the park.'], answer: 0,
+      { q: 'Why did the trees near the rivers grow back?', options: ['Elk began to stay away from those areas.', 'Scientists planted many new trees along the rivers.', 'Beavers stopped cutting them down.', 'More rain fell in the park.'], answer: 0,
         exp: '第3段落: オオカミが エルクを 狩り、エルクが 川の 近くを 避けるように なった。' },
-      { q: 'What do some researchers think about the Yellowstone story?', options: ['Wolves may not be the only reason the park recovered.', 'Wolves should be removed from the park again.', 'The rivers did not change at all.', 'Elk are more important than wolves.'], answer: 0,
+      { q: 'What do some researchers think about the Yellowstone story?', options: ['Wolves may not be the only reason the park recovered.', 'Wolves should be removed from the park once again.', 'The rivers did not change at all.', 'Elk are more important than wolves.'], answer: 0,
         exp: '最終段落: 降水量の 変化なども 回復に 関係した → 原因は 1つでは ないかも しれない。' } ] },
 ];
