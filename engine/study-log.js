@@ -11,7 +11,7 @@ const Study = (function () {
     pageStoryMain: 'story', pageStory: 'case', pageSelect: 'case', pagePuzzle: 'case',
     pageEng: 'english', pageWriting: 'english', pageGrammar: 'english', pageComposition: 'english', pagePhraseDict: 'english', pageDaily: 'english', pageNews: 'english', pageCompound: 'english',
     pageScience: 'science', pageScienceList: 'science', pageScientists: 'science', pageScientistsLearn: 'science',
-    pageWorld: 'geo', pageWQ: 'geo', pageJapanTrip: 'geo', pageHist: 'hist', pageSoc: 'soc', pageMon: 'money', pageBiz: 'biz', pageLit: 'lit',
+    pageWorld: 'geo', pageWQ: 'geo', pageJapanTrip: 'geo', pageHist: 'hist', pageTimeTravel: 'hist', pageSoc: 'soc', pageMon: 'money', pageBiz: 'biz', pageLit: 'lit',
     pageGame: 'game', pageFreeQuiz: 'game', pageGate: 'game',
   };
   const NAME = {

@@ -8,7 +8,7 @@
 .ml-mc-i { font-size: 26px; }
 .ml-mc-n { font-family: 'RocknRoll One'; font-size: 14px; color: #3a2a1a; }
 .ml-mc-s { font-family: 'Klee One'; font-size: 11px; color: #8a7a6a; }
-.ml-area { max-width: 520px; margin: 0 auto; padding: 12px 14px 40px; }
+.ml-area { width: 100%; box-sizing: border-box; min-width: 0; max-width: 520px; margin: 0 auto; padding: 12px 14px 40px; }
 .ml-head { margin-bottom: 10px; }
 .ml-card { background: #fff; border: 3px solid #e0b35a; border-radius: 20px; padding: 18px; text-align: center; box-shadow: 0 4px 0 #e8c98a; }
 .ml-icon { font-size: 52px; }

@@ -114,6 +114,8 @@ const Hub = (function () {
     let jts = null; try { jts = JapanTrip.stats(); } catch (e) {}
     h += '<h2 class="hub-h">🌸 シーズン2 <small class="hub-h-sub">新しい 冒険が 始まる</small></h2><section class="hub-new">';
     h += '<button class="hub-new-btn s2" id="hubJapan"><span style="font-size:44px">🗾</span><span><b>日本列島ミステリー紀行<span class="tag">NEW</span></b><small>47都道府県を 推理で 追え · 解決 ' + (jts ? jts.cleared : 0) + ' / 6 · 図鑑 ' + (jts ? jts.seen : 0) + ' / 47</small></span></button>';
+    let tts = null; try { tts = TimeTravel.stats(); } catch (e) {}
+    h += '<button class="hub-new-btn s2" id="hubTime"><span style="font-size:44px">⏳</span><span><b>タイムトラベル探偵<span class="tag">NEW</span></b><small>縄文〜令和を 追跡 · 時のゆがみ さがし · 年表 ならべかえ · 解決 ' + (tts ? tts.cleared : 0) + ' / 6</small></span></button>';
     h += '</section>';
 
     // 사건 파일
@@ -171,6 +173,8 @@ const Hub = (function () {
     if (hl) hl.onclick = () => { sfx('click'); LabDetective.open(); };
     const hx = document.getElementById('hubWx');
     if (hx) hx.onclick = () => { sfx('click'); WeatherChallenge.open(); };
+    const htt = document.getElementById('hubTime');
+    if (htt) htt.onclick = () => { sfx('click'); TimeTravel.open(); };
     const hjp = document.getElementById('hubJapan');
     if (hjp) hjp.onclick = () => { sfx('click'); JapanTrip.open(); };
     const hw = document.getElementById('hubWorld');

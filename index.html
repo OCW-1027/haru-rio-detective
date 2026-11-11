@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="styles/game.css">
 <link rel="stylesheet" href="styles/mini-learn.css">
 <link rel="stylesheet" href="styles/japan-trip.css">
+<link rel="stylesheet" href="styles/time-travel.css">
 <link rel="stylesheet" href="styles/learn.css">
 <link rel="stylesheet" href="styles/chat.css">
 <link rel="stylesheet" href="styles/vocab-learn.css">
@@ -239,6 +240,12 @@
   <div class="page jt-page" id="pageJapanTrip">
     <button class="back-btn" id="btnJapanBack">← 事務所</button>
     <div class="jt-area" id="jtArea"></div>
+  </div>
+
+  <!-- ⏳ タイムトラベル探偵 (シーズン2) -->
+  <div class="page tt-page" id="pageTimeTravel">
+    <button class="back-btn" id="btnTimeBack">← 事務所</button>
+    <div class="tt-area" id="ttArea"></div>
   </div>
 
   <!-- 🧠 学習ミニゲーム -->
@@ -503,6 +510,8 @@
 <script src="data/japan-pref.js"></script>
 <script src="data/japan-map.js"></script>
 <script src="engine/japan-trip.js"></script>
+<script src="data/time-travel.js"></script>
+<script src="engine/time-travel.js"></script>
 <script src="engine/game-v2.js"></script>
 <script src="engine/case-engine.js"></script>
 <script src="engine/detectives-A.js"></script>

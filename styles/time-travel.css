@@ -1,0 +1,71 @@
+/* styles/time-travel.css — タイムトラベル探偵 (engine/time-travel.js) */
+.tt-page { background: linear-gradient(180deg, #f4f0ff, #ece4f8); }
+.tt-area { width: 100%; box-sizing: border-box; min-width: 0; max-width: 760px; margin: 0 auto; padding: 56px 14px 50px; }
+.tt-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.tt-back { padding: 8px 14px; border-radius: 999px; border: 2px solid #a48ad0; background: #fff; font-family: 'RocknRoll One'; font-size: 13px; color: #4a2a7a; cursor: pointer; white-space: nowrap; }
+.tt-title { font-family: 'RocknRoll One'; font-size: 20px; color: #2e1a5a; }
+.tt-sub { font-family: 'Klee One'; font-size: 13px; color: #6a5a8a; }
+.tt-sub .off, .tt-res .off { opacity: 0.25; }
+.tt-hero { display: flex; gap: 10px; align-items: flex-start; background: #fff; border: 2px solid #d4c4ee; border-radius: 16px; padding: 10px; margin-bottom: 12px; }
+.tt-hero img { width: 70px; flex: none; }
+.tt-say { font-family: 'Klee One'; font-size: 14px; line-height: 1.7; color: #2a1a4a; }
+.tt-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.tt-mbtn { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; padding: 14px; border-radius: 16px; border: 2px solid #b8a2e0; background: #fff; box-shadow: 0 3px 0 #b8a2e0; text-align: left; cursor: pointer; }
+.tt-mbtn .i { font-size: 30px; }
+.tt-mbtn b { font-family: 'RocknRoll One'; font-size: 16px; color: #2e1a5a; }
+.tt-mbtn small { font-family: 'Klee One'; font-size: 12px; color: #6a5a8a; }
+.tt-line { display: flex; gap: 4px; overflow-x: auto; padding: 6px 2px 10px; margin-bottom: 8px; scroll-snap-type: x proximity; }
+.tt-era { flex: none; display: flex; flex-direction: column; align-items: center; min-width: 58px; padding: 8px 6px; border-radius: 12px; border: 2px solid #cdbfe8; background: #fff; cursor: pointer; scroll-snap-align: center; }
+.tt-era b { font-family: 'RocknRoll One'; font-size: 13px; color: #3a2a6a; white-space: nowrap; }
+.tt-era small { font-family: 'Klee One'; font-size: 10px; color: #8a7aa8; }
+.tt-era.on, .tt-era.here { background: #7a52c8; border-color: #5a32a8; }
+.tt-era.on b, .tt-era.here b, .tt-era.on small, .tt-era.here small { color: #fff; }
+.tt-era.past { background: #e8def8; }
+.tt-era.ng { background: #eee; opacity: 0.5; text-decoration: line-through; }
+.tt-card { background: #fff; border: 2px solid #d4c4ee; border-radius: 16px; padding: 12px; }
+.tt-card-h { font-family: 'RocknRoll One'; font-size: 20px; color: #2e1a5a; }
+.tt-card-h small { font-family: 'Klee One'; font-size: 12px; color: #8a7aa8; margin-left: 6px; }
+.tt-card-p { font-family: 'Klee One'; font-size: 14px; color: #4a3a6a; margin: 4px 0 8px; }
+.tt-sec { font-family: 'RocknRoll One'; font-size: 14px; color: #5a32a8; margin: 10px 0 4px; }
+.tt-ev { font-family: 'Klee One'; font-size: 14px; padding: 5px 0; border-bottom: 1px dashed #e0d6f0; color: #2a1a4a; }
+.tt-ev span { display: inline-block; min-width: 88px; font-weight: 700; color: #7a52c8; font-size: 12px; }
+.tt-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.tt-chip { padding: 5px 10px; border-radius: 999px; background: #f2ecfc; font-family: 'Klee One'; font-size: 13px; color: #2a1a4a; }
+.tt-cases { display: grid; gap: 10px; }
+.tt-case { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; padding: 14px; border-radius: 16px; border: 2px solid #b8a2e0; background: #fff; box-shadow: 0 3px 0 #b8a2e0; text-align: left; cursor: pointer; }
+.tt-case.done { background: #f6f1ff; }
+.tt-cn { font-family: 'RocknRoll One'; font-size: 12px; color: #7a52c8; }
+.tt-case b { font-family: 'RocknRoll One'; font-size: 16px; color: #2e1a5a; }
+.tt-case small { font-family: 'Klee One'; font-size: 12px; color: #6a5a8a; }
+.tt-st { position: absolute; right: 12px; top: 10px; font-size: 14px; }
+.tt-now { font-family: 'Klee One'; font-size: 15px; margin: 4px 0 8px; }
+.tt-now small { color: #8a7aa8; }
+.tt-q { font-family: 'Klee One'; font-size: 15px; line-height: 1.7; color: #2a1a4a; margin: 8px 0; }
+.tt-q.big { font-size: 17px; font-weight: 700; text-align: center; }
+.tt-memo { font-family: 'Klee One'; font-size: 16px; background: #fffbe8; border: 2px dashed #d8b84a; border-radius: 12px; padding: 12px; text-align: center; transform: rotate(-0.6deg); }
+.tt-items { display: grid; gap: 8px; }
+.tt-item { padding: 13px 12px; border-radius: 14px; border: 2px solid #cdbfe8; background: #fff; font-family: 'Klee One'; font-size: 15px; font-weight: 700; color: #2a1a4a; text-align: left; box-shadow: 0 3px 0 #cdbfe8; cursor: pointer; }
+.tt-item.ok { background: #fff1c8; border-color: #d8a020; }
+.tt-item.ng { background: #f2e4e4; border-color: #b85a5a; }
+.tt-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tt-opt { padding: 13px 8px; border-radius: 14px; border: 2px solid #b8a2e0; background: #fff; font-family: 'RocknRoll One'; font-size: 15px; color: #2e1a5a; box-shadow: 0 3px 0 #b8a2e0; cursor: pointer; }
+.tt-opt.ok { background: #e2f5dc; border-color: #5aa04a; }
+.tt-opt.ng { background: #f5e4e4; border-color: #b85a5a; }
+.tt-ok, .tt-ng { margin-top: 10px; padding: 10px 12px; border-radius: 12px; font-family: 'Klee One'; font-size: 14px; line-height: 1.6; }
+.tt-ok { background: #e6f6df; color: #1f5a1a; }
+.tt-ng { background: #fbe6e0; color: #8a2a1a; }
+.tt-go { width: 100%; margin-top: 8px; padding: 14px; border: none; border-radius: 14px; background: #6a42b8; color: #fff; font-family: 'RocknRoll One'; font-size: 17px; box-shadow: 0 4px 0 #42228a; cursor: pointer; }
+.tt-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+.tt-row > * { flex: 1; }
+.tt-btn2 { padding: 11px 10px; border-radius: 14px; border: 2px solid #b8a2e0; background: #fff; font-family: 'RocknRoll One'; font-size: 14px; color: #4a2a7a; cursor: pointer; }
+.tt-res { text-align: center; font-size: 32px; margin: 8px 0; font-family: 'RocknRoll One'; color: #2e1a5a; }
+.tt-res div { font-family: 'Klee One'; font-size: 14px; color: #6a5a8a; }
+.tt-res b { font-size: 48px; color: #6a42b8; }
+.tt-recap { background: #fff; border-radius: 14px; padding: 10px 12px; border: 2px solid #d4c4ee; margin: 10px 0; }
+.tt-ord { display: grid; gap: 6px; margin-bottom: 10px; }
+.tt-slot { display: flex; gap: 8px; align-items: center; min-height: 44px; padding: 8px 10px; border-radius: 12px; background: #fff; border: 2px solid #cdbfe8; font-family: 'Klee One'; font-size: 14px; color: #2a1a4a; }
+.tt-slot span { flex: none; min-width: 26px; font-family: 'RocknRoll One'; color: #7a52c8; font-size: 13px; }
+.tt-slot.empty { border-style: dashed; background: transparent; }
+.tt-slot.good { background: #e6f6df; border-color: #8cc07a; }
+.tt-slot.bad { background: #fbeee8; border-color: #e0a090; }
+.tt-slot small { color: #8a7aa8; }
