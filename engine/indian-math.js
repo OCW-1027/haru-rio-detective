@@ -184,7 +184,7 @@ const IndianMath = (function () {
     }
     stop(); run = R0;
     let h = head(esc(cfg.title) + ' — 結果', true);
-    h += '<div class="im-box im-center"><div class="im-big">' + (R0.ok >= 9 ? '🎉' : R0.ok >= 7 ? '👍' : '💪') + '</div><p><b class="im-score">' + R0.ok + '</b> / ' + cfg.n + ' 正解 ・ 平均 ' + avg.toFixed(1) + '秒</p>' + msg + '</div>';
+    h += '<div class="im-box im-center"><div class="im-big">' + (R0.ok >= 8 ? aarya('mid', 'cheer') : (R0.ok >= 7 ? '👍' : '💪')) + '</div><p><b class="im-score">' + R0.ok + '</b> / ' + cfg.n + ' 正解 ・ 平均 ' + avg.toFixed(1) + '秒</p>' + msg + '</div>';
     if (R0.wrong.length) h += '<div class="im-box"><b>まちがえた 問題の 解き方</b>' + R0.wrong.map(w => '<details class="im-wr"><summary>' + esc(w.ex.q) + ' = ' + fmtA(w.t, w.ex.a) + '</summary><ol class="im-steps">' + w.ex.steps.map(x => '<li>' + x + '</li>').join('') + '</ol></details>').join('') + '</div>';
     h += '<div class="im-row"><button class="im-primary" id="imAgain">もう一度</button><button class="im-secondary" id="imBackT">' + (cfg.t ? 'ワザの ページへ' : '道場へ') + '</button></div>';
     area().innerHTML = h; bindBack(cfg.t ? () => techView(cfg.t, 'prac') : home);
@@ -268,7 +268,7 @@ const IndianMath = (function () {
       const pass = ok >= E.pass; D.exam[cid] = Math.max(D.exam[cid] || 0, ok); if (pass) D.badge[cid] = 1; save();
       stop(); sfx(pass ? 'unlock' : 'wrong');
       let h = head('📝 ' + c.name + ' 検定 — 結果');
-      h += '<div class="im-box im-center"><div class="im-big">' + (pass ? '🏅' : '💪') + '</div>' + (timeUp ? '<p class="im-small">⏰ 時間切れ</p>' : '') + '<p><b class="im-score">' + ok + '</b> / ' + qs.length + '</p><div class="' + (pass ? 'im-good big' : 'im-bad') + '">' + (pass ? c.name + ' 検定 合格!' : '合格まで あと ' + (E.pass - ok) + '問') + '</div></div>';
+      h += '<div class="im-box im-center"><div class="im-big">' + (pass ? aarya('mid', 'cheer') + '<div>🏅</div>' : '💪') + '</div>' + (timeUp ? '<p class="im-small">⏰ 時間切れ</p>' : '') + '<p><b class="im-score">' + ok + '</b> / ' + qs.length + '</p><div class="' + (pass ? 'im-good big' : 'im-bad') + '">' + (pass ? c.name + ' 検定 合格!' : '合格まで あと ' + (E.pass - ok) + '問') + '</div></div>';
       const byT = {}; rows.forEach(x => { const k = x.q.t.id; byT[k] = byT[k] || [0, 0]; byT[k][1]++; if (x.r) byT[k][0]++; });
       h += '<div class="im-box"><b>ワザ別</b><table class="im-tbl">' + Object.keys(byT).map(k => { const t = IM.byId(k); return '<tr><td>' + t.icon + ' ' + esc(t.name) + '</td><td>' + byT[k][0] + ' / ' + byT[k][1] + '</td></tr>'; }).join('') + '</table></div>';
       const wr = rows.filter(x => !x.r);

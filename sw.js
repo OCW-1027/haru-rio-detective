@@ -1,7 +1,7 @@
 // sw.js — v2 기반 공사(P2): 이미지는 캐시 우선, 코드는 네트워크 우선(+오프라인 대비).
 // FCM 백그라운드 메시지는 firebase-messaging-sw.js (별도 SW) 가 처리한다.
 const CODE_CACHE = 'haru-code-v2';   // HTML·JS·CSS — 항상 최신을 받고, 실패할 때만 캐시 사용
-const IMG_CACHE  = 'haru-img-v2';    // 이미지·글꼴 — 한 번 받으면 다시 받지 않음
+const IMG_CACHE  = 'haru-img-v3';    // 이미지·글꼴 — 한 번 받으면 다시 받지 않음
 // ※ 같은 파일 이름으로 그림 내용을 바꿨다면 IMG_CACHE 의 숫자를 올린다.
 const KEEP = [CODE_CACHE, IMG_CACHE];
 const IMG_RE = /\.(webp|png|jpe?g|gif|svg|ico|woff2?)$/i;

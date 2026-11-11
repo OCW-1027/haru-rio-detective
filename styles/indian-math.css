@@ -7,7 +7,7 @@
 .im-kicker { font-family: 'RocknRoll One'; font-size: 13px; color: #d0702a; }
 .im-h1 { font-family: 'RocknRoll One'; font-size: 28px; color: #3a2a1a; margin: 0; }
 .im-aarya { flex-shrink: 0; text-align: center; }
-.im-aarya.big { width: 96px; } .im-aarya.sm { width: 56px; }
+.im-aarya.big { width: 96px; } .im-aarya.sm { width: 56px; } .im-aarya.mid { width: 120px; display: inline-block; }
 .im-aarya.ok .art-main { border-radius: 50%; aspect-ratio: 1; object-fit: cover; border: 3px solid #f1c98a; }
 .im-aarya-fb { font-size: 56px; line-height: 1.1; }
 .im-aarya.sm .im-aarya-fb { font-size: 38px; }
