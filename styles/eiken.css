@@ -211,3 +211,10 @@
 .ek-mock-grid .ek-card-icon { font-size: 18px; }
 .ek-mock-grid .ek-card-name { font-size: 14px; }
 .ek-mock-grid .ek-card-sub { font-size: 10.5px; line-height: 1.35; }
+.ek-pbar { display: grid; grid-template-columns: 7.5em 1fr 5.2em; align-items: center; gap: 8px; margin: 6px 0; font-family: 'Klee One'; font-size: 13px; color: #1f3f4c; }
+.ek-pbar.weak .ek-pbar-n { color: #c0482f; font-weight: 700; }
+.ek-pbar-t { height: 10px; border-radius: 6px; background: #e7efec; overflow: hidden; }
+.ek-pbar-t i { display: block; height: 100%; border-radius: 6px; }
+.ek-pbar-v { text-align: right; font-family: 'RocknRoll One'; font-size: 13px; }
+.ek-pbar-v small { font-family: 'Klee One'; font-size: 10px; color: #6a7a8a; }
+.ek-pbar-go { margin-top: 8px; }

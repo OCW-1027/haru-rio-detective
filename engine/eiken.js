@@ -579,6 +579,8 @@ const Eiken = (function () {
     h += '<li>✍ 作文: 要約 1題 + 意見論述 1題 (筆記の 時間内)</li>';
     h += '<li>🎧 リスニング (約' + C.lmin + '分): ' + C.L.map(l => 'Part' + l[0] + ' ' + l[1] + (l[2] > 1 ? '題×' + l[2] + '問' : '問')).join(' / ') + ' — 音声は 1回だけ</li></ul>';
     h += '<p class="ek-small">第1回〜第' + P.n + '回は それぞれ 別の 問題 (長文・リスニングが 重ならない)。順番に 受けて 本番の 練習を しよう。</p></div>';
+    const agg = {}; hist.filter(m => m.s).slice(-5).forEach(m => Object.keys(m.s).forEach(k => { const v = agg[k] || (agg[k] = [0, 0]); v[0] += m.s[k][0]; v[1] += m.s[k][1]; }));
+    h += partBox(agg, 'これまでの パート別 (最近 5回)');
     h += '<div class="ek-grid ek-mock-grid">';
     for (let k = 0; k < P.n; k++) {
       const hs = hist.filter(m => m.n === k + 1), last = hs[hs.length - 1];
@@ -682,22 +684,37 @@ const Eiken = (function () {
       speakSeq(seq, () => { const w = document.getElementById('ekWave'); if (w) w.classList.remove('on'); status('答えを 選んで 次へ'); const n2 = document.getElementById('mkNextL'); if (n2) n2.disabled = false; });
     }, it.situation ? 10000 : 2500);
   }
+  // パート別 正答率 (s1〜s3 = 筆記 大問1〜3, L1〜L3 = リスニング Part1〜3)
+  const PART_NAME = { s1: '大問1 語句', s2: '大問2 長文空所', s3: '大問3 内容一致', L1: 'Part1 会話', L2: 'Part2 説明文', L3: 'Part3 Real-Life' };
+  const PART_GO = { s1: 'p1', s2: 'read', s3: 'read', L1: 'listen', L2: 'listen', L3: 'listen' };
+  function partBox(ps, title) {
+    const ks = Object.keys(PART_NAME).filter(k => ps[k] && ps[k][1]);
+    if (!ks.length) return '';
+    const pc = k => Math.round(ps[k][0] * 100 / ps[k][1]);
+    const weak = ks.slice().sort((a, b) => pc(a) - pc(b))[0];
+    let h = '<div class="ek-box"><div class="ek-fb-h">📊 ' + title + '</div>';
+    ks.forEach(k => { const v = pc(k); h += '<div class="ek-pbar' + (k === weak && v < 80 ? ' weak' : '') + '"><span class="ek-pbar-n">' + PART_NAME[k] + '</span><span class="ek-pbar-t"><i style="width:' + v + '%;background:' + (v >= 75 ? '#3a9a6a' : v >= 60 ? '#e0a42a' : '#d9604a') + '"></i></span><span class="ek-pbar-v">' + v + '%<small> ' + ps[k][0] + '/' + ps[k][1] + '</small></span></div>'; });
+    if (pc(weak) < 80) h += '<button class="ek-secondary ek-pbar-go" data-go="' + PART_GO[weak] + '">🎯 いちばん 弱い「' + PART_NAME[weak] + '」を 練習する</button>';
+    return h + '</div>';
+  }
   function mockResult() {
     stopSpeak();
-    const set = P1SET(), wrong = [];
+    const set = P1SET(), wrong = [], ps = {};
+    const tally = (k, ok) => { const v = ps[k] || (ps[k] = [0, 0]); v[1]++; if (ok) v[0]++; };
     let r1 = 0, rTotal = 0;
-    mk.p1.forEach((it, k) => { rTotal++; const q = set[it.i]; if (mk.ans['p1_' + k] === q.answer) r1++; else wrong.push({ sec: '大問1', q: q.q, a: q.options[q.answer], exp: q.exp }); });
+    mk.p1.forEach((it, k) => { rTotal++; const q = set[it.i], ok = mk.ans['p1_' + k] === q.answer; tally('s1', ok); if (ok) r1++; else wrong.push({ sec: '大問1', q: q.q, a: q.options[q.answer], exp: q.exp }); });
     let r23 = 0;
-    [['c', mk.cloze, '大問2'], ['t', mk.content, '大問3']].forEach(([sec, L, nm]) => L.forEach(r => r.questions.forEach((q, qi) => { rTotal++; if (mk.ans[sec + '_' + r.id + '_' + qi] === q.answer) r23++; else wrong.push({ sec: nm, q: r.title + ' — ' + q.q, a: q.options[q.answer], exp: q.exp }); })));
+    [['c', mk.cloze, '大問2', 's2'], ['t', mk.content, '大問3', 's3']].forEach(([sec, L, nm, sk]) => L.forEach(r => r.questions.forEach((q, qi) => { rTotal++; const ok = mk.ans[sec + '_' + r.id + '_' + qi] === q.answer; tally(sk, ok); if (ok) r23++; else wrong.push({ sec: nm, q: r.title + ' — ' + q.q, a: q.options[q.answer], exp: q.exp }); })));
     let lc = 0, lTotal = 0;
-    mk.lis.forEach(idx => { const it = normListen(SET('listen')[idx]); it.qs.forEach((q, qi) => { lTotal++; if (mk.lans[idx + '.' + qi] === q.answer) lc++; else wrong.push({ sec: 'リスニング Part' + it.part, q: q.q, a: q.options[q.answer], exp: q.exp }); }); });
+    mk.lis.forEach(idx => { const it = normListen(SET('listen')[idx]); it.qs.forEach((q, qi) => { lTotal++; const ok = mk.lans[idx + '.' + qi] === q.answer; tally('L' + it.part, ok); if (ok) lc++; else wrong.push({ sec: 'リスニング Part' + it.part, q: q.q, a: q.options[q.answer], exp: q.exp }); }); });
     const rr = r1 + r23, pr = Math.round(rr * 100 / rTotal), pl = Math.round(lc * 100 / lTotal);
-    const e = data(); e.mock = e.mock || []; e.mock.push({ lv: mk.level, n: mk.no || 0, d: today(), r: [rr, rTotal], l: [lc, lTotal] }); save();
+    const e = data(); e.mock = e.mock || []; e.mock.push({ lv: mk.level, n: mk.no || 0, d: today(), r: [rr, rTotal], l: [lc, lTotal], s: ps }); save();
     if (typeof Study !== 'undefined') { for (let i = 0; i < rTotal; i++) Study.log('eiken', i < rr, 'mockR'); for (let i = 0; i < lTotal; i++) Study.log('eiken', i < lc, 'mockL'); }
     const judge = p => p >= 75 ? '🟢 合格圏' : p >= 60 ? '🟡 あと少し' : '🔴 要復習';
     let h = header('⏱ 模擬試験 ・ 結果', (mk.level === 'p1' ? '準1級' : '2級') + (mk.no ? ' 第' + mk.no + '回' : ' ランダム') + ' ・ 筆記 ' + (mk.rmin || 0) + '分');
     h += '<div class="ek-box"><div class="ek-mres"><div><b>' + rr + '</b> / ' + rTotal + '<span>リーディング ' + pr + '% ' + judge(pr) + '</span></div><div><b>' + lc + '</b> / ' + lTotal + '<span>リスニング ' + pl + '% ' + judge(pl) + '</span></div></div>';
     h += '<p class="ek-small">※ 英検の 合否は CSE スコア (技能ごとの 換算) で 決まります。正答率 7〜8割が 一次合格の おおよその 目安です。作文は 下の モデル解答と 比べて 自己採点しよう。</p></div>';
+    h += partBox(ps, 'この回の パート別');
     [[mk.wsum, 'mkSum'], [mk.wop, 'mkOp']].forEach(([w, id]) => { if (!w) return; h += '<div class="ek-box ek-model"><div class="ek-fb-h">✍ ' + (w.type === 'summary' ? '要約' : '意見論述') + ' — あなた ' + wordCount(mk[id] || '') + '語</div><p class="ek-mine">' + esc(mk[id] || '(未記入)') + '</p><div class="ek-fb-h">📖 モデル解答</div><p>' + esc(w.model) + '</p></div>'; });
     if (wrong.length) {
       h += '<div class="ek-mock-sec">❗ まちがえた 問題 (' + wrong.length + ')</div>';
