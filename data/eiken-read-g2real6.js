@@ -1,17 +1,17 @@
 /* 英検2級 長文 本番サイズ セット6 (オリジナル) — 大問2 空所補充 6題 / 大問3 内容一致 6題 */
 EIKEN_G2_READING.push(
-  { id: 'g2x37', real: true, type: 'cloze', title: 'The Comeback of Vinyl Records',
+  { id: 'g2x25', real: true, type: 'cloze', title: 'Vending Machines That Help in Disasters',
     paragraphs: [
-      'For much of the 20th century, people listened to music on vinyl records, large black discs that are played on a turntable. When CDs appeared in the 1980s, record sales dropped quickly, and many factories that made records closed. Later, music fans began downloading songs and then streaming them online. By the early 2000s, many people thought that vinyl records would (1).',
-      'Surprisingly, however, records have become popular again. In the United States, sales of vinyl records have grown every year for more than 15 years, and in 2022, more records than CDs were sold for the first time since the 1980s. Many of the buyers are young people who grew up with smartphones. (2), some of them do not even own a record player and buy records mainly to display them as art.',
-      'Fans give several reasons for loving records. Some say that the sound is warmer than digital music, while others enjoy the large cover art and the feeling of owning something physical. Listening to a record also requires people to (3). Instead of skipping from song to song, listeners usually play one side of a record from beginning to end, just as the artist intended.' ],
+      'Japan has more vending machines per person than almost any other country. There are about four million of them, selling everything from drinks and snacks to umbrellas and hot meals. Most people use them simply because they are convenient. However, some vending machines have a special purpose that (1). They are designed to help people when a disaster such as an earthquake or a typhoon happens.',
+      'These machines look like ordinary ones, but they can be switched to a special mode in an emergency. When this happens, people can take drinks out of the machine for free. Some models also have electronic message boards that show information about evacuation centers or train services. (2), some machines can continue working for a short time even when there is a power cut, because they have batteries inside.',
+      'Many of these machines have been placed in schools, parks, and city offices, which often become evacuation centers. After large earthquakes, local governments have reported that the free drinks helped people (3) during the first days, before supplies arrived from outside the area. Drink companies say the machines are also good for their image, because they show that the companies care about the communities where they do business.' ],
     questions: [
-      { q: '(1)', options: ['soon disappear completely', 'become more expensive than CDs', 'be used only by DJs', 'be played on smartphones'], answer: 0,
-        exp: 'CD・ダウンロード・ストリーミングで 売上が 落ちた → まもなく 消える と 思われた。' },
-      { q: '(2)', options: ['Interestingly', 'As a result', 'In the same way', 'For this reason'], answer: 0,
-        exp: 'プレーヤーを 持たずに 飾る ために 買う 人も いる という 意外な 事実 → Interestingly。' },
-      { q: '(3)', options: ['slow down and pay attention', 'buy expensive equipment', 'listen with other people', 'learn about the history of music'], answer: 0,
-        exp: '曲を 飛ばさず 片面を 最初から 最後まで → ゆっくり 集中して 聴く。' } ] },
+      { q: '(1)', options: ['most people do not know about', 'has made them very expensive', 'is no longer necessary', 'was decided by the customers'], answer: 0,
+        exp: '「単に 便利だから 使う」→ しかし 多くの 人が 知らない 特別な 目的が ある。' },
+      { q: '(2)', options: ['In addition', 'In contrast', 'For this reason', 'As a result'], answer: 0,
+        exp: '無料・情報表示 に 加えて バッテリーで 動く → In addition。' },
+      { q: '(3)', options: ['get through the difficult period', 'find their lost family members', 'repair their damaged houses', 'leave the area quickly'], answer: 0,
+        exp: '外から 物資が 届く 前の 最初の 数日を 乗り切る のに 役立った。' } ] },
 
   { id: 'g2x38', real: true, type: 'cloze', title: 'Sleeping in Space',
     paragraphs: [
@@ -110,21 +110,21 @@ EIKEN_G2_READING.push(
       { q: 'What happens every year on May 12?', options: ['International Nurses Day is celebrated.', 'The Royal Statistical Society holds a meeting.', 'Hospitals in Turkey are cleaned.', 'New nurses begin their training.'], answer: 0,
         exp: '第4段落: 彼女の 誕生日に 国際看護師の日。' } ] },
 
-  { id: 'g2x45', real: true, type: 'content', title: 'Ants That Count Their Steps',
+  { id: 'g2x21', real: true, type: 'content', title: 'The Woman Who Reached the Top',
     paragraphs: [
-      'In the Sahara Desert, there is a type of ant that faces a difficult challenge. During the hottest part of the day, when the ground can reach over 60 degrees Celsius, these desert ants leave their nests to search for food, such as insects that have died from the heat. They may travel more than 100 meters away from their nest, following a twisting path. Yet when they find food, they return home in an almost straight line.',
-      'Scientists have long wondered how the ants find their way back. The desert has few landmarks, and the wind quickly blows away any smells the ants leave behind. Researchers discovered that the ants use the sun to tell which direction they are going. Like a compass, the position of the sun helps them know which way their nest is. However, knowing the direction is not enough. The ants also need to know how far they have traveled.',
-      'In 2006, a team of scientists from Germany and Switzerland carried out a clever experiment to test the idea that the ants count their steps. First, they trained ants to walk to a feeder ten meters from their nest. Then, they changed the length of the ants\' legs. For some ants, they glued tiny "stilts" made from pig hairs to their legs, making their steps longer. For others, they cut their legs a little shorter, which made their steps shorter.',
-      'When the ants with stilts tried to return home, they walked past their nest. The ants with shorter legs, on the other hand, stopped before they reached it. This showed that the ants measure distance by counting their steps, much like a pedometer. The researchers were careful to point out that the ants were not seriously harmed. The study is now often cited as an example of how even small animals can perform complex tasks without a large brain.' ],
+      'On May 16, 1975, a Japanese woman named Junko Tabei became the first woman ever to stand on the top of Mount Everest, the highest mountain in the world. Tabei was born in 1939 in Fukushima Prefecture. As a child, she was small and not very strong, and she was not good at sports. However, when she was 10 years old, a teacher took her class on a trip to climb mountains in Tochigi Prefecture, and she fell in love with climbing.',
+      'At that time, many people in Japan believed that climbing was an activity for men. Some male climbers refused to climb with Tabei, and some people said that she should stay at home and look after her family. Instead of giving up, Tabei started a climbing club for women in 1969 with the message "Let\'s go on an overseas expedition by ourselves." The club had a hard time finding money for the Everest expedition, and the members made some of their equipment by hand to save money.',
+      'The expedition was nearly ended by a disaster. While the team was camping at about 6,300 meters, an avalanche buried their tents. Tabei was trapped under the snow and lost consciousness for several minutes before a guide pulled her out. Although she was injured and could hardly walk at first, she decided to continue. Twelve days later, she reached the top with a Sherpa guide named Ang Tsering.',
+      'Tabei did not stop after Everest. In 1992, she became the first woman to climb the highest mountain on each of the seven continents. Later in her life, she became worried about the large amounts of trash left by climbers on mountains, and she studied environmental problems at university. She also organized climbing trips for high school students from Tohoku after the Great East Japan Earthquake in 2011. She continued climbing until shortly before her death in 2016.' ],
     questions: [
-      { q: 'What is surprising about the desert ants?', options: ['They return home in an almost straight line.', 'They only leave their nests at night.', 'They never travel far from their nests.', 'They can survive without food.'], answer: 0,
-        exp: '第1段落: 曲がりくねって 進んでも 帰りは ほぼ 一直線。' },
-      { q: 'How do the ants know which direction their nest is in?', options: ['They use the position of the sun.', 'They follow smells they left behind.', 'They look for landmarks in the desert.', 'They listen for sounds from the nest.'], answer: 0,
-        exp: '第2段落: 太陽を コンパスの ように 使う。' },
-      { q: 'What did the scientists do in their experiment?', options: ['They changed the length of the ants\' legs.', 'They moved the ants\' nests to a new place.', 'They covered the sun with a screen.', 'They gave the ants special food.'], answer: 0,
-        exp: '第3段落: 竹馬を つけたり 脚を 短く したり。' },
-      { q: 'What did the results of the experiment show?', options: ['The ants measure distance by counting their steps.', 'The ants cannot walk with longer legs.', 'The ants use the wind to find their way.', 'The ants were seriously harmed by the experiment.'], answer: 0,
-        exp: '第4段落: 歩数を 数えて 距離を 測っている (歩数計の ように)。' } ] },
+      { q: 'How did Junko Tabei become interested in climbing?', options: ['A teacher took her class on a mountain-climbing trip.', 'Her parents were famous mountain climbers.', 'She joined a sports team because she was strong.', 'She saw Mount Everest on television.'], answer: 0,
+        exp: '第1段落: 10歳の 時、先生が クラスを 登山に 連れて 行った。' },
+      { q: 'Why did Tabei start a climbing club for women?', options: ['Many people thought climbing was only for men.', 'She wanted to earn money by teaching climbing.', 'Men\'s clubs did not allow overseas trips.', 'The government asked her to start one.'], answer: 0,
+        exp: '第2段落: 登山は 男性の もの と 思われ、一緒に 登るのを 断られた → 女性だけで 挑戦。' },
+      { q: 'What happened to Tabei during the Everest expedition?', options: ['She was buried by an avalanche but decided to continue.', 'She had to return home because of an injury.', 'She lost her equipment and borrowed some from men.', 'She climbed alone after the guide became sick.'], answer: 0,
+        exp: '第3段落: 雪崩に 埋まり 一時 意識を 失ったが、登頂を 続けた。' },
+      { q: 'Which of the following is true about Tabei\'s later life?', options: ['She studied environmental problems and helped young people from Tohoku.', 'She stopped climbing after she reached the top of Everest.', 'She became the first person to climb Everest twice in one year.', 'She moved abroad and opened a climbing school.'], answer: 0,
+        exp: '第4段落: 山の ごみ問題を 大学で 研究・震災後は 東北の 高校生を 山へ。' } ] },
 
   { id: 'g2x46', real: true, type: 'content', title: 'Little Pictures That Went Global',
     paragraphs: [

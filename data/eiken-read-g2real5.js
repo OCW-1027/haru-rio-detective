@@ -1,17 +1,17 @@
 /* 英検2級 長文 本番サイズ セット5 (オリジナル) — 大問2 空所補充 6題 / 大問3 内容一致 6題 */
 EIKEN_G2_READING.push(
-  { id: 'g2x25', real: true, type: 'cloze', title: 'Vending Machines That Help in Disasters',
+  { id: 'g2x37', real: true, type: 'cloze', title: 'The Comeback of Vinyl Records',
     paragraphs: [
-      'Japan has more vending machines per person than almost any other country. There are about four million of them, selling everything from drinks and snacks to umbrellas and hot meals. Most people use them simply because they are convenient. However, some vending machines have a special purpose that (1). They are designed to help people when a disaster such as an earthquake or a typhoon happens.',
-      'These machines look like ordinary ones, but they can be switched to a special mode in an emergency. When this happens, people can take drinks out of the machine for free. Some models also have electronic message boards that show information about evacuation centers or train services. (2), some machines can continue working for a short time even when there is a power cut, because they have batteries inside.',
-      'Many of these machines have been placed in schools, parks, and city offices, which often become evacuation centers. After large earthquakes, local governments have reported that the free drinks helped people (3) during the first days, before supplies arrived from outside the area. Drink companies say the machines are also good for their image, because they show that the companies care about the communities where they do business.' ],
+      'For much of the 20th century, people listened to music on vinyl records, large black discs that are played on a turntable. When CDs appeared in the 1980s, record sales dropped quickly, and many factories that made records closed. Later, music fans began downloading songs and then streaming them online. By the early 2000s, many people thought that vinyl records would (1).',
+      'Surprisingly, however, records have become popular again. In the United States, sales of vinyl records have grown every year for more than 15 years, and in 2022, more records than CDs were sold for the first time since the 1980s. Many of the buyers are young people who grew up with smartphones. (2), some of them do not even own a record player and buy records mainly to display them as art.',
+      'Fans give several reasons for loving records. Some say that the sound is warmer than digital music, while others enjoy the large cover art and the feeling of owning something physical. Listening to a record also requires people to (3). Instead of skipping from song to song, listeners usually play one side of a record from beginning to end, just as the artist intended.' ],
     questions: [
-      { q: '(1)', options: ['most people do not know about', 'has made them very expensive', 'is no longer necessary', 'was decided by the customers'], answer: 0,
-        exp: '「単に 便利だから 使う」→ しかし 多くの 人が 知らない 特別な 目的が ある。' },
-      { q: '(2)', options: ['In addition', 'In contrast', 'For this reason', 'As a result'], answer: 0,
-        exp: '無料・情報表示 に 加えて バッテリーで 動く → In addition。' },
-      { q: '(3)', options: ['get through the difficult period', 'find their lost family members', 'repair their damaged houses', 'leave the area quickly'], answer: 0,
-        exp: '外から 物資が 届く 前の 最初の 数日を 乗り切る のに 役立った。' } ] },
+      { q: '(1)', options: ['soon disappear completely', 'become more expensive than CDs', 'be used only by DJs', 'be played on smartphones'], answer: 0,
+        exp: 'CD・ダウンロード・ストリーミングで 売上が 落ちた → まもなく 消える と 思われた。' },
+      { q: '(2)', options: ['Interestingly', 'As a result', 'In the same way', 'For this reason'], answer: 0,
+        exp: 'プレーヤーを 持たずに 飾る ために 買う 人も いる という 意外な 事実 → Interestingly。' },
+      { q: '(3)', options: ['slow down and pay attention', 'buy expensive equipment', 'listen with other people', 'learn about the history of music'], answer: 0,
+        exp: '曲を 飛ばさず 片面を 最初から 最後まで → ゆっくり 集中して 聴く。' } ] },
 
   { id: 'g2x26', real: true, type: 'cloze', title: 'Leather from Mushrooms',
     paragraphs: [
