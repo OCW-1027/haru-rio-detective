@@ -167,7 +167,7 @@ const Eiken = (function () {
       { go: 'p1', icon: '✏️', name: '大問1 語句空所補充', sub: P1.length ? P1.length + '問 · 正答率 ' + rate(e[g2 ? 'p1' : 'pp1'] || {}) : '準備中', ok: P1.length > 0 },
       { go: 'listen', icon: '🎧', name: 'リスニング', sub: n('listen') ? n('listen') + '問 · 正答率 ' + rate(REC('listen')) : '準備中', ok: n('listen') > 0 },
       { go: 'write', icon: '📝', name: 'ライティング', sub: n('write') ? '要約 · 意見論述 ' + n('write') + '題' : '準備中', ok: n('write') > 0 },
-      { go: 'read', icon: '📖', name: '長文読解', sub: n('read') ? '空所補充 · 内容一致 ' + n('read') + '題' : '準備中', ok: n('read') > 0 },
+      { go: 'read', icon: '📖', name: '長文読解', sub: n('read') ? '空所補充 · 内容一致 ' + n('read') + '題 · 解いた ' + SET('read').filter(r => e.read[r.id]).length : '準備中', ok: n('read') > 0 },
       { go: 'interview', icon: '🎤', name: '面接 (二次)', sub: (typeof EIKEN_INTERVIEW !== 'undefined' ? EIKEN_INTERVIEW[level].length + 'カード · ' : '') + (level === 'p1' ? 'ナレーション + 4問' : '音読 + 4問') + ' · 音声認識', ok: typeof EikenInterview !== 'undefined' },
       ...(level === 'p1' && typeof EIKEN_1K_PART1 !== 'undefined' ? [{ go: 'k1', icon: '🎓', name: '1級 チャレンジ (大問1)', sub: EIKEN_1K_PART1.length + '問 · 正答率 ' + rate(e.k1p1 || {}), ok: true }] : []),
       { go: 'mock', icon: '⏱', name: '模擬試験 (本番形式)', sub: '全 ' + mockPlan().n + '回 · ' + (level === 'p1' ? '筆記31問 + 作文2題 + リスニング29問' : '筆記31問 + 作文2題 + リスニング30問'), ok: true },
@@ -454,18 +454,24 @@ const Eiken = (function () {
   }
 
   // ---------- 長文読解 ----------
+  let rf = 'all';   // 長文 一覧の 絞りこみ: all / cloze / content / todo
   function readList() {
-    const e = data();
-    let h = header('長文読解', '大問2 (空所補充) · 大問3 (内容一致)');
-    h += '<div class="ek-grid">';
-    const L = SET('read').map((r, i) => [r, i]);
+    const e = data(), all = SET('read');
+    const done = all.filter(r => e.read[r.id]).length;
+    let h = header('長文読解', '大問2 (空所補充) · 大問3 (内容一致) ・ 全 ' + all.length + '題 · 解いた ' + done);
+    const F = [['all', 'すべて', all.length], ['cloze', '🧩 大問2', all.filter(r => r.type === 'cloze').length], ['content', '🔎 大問3', all.filter(r => r.type === 'content').length], ['todo', '⏳ まだ', all.length - done]];
+    h += '<div class="ek-pos small" style="grid-template-columns:repeat(4,1fr)">';
+    F.forEach(([id, nm, c]) => { h += '<button class="ek-pos-b' + (rf === id ? ' on' : '') + '" data-rf="' + id + '"><span class="ek-pos-n">' + nm + '</span><span class="ek-pos-c">' + c + '題</span></button>'; });
+    h += '</div><div class="ek-grid">';
+    const L = all.map((r, i) => [r, i]).filter(([r]) => rf === 'all' || (rf === 'todo' ? !e.read[r.id] : r.type === rf));
     L.sort((x, y) => (y[0].real ? 1 : 0) - (x[0].real ? 1 : 0));
     L.forEach(([r, i]) => {
-      const done = e.read[r.id];
-      h += '<button class="ek-card' + (r.real ? ' real' : '') + '" data-r="' + i + '"><span class="ek-card-icon">' + (r.type === 'cloze' ? '🧩' : '🔎') + '</span><span class="ek-card-name">' + esc(r.title) + '</span><span class="ek-card-sub">' + (r.real ? '🎯 本番サイズ ・ ' : 'ミニ ・ ') + (r.type === 'cloze' ? '空所補充' : '内容一致 ' + r.questions.length + '問') + (done ? ' ・ 前回 ' + done[0] + '/' + done[1] : '') + '</span></button>';
+      const d = e.read[r.id];
+      h += '<button class="ek-card' + (r.real ? ' real' : '') + (d ? ' done' : '') + '" data-r="' + i + '"><span class="ek-card-icon">' + (r.type === 'cloze' ? '🧩' : '🔎') + '</span><span class="ek-card-name">' + esc(r.title) + '</span><span class="ek-card-sub">' + (r.real ? '🎯 本番サイズ ・ ' : 'ミニ ・ ') + (r.type === 'cloze' ? '空所補充' : '内容一致 ' + r.questions.length + '問') + (d ? ' ・ 前回 ' + d[0] + '/' + d[1] : '') + '</span></button>';
     });
     h += '</div>';
     area().innerHTML = h; bindGo(area());
+    area().querySelectorAll('[data-rf]').forEach(b => b.onclick = () => { sfx('click'); rf = b.dataset.rf; readList(); });
     area().querySelectorAll('[data-r]').forEach(b => b.onclick = () => { sfx('click'); readTask(+b.dataset.r); });
   }
   function readTask(ri) {
@@ -495,8 +501,11 @@ const Eiken = (function () {
         box.querySelector('.ek-rfb').innerHTML = '<div class="ek-fb ' + (good ? 'ok' : 'ng') + '"><div class="ek-fb-h">' + (good ? '🎉 正解!' : '✗ 正解は 「' + esc(q.options[q.answer]) + '」') + '</div><div class="ek-fb-exp">💡 ' + esc(q.exp) + '</div></div>';
         if (answered === r.questions.length) {
           data().read[r.id] = [ok, r.questions.length]; save();
-          document.getElementById('ekReadEnd').innerHTML = '<div class="ek-box ek-center"><p>' + r.questions.length + '問中 <b>' + ok + '</b>問 正解</p><button class="ek-primary" data-go="read">ほかの 長文へ</button></div>';
+          const RS = SET('read'), e2 = data(); let nx = -1;
+          for (let k = 1; k <= RS.length; k++) { const j = (ri + k) % RS.length; if (RS[j].type === r.type && RS[j].real === r.real && !e2.read[RS[j].id]) { nx = j; break; } }
+          document.getElementById('ekReadEnd').innerHTML = '<div class="ek-box ek-center"><p>' + r.questions.length + '問中 <b>' + ok + '</b>問 正解</p>' + (nx >= 0 ? '<button class="ek-primary" id="ekReadNext">次の ' + (r.type === 'cloze' ? '空所補充' : '内容一致') + ' →</button>' : '') + '<button class="ek-secondary" data-go="read">長文の 一覧へ</button></div>';
           bindGo(document.getElementById('ekReadEnd'));
+          const nb = document.getElementById('ekReadNext'); if (nb) nb.onclick = () => { sfx('click'); readTask(nx); const pg = document.getElementById('pageEiken'); if (pg) pg.scrollTop = 0; };
         }
       });
     });

@@ -205,4 +205,4 @@
 .iv-tips { margin: 6px 0; padding-left: 18px; font-family: 'Klee One'; font-size: 13px; color: #8a4a2a; line-height: 1.6; }
 .iv-good { font-family: 'Klee One'; color: #2e7d4f; margin: 6px 0; }
 @media (max-width: 520px) { .iv-panels { grid-template-columns: 1fr; } .iv-panels.n4 { grid-template-columns: 1fr 1fr; } }
-.ek-card.real.done { background: #f2fbf8; }
+.ek-card.done { background: #f2fbf8; }
