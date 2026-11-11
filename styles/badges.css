@@ -1,0 +1,39 @@
+/* バッジ 図鑑 */
+.bg-page { background: radial-gradient(ellipse at 20% 0%, #fff6e2 0%, #faf3e6 40%, #f2ece0 100%); overflow-y: auto; padding: 0 0 48px; }
+.bg-wrap { width: 100%; max-width: 820px; margin: 0 auto; padding: 64px 16px 0; box-sizing: border-box; }
+.bg-exit { position: absolute; top: 14px; left: 14px; z-index: 5; }
+.bg-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
+.bg-head h1 { font-family: 'RocknRoll One'; font-size: 24px; color: #4a3a2a; margin: 0; }
+.bg-count { font-family: 'RocknRoll One'; font-size: 14px; color: #8a7a6a; }
+.bg-count b { font-size: 26px; color: #c08a2a; }
+.bg-bar { height: 10px; border-radius: 99px; background: #ece3d3; overflow: hidden; margin: 8px 0 6px; }
+.bg-bar i { display: block; height: 100%; background: linear-gradient(90deg, #e8b85a, #d48a3a); border-radius: 99px; }
+.bg-cat { font-family: 'RocknRoll One'; font-size: 15px; color: #6a5a4a; margin: 18px 0 8px; padding-left: 10px; border-left: 4px solid #d8b878; }
+.bg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.bg-card { position: relative; background: rgba(255,255,255,.7); border: 1.5px dashed #d8cdbd; border-radius: 16px; padding: 12px 10px 10px; text-align: center; min-width: 0; }
+.bg-card .bg-icon { font-size: 34px; line-height: 1.2; filter: grayscale(1) opacity(.35); }
+.bg-card .bg-name { font-family: 'RocknRoll One'; font-size: 13px; color: #8a7a6a; margin-top: 4px; }
+.bg-card .bg-desc { font-family: 'Klee One'; font-size: 11px; color: #9a8a7a; margin-top: 3px; line-height: 1.4; min-height: 30px; }
+.bg-prog { height: 6px; border-radius: 99px; background: #eee6d8; overflow: hidden; margin-top: 6px; }
+.bg-prog i { display: block; height: 100%; background: #b8c8a0; }
+.bg-num { font-family: 'Klee One'; font-size: 11px; color: #9a8a7a; margin-top: 3px; }
+.bg-card.ok { background: linear-gradient(160deg, #fffaf0, #fff3dc); border: 2px solid #e2c27a; box-shadow: 0 3px 10px rgba(180,130,40,.15); }
+.bg-card.ok .bg-icon { filter: none; animation: bgPop .5s ease-out; }
+.bg-card.ok .bg-name { color: #6a4a1a; }
+.bg-card.ok .bg-desc { color: #8a6a3a; }
+.bg-date { font-family: 'Klee One'; font-size: 11px; color: #b08a3a; margin-top: 6px; }
+@keyframes bgPop { 0% { transform: scale(.6); } 70% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@media (max-width: 400px) { .bg-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; } }
+
+/* 新しい バッジ トースト */
+.bg-toast { position: fixed; left: 50%; top: 18px; transform: translate(-50%, -140%); z-index: 9999; display: flex; align-items: center; gap: 10px; background: linear-gradient(160deg, #fffaf0, #ffefc8); border: 2px solid #e2c27a; border-radius: 18px; padding: 10px 18px 10px 12px; box-shadow: 0 6px 20px rgba(120,80,20,.25); transition: transform .45s cubic-bezier(.2,1.4,.4,1); max-width: calc(100vw - 32px); box-sizing: border-box; }
+.bg-toast.show { transform: translate(-50%, 0); }
+.bg-toast .bg-ti { font-size: 34px; }
+.bg-toast small { display: block; font-family: 'Klee One'; font-size: 11px; color: #a07a30; }
+.bg-toast b { display: block; font-family: 'RocknRoll One'; font-size: 16px; color: #5a3a10; }
+
+/* ハブの 下の ボタン 並び */
+.hub-foot { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 18px auto 8px; }
+.hub-foot .hub-parent { margin: 0; }
+.hub-badge { border-color: #e2c27a; background: #fff8e6; color: #7a5a1a; }
+.hub-badge b { color: #c08a2a; }
