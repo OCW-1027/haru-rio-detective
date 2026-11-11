@@ -71,6 +71,62 @@ const ELAD = (function () {
     const b = pick([98, 99, 101, 102, 199]), m = R(3, 9), base = Math.round(b / 100) * 100; return { q: b + ' × ' + m + ' = ? (くふうして 計算)', type: 'num', a: b * m, steps: [b + ' = ' + base + (b > base ? ' + ' + (b - base) : ' − ' + (base - b)), base + ' × ' + m + (b > base ? ' + ' : ' − ') + Math.abs(b - base) + ' × ' + m + ' = ' + (base * m) + (b > base ? ' + ' : ' − ') + Math.abs(b - base) * m, '= ' + (b * m)] };
   });
 
+  // ---- 4年 (つづき) ----
+  const lineChart = (labels, vals, unit, title) => { const W = 330, H = 190, L = 40, B = 160, top = 20, mx = Math.ceil(Math.max(...vals) / 5) * 5 + 5, mn = Math.max(0, Math.floor(Math.min(...vals) / 5) * 5 - 5), X = i => L + 14 + i * (W - L - 30) / (vals.length - 1), Y = v => B - (v - mn) * (B - top) / (mx - mn);
+    let s = '<svg viewBox="0 0 ' + W + ' ' + (H + 16) + '" class="mw-figsvg"><text x="' + W / 2 + '" y="14" font-size="13" text-anchor="middle">' + title + '</text>';
+    for (let v = mn; v <= mx; v += 5) s += '<line x1="' + L + '" y1="' + Y(v) + '" x2="' + (W - 10) + '" y2="' + Y(v) + '" stroke="#dde4ec"/><text x="' + (L - 6) + '" y="' + (Y(v) + 4) + '" font-size="11" text-anchor="end" fill="#6a7a8a">' + v + '</text>';
+    s += '<polyline points="' + vals.map((v, i) => X(i) + ',' + Y(v)).join(' ') + '" fill="none" stroke="#d0382a" stroke-width="2.5"/>' + vals.map((v, i) => '<circle cx="' + X(i) + '" cy="' + Y(v) + '" r="3.5" fill="#d0382a"/><text x="' + X(i) + '" y="' + (B + 18) + '" font-size="11" text-anchor="middle">' + labels[i] + '</text>').join('') + '<text x="' + (L - 4) + '" y="' + (top - 4) + '" font-size="11" text-anchor="end">(' + unit + ')</text></svg>';
+    return s; };
+  add('e4', 'e4i', '📈', '折れ線グラフ', ['変わっていく ようすを 表すのに 便利 (気温・身長 など)', '線の かたむきが 急 → 変わり方が 大きい、横に まっすぐ → 変わらない', '目もり 1つ分の 大きさを まず 確かめる'], () => {
+    const M = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月'], base = pick([[5, 6, 9, 14, 19, 22, 26, 27], [3, 4, 8, 13, 18, 21, 25, 26], [8, 9, 12, 16, 20, 23, 27, 29]]), v = base.map(x => x + R(-1, 1)), k = pick(['max', 'diff', 'steep', 'read']);
+    const fig = lineChart(M, v, '度', '月ごとの 気温'), diffs = v.slice(1).map((x, i) => x - v[i]);
+    if (k === 'max') { const i = v.indexOf(Math.max(...v)); if (v.lastIndexOf(Math.max(...v)) !== i) return null; const o = choice('グラフで 気温が いちばん 高いのは 何月?', M[i], M.filter((_, j) => j !== i).slice(-4), ['点が いちばん 上に ある 月 → ' + M[i] + ' (' + v[i] + '度)']); return o && Object.assign(o, { fig: fig }); }
+    if (k === 'diff') { const i = R(0, 6); return { q: 'グラフで ' + M[i] + 'から ' + M[i + 1] + 'の 間に 気温は 何度 上がった?', type: 'num', a: v[i + 1] - v[i], fig: fig, steps: [M[i] + ' は ' + v[i] + '度、' + M[i + 1] + ' は ' + v[i + 1] + '度', v[i + 1] + ' − ' + v[i] + ' = ' + (v[i + 1] - v[i]) + '度'] }; }
+    if (k === 'steep') { const mxd = Math.max(...diffs), i = diffs.indexOf(mxd); if (diffs.lastIndexOf(mxd) !== i) return null; const o = choice('グラフで 気温の 上がり方が いちばん 大きいのは どの 月の 間?', M[i] + '〜' + M[i + 1], diffs.map((_, j) => M[j] + '〜' + M[j + 1]).filter((_, j) => j !== i).sort(() => Math.random() - 0.5), ['線の かたむきが いちばん 急な ところ', M[i] + '〜' + M[i + 1] + ' で ' + mxd + '度 上がった']); return o && Object.assign(o, { fig: fig }); }
+    const i = R(0, 7); return { q: 'グラフで ' + M[i] + 'の 気温は 何度?', type: 'num', a: v[i], fig: fig, steps: ['横の じくで ' + M[i] + ' を 見つけ、点の 高さを 左の 目もりで 読む', '→ ' + v[i] + '度'] };
+  });
+  const QUAD = [['台形', '向かい合った 1組の 辺が 平行'], ['平行四辺形', '向かい合った 2組の 辺が 平行'], ['ひし形', '4つの 辺の 長さが すべて 等しい'], ['長方形', '4つの 角が すべて 直角'], ['正方形', '4つの 辺が 等しく、4つの 角が すべて 直角']];
+  add('e4', 'e4j', '▱', '垂直・平行と 四角形', ['2本の 直線が 直角に 交わる → 垂直、どこまで のばしても 交わらない → 平行', '台形: 1組が 平行、平行四辺形: 2組が 平行、ひし形: 4辺が 等しい', '平行四辺形の 向かい合う 辺の 長さ・角の 大きさは 等しい'], () => {
+    const k = pick(['name', 'name', 'diag', 'angle', 'para']);
+    if (k === 'name') { const SAT = { 平行四辺形: ['ひし形', '長方形', '正方形'], ひし形: ['正方形'], 長方形: ['正方形'], 正方形: [] }, q = pick(QUAD.slice(1)), ex = SAT[q[0]];
+      return choice('「' + q[1] + '」四角形の 名前は? (いちばん 広く あてはまる 名前)', q[0], QUAD.map(x => x[0]).filter(x => x !== q[0] && ex.indexOf(x) < 0).concat(['三角形', '五角形']).sort(() => Math.random() - 0.5), [q[0] + ': ' + q[1], ex.length ? '(' + ex.join('・') + ' も この 性質を もつ — ' + q[0] + 'の なかまだから)' : '正方形は ひし形でも あり 長方形でも ある']); }
+    if (k === 'diag') { const D = [['ひし形', '2本の 対角線が 垂直に 交わり、たがいの まん中で 交わる (長さは ちがう)'], ['長方形', '2本の 対角線の 長さが 等しく、たがいの まん中で 交わる (垂直では ない)'], ['正方形', '2本の 対角線の 長さが 等しく、垂直に 交わり、まん中で 交わる'], ['平行四辺形', '2本の 対角線が たがいの まん中で 交わる (長さも 角も 決まって いない)']], d = pick(D);
+      return choice('対角線が「' + d[1] + '」四角形は?', d[0], D.filter(x => x !== d).map(x => x[0]).concat(['台形']), ['対角線の 性質: ' + d[0] + ' → ' + d[1]]); }
+    if (k === 'angle') { const a = R(50, 80); return { q: '平行四辺形の 1つの 角が ' + a + '° の とき、となりの 角は 何度?', type: 'num', a: 180 - a, steps: ['平行四辺形の となり合う 角を 足すと 180°', '180 − ' + a + ' = ' + (180 - a) + '°'] }; }
+    const a = R(4, 12), b = R(3, 9); return { q: '平行四辺形の となり合う 2辺が ' + a + 'cm と ' + b + 'cm。まわりの 長さは 何 cm?', type: 'num', a: 2 * (a + b), steps: ['向かい合う 辺の 長さは 等しい', '(' + a + ' + ' + b + ') × 2 = ' + 2 * (a + b) + 'cm'] };
+  });
+  add('e4', 'e4k', '📦', '直方体と 立方体', ['直方体も 立方体も 面 6・辺 12・頂点 8', '立方体は 6つの 面が すべて 同じ 正方形', '辺の 長さの 合計 = (たて + よこ + 高さ) × 4'], () => {
+    const k = pick(['count', 'edge', 'cubeEdge', 'face', 'net']);
+    if (k === 'count') { const w = pick([['面', 6], ['辺', 12], ['頂点', 8]]); return { q: '直方体の ' + w[0] + 'の 数は いくつ?', type: 'num', a: w[1], steps: ['面 6、辺 12、頂点 8', '→ ' + w[1]] }; }
+    if (k === 'edge') { const a = R(2, 12), b = R(2, 12), c = R(2, 12); return { q: 'たて ' + a + 'cm、よこ ' + b + 'cm、高さ ' + c + 'cm の 直方体の 辺の 長さを ぜんぶ 足すと 何 cm?', type: 'num', a: 4 * (a + b + c), steps: ['同じ 長さの 辺が 4本ずつ', '(' + a + ' + ' + b + ' + ' + c + ') × 4 = ' + 4 * (a + b + c) + 'cm'] }; }
+    if (k === 'cubeEdge') { const t = R(3, 20) * 12; return { q: '立方体の 辺の 長さを ぜんぶ 足すと ' + t + 'cm。1辺は 何 cm?', type: 'num', a: t / 12, steps: ['立方体は 12本の 辺が 同じ 長さ', t + ' ÷ 12 = ' + t / 12 + 'cm'] }; }
+    if (k === 'face') { return choice('直方体で、1つの 面に 垂直な 面は いくつ?', '4つ', ['1つ', '2つ', '5つ', '6つ'], ['向かい合う 1つの 面は 平行', '残りの 4つの 面が 垂直']); }
+    return choice('立方体の 展開図で、1つの 面と 向かい合う (平行な) 面は いくつ?', '1つ', ['2つ', '3つ', '4つ'], ['6つの 面は 3組の 向かい合う 面に 分かれる', '組み立てると 1つの 面に 平行な 面は 1つだけ']);
+  });
+  add('e4', 'e4l', '🔗', '変わり方 (きまりを 見つける)', ['2つの 量を 表に 書いて、ふえ方の きまりを 見つける', '「□ が 1 ふえると ○ が いくつ ふえる?」を 調べる', 'きまりを 式に すると、遠くの 数も 計算できる'], () => {
+    const k = pick(['match', 'peri', 'age', 'steps', 'tables']), n = R(6, 30);
+    if (k === 'match') return { q: 'マッチぼうで 正方形を 横に つなげて 作る。正方形 1こで 4本、2こで 7本、3こで 10本。正方形が ' + n + 'こ の とき、マッチぼうは 何本?', type: 'num', a: 3 * n + 1, steps: ['正方形が 1こ ふえると マッチぼうは 3本 ふえる', '最初の 1本 + 3 × こ数 → 1 + 3 × ' + n + ' = ' + (3 * n + 1) + '本'] };
+    if (k === 'peri') return { q: '1辺 1cm の 正方形を 横に 1列に ' + n + 'こ 並べる。できた 長方形の まわりの 長さは 何 cm?', type: 'num', a: 2 * n + 2, steps: ['たて 1cm、よこ ' + n + 'cm の 長方形', '(1 + ' + n + ') × 2 = ' + (2 * n + 2) + 'cm'] };
+    if (k === 'age') { const d = R(25, 35), c = R(4, 10), y = R(3, 15); return { q: '今、お母さんは ' + (d + c) + '才、わたしは ' + c + '才。わたしが ' + (c + y) + '才に なる とき、お母さんは 何才?', type: 'num', a: d + c + y, steps: ['2人の 年の 差は いつも ' + d + '才 (変わらない)', (c + y) + ' + ' + d + ' = ' + (d + c + y) + '才'] }; }
+    if (k === 'steps') { const m = R(4, 12); return { q: '1辺 1cm の 立方体を 階だん の 形に 積む。1だん 1こ、2だん 3こ (1 + 2)、3だん 6こ (1 + 2 + 3)。' + m + 'だん の ときは 何こ?', type: 'num', a: m * (m + 1) / 2, steps: ['1 + 2 + 3 + … + ' + m, '= ' + m * (m + 1) / 2 + 'こ'] }; }
+    return { q: 'つくえを 横に 1列に つなげる。1台で 6人、2台で 10人、3台で 14人 すわれる。' + n + '台 では 何人?', type: 'num', a: 4 * n + 2, steps: ['1台 ふえると 4人 ふえる', '6 + 4 × (' + n + ' − 1) = ' + (4 * n + 2) + '人'] };
+  });
+  add('e4', 'e4m', '🍬', 'わり算 (1けたで わる)', ['大きい 位から 順に「たてる → かける → ひく → おろす」', '商が たたない 位には 0 を たてる (例: 618 ÷ 6 = 103)', '暗算: 60 ÷ 3 は 6 ÷ 3 = 2 の 10倍 → 20'], () => {
+    const k = pick(['hiss', 'hiss', 'zero', 'mental', 'word']);
+    if (k === 'hiss') { const d = R(2, 9), q = R(12, 199), r = R(0, d - 1), n = d * q + r; return { q: n + ' ÷ ' + d + ' = ? (商と あまり)', type: 'pair', a: [q, r], labels: ['商', 'あまり'], steps: [d + ' × ' + q + ' = ' + d * q, n + ' − ' + d * q + ' = ' + r, 'たしかめ: ' + d + ' × ' + q + ' + ' + r + ' = ' + n] }; }
+    if (k === 'zero') { const d = R(3, 9), a = R(1, 9), c = R(1, 9), q = a * 100 + c, n = d * q; return { q: n + ' ÷ ' + d + ' = ?', type: 'num', a: q, steps: ['百の位: ' + Math.floor(n / 100) + ' ÷ ' + d + ' → ' + a, '十の位: 商が たたない → 0 を たてる', '= ' + q] }; }
+    if (k === 'mental') { const d = R(2, 9), q = R(2, 9) * pick([10, 100]); return { q: (d * q) + ' ÷ ' + d + ' = ? (暗算)', type: 'num', a: q, steps: [(d * q / (q >= 100 ? 100 : 10)) + ' ÷ ' + d + ' = ' + (q / (q >= 100 ? 100 : 10)), 'それの ' + (q >= 100 ? '100' : '10') + '倍 → ' + q] }; }
+    const d = R(3, 8), q = R(10, 40), r = R(1, d - 1), n = d * q + r; return pick([0, 1]) ? { q: 'あめが ' + n + 'こ ある。1人 ' + d + 'こずつ 分けると、何人に 分けられて 何こ あまる?', type: 'pair', a: [q, r], labels: ['人数', 'あまり'], steps: [n + ' ÷ ' + d + ' = ' + q + ' あまり ' + r] }
+      : { q: n + '人が ' + d + '人ずつ 長いすに すわる。全員が すわるには 長いすが 何きゃく いる?', type: 'num', a: q + 1, steps: [n + ' ÷ ' + d + ' = ' + q + ' あまり ' + r, 'あまりの ' + r + '人にも 1きゃく 必要 → ' + (q + 1) + 'きゃく'] };
+  });
+  add('e4', 'e4n', '🔍', '小数の しくみ', ['0.1 を 10こ 集めると 1、0.01 を 10こ 集めると 0.1', '2.45 は「1 が 2こ、0.1 が 4こ、0.01 が 5こ」', '大きさ くらべは 上の 位から 順に'], () => {
+    const k = pick(['gather', 'count', 'cmp', 'x10']);
+    if (k === 'gather') { const n = R(12, 999); return { q: '0.01 を ' + n + 'こ 集めた 数は?', type: 'num', a: r3(n / 100), steps: ['0.01 が 100こ で 1', n + 'こ → ' + r3(n / 100)] }; }
+    if (k === 'count') { const v = R(101, 999) / 100; return { q: r3(v) + ' は 0.01 を 何こ 集めた 数?', type: 'num', a: Math.round(v * 100), steps: ['1 は 0.01 が 100こ', r3(v) + ' → ' + Math.round(v * 100) + 'こ'] }; }
+    if (k === 'cmp') { const a = R(100, 400) / 100, xs = [a, r3(a + 0.1), r3(a + 0.01), r3(a - 0.05 + 0.001 * R(0, 4))].map(r3); const mx = Math.max(...xs); if (new Set(xs).size < 4) return null; return choice('いちばん 大きい 数は どれ?', String(mx), xs.filter(x => x !== mx).map(String), ['一の位 → 1/10 の位 → 1/100 の位 の 順に くらべる', '→ ' + mx]); }
+    const v = R(11, 999) / 100, t = pick([10, 100]); return pick([0, 1]) ? { q: r3(v) + ' を ' + t + '倍 した 数は?', type: 'num', a: r3(v * t), steps: [t + '倍 → 小数点が ' + (t === 10 ? 1 : 2) + 'けた 右へ', '= ' + r3(v * t)] } : { q: r3(v * 10) + ' を 1/' + t + ' に した 数は?', type: 'num', a: r3(v * 10 / t), steps: ['1/' + t + ' → 小数点が ' + (t === 10 ? 1 : 2) + 'けた 左へ', '= ' + r3(v * 10 / t)] };
+  });
+
   // ======================= 5年 =======================
   add('e5', 'e5a', '✖', '小数の かけ算・わり算', ['小数 × 小数: 小数点以下の けた数を 合わせた ぶんだけ、答えの 小数点を うつ', '÷ 小数: わる数が 整数に なるよう、両方の 小数点を 同じ けただけ 右へ', '1より 小さい 数で わると、答えは わられる数より 大きく なる'], () => {
     const k = pick(['mul', 'mul', 'div', 'div']);
