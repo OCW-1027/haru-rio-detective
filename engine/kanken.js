@@ -31,6 +31,7 @@ const Kanken = (function () {
     sanji: { name: '三字熟語', icon: '🧩', note: '□に 入る 漢字は?' },
     yoji: { name: '四字熟語', icon: '🀄', note: '□に 入る 漢字は?' },
     goji: { name: '誤字訂正', icon: '🔍', note: 'まちがった 字を 見つけよう' },
+    bunsho: { name: '文章題', icon: '📰', note: '文章の 中の 読み・書き' },
     hyogai: { name: '表外読み', icon: '🌙', note: 'ふだん 見ない 読み方' },
     kyuji: { name: '旧字体', icon: '🏯', note: '昔の 字の 形' },
     koji: { name: '故事・ことわざ', icon: '📜', note: '□に 入る 漢字は?' },
@@ -38,8 +39,8 @@ const Kanken = (function () {
   };
   // 本番形式: [分野, 問題数, 1問の 点]  (合計 200点に 換算・140点以上が 合格の めやす)
   const MOCK = [['read', 20, 1], ['bushu', 10, 1], ['stroke', 10, 1], ['okuri', 10, 2], ['onkun', 10, 1], ['taigi', 10, 2], ['douon', 10, 2], ['sanji', 10, 2], ['write', 20, 2]];
-  const ORDER = ['read', 'hyogai', 'write', 'stroke', 'okuri', 'onkun', 'taigi', 'ruigi', 'kousei', 'douon', 'sanji', 'yoji', 'koji', 'goji', 'kyuji', 'bushu'];
-  const ARR = { okuri: 'OKURI', onkun: 'ONKUN', taigi: 'TAIGI', ruigi: 'RUIGI', kousei: 'KOUSEI', douon: 'DOUON', sanji: 'SANJI', yoji: 'YOJI', goji: 'GOJI', kyuji: 'KYUJI', koji: 'KOJI', hyogai: 'HYOGAI', bushu: 'BUSHU' };
+  const ORDER = ['read', 'hyogai', 'write', 'stroke', 'okuri', 'onkun', 'taigi', 'ruigi', 'kousei', 'douon', 'sanji', 'yoji', 'koji', 'goji', 'bunsho', 'kyuji', 'bushu'];
+  const ARR = { okuri: 'OKURI', onkun: 'ONKUN', taigi: 'TAIGI', ruigi: 'RUIGI', kousei: 'KOUSEI', douon: 'DOUON', sanji: 'SANJI', yoji: 'YOJI', goji: 'GOJI', kyuji: 'KYUJI', koji: 'KOJI', hyogai: 'HYOGAI', bunsho: 'BUNSHO', bushu: 'BUSHU' };
   const KOUSEI = { ア: '同じような 意味の 字を 重ねた もの (例: 岩石)', イ: '反対や 対の 意味の 字を 重ねた もの (例: 高低)', ウ: '上の 字が 下の 字を 説明 (修飾) して いる もの (例: 洋画)', エ: '下の 字が 「〜を」「〜に」に あたる もの (例: 着席 = 席に 着く)' };
   let lv = 7, run = null, writers = [];
   const HW = () => typeof HanziWriter !== 'undefined';
@@ -161,6 +162,16 @@ const Kanken = (function () {
     return { key: 'kousei:' + i, sec: 'kousei', q: '<div class="kk-big">' + esc(w) + '</div><div class="kk-ask">この 熟語の 組み立ては?</div><div class="kk-kousei-key">' + Object.keys(KOUSEI).map(x => '<div><b>' + x + '</b> ' + esc(KOUSEI[x]) + '</div>').join('') + '</div>',
       opts: ['ア', 'イ', 'ウ', 'エ'], ans: 'アイウエ'.indexOf(t), exp: '<b>' + esc(w) + '</b> → ' + t + ': ' + esc(KOUSEI[t].replace(/ \(例.*\)/, '')), big: true };
   }
+  // 文章題: 文章の 中の 〔読:ことば|正|誤|誤|誤〕〔書:カタカナ|正|誤|誤|誤〕 を 順に 1問ずつ
+  const marks = p => Array.from(L().BUNSHO[p].matchAll(/〔(読|書):([^〕]+)〕/g)).map(x => ({ t: x[1], f: x[2].split('|') }));
+  function bunshoItem(p, m) {
+    const ms = marks(p), cur = ms[m]; let j = 0;
+    const html = esc(L().BUNSHO[p]).replace(/〔(読|書):([^〕]+)〕/g, (all, t, body) => { const k = j++, w = body.split('|')[0], no = '<sup>' + (k + 1) + '</sup>';
+      return k === m ? '<u class="kk-tgt">' + w + '</u>' + no : '<span class="kk-bs-o">' + w + '</span>' + no; });
+    const rd = cur.t === '読';
+    return finish({ key: 'bunsho:' + p + '.' + m, sec: 'bunsho', q: '<div class="kk-bunsho">' + html + '</div><div class="kk-ask">' + (m + 1) + '. 線の ' + (rd ? 'ことばの 読みは?' : 'カタカナを 漢字に すると?') + '</div>', opts: cur.f.slice(1, 5),
+      exp: rd ? '<b>' + esc(cur.f[0]) + '</b>(' + esc(cur.f[1]) + ')' : '<b>' + esc(cur.f[1]) + '</b>(' + esc(cur.f[0]) + ')', speak: rd ? cur.f[1] : null });
+  }
   // 表外読み: 'ことば|正|誤|誤|誤|例文'
   function hyogaiItem(i) {
     const [w, a, b, c, d, s] = split(L().HYOGAI[i]);
@@ -241,6 +252,7 @@ const Kanken = (function () {
     else if (sec === 'goji') take(Lv.GOJI.length, gojiItem);
     else if (sec === 'kyuji') take(Lv.KYUJI.length, kyujiItem);
     else if (sec === 'hyogai') take(Lv.HYOGAI.length, hyogaiItem);
+    else if (sec === 'bunsho') for (const p of shuffle(Lv.BUNSHO.map((x, j) => j))) { if (out.length >= n) break; marks(p).forEach((m, j) => { if (out.length < n) out.push(bunshoItem(p, j)); }); }
     else if (sec === 'koji') take(Lv.KOJI.length, j => blankItem('koji', j, Lv.KOJI, '〔 〕に 入る 漢字は?'));
     else if (sec === 'bushu') take(Lv.BUSHU.length, bushuItem);
     else if (sec === 'stroke') shuffle(newKanji()).slice(0, n).forEach((k, j) => out.push(strokeItem(k, j % 2 ? 'count' : 'order')));
@@ -261,6 +273,7 @@ const Kanken = (function () {
       if (sec === 'sanji') return Lv.SANJI[i] ? blankItem('sanji', i, Lv.SANJI, '〔 〕に 入る 漢字は?') : null;
       if (sec === 'yoji') return Lv.YOJI && Lv.YOJI[i] ? blankItem('yoji', i, Lv.YOJI, '〔 〕に 入る 漢字は?') : null;
       if (sec === 'goji') return Lv.GOJI && Lv.GOJI[i] ? gojiItem(i) : null;
+      if (sec === 'bunsho') { const [p, m] = id.split('.').map(Number); return Lv.BUNSHO && Lv.BUNSHO[p] && marks(p)[m] ? bunshoItem(p, m) : null; }
       if (sec === 'hyogai') return Lv.HYOGAI && Lv.HYOGAI[i] ? hyogaiItem(i) : null;
       if (sec === 'kyuji') return Lv.KYUJI && Lv.KYUJI[i] ? kyujiItem(i) : null;
       if (sec === 'koji') return Lv.KOJI && Lv.KOJI[i] ? blankItem('koji', i, Lv.KOJI, '〔 〕に 入る 漢字は?') : null;

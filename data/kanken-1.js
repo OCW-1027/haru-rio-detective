@@ -5,7 +5,7 @@
 var KANKEN_LV = KANKEN_LV || {};
 KANKEN_LV[1] = {
   grade: 12, name: '1級', target: '大学・一般 (最上位)', total: 6000,
-  mock: [['read', 30, 1], ['hyogai', 10, 1], ['yoji', 15, 2], ['taigi', 5, 2], ['ruigi', 5, 2], ['goji', 5, 2], ['koji', 10, 2], ['write', 30, 2]],
+  mock: [['read', 30, 1], ['hyogai', 10, 1], ['yoji', 15, 2], ['taigi', 5, 2], ['ruigi', 5, 2], ['goji', 5, 2], ['koji', 10, 2], ['bunsho', 10, 1], ['write', 30, 2]],
   READ: [
 // お天気・自然
 '霙|霙|みぞれ|雨に 雪が まじった 〔霙〕が ふる。',

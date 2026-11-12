@@ -4,7 +4,7 @@
 var KANKEN_LV = KANKEN_LV || {};
 KANKEN_LV.p1 = {
   grade: 11, name: '準1級', target: '大学・一般 程度', total: 3000,
-  mock: [['read', 30, 1], ['hyogai', 10, 1], ['yoji', 15, 2], ['taigi', 5, 2], ['ruigi', 5, 2], ['goji', 5, 2], ['koji', 10, 2], ['write', 30, 2]],
+  mock: [['read', 30, 1], ['hyogai', 10, 1], ['yoji', 15, 2], ['taigi', 5, 2], ['ruigi', 5, 2], ['goji', 5, 2], ['koji', 10, 2], ['bunsho', 10, 1], ['write', 30, 2]],
   READ: [],
   TAIGI: [
 '暗愚|賢明','杜撰|周到','怯懦|勇敢','僅少|多大','逼迫|緩和','穿鑿|看過','凋落|隆盛','叛逆|恭順','喧騒|静寂','狼狽|沈着',
