@@ -8,7 +8,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 import { firebaseConfig } from "./chat-config.js";
 
-const SW_PATH = '/haru-rio-detective/firebase-messaging-sw.js';
+// 앱 SW (sw.js) 가 firebase-messaging-sw.js 를 importScripts 로 포함한다. 같은 범위에 SW 를 2개 등록하면 서로 덮어쓰므로 sw.js 하나만 쓴다.
+const SW_PATH = '/haru-rio-detective/sw.js';
 
 let _messaging = null;
 let _foregroundUnsub = null;
@@ -23,7 +24,7 @@ function envSupported() {
 
 async function ensureSwRegistration() {
   if (_swReg) return _swReg;
-  _swReg = await navigator.serviceWorker.register(SW_PATH);
+  _swReg = (await navigator.serviceWorker.getRegistration('/haru-rio-detective/')) || await navigator.serviceWorker.register(SW_PATH, { scope: '/haru-rio-detective/' });
   return _swReg;
 }
 
