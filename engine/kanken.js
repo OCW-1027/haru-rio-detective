@@ -12,10 +12,10 @@ const Kanken = (function () {
   const esc = s => escapeHtml(String(s));
   const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   // 級 id: 10〜3 は 数字、準2級 = 'p2'。KANKEN_GRADE の キー 1〜6 = 小学 学年、7〜10 = 4級・3級・準2級・2級 (中学以上の 常用漢字)
-  const LVS = [10, 9, 8, 7, 6, 5, 4, 3, 'p2', 2];
-  const LV_GRADE = { 10: 1, 9: 2, 8: 3, 7: 4, 6: 5, 5: 6, 4: 7, 3: 8, p2: 9, 2: 10 };
-  const LV_TARGET = { 10: '小学1年', 9: '小学2年', 8: '小学3年', 7: '小学4年', 6: '小学5年', 5: '小学6年', 4: '中学 在学程度', 3: '中学 卒業程度', p2: '高校 在学程度', 2: '高校卒業・一般' };
-  const lvName = n => (n === 'p2' ? '準2' : n) + '級';
+  const LVS = [10, 9, 8, 7, 6, 5, 4, 3, 'p2', 2, 'p1', 1];
+  const LV_GRADE = { 10: 1, 9: 2, 8: 3, 7: 4, 6: 5, 5: 6, 4: 7, 3: 8, p2: 9, 2: 10, p1: 11, 1: 12 };
+  const LV_TARGET = { 10: '小学1年', 9: '小学2年', 8: '小学3年', 7: '小学4年', 6: '小学5年', 5: '小学6年', 4: '中学 在学程度', 3: '中学 卒業程度', p2: '高校 在学程度', 2: '高校卒業・一般', p1: '大学・一般 程度', 1: '大学・一般 (最上位)' };
+  const lvName = n => (n === 'p2' ? '準2' : n === 'p1' ? '準1' : n) + '級';
   const lvParse = x => (isNaN(+x) ? x : +x);
   const SEC = {
     read: { name: '読み', icon: '📖', note: '線の ことばの 読みを えらぼう' },
@@ -55,7 +55,7 @@ const Kanken = (function () {
     r[K] = v; save();
   }
   function got(key) { return (data().rec[lv + ':' + key] || [])[2] === 1; }
-  const gradeOf = c => { for (let g = 1; g <= 10; g++) if (KANKEN_GRADE[g] && KANKEN_GRADE[g].indexOf(c) >= 0) return g; return 99; };
+  const gradeOf = c => { for (let g = 1; g <= 12; g++) if (KANKEN_GRADE[g] && KANKEN_GRADE[g].indexOf(c) >= 0) return g; return 99; };
   const L = () => (typeof KANKEN_LV !== 'undefined' && KANKEN_LV[lv]) || null;
   const newKanji = () => (KANKEN_GRADE[LV_GRADE[lv]] || '').split('');
   const isKanji = c => /[一-鿿]/.test(c);
@@ -143,7 +143,9 @@ const Kanken = (function () {
     return finish({ key: 'onkun:' + i, sec: 'onkun', q: '<div class="kk-big">' + esc(k) + '<small>(' + esc(r) + ')</small></div><div class="kk-ask">この 読み方は 音読み? 訓読み?</div>', opts: [t + '読み', (t === '音' ? '訓' : '音') + '読み'],
       exp: '「' + esc(r) + '」は <b>' + t + '読み</b>。' + (t === '音' ? '音読みは 中国から 伝わった 読み方で、それだけ 聞いても 意味が わかりにくい。' : '訓読みは 漢字に 日本語の 意味を あてた 読み方で、聞くと 意味が わかる。'), fixed: true });
   }
-  function secs() { const Lv = L(); return ORDER.filter(s => !ARR[s] || (Lv[ARR[s]] && Lv[ARR[s]].length)); }
+  const noStroke = c => typeof KANKEN_NOSTROKE !== 'undefined' && KANKEN_NOSTROKE.indexOf(c) >= 0;
+  // 準1級・1級は 書き順データが そろって いないので 画数・筆順 ドリルは 出さない
+  function secs() { const Lv = L(); return ORDER.filter(s => (s !== 'stroke' || LV_GRADE[lv] <= 10) && (!ARR[s] || (Lv[ARR[s]] && Lv[ARR[s]].length))); }
   function mockPlan() { return (L() && L().mock) || MOCK; }
   function ruigiItem(i) {
     const [a, b] = split(L().RUIGI[i]);
@@ -328,6 +330,9 @@ const Kanken = (function () {
       h += '<div class="kk-ex"><h3>例文</h3>';
       ex.forEach(([a]) => { h += '<div class="kk-exrow"><button class="kk-say" data-say="' + esc(a[2]) + '">🔊</button><div><b>' + esc(a[1]) + '</b> <span class="kana">' + esc(a[2]) + '</span><p>' + esc(a[3]).replace(/〔|〕/g, '') + '</p></div></div>'; });
       h += '</div>';
+    } else if (KANKEN_ON[k]) {
+      const kata = KANKEN_ON[k].replace(/[\u3041-\u3096]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60)).split('/').join('・');
+      h += '<div class="kk-ex"><h3>音読み</h3><p class="kk-on">' + esc(kata) + '</p></div>';
     }
     h += '<div class="kk-nav"><button id="kkPrev"' + (at > 0 ? '' : ' disabled') + '>← 前</button><button id="kkNext"' + (at < ks.length - 1 ? '' : ' disabled') + '>次 →</button></div></div>';
     frame(h);
@@ -336,7 +341,7 @@ const Kanken = (function () {
     $('kkNext').onclick = () => { sfx('click'); card(ks[at + 1]); };
     $('kkArea').querySelectorAll('.kk-say').forEach(b => b.onclick = () => say(b.dataset.say));
     const box = $('kkWriter');
-    if (HW()) {
+    if (HW() && !noStroke(k)) {
       const size = Math.min(260, box.clientWidth || 260);
       const w = makeWriter(box, k, size, { showOutline: true });
       setTimeout(() => { try { w.animateCharacter(); } catch (e) {} }, 300);
@@ -344,6 +349,7 @@ const Kanken = (function () {
       $('kkTrace').onclick = () => { w.hideCharacter(); w.quiz({ showHintAfterMisses: 2, onComplete: () => { sfx('correct'); } }); };
       $('kkSteps').onclick = () => showSteps(k);
     } else {
+      ['kkPlay', 'kkTrace', 'kkSteps'].forEach(id => { const b = $(id); if (b) b.style.display = 'none'; });
       strokeData(k).then(d => { box.innerHTML = strokeSVG(d, -1).replace(/#d8d2c4/g, '#3a3a3a'); }).catch(() => { box.innerHTML = '<div class="kk-plain">' + esc(k) + '</div>'; });
     }
   }
@@ -422,7 +428,7 @@ const Kanken = (function () {
 
   // ---- 手書き 書き取り ----
   function startHW() {
-    const idx = shuffle(L().READ.map((x, i) => i).filter(i => writable(i) && split(L().READ[i])[1].split('').filter(isKanji).length <= 3)).slice(0, 8);
+    const idx = shuffle(L().READ.map((x, i) => i).filter(i => writable(i) && !split(L().READ[i])[1].split('').some(noStroke) && split(L().READ[i])[1].split('').filter(isKanji).length <= 3)).slice(0, 8);
     run = { title: '✍️ 手書き 書き取り', items: idx.map(i => ({ hw: true, key: 'hw:' + i, i: i })), i: 0, ok: 0, mode: 'hw', res: [] };
     ask();
   }
