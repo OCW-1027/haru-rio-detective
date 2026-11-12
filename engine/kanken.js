@@ -208,8 +208,10 @@ const Kanken = (function () {
   function gen(sec, n) {
     const Lv = L(), out = [];
     const take = (len, f) => shuffle(Array.from({ length: len }, (x, j) => j)).slice(0, n).forEach(j => out.push(f(j)));
-    if (sec === 'read') take(Lv.READ.length, readItem);
-    else if (sec === 'write') shuffle(Lv.READ.map((x, j) => j).filter(writable)).slice(0, n).forEach(j => out.push(writeItem(j)));
+    // 読み・書きは 同じ ことばが 1回の セットで 重ならないように (2字とも その級の 漢字の ことばが ある ため)
+    const uniq = idx => { const seen = new Set(), r = []; idx.forEach(j => { const w = split(Lv.READ[j])[1]; if (r.length < n && !seen.has(w)) { seen.add(w); r.push(j); } }); return r; };
+    if (sec === 'read') uniq(shuffle(Lv.READ.map((x, j) => j))).forEach(j => out.push(readItem(j)));
+    else if (sec === 'write') uniq(shuffle(Lv.READ.map((x, j) => j).filter(writable))).forEach(j => out.push(writeItem(j)));
     else if (sec === 'okuri') take(Lv.OKURI.length, okuriItem);
     else if (sec === 'onkun') take(Lv.ONKUN.length, onkunItem);
     else if (sec === 'taigi') take(Lv.TAIGI.length, taigiItem);
