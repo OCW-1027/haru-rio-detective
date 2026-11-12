@@ -209,6 +209,7 @@ const WxLab = (function () {
     { id: 'fcst', icon: '📡', name: '予報演習', sub: '天気図の 動きから あすの 天気を 予報', lv: '応用' },
     { id: 'upper', icon: '🛰️', name: '高層天気図', sub: '500hPa の トラフ・寒気、850hPa の −6℃線', lv: '予報士' },
     { id: 'desc', icon: '📝', name: '実技 記述', sub: '予報士試験 ふうの 文を 完成させよう', lv: '予報士' },
+    { id: 'calc', icon: '🧮', name: '計算 ドリル', sub: '断熱変化・フェーン・雲底高度・湿度・露点・UTC など (毎回 数値が 変わる)', lv: '予報士' },
     { id: 'gakka', icon: '📘', name: '学科 ドリル', sub: '一般知識 10分野 + 専門知識 5分野 (観測・数値予報・解析・季節予報・防災情報)', lv: '予報士' },
   ];
   let run = null;
@@ -496,7 +497,50 @@ const WxLab = (function () {
     return genDesc();
   }
 
-  const GEN = { sym: genSym, iso: genIso, front: genFront, season: genSeason, fcst: genFcst, upper: genUpper, desc: genDesc };
+
+  // ---------- 🧮 計算 ドリル (数値を 毎回 変えて 自動生成) ----------
+  const SAT = { 0: 4.8, 5: 6.8, 10: 9.4, 15: 12.8, 20: 17.3, 25: 23.0, 30: 30.4 };   // 飽和水蒸気量 g/m³
+  const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const fmt = v => (Math.round(v * 10) / 10).toString();
+  function numOpts(ans, deltas, unit) {   // 正解 + 近い 誤答 3つ (重複なし)
+    const set = [ans]; shuffle(deltas).forEach(d => { const v = Math.round((ans + d) * 10) / 10; if (set.length < 4 && set.indexOf(v) < 0) set.push(v); });
+    let k = 1; while (set.length < 4) { const v = ans + k * (deltas[0] || 1) * 2; if (set.indexOf(v) < 0) set.push(v); k++; }
+    return set.map(v => fmt(v) + unit);
+  }
+  const satTable = ts => '<table class="wl-ctab"><tr><th>気温 (℃)</th>' + ts.map(t => '<td>' + t + '</td>').join('') + '</tr><tr><th>飽和水蒸気量 (g/m³)</th>' + ts.map(t => '<td>' + SAT[t] + '</td>').join('') + '</tr></table>';
+  function genCalc() {
+    const t = pick(['dry', 'dry2', 'foehn', 'lcl', 'rh', 'dew', 'pres', 'kt', 'env', 'utc', 'rain', 'shitsu', 'typh', 'geo']);
+    if (t === 'dry') { const T = ri(15, 32), h = ri(5, 25) * 100, a = T - h / 100;
+      return mk('地上で ' + T + '℃の 乾いた 空気を ' + h + 'm 持ち上げると、気温は 何℃に なる?<br><small>(乾燥断熱減率は 1℃/100m と する)</small>', null, numOpts(a, [5, -5, h / 200, 2, -2, h / 100], '℃'), '<b>' + T + ' − ' + h + '÷100 = ' + a + '℃</b><br>乾いた 空気は 100m 上がるごとに 約1℃ 下がる。'); }
+    if (t === 'dry2') { const T = ri(-10, 5), h = ri(5, 20) * 100, a = T + h / 100;
+      return mk('高さ ' + h + 'm で ' + T + '℃の 乾いた 空気が 地上まで 下りて くると、何℃に なる?<br><small>(乾燥断熱減率 1℃/100m)</small>', null, numOpts(a, [-h / 50, -5, 5, h / 200, -h / 200], '℃'), '<b>' + T + ' + ' + h + '÷100 = ' + a + '℃</b><br>下降する 空気は 圧縮されて 暖まる (断熱圧縮)。'); }
+    if (t === 'foehn') { const T = ri(15, 25), Z = ri(3, 10) * 100, H = Z + ri(4, 20) * 100, a = T + (H - Z) * 0.005;
+      return mk('気温 ' + T + '℃の 空気が 山を 越える。風上側では 高さ ' + Z + 'm で 雲が でき、山頂 (' + H + 'm) まで 雨を 降らせた。山を 越えた 空気が 風下の 地上 (高さ 0m) に 下りた ときの 気温は?<br><small>(乾燥断熱減率 1℃/100m、湿潤断熱減率 0.5℃/100m)</small>', null, numOpts(a, [-(H - Z) * 0.005, (H - Z) * 0.005, 2, -2, 1, 5], '℃'),
+        '<b>雲底 ' + Z + 'm: ' + T + '−' + Z / 100 + ' = ' + fmt(T - Z / 100) + '℃ → 山頂: ' + fmt(T - Z / 100) + '−' + fmt((H - Z) * 0.005) + ' = ' + fmt(T - Z / 100 - (H - Z) * 0.005) + '℃ → 風下: +' + H / 100 + ' = ' + fmt(a) + '℃</b><br>雲の 中では 潜熱が 出て 下がり方が 小さい。下りる ときは 乾燥断熱で 暖まるので、風上より ' + fmt(a - T) + '℃ 高く なる (フェーン現象)。'); }
+    if (t === 'lcl') { const T = ri(18, 32), d = ri(2, 12), Td = T - d, a = d * 125;
+      return mk('地上の 気温 ' + T + '℃、露点温度 ' + Td + '℃の 空気を 持ち上げると、およそ 何m で 雲が でき始める?<br><small>(気温と 露点の 差 1℃ あたり 約125m)</small>', null, numOpts(a, [-125, 125, -250, 250, d * 25], 'm'), '<b>(' + T + ' − ' + Td + ') × 125 = ' + a + 'm</b><br>上昇すると 気温は 約1℃/100m、露点は 約0.2℃/100m 下がり、その 差は 100m で 0.8℃ 縮む → 1℃の 差が 縮むのに 約125m。'); }
+    if (t === 'rh') { const T = pick([10, 15, 20, 25, 30]), pct = pick([40, 50, 60, 70, 80]), v = Math.round(SAT[T] * pct / 10) / 10, a = Math.round(v / SAT[T] * 100);
+      return mk('気温 ' + T + '℃の 空気 1m³ に 水蒸気が ' + v + 'g ふくまれて いる。相対湿度は 約何%?' + satTable([10, 15, 20, 25, 30]), null, numOpts(a, [10, -10, 20, -20, 5], '%'), '<b>' + v + ' ÷ ' + SAT[T] + ' × 100 ≒ ' + a + '%</b><br>相対湿度 = 実際の 水蒸気量 ÷ 飽和水蒸気量 × 100。', true); }
+    if (t === 'dew') { const Td = pick([5, 10, 15, 20]), T = Td + pick([5, 10]), v = SAT[Td];
+      return mk('気温 ' + T + '℃の 空気 1m³ に 水蒸気が ' + v + 'g ふくまれて いる。この 空気の 露点温度は?' + satTable([0, 5, 10, 15, 20, 25, 30]), null, [Td, Td + 5, Td - 5, Td + 10].map(x => x + '℃'), '<b>' + v + 'g/m³ が 飽和に なるのは ' + Td + '℃</b><br>空気を 冷やして いき、ふくんで いる 水蒸気量が 飽和水蒸気量と 等しく なる 温度が 露点。', true); }
+    if (t === 'pres') { const P = ri(1000, 1025), h = ri(1, 5) * 100, a = P - h / 10;
+      return mk('ふもとの 気圧が ' + P + 'hPa の とき、高さ ' + h + 'm の 山の 上の 気圧は 約何hPa?<br><small>(地上付近では 10m 上がるごとに 約1hPa 下がる)</small>', null, numOpts(a, [h / 10, -h / 10, h / 20, -5, 5], 'hPa'), '<b>' + P + ' − ' + h + '÷10 = ' + a + 'hPa</b><br>だから 山の 上では お菓子の 袋が ふくらむ。'); }
+    if (t === 'kt') { const k = ri(2, 14) * 5, a = k / 2;
+      return mk('天気図に 「' + k + 'ノット」と 書かれた 風は、約 何m/s?<br><small>(1ノット ≒ 0.5m/s)</small>', null, numOpts(a, [a, -a / 2, 5, -5, k / 4], 'm/s'), '<b>' + k + ' × 0.5 ≒ ' + a + 'm/s</b><br>1ノット = 1時間に 1海里 (1852m) 進む 速さ = 約0.51m/s。'); }
+    if (t === 'env') { const T = ri(15, 30), h = ri(1, 6) * 1000, a = Math.round((T - h * 0.0065) * 10) / 10;
+      return mk('地上の 気温が ' + T + '℃の とき、高さ ' + h + 'm の 気温は 約何℃?<br><small>(対流圏の 平均の 気温減率 0.65℃/100m)</small>', null, numOpts(a, [h * 0.0035, -h * 0.0035, 5, -5, h / 1000], '℃'), '<b>' + T + ' − ' + h + '÷100 × 0.65 = ' + fmt(a) + '℃</b><br>富士山 (3776m) の 山頂は ふもとより 約25℃ 低い。'); }
+    if (t === 'utc') { const u = pick([0, 3, 6, 9, 12, 15, 18, 21]), j = (u + 9) % 24, nx = u + 9 >= 24;
+      return mk('天気図に 「' + String(u).padStart(2, '0') + 'UTC」と ある。日本時間では 何時?', null, [j + '時' + (nx ? ' (翌日)' : ''), ((u + 15) % 24) + '時', u + '時', ((u + 3) % 24) + '時'], '<b>' + u + ' + 9 = ' + (u + 9) + (nx ? ' → 翌日の ' + j : '') + '時</b><br>日本時間 (JST) = UTC + 9時間。'); }
+    if (t === 'rain') { const mm = pick([10, 20, 30, 50, 80]), m2 = pick([1, 10, 100]), a = mm * m2;
+      return mk(m2 + 'm² の 地面に ' + mm + 'mm の 雨が 降った。雨水は 何リットル?<br><small>(1m² に 1mm = 1リットル)</small>', null, numOpts(a, [a * 9, -a / 2, a, a * 99], 'L'), '<b>' + m2 + ' × ' + mm + ' = ' + a + 'L</b><br>1m × 1m × 0.001m = 0.001m³ = 1L。'); }
+    if (t === 'shitsu') { const T = ri(-5, 15), d = pick([1, 2, 3, 6, 10, 15]), Td = T - d;
+      return mk('850hPa の 気温が ' + T + '℃、露点温度が ' + Td + '℃。湿数は? また 雲が ありそう?', null, [d + '℃ — ' + (d <= 3 ? '湿っていて 雲が ありそう' : '乾いていて 雲は なさそう'), d + '℃ — ' + (d <= 3 ? '乾いていて 雲は なさそう' : '湿っていて 雲が ありそう'), (d + 4) + '℃ — 湿っていて 雲が ありそう', (d * 2) + '℃ — 乾いていて 雲は なさそう'], '<b>湿数 = 気温 − 露点 = ' + T + ' − (' + Td + ') = ' + d + '℃</b><br>湿数 3℃ 以下は 湿った 区域 (雲が ある ことが 多い) の 目安。', true); }
+    if (t === 'typh') { const v = pick([15, 20, 25, 30, 40]), hr = pick([6, 12, 24]), a = v * hr;
+      return mk('時速 ' + v + 'km で 北へ 進む 台風は、' + hr + '時間後に 約何km 北へ 進む?', null, numOpts(a, [a / 2, -a / 2, v, a], 'km'), '<b>' + v + ' × ' + hr + ' = ' + a + 'km</b><br>東京〜大阪 (約400km) と くらべると 速さの 感覚が つかめる。'); }
+    const w = ri(5, 15);
+    return mk('等圧線の 間隔が 半分に せまく なると、地衡風の 風速は? (今は ' + w + 'm/s)', null, [(w * 2) + 'm/s (2倍)', Math.round(w / 2 * 10) / 10 + 'm/s (半分)', w + 'm/s (変わらない)', (w * 4) + 'm/s (4倍)'], '<b>' + w * 2 + 'm/s</b><br>地衡風の 風速は 気圧傾度 (等圧線の 混み具合) に 比例する。間隔が 半分 → 傾度 2倍 → 風速 2倍。', true);
+  }
+  const GEN = { calc: genCalc, sym: genSym, iso: genIso, front: genFront, season: genSeason, fcst: genFcst, upper: genUpper, desc: genDesc };
   // ---------- 学科 一般知識 (data/wx-gakka.js の 問題 バンク) ----------
   function gakkaMenu() {
     const d = data(), G = (typeof WX_GAKKA !== 'undefined') ? WX_GAKKA : { cats: [], q: [] }, gk = d.gk || {};

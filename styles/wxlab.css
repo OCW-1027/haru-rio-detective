@@ -104,3 +104,6 @@
 .wl-gk.all { width: 100%; background: linear-gradient(135deg, #eaf4ff, #fff); border-color: #8fb8dc; }
 .wl-gk-h { font-size: 16px; color: #1f3a52; margin: 16px 0 8px; border-left: 4px solid #4f8fc0; padding-left: 8px; }
 .wl-gk-h small { font-size: 12px; color: #6b8197; font-weight: normal; }
+.wl-ctab { border-collapse: collapse; margin: 8px auto 0; font-size: 12px; }
+.wl-ctab th, .wl-ctab td { border: 1px solid #c9d8e4; padding: 3px 6px; text-align: center; }
+.wl-ctab th { background: #eef5fa; font-weight: normal; white-space: nowrap; }
