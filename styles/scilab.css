@@ -1,0 +1,42 @@
+/* 理科 実験室 */
+.scilab-page { background: #f4f1e6 repeating-linear-gradient(0deg, transparent 0 23px, rgba(90, 140, 180, .08) 23px 24px), repeating-linear-gradient(90deg, transparent 0 23px, rgba(90, 140, 180, .08) 23px 24px); }
+.sl-wrap { max-width: 720px; margin: 0 auto; padding: 64px 14px 40px; font-family: 'Zen Maru Gothic', sans-serif; color: #26323d; }
+.sl-hero { background: linear-gradient(135deg, #e7f2ea, #fdf8e9); border: 2px solid #cfe2d4; border-radius: 18px; padding: 18px 18px 14px; margin-bottom: 14px; }
+.sl-kicker { font-size: 12px; color: #3d8a5a; font-weight: 700; letter-spacing: 1px; }
+.sl-hero h1 { margin: 2px 0 6px; font-size: 26px; color: #22543a; font-family: 'RocknRoll One', sans-serif; }
+.sl-hero p { margin: 0; font-size: 14px; line-height: 1.7; }
+.sl-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.sl-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; text-align: left; border: 2px solid #d6e4dc; background: #fff; border-radius: 16px; padding: 12px; cursor: pointer; font-family: inherit; color: #26323d; }
+.sl-card .sl-ci { font-size: 30px; }
+.sl-card b { font-size: 16px; }
+.sl-card small { font-size: 12px; color: #5a6a7a; line-height: 1.5; }
+.sl-card em { position: absolute; top: 10px; right: 10px; font-style: normal; font-size: 11px; background: #eef5f0; color: #3d8a5a; border-radius: 99px; padding: 1px 8px; }
+.sl-card i { font-style: normal; font-size: 11px; color: #b0742a; margin-top: 4px; }
+.sl-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.sl-top b { font-size: 18px; font-family: 'RocknRoll One', sans-serif; }
+.sl-back { border: 2px solid #cfdcd4; background: #fff; border-radius: 99px; padding: 5px 12px; font-family: inherit; font-size: 13px; cursor: pointer; }
+.sl-card2 { background: #fff; border: 2px solid #dfe7e2; border-radius: 16px; padding: 12px; margin-bottom: 12px; }
+.sl-fig svg, .sl-fig canvas { width: 100%; height: auto; display: block; border-radius: 10px; }
+.sl-pend canvas { background: #fbfaf5; }
+.sl-moonrow { display: grid; grid-template-columns: 3fr 2fr; gap: 8px; }
+.sl-seg { display: flex; gap: 6px; margin-bottom: 8px; }
+.sl-seg button { flex: 1; border: 2px solid #d6e4dc; background: #f6faf7; border-radius: 10px; padding: 7px; font-family: inherit; font-weight: 700; cursor: pointer; color: #3a5a4a; }
+.sl-seg button.on { background: #3d8a5a; border-color: #3d8a5a; color: #fff; }
+.sl-read { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 6px; }
+.sl-read span { background: #f3f7fb; border-radius: 10px; padding: 5px 10px; font-size: 13px; }
+.sl-read b { color: #1d4f86; }
+.sl-sl { display: block; margin: 8px 2px; font-size: 13px; }
+.sl-sl span { display: block; margin-bottom: 2px; }
+.sl-sl b { color: #d0382a; font-size: 15px; }
+.sl-sl input { width: 100%; accent-color: #3d8a5a; }
+.sl-miss { background: #fffdf3; border: 2px solid #efe2b8; border-radius: 14px; padding: 10px 12px; margin-bottom: 12px; font-size: 14px; }
+.sl-miss > b { display: block; margin-bottom: 4px; color: #8a6a1a; }
+.sl-mi { display: flex; gap: 6px; padding: 4px 0; line-height: 1.5; }
+.sl-mi i { font-style: normal; }
+.sl-mi.ok { color: #2f8a4f; font-weight: 700; }
+.sl-law { background: #f1f6fb; border-left: 5px solid #5a8ab8; border-radius: 10px; padding: 10px 12px; font-size: 13.5px; line-height: 1.75; }
+.sl-law p { margin: 4px 0; }
+.sl-toast { position: fixed; left: 50%; bottom: 30px; transform: translateX(-50%) translateY(30px); background: #2f8a4f; color: #fff; padding: 10px 18px; border-radius: 99px; font-weight: 700; opacity: 0; transition: .3s; pointer-events: none; z-index: 50; }
+.sl-toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+@keyframes slFlow { to { stroke-dashoffset: -32; } }
+@media (max-width: 480px) { .sl-moonrow { grid-template-columns: 1fr 1fr; } .sl-cards { grid-template-columns: 1fr; } }

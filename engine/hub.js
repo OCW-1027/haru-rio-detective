@@ -76,6 +76,7 @@ const Hub = (function () {
     add({ id: 'eng', cat: 'study', icon: '🔤', name: '英語', sub: () => '単語・文法・作文 (前からの 練習)', go: () => openList('eng', '🔤 英語') });
     add({ id: 'elem', cat: 'study', icon: '🎒', name: '小学 算数 ラダー', sub: () => '4年〜6年 · ' + (typeof ELAD !== 'undefined' ? ELAD.U.length : 25) + '単元 · 図つき 解説', go: () => MathWorld.open('elem') });
     add({ id: 'mathLearn', cat: 'study', icon: '📐', name: '算数 試験対策', sub: () => '公式・図解・過去問', go: () => openMathLearn() });
+    add({ id: 'scilab', cat: 'study', icon: '🧪', name: '理科 実験室', sub: () => { const s = safe(() => SciLab.stats(), null); return '電気回路・凸レンズ・ふりこ・月の 満ち欠け' + (s && s.done ? ' · ミッション ' + s.done + '/' + s.total : ''); }, go: () => SciLab.open() });
     add({ id: 'scilad', cat: 'study', icon: '🔬', name: '理科・社会 ラダー', sub: () => '中学〜高校 · 物理・化学・生物・地学・歴史・地理・公民', go: () => MathWorld.open('sci') });
     add({ id: 'wq', cat: 'study', icon: '🌐', name: '世界の 国 クイズ', sub: () => { const s = safe(() => WorldQuiz.stats(), null); return '237の 国・地域と 首都 · 覚えた ' + (s ? s.map : 0) + '/' + (s ? s.total : 237); }, go: () => WorldQuiz.open() });
     add({ id: 'quiz', cat: 'study', icon: '🧠', name: 'クイズ', sub: () => 'ニュース・熟語 クイズ', go: () => openList('quiz', '🧠 クイズ') });
