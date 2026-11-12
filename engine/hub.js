@@ -11,6 +11,10 @@ const Hub = (function () {
   const v2 = () => { if (!State.v2) State.v2 = {}; return State.v2; };
   const safe = (f, d) => { try { return f(); } catch (e) { return d; } };
   let cat = null;          // 지금 보고 있는 카테고리 (null = 메인)
+  const POS = {};          // 화면별 스크롤 위치 (main / 카테고리 id) — 돌아왔을 때 그 자리로
+  const hubPage = () => document.getElementById('pageHub');
+  function keepPos() { const p = hubPage(); if (p && p.classList.contains('active')) POS[cat || 'main'] = p.scrollTop; }
+  function setPos(y) { const p = hubPage(); if (!p) return; p.scrollTop = y || 0; requestAnimationFrame(() => { p.scrollTop = y || 0; }); }
 
   // 사건 파일 (탐정 시리즈)
   function cases() {
@@ -76,7 +80,7 @@ const Hub = (function () {
     add({ id: 'eng', cat: 'study', icon: '🔤', name: '英語', sub: () => '単語・文法・作文 (前からの 練習)', go: () => openList('eng', '🔤 英語') });
     add({ id: 'elem', cat: 'study', icon: '🎒', name: '小学 算数 ラダー', sub: () => '4年〜6年 · ' + (typeof ELAD !== 'undefined' ? ELAD.U.length : 25) + '単元 · 図つき 解説', go: () => MathWorld.open('elem') });
     add({ id: 'mathLearn', cat: 'study', icon: '📐', name: '算数 試験対策', sub: () => '公式・図解・過去問', go: () => openMathLearn() });
-    add({ id: 'scilab', cat: 'study', icon: '🧪', name: '理科 実験室', sub: () => { const s = safe(() => SciLab.stats(), null); return '電気回路・凸レンズ・ふりこ・月の 満ち欠け' + (s && s.done ? ' · ミッション ' + s.done + '/' + s.total : ''); }, go: () => SciLab.open() });
+    add({ id: 'scilab', cat: 'study', icon: '🧪', name: '理科 実験室', sub: () => { const s = safe(() => SciLab.stats(), null); return '8つの 実験 · 予想→記録→グラフ→考察' + (s && s.done ? ' · ミッション ' + s.done + '/' + s.total : '') + (s && s.notes ? ' · 📒' + s.notes : ''); }, go: () => SciLab.open() });
     add({ id: 'scilad', cat: 'study', icon: '🔬', name: '理科・社会 ラダー', sub: () => '中学〜高校 · 物理・化学・生物・地学・歴史・地理・公民', go: () => MathWorld.open('sci') });
     add({ id: 'wq', cat: 'study', icon: '🌐', name: '世界の 国 クイズ', sub: () => { const s = safe(() => WorldQuiz.stats(), null); return '237の 国・地域と 首都 · 覚えた ' + (s ? s.map : 0) + '/' + (s ? s.total : 237); }, go: () => WorldQuiz.open() });
     add({ id: 'quiz', cat: 'study', icon: '🧠', name: 'クイズ', sub: () => 'ニュース・熟語 クイズ', go: () => openList('quiz', '🧠 クイズ') });
@@ -106,6 +110,7 @@ const Hub = (function () {
   function launch(it, fromCat) {
     if (!it) return;
     sfx('click');
+    keepPos();
     seen()[it.id] = 1; v2().hubLast = it.id;
     try { saveState(); } catch (e) {}
     cat = fromCat || null;
@@ -159,8 +164,8 @@ const Hub = (function () {
     root.innerHTML = h;
 
     root.querySelectorAll('[data-it]').forEach(b => b.onclick = () => launch(all.find(x => x.id === b.dataset.it), null));
-    root.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { sfx('click'); cat = b.dataset.cat; buildCat(cat); const p = document.getElementById('pageHub'); if (p) p.scrollTop = 0; });
-    const on = (id, f) => { const e = document.getElementById(id); if (e) e.onclick = () => { sfx('click'); f(); }; };
+    root.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { sfx('click'); keepPos(); cat = b.dataset.cat; buildCat(cat); setPos(0); });
+    const on = (id, f) => { const e = document.getElementById(id); if (e) e.onclick = () => { sfx('click'); keepPos(); f(); }; };
     on('hubStory', () => MainStory.open(1));
     on('hubStory2', () => MainStory.open(2));
     on('hubParent', () => ParentReport.open());
@@ -194,18 +199,21 @@ const Hub = (function () {
     }
     root.innerHTML = h;
     root.querySelectorAll('[data-it]').forEach(b => b.onclick = () => launch(its.find(x => x.id === b.dataset.it), id));
-    document.getElementById('hubCatBack').onclick = () => { sfx('click'); cat = null; buildMain(); const p = document.getElementById('pageHub'); if (p) p.scrollTop = 0; };
+    document.getElementById('hubCatBack').onclick = () => { sfx('click'); keepPos(); const from = cat; cat = null; buildMain(); setPos(POS.main != null ? POS.main : panelTop(from)); };
     const back = document.getElementById('btnHubBack'); if (back) back.style.display = 'none';
   }
 
+  // 메인 화면에서 그 카테고리 칸이 있는 위치
+  function panelTop(id) { const p = hubPage(), b = p && p.querySelector('.hub-panel-head[data-cat="' + id + '"]'); return b ? Math.max(0, b.closest('.hub-panel').offsetTop - 12) : 0; }
+
   function open() {
+    const y = POS[cat || 'main'] || 0;
     build();
     showPage('pageHub');
-    const page = document.getElementById('pageHub');
-    if (page) page.scrollTop = 0;
+    setPos(y);
     try { if (Badges.check().length) setTimeout(build, 100); } catch (e) {}
   }
-  function home() { cat = null; open(); }
+  function home() { cat = null; POS.main = 0; open(); }
 
   return { build: build, open: open, home: home, openList: openList, _cases: cases, _items: items };
 })();
