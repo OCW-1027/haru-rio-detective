@@ -164,3 +164,7 @@
   .kk-opts.big .kk-opt { font-size: 23px; }
 }
 .kk-on { font-size: 18px; letter-spacing: 2px; margin: 4px 0 0; }
+/* 旧字体・故事 */
+.kk-kyu, .kk-opts.kyu .kk-opt { font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', serif !important; font-weight: 600; }
+.kk-kyu { font-size: 64px; }
+.kk-mean { margin-top: 6px; font-size: 14px; color: #5b4a32; background: #f7efdc; border-radius: 8px; padding: 6px 10px; line-height: 1.6; }

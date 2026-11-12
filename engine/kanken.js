@@ -31,12 +31,14 @@ const Kanken = (function () {
     sanji: { name: '三字熟語', icon: '🧩', note: '□に 入る 漢字は?' },
     yoji: { name: '四字熟語', icon: '🀄', note: '□に 入る 漢字は?' },
     goji: { name: '誤字訂正', icon: '🔍', note: 'まちがった 字を 見つけよう' },
+    kyuji: { name: '旧字体', icon: '🏯', note: '昔の 字の 形' },
+    koji: { name: '故事・ことわざ', icon: '📜', note: '□に 入る 漢字は?' },
     bushu: { name: '部首', icon: '🏷️', note: '部首と 部首名' },
   };
   // 本番形式: [分野, 問題数, 1問の 点]  (合計 200点に 換算・140点以上が 合格の めやす)
   const MOCK = [['read', 20, 1], ['bushu', 10, 1], ['stroke', 10, 1], ['okuri', 10, 2], ['onkun', 10, 1], ['taigi', 10, 2], ['douon', 10, 2], ['sanji', 10, 2], ['write', 20, 2]];
-  const ORDER = ['read', 'write', 'stroke', 'okuri', 'onkun', 'taigi', 'ruigi', 'kousei', 'douon', 'sanji', 'yoji', 'goji', 'bushu'];
-  const ARR = { okuri: 'OKURI', onkun: 'ONKUN', taigi: 'TAIGI', ruigi: 'RUIGI', kousei: 'KOUSEI', douon: 'DOUON', sanji: 'SANJI', yoji: 'YOJI', goji: 'GOJI', bushu: 'BUSHU' };
+  const ORDER = ['read', 'write', 'stroke', 'okuri', 'onkun', 'taigi', 'ruigi', 'kousei', 'douon', 'sanji', 'yoji', 'koji', 'goji', 'kyuji', 'bushu'];
+  const ARR = { okuri: 'OKURI', onkun: 'ONKUN', taigi: 'TAIGI', ruigi: 'RUIGI', kousei: 'KOUSEI', douon: 'DOUON', sanji: 'SANJI', yoji: 'YOJI', goji: 'GOJI', kyuji: 'KYUJI', koji: 'KOJI', bushu: 'BUSHU' };
   const KOUSEI = { ア: '同じような 意味の 字を 重ねた もの (例: 岩石)', イ: '反対や 対の 意味の 字を 重ねた もの (例: 高低)', ウ: '上の 字が 下の 字を 説明 (修飾) して いる もの (例: 洋画)', エ: '下の 字が 「〜を」「〜に」に あたる もの (例: 着席 = 席に 着く)' };
   let lv = 7, run = null, writers = [];
   const HW = () => typeof HanziWriter !== 'undefined';
@@ -158,6 +160,14 @@ const Kanken = (function () {
     return { key: 'kousei:' + i, sec: 'kousei', q: '<div class="kk-big">' + esc(w) + '</div><div class="kk-ask">この 熟語の 組み立ては?</div><div class="kk-kousei-key">' + Object.keys(KOUSEI).map(x => '<div><b>' + x + '</b> ' + esc(KOUSEI[x]) + '</div>').join('') + '</div>',
       opts: ['ア', 'イ', 'ウ', 'エ'], ans: 'アイウエ'.indexOf(t), exp: '<b>' + esc(w) + '</b> → ' + t + ': ' + esc(KOUSEI[t].replace(/ \(例.*\)/, '')), big: true };
   }
+  // 旧字体: '新|旧' — 新字体を 見て 旧字体を えらぶ (選択肢は ほかの 旧字体)
+  function kyujiItem(i) {
+    const [a, b] = split(L().KYUJI[i]);
+    const rev = Math.random() < 0.35, k = rev ? 0 : 1;   // ときどき 旧→新 も
+    const others = shuffle(L().KYUJI.filter((x, j) => j !== i).map(x => split(x)[k]));
+    return finish({ key: 'kyuji:' + i, sec: 'kyuji', q: '<div class="kk-big kk-kyu">' + esc(rev ? b : a) + '</div><div class="kk-ask">' + (rev ? 'この 旧字体を 今の 字に すると?' : 'この 字の 旧字体 (昔の 形) は どれ?') + '</div>',
+      opts: [rev ? a : b].concat(others.slice(0, 3)), exp: '<b>' + esc(a) + '</b> の 旧字体は <b>' + esc(b) + '</b>' + (KANKEN_ON[a] ? ' (' + esc(KANKEN_ON[a].split('/')[0]) + ')' : ''), big: true, kyu: true });
+  }
   // 誤字訂正: '文|誤|正' — 文の 中の まちがった 字を えらぶ (選択肢は 文中の ほかの 漢字)
   function gojiItem(i) {
     const [t, x, y] = split(L().GOJI[i]);
@@ -176,7 +186,7 @@ const Kanken = (function () {
     const m = w.match(/〔(.+?)〕/);
     const html = esc(w).replace(/〔(.+?)〕/, '<span class="kk-blank">$1</span>');
     return finish({ key: sec + ':' + i, sec: sec, q: '<div class="kk-big">' + html + '</div><div class="kk-ask">' + ask + '</div>', opts: [a].concat(d.slice(0, 3)),
-      exp: '<b>' + esc(w.replace(m[0], a)) + '</b>', big: true });
+      exp: '<b>' + esc(w.replace(m[0], a)) + '</b>' + (d[3] ? '<div class="kk-mean">' + esc(d[3]) + '</div>' : ''), big: true });
   }
   function bushuItem(i) {
     const [k, b, nm] = split(L().BUSHU[i]);
@@ -221,6 +231,8 @@ const Kanken = (function () {
     else if (sec === 'sanji') take(Lv.SANJI.length, j => blankItem('sanji', j, Lv.SANJI, '〔 〕に 入る 漢字は?'));
     else if (sec === 'yoji') take(Lv.YOJI.length, j => blankItem('yoji', j, Lv.YOJI, '〔 〕に 入る 漢字は?'));
     else if (sec === 'goji') take(Lv.GOJI.length, gojiItem);
+    else if (sec === 'kyuji') take(Lv.KYUJI.length, kyujiItem);
+    else if (sec === 'koji') take(Lv.KOJI.length, j => blankItem('koji', j, Lv.KOJI, '〔 〕に 入る 漢字は?'));
     else if (sec === 'bushu') take(Lv.BUSHU.length, bushuItem);
     else if (sec === 'stroke') shuffle(newKanji()).slice(0, n).forEach((k, j) => out.push(strokeItem(k, j % 2 ? 'count' : 'order')));
     return out;
@@ -240,6 +252,8 @@ const Kanken = (function () {
       if (sec === 'sanji') return Lv.SANJI[i] ? blankItem('sanji', i, Lv.SANJI, '〔 〕に 入る 漢字は?') : null;
       if (sec === 'yoji') return Lv.YOJI && Lv.YOJI[i] ? blankItem('yoji', i, Lv.YOJI, '〔 〕に 入る 漢字は?') : null;
       if (sec === 'goji') return Lv.GOJI && Lv.GOJI[i] ? gojiItem(i) : null;
+      if (sec === 'kyuji') return Lv.KYUJI && Lv.KYUJI[i] ? kyujiItem(i) : null;
+      if (sec === 'koji') return Lv.KOJI && Lv.KOJI[i] ? blankItem('koji', i, Lv.KOJI, '〔 〕に 入る 漢字は?') : null;
       if (sec === 'bushu') return Lv.BUSHU[i] ? bushuItem(i) : null;
       if (sec === 'stroke') return newKanji().indexOf(id) >= 0 ? strokeItem(id, 'count') : null;
       if (sec === 'order') return newKanji().indexOf(id) >= 0 ? strokeItem(id, 'order') : null;
@@ -394,7 +408,7 @@ const Kanken = (function () {
     if (run.mode === 'mock' && (!run.items[run.i - 1] || run.items[run.i - 1].part !== it.part)) h += '<div class="kk-part">' + SEC[it.part].icon + ' ' + SEC[it.part].name + ' (' + it.pts + '点 × ' + run.items.filter(x => x.part === it.part).length + '問)</div>';
     h += '<div class="kk-qcard">' + it.q;
     if (useInput) h += '<div class="kk-inrow"><input id="kkIn" class="kk-in" autocomplete="off" inputmode="kana" placeholder="ひらがなで"><button id="kkOk" class="kk-go">決定</button></div><button id="kkIdk" class="kk-idk">わからない</button>';
-    else { h += '<div class="kk-opts' + (it.big ? ' big' : '') + '">'; it.opts.forEach((o, j) => { h += '<button class="kk-opt" data-j="' + j + '">' + esc(o) + '</button>'; }); h += '</div>'; }
+    else { h += '<div class="kk-opts' + (it.big ? ' big' : '') + (it.kyu ? ' kyu' : '') + '">'; it.opts.forEach((o, j) => { h += '<button class="kk-opt" data-j="' + j + '">' + esc(o) + '</button>'; }); h += '</div>'; }
     h += '<div id="kkFb"></div></div>';
     frame(h);
     $('kkQuit').onclick = () => { sfx('click'); menu(); };
