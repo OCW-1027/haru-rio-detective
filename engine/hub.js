@@ -149,7 +149,7 @@ const Hub = (function () {
     h += '</section>';
     let bgot = 0, ball = 0;
     try { const bs = Badges.status(), BS = (State.v2 || {}).badges || {}; ball = bs.length; bgot = bs.filter(b => b.ok || BS[b.id]).length; } catch (e) {}
-    h += '<div class="hub-foot">' + (ball ? '<button class="hub-parent hub-badge" id="hubBadges">🏅 バッジ 図鑑 <b>' + bgot + '</b> / ' + ball + '</button>' : '') + '<button class="hub-parent" id="hubParent">👪 保護者レポート</button></div>';
+    h += '<div class="hub-foot">' + (ball ? '<button class="hub-parent hub-badge" id="hubBadges">🏅 バッジ 図鑑 <b>' + bgot + '</b> / ' + ball + '</button>' : '') + '<button class="hub-parent" id="hubParent">👪 保護者レポート</button><button class="hub-parent no-furi" id="hubFuri">ふりがな: ' + (window.Furigana && !Furigana.isOn() ? 'OFF' : 'ON') + '</button></div>';
     root.innerHTML = h;
 
     root.querySelectorAll('[data-case]').forEach(b => {
@@ -170,6 +170,8 @@ const Hub = (function () {
     if (hi) hi.onclick = () => { sfx('click'); IndianMath.open(); };
     const hpr = document.getElementById('hubParent');
     if (hpr) hpr.onclick = () => { sfx('click'); ParentReport.open(); };
+    const hfu = document.getElementById('hubFuri');
+    if (hfu) hfu.onclick = () => { sfx('click'); const v = window.Furigana ? Furigana.toggle() : true; hfu.textContent = 'ふりがな: ' + (v ? 'ON' : 'OFF'); };
     const hbg = document.getElementById('hubBadges');
     if (hbg) hbg.onclick = () => { sfx('click'); Badges.open(); };
     const hwq = document.getElementById('hubWQ');

@@ -158,3 +158,8 @@ body {
 .mode-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--deep-ink); }
 .mode-btn.eng { background: var(--soft-blue); }
 
+
+/* ===== ふりがな (engine/furigana.js) ===== */
+ruby { ruby-position: over; ruby-align: center; }
+rt { font-size: 0.5em; line-height: 1; font-weight: normal; letter-spacing: 0; opacity: 0.85; user-select: none; -webkit-user-select: none; }
+html.furi-off rt { display: none; }

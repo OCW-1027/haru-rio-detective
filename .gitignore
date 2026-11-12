@@ -14,3 +14,5 @@ __pycache__/
 # 새 캐릭터 원본 임시 보관 (tools/process_art.py 입력)
 _art_inbox/
 assets/audio/en/_tmp.wav
+tools/furigana/raw.json
+tools/furigana/disagree.json
