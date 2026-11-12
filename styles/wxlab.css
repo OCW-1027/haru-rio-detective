@@ -90,3 +90,15 @@
 .wl-live-q h3 { font-family: 'RocknRoll One'; font-size: 16px; margin: 6px 0 8px; }
 .wl-lq { border-top: 1px dashed #cfe1ec; padding: 10px 0; }
 .wl-lq p { margin: 0 0 8px; font-size: 15px; line-height: 1.6; }
+/* 学科 一般知識 */
+.wl-opts.txt { grid-template-columns: 1fr; }
+.wl-opts.txt .wl-opt { text-align: left; font-size: 15px; line-height: 1.5; padding: 11px 14px; }
+.wl-gk-cat { display: inline-block; font-size: 12px; color: #4a6a86; background: #e8f1f8; border-radius: 99px; padding: 1px 10px; margin-bottom: 4px; }
+.wl-gk-intro { font-size: 14px; line-height: 1.7; color: #3d5368; margin: 0 0 12px; }
+.wl-gks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
+.wl-gk { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 8px; align-items: center; text-align: left; border: 2px solid #cfe0ee; background: #fff; border-radius: 14px; padding: 10px 12px; cursor: pointer; font-family: inherit; color: #1f3a52; }
+.wl-gk span { grid-row: 1 / 3; font-size: 24px; }
+.wl-gk b { font-size: 14px; }
+.wl-gk small { font-size: 11px; color: #6b8197; }
+.wl-gk i { grid-column: 1 / 3; font-style: normal; font-size: 11px; color: #2e7d4f; margin-top: 3px; }
+.wl-gk.all { width: 100%; background: linear-gradient(135deg, #eaf4ff, #fff); border-color: #8fb8dc; }

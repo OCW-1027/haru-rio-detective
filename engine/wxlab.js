@@ -209,6 +209,7 @@ const WxLab = (function () {
     { id: 'fcst', icon: '📡', name: '予報演習', sub: '天気図の 動きから あすの 天気を 予報', lv: '応用' },
     { id: 'upper', icon: '🛰️', name: '高層天気図', sub: '500hPa の トラフ・寒気、850hPa の −6℃線', lv: '予報士' },
     { id: 'desc', icon: '📝', name: '実技 記述', sub: '予報士試験 ふうの 文を 完成させよう', lv: '予報士' },
+    { id: 'gakka', icon: '📘', name: '学科 一般知識', sub: '大気の 構造・熱力学・雲・放射・力学・気象業務法 など 10分野', lv: '予報士' },
   ];
   let run = null;
   function open() { showPage('pageWxLab'); home(); }
@@ -222,7 +223,7 @@ const WxLab = (function () {
     h += '<button class="wl-mod lab" data-m="lab"><span class="wl-mi">🧪</span><b>天気図ラボ</b><small>高気圧・低気圧を 置いて 等圧線と 風を 観察</small><em class="lv-自由">自由研究</em></button>';
     h += '</div><p class="wl-foot">地図: Natural Earth (パブリックドメイン)。天気図は 学習用に 自動で 作った もので、本物の 観測では ありません。</p>';
     frame(h);
-    $('wlArea').querySelectorAll('.wl-mod').forEach(b => b.onclick = () => { sfx('click'); b.dataset.m === 'lab' ? lab() : b.dataset.m === 'live' ? live() : start(b.dataset.m); });
+    $('wlArea').querySelectorAll('.wl-mod').forEach(b => b.onclick = () => { sfx('click'); b.dataset.m === 'lab' ? lab() : b.dataset.m === 'live' ? live() : b.dataset.m === 'gakka' ? gakkaMenu() : start(b.dataset.m); });
   }
   function heroMap() { const p = pattern('spring'); return '<div class="wl-hero-map">' + mapSVG({ sp: p.sp, fronts: p.fronts, centers: p.centers, view: [180, 120, 260, 220] }) + '</div>'; }
 
@@ -496,13 +497,32 @@ const WxLab = (function () {
   }
 
   const GEN = { sym: genSym, iso: genIso, front: genFront, season: genSeason, fcst: genFcst, upper: genUpper, desc: genDesc };
+  // ---------- 学科 一般知識 (data/wx-gakka.js の 問題 バンク) ----------
+  function gakkaMenu() {
+    const d = data(), G = (typeof WX_GAKKA !== 'undefined') ? WX_GAKKA : { cats: [], q: [] }, gk = d.gk || {};
+    let h = '<div class="wl-top"><button class="wl-back" id="wlQuit">← もどる</button><b>📘 学科 一般知識</b><span>' + G.q.length + '問</span></div>';
+    h += '<div class="wl-card"><p class="wl-gk-intro">気象予報士試験の 「学科 一般知識」で 出る 分野を 10問ずつ。まずは ランダムで 腕だめし、苦手な 分野は 個別に 練習しよう。</p>';
+    h += '<button class="wl-gk all" data-c="all"><span>🎲</span><b>ランダム 10問</b><small>全分野から</small>' + (gk.all != null ? '<i>最高 ' + gk.all + ' / 10</i>' : '') + '</button><div class="wl-gks">';
+    G.cats.forEach(([id, ic, nm]) => { const n = G.q.filter(q => q[0] === id).length; h += '<button class="wl-gk" data-c="' + id + '"><span>' + ic + '</span><b>' + nm + '</b><small>' + n + '問</small>' + (gk[id] != null ? '<i>最高 ' + gk[id] + ' / 10</i>' : '') + '</button>'; });
+    h += '</div></div>';
+    frame(h);
+    $('wlQuit').onclick = () => { sfx('click'); home(); };
+    $('wlArea').querySelectorAll('[data-c]').forEach(b => b.onclick = () => { sfx('click'); gakkaStart(b.dataset.c); });
+  }
+  function gakkaStart(cat) {
+    const G = WX_GAKKA, pool = shuffle(G.q.filter(q => cat === 'all' || q[0] === cat)).slice(0, 10);
+    const cn = c => { const x = G.cats.find(k => k[0] === c); return x ? x[1] + ' ' + x[2] : ''; };
+    const items = pool.map(q => mk('<small class="wl-gk-cat">' + esc(cn(q[0])) + '</small><br>' + esc(q[1]), null, q.slice(2, 6).map(esc), '<b>' + esc(q[2]) + '</b><br>' + esc(q[6])));
+    items.forEach(it => it.txt = true);
+    run = { mod: 'gakka', cat: cat, items: items, i: 0, ok: 0 }; ask();
+  }
   function start(mod) { const items = []; for (let i = 0; i < 10; i++) items.push(GEN[mod]()); run = { mod: mod, items: items, i: 0, ok: 0 }; ask(); }
   function head() { const m = MODS.find(x => x.id === run.mod); return '<div class="wl-top"><button class="wl-back" id="wlQuit">✕ やめる</button><b>' + m.icon + ' ' + m.name + '</b><span>' + (run.i + 1) + ' / ' + run.items.length + '</span></div><div class="wl-bar"><i style="width:' + Math.round(run.i / run.items.length * 100) + '%"></i></div>'; }
   function ask() {
     const it = run.items[run.i]; if (!it) return result();
     if (it.desc) return askDesc(it);
     let h = head() + '<div class="wl-card"><div class="wl-q">' + it.q + '</div>' + (it.map ? '<div class="wl-mapbox' + (it.wide ? ' wide' : '') + '">' + it.map + '</div>' : '');
-    h += '<div class="wl-opts">'; it.opts.forEach((o, j) => { h += '<button class="wl-opt" data-j="' + j + '">' + o + '</button>'; }); h += '</div><div id="wlFb"></div></div>';
+    h += '<div class="wl-opts' + (it.txt ? ' txt' : '') + '">'; it.opts.forEach((o, j) => { h += '<button class="wl-opt" data-j="' + j + '">' + o + '</button>'; }); h += '</div><div id="wlFb"></div></div>';
     frame(h);
     $('wlQuit').onclick = () => { sfx('click'); home(); };
     $('wlArea').querySelectorAll('.wl-opt').forEach(b => b.onclick = () => answer(+b.dataset.j));
@@ -535,12 +555,14 @@ const WxLab = (function () {
   }
   function result() {
     const d = data(), n = run.items.length;
-    d.best[run.mod] = Math.max(d.best[run.mod] || 0, run.ok); d.plays = (d.plays || 0) + 1; save();
+    d.best[run.mod] = Math.max(d.best[run.mod] || 0, run.ok); d.plays = (d.plays || 0) + 1;
+    if (run.mod === 'gakka') { d.gk = d.gk || {}; d.gk[run.cat] = Math.max(d.gk[run.cat] || 0, run.ok); }
+    save();
     const m = MODS.find(x => x.id === run.mod);
     const msg = run.ok === n ? '💮 完ぺき! 予報士の たまご 認定!' : run.ok >= 8 ? '🌤 すばらしい! 天気図が 読めて きた。' : run.ok >= 5 ? '⛅ いい 調子。解説を 読んで もう一度!' : '🌧 ここから レベルアップ!';
     frame('<div class="wl-top"><b>' + m.icon + ' ' + m.name + '</b></div><div class="wl-card wl-res"><div class="wl-score"><b>' + run.ok + '</b><span>/ ' + n + '</span></div><p>' + msg + '</p><div class="wl-rbtns"><button class="wl-go" id="wlAgain">もう一度</button><button class="wl-back2" id="wlHome">メニューへ</button></div></div>');
-    $('wlAgain').onclick = () => { sfx('click'); start(run.mod); };
-    $('wlHome').onclick = () => { sfx('click'); home(); };
+    $('wlAgain').onclick = () => { sfx('click'); run.mod === 'gakka' ? gakkaStart(run.cat) : start(run.mod); };
+    $('wlHome').onclick = () => { sfx('click'); run.mod === 'gakka' ? gakkaMenu() : home(); };
   }
 
   // ---------- きょうの 本物の 天気図 (Open-Meteo の 海面気圧 予報値から 作図) ----------
