@@ -149,7 +149,7 @@ const Hub = (function () {
     h += '<h2 class="hub-h">📚 学習室</h2><section class="hub-study">';
     STUDY.forEach(s => {
       let sub = s.sub;
-      if (s.id === 'kanken') { try { const ks = Kanken.stats(); if (ks.solved) sub = ks.lv + '級 覚えた ' + ks.mastered + '/' + ks.total + '字' + (ks.best != null ? ' · 模試 ' + ks.best + '点' : ''); } catch (e) {} }
+      if (s.id === 'kanken') { try { const ks = Kanken.stats(); if (ks.solved) sub = ks.name + ' 覚えた ' + ks.mastered + '/' + ks.total + '字' + (ks.best != null ? ' · 模試 ' + ks.best + '点' : ''); } catch (e) {} }
       if (s.id === 'newsbox') { try { const ns = NewsBox.stats(); sub = (ns.today ? '✅ 今日 読んだ' : '📮 今日の ニュース') + ' · 単語 ' + ns.words + '語' + (ns.streak > 1 ? ' · 連続 ' + ns.streak + '日' : ''); } catch (e) {} }
       h += '<button class="hub-study-btn' + (s.hot ? ' hot' : '') + '" data-study="' + s.id + '"><span class="hub-study-icon">' + s.icon + '</span><span class="hub-study-name">' + s.name + '</span><span class="hub-study-sub">' + sub + '</span></button>';
     });
