@@ -26,7 +26,7 @@ const WxLab = (function () {
 
   // ---------- 気圧場 ----------
   // spec = { base, gx, gy, c: [{x, y, a, s}] }  P = base + gx*x + gy*y + Σ a·exp(-r²/2s²)
-  function P(sp, x, y) { let p = sp.base + (sp.gx || 0) * x + (sp.gy || 0) * y; sp.c.forEach(c => { const dx = x - c.x, dy = y - c.y; p += c.a * Math.exp(-(dx * dx + dy * dy) / (2 * c.s * c.s)); }); return p; }
+  function P(sp, x, y) { if (sp.f) return sp.f(x, y); let p = sp.base + (sp.gx || 0) * x + (sp.gy || 0) * y; sp.c.forEach(c => { const dx = x - c.x, dy = y - c.y; p += c.a * Math.exp(-(dx * dx + dy * dy) / (2 * c.s * c.s)); }); return p; }
   function grad(sp, x, y) { return [(P(sp, x + 1, y) - P(sp, x - 1, y)) / 2, (P(sp, x, y + 1) - P(sp, x, y - 1)) / 2]; }
   // 風 (吹いていく 向きの 単位ベクトル·強さ)  SVG 座標 (y 下向き)。北半球: 低圧部を 左に 見て 吹き、摩擦で 低圧側へ 約30度
   function wind(sp, x, y) {
@@ -148,11 +148,15 @@ const WxLab = (function () {
     // 緯線·経線
     for (let lat = 20; lat <= 55; lat += 10) s += '<line x1="0" x2="' + WXMAP.W + '" y1="' + Y(lat) + '" y2="' + Y(lat) + '" stroke="#9ab" stroke-width="0.4" stroke-dasharray="2 4"/>';
     for (let lon = 110; lon <= 160; lon += 10) s += '<line y1="0" y2="' + WXMAP.H + '" x1="' + X(lon) + '" x2="' + X(lon) + '" stroke="#9ab" stroke-width="0.4" stroke-dasharray="2 4"/>';
+    if (m.sp2) {   // 等温線 (破線)。hl の 値は 太い 青線
+      contours(m.sp2, m.step2 || 6).forEach(c => { const hl = c.L === m.hl2; s += '<path d="' + smooth(c.pts) + '" fill="none" stroke="' + (hl ? '#1f5fbf' : '#c8332b') + '" stroke-width="' + (hl ? 2.6 : 0.9) + '" stroke-dasharray="' + (hl ? '' : '4 3') + '"/>'; if (c.pts.length > 12) { const q = c.pts[Math.floor(c.pts.length * 0.3)]; if (q[0] > v[0] + 10 && q[0] < v[0] + v[2] - 10 && q[1] > v[1] + 10 && q[1] < v[1] + v[3] - 10) s += '<text x="' + q[0].toFixed(1) + '" y="' + (q[1] + 3).toFixed(1) + '" class="wl-iso t' + (hl ? ' hl' : '') + '">' + c.L + '℃</text>'; } });
+    }
     if (m.sp && !m.noIso) {
-      const cs = contours(m.sp, 4), lab = [];
-      cs.forEach(c => { const bold = c.L % 20 === 0; s += '<path d="' + smooth(c.pts) + '" fill="none" stroke="#3a3a3a" stroke-width="' + (bold ? 1.6 : 0.8) + '"/>'; if (c.pts.length > 14) lab.push(c); });
+      const st = m.step || 4, bE = m.bold || 20, lE = m.lab || 8;
+      const cs = contours(m.sp, st), lab = [];
+      cs.forEach(c => { const bold = c.L % bE === 0; s += '<path d="' + smooth(c.pts) + '" fill="none" stroke="#3a3a3a" stroke-width="' + (bold ? 1.6 : 0.8) + '"/>'; if (c.pts.length > 14) lab.push(c); });
       const cen = (m.centers || []);
-      lab.forEach(c => { if (c.L % 8) return; const p = c.pts[Math.floor(c.pts.length * 0.5)]; if (cen.some(q => Math.hypot(q.x - p[0], q.y - p[1]) < 34)) return; if (p[0] < v[0] + 8 || p[0] > v[0] + v[2] - 8 || p[1] < v[1] + 8 || p[1] > v[1] + v[3] - 8) return; s += '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] + 3).toFixed(1) + '" class="wl-iso">' + c.L + '</text>'; });
+      lab.forEach(c => { if (c.L % lE) return; const p = c.pts[Math.floor(c.pts.length * 0.5)]; if (cen.some(q => Math.hypot(q.x - p[0], q.y - p[1]) < 34)) return; if (p[0] < v[0] + 8 || p[0] > v[0] + v[2] - 8 || p[1] < v[1] + 8 || p[1] > v[1] + v[3] - 8) return; s += '<text x="' + p[0].toFixed(1) + '" y="' + (p[1] + 3).toFixed(1) + '" class="wl-iso">' + c.L + '</text>'; });
     }
     (m.fronts || []).forEach(f => { s += frontSVG(f); });
     (m.centers || []).forEach(c => {
@@ -163,6 +167,8 @@ const WxLab = (function () {
       s += '<line x1="' + (c.x - 3) + '" y1="' + (c.y - 14) + '" x2="' + (c.x + 3) + '" y2="' + (c.y - 8) + '" stroke="#222" stroke-width="1.2"/><line x1="' + (c.x + 3) + '" y1="' + (c.y - 14) + '" x2="' + (c.x - 3) + '" y2="' + (c.y - 8) + '" stroke="#222" stroke-width="1.2"/>';
     });
     (m.stations || []).forEach(st => { s += windSym(st.x, st.y, st.d, st.f) + wxSym(st.wx, st.x, st.y); if (st.name) s += '<text x="' + (st.x + 9) + '" y="' + (st.y + 14) + '" class="wl-st">' + esc(st.name) + '</text>'; });
+    (m.troughs || []).forEach(t => { s += '<path d="' + smooth(t.pts) + '" fill="none" stroke="#8a3ab8" stroke-width="2.4" stroke-dasharray="8 5"/><text x="' + t.pts[0][0] + '" y="' + (t.pts[0][1] - 5) + '" class="wl-tr">' + (t.ridge ? 'リッジ' : 'トラフ') + '</text>'; });
+    (m.dots || []).forEach(d => { s += '<circle cx="' + d.x + '" cy="' + d.y + '" r="3.2" fill="#222"/><text x="' + (d.x + 5) + '" y="' + (d.y - 4) + '" class="wl-st">' + esc(d.name) + '</text>'; });
     (m.marks || []).forEach(k => {
       if (k.star) s += '<text x="' + k.x + '" y="' + (k.y + 6) + '" class="wl-star">★</text>';
       else s += '<circle cx="' + k.x + '" cy="' + k.y + '" r="9" fill="#fff" stroke="#c8332b" stroke-width="2"/><text x="' + k.x + '" y="' + (k.y + 4.5) + '" class="wl-mk">' + esc(k.label) + '</text>';
@@ -201,6 +207,7 @@ const WxLab = (function () {
     { id: 'front', icon: '🌧️', name: '前線と 天気', sub: '雨の 降り方・前線が 通ると どうなる?', lv: '基本' },
     { id: 'season', icon: '🗾', name: '季節の 気圧配置', sub: '冬型・夏型・梅雨・台風・南岸低気圧', lv: '応用' },
     { id: 'fcst', icon: '📡', name: '予報演習', sub: '天気図の 動きから あすの 天気を 予報', lv: '応用' },
+    { id: 'upper', icon: '🛰️', name: '高層天気図', sub: '500hPa の トラフ・寒気、850hPa の −6℃線', lv: '予報士' },
     { id: 'desc', icon: '📝', name: '実技 記述', sub: '予報士試験 ふうの 文を 完成させよう', lv: '予報士' },
   ];
   let run = null;
@@ -436,7 +443,58 @@ const WxLab = (function () {
     return { desc: true, title: d.t, s: d.s, blanks: blanks, opts: d.o.map(o => shuffle(o)), step: 0, miss: 0 };
   }
 
-  const GEN = { sym: genSym, iso: genIso, front: genFront, season: genSeason, fcst: genFcst, desc: genDesc };
+  // ---------- 高層天気図 ----------
+  // 500hPa 高度 Z = 南ほど 高い 基本場 + 偏西風の 波 (トラフ・リッジ)。トラフ = 波の 谷 (高度が 低い 側へ 張り出す)
+  function upperField() {
+    const lam = rnd(230, 290), ph = rnd(0, lam), A = rnd(80, 120), yc = rnd(170, 230);
+    const env = y => Math.exp(-Math.pow((y - yc) / 170, 2));
+    const Z = (x, y) => 5300 + y / 450 * 600 + A * Math.sin(2 * Math.PI * (x - ph) / lam) * env(y);
+    const T5 = (x, y) => -46 + y / 450 * 38 + 7 * Math.sin(2 * Math.PI * (x - ph - lam * 0.05) / lam) * env(y);
+    const T8 = (x, y) => -22 + y / 450 * 40 + 6 * Math.sin(2 * Math.PI * (x - ph - lam * 0.05) / lam) * env(y);
+    const axes = (off) => { const r = []; for (let k = -1; k < 4; k++) { const xa = ph + lam * off + k * lam; if (xa > 20 && xa < WXMAP.W - 20) r.push(xa); } return r; };
+    return { Z: Z, T5: T5, T8: T8, tr: axes(0.75), rd: axes(0.25), yc: yc, lam: lam };
+  }
+  const axisPts = (xa, yc) => [[xa + 18, yc - 120], [xa + 6, yc - 50], [xa, yc], [xa + 6, yc + 50], [xa + 18, yc + 110]];
+  function genUpper() {
+    const t = pick(['trough', 'east', 'cold', 'snow']);
+    for (let tries = 0; tries < 120; tries++) {
+      const u = upperField();
+      const z500 = { f: u.Z }, t500 = { f: u.T5 }, t850 = { f: u.T8 };
+      if (t === 'trough') {
+        const xt = u.tr.find(x => x > 80 && x < WXMAP.W - 80), xr = u.rd.find(x => x > 60 && x < WXMAP.W - 60); if (xt == null || xr == null) continue;
+        const cand = [{ x: xt, y: u.yc, k: 't' }, { x: xr, y: u.yc, k: 'r' }, { x: (xt + xr) / 2, y: u.yc - 80, k: 'o' }, { x: (xt + xr) / 2, y: u.yc + 90, k: 'o' }];
+        if (cand.some(c => c.y < 30 || c.y > WXMAP.H - 30 || c.x < 30 || c.x > WXMAP.W - 30)) continue;
+        const L = ['A', 'B', 'C', 'D'], sh = shuffle(cand); sh.forEach((c, i) => c.label = L[i]);
+        const ans = sh.find(c => c.k === 't').label;
+        return mk('500hPa 天気図。等高度線 (60mごと) が 南へ 大きく たれさがった 「<b>トラフ (気圧の 谷)</b>」は A〜D の どこ?', mapSVG({ sp: z500, step: 60, bold: 300, lab: 120, marks: sh }), [ans].concat(L.filter(x => x !== ans)), '<b>' + ans + '</b>。等高度線が <b>南 (高度の 高い 側) へ U字に 張り出す</b> ところが トラフ。北へ もり上がる ところは <b>リッジ (気圧の 尾根)</b>。', true);
+      }
+      if (t === 'east') {
+        const tr = u.tr.filter(x => x > 60 && x < WXMAP.W - 60).map(x => ({ pts: axisPts(x, u.yc) }));
+        if (!tr.length) continue;
+        return mk('500hPa の トラフ (紫の 破線) に 対して、地上の 低気圧が 発達しやすいのは どちら側?', mapSVG({ sp: z500, step: 60, bold: 300, lab: 120, troughs: tr }), ['トラフの 東側 (前面)', 'トラフの 西側 (後面)', 'トラフの 真下だけ', 'リッジの 西側'], '<b>トラフの 東側 (前面)</b> では 上空で 空気が 発散し 上昇気流が 強まる。地上の 低気圧は トラフの 前面で 発達しやすい。', true);
+      }
+      if (t === 'cold') {
+        const pts = [];
+        for (let k = 0; k < 300 && pts.length < 4; k++) { const x = rnd(50, WXMAP.W - 50), y = rnd(50, WXMAP.H - 50); if (pts.every(q => Math.hypot(q.x - x, q.y - y) > 70)) pts.push({ x: x, y: y, T: u.T5(x, y) }); }
+        if (pts.length < 4) continue;
+        const cold = pts.filter(q => q.T <= -31), warm = pts.filter(q => q.T >= -27);
+        if (cold.length !== 1 || warm.length !== 3) continue;
+        const L = ['A', 'B', 'C', 'D']; pts.forEach((q, i) => q.label = L[i]);
+        const ans = cold[0].label;
+        return mk('500hPa の 等温線 (赤い 破線、太い 青線が −30℃)。<b>−30℃ 以下の 強い 寒気</b> が 入って いるのは?', mapSVG({ sp: z500, step: 60, bold: 300, lab: 300, sp2: t500, step2: 3, hl2: -30, marks: pts }), [ans].concat(L.filter(x => x !== ans)), '<b>' + ans + '</b>。上空 約5500mが −30℃ 以下だと 地上との 温度差が 大きく <b>大気が 不安定</b> に → 冬は 大雪、夏は 雷雨の おそれ。', true);
+      }
+      if (t === 'snow') {
+        const ids = shuffle(['sapporo', 'sendai', 'niigata', 'kanazawa', 'tokyo', 'osaka', 'hiroshima', 'fukuoka', 'kagoshima']);
+        const sn = ids.filter(i => u.T8(cx(i), cy(i)) <= -8), wm = ids.filter(i => u.T8(cx(i), cy(i)) >= -2);
+        if (!sn.length || wm.length < 3) continue;
+        const ch = [sn[0]].concat(wm.slice(0, 3)), ans = CITY[sn[0]][0];
+        return mk('850hPa (上空 約1500m) の 等温線。<b>太い 青線が −6℃</b>。地上で <b>雪</b> に なる 可能性が いちばん 高い 都市は?', mapSVG({ sp: { f: u.Z }, noIso: true, sp2: t850, step2: 3, hl2: -6, dots: ch.map(i => ({ x: cx(i), y: cy(i), name: CITY[i][0] })) }), [ans].concat(wm.slice(0, 3).map(i => CITY[i][0])), '<b>' + ans + '</b>。850hPa で <b>−6℃ 以下</b> (太い 青線より 北側) は、地上で 雨ではなく 雪に なる めやす。', true);
+      }
+    }
+    return genDesc();
+  }
+
+  const GEN = { sym: genSym, iso: genIso, front: genFront, season: genSeason, fcst: genFcst, upper: genUpper, desc: genDesc };
   function start(mod) { const items = []; for (let i = 0; i < 10; i++) items.push(GEN[mod]()); run = { mod: mod, items: items, i: 0, ok: 0 }; ask(); }
   function head() { const m = MODS.find(x => x.id === run.mod); return '<div class="wl-top"><button class="wl-back" id="wlQuit">✕ やめる</button><b>' + m.icon + ' ' + m.name + '</b><span>' + (run.i + 1) + ' / ' + run.items.length + '</span></div><div class="wl-bar"><i style="width:' + Math.round(run.i / run.items.length * 100) + '%"></i></div>'; }
   function ask() {

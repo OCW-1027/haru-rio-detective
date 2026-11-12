@@ -37,6 +37,9 @@
 .wl-mapbox.wide { max-width: 100%; }
 .wl-map { display: block; width: 100%; height: auto; touch-action: manipulation; }
 .wl-iso { font-size: 8px; text-anchor: middle; fill: #333; paint-order: stroke; stroke: #dcebf4; stroke-width: 3px; font-family: sans-serif; }
+.wl-iso.t { fill: #c8332b; }
+.wl-iso.t.hl { fill: #1f5fbf; font-weight: 700; font-size: 9px; }
+.wl-tr { font-size: 10px; fill: #8a3ab8; font-weight: 700; text-anchor: middle; font-family: sans-serif; paint-order: stroke; stroke: #fff; stroke-width: 2.5px; }
 .wl-H { font-size: 17px; font-weight: 700; fill: #1f5fbf; text-anchor: middle; font-family: sans-serif; }
 .wl-L { font-size: 17px; font-weight: 700; fill: #c8332b; text-anchor: middle; font-family: sans-serif; }
 .wl-T { font-size: 15px; font-weight: 700; fill: #c8332b; text-anchor: middle; font-family: sans-serif; }
