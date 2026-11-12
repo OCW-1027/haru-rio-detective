@@ -633,6 +633,97 @@ const LADDER = (function () {
     { id: 'h1', name: '高校 数学I', color: '#b05a3a' }, { id: 'hA', name: '高校 数学A', color: '#a0702a' }, { id: 'h2', name: '高校 数学II', color: '#9a3a7a' },
     { id: 'hB', name: '高校 数学B・C', color: '#6a3aa0' }, { id: 'h3', name: '発展 (数学III)', color: '#3a3a3a' },
   ];
+  // ======================= 2026-11 追加 (図形・素因数分解・関数の 利用) =======================
+  const SV = (w, h, inner) => '<svg viewBox="0 0 ' + w + ' ' + h + '" xmlns="http://www.w3.org/2000/svg">' + inner + '</svg>';
+  const Ln = (x1, y1, x2, y2, c, w, d) => '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + (c || '#2a2a3a') + '" stroke-width="' + (w || 2) + '"' + (d ? ' stroke-dasharray="5 4"' : '') + ' stroke-linecap="round"/>';
+  const Tx = (x, y, t, c, s) => '<text x="' + x + '" y="' + y + '" font-size="' + (s || 15) + '" fill="' + (c || '#2a2a3a') + '" text-anchor="middle" font-weight="700">' + t + '</text>';
+  const Pg = (pts, f) => '<polygon points="' + pts.map(p => p.join(',')).join(' ') + '" fill="' + (f || 'none') + '" stroke="#2a2a3a" stroke-width="2" stroke-linejoin="round"/>';
+  const PR = [2, 3, 5, 7, 11, 13];
+  add('c1', 'c1i', '🧩', '素因数分解', ['素数 = 1 と その数 自身しか 約数が ない 数 (2, 3, 5, 7, 11, …)。1 は 素数では ない', '小さい 素数から 順に 割っていく (すだれ算)', '同じ 素数は 累乗で 書く: 2 × 2 × 2 = 2³'], () => {
+    const ex = () => { const e = {}; let n = 1; const k = R(2, 4); for (let i = 0; i < k; i++) { const p = pick(i < 2 ? [2, 3] : PR.slice(0, 4)); e[p] = (e[p] || 0) + 1; n *= p; } return { e: e, n: n }; };
+    const str = e => Object.keys(e).map(Number).sort((a, b) => a - b).map(p => e[p] > 1 ? p + SUP[e[p]] : String(p)).join(' × ');
+    const kind = pick(['fac', 'fac', 'sq']);
+    if (kind === 'fac') { let o; do { o = ex(); } while (o.n < 12 || o.n > 400 || Object.keys(o.e).length < 2); const right = str(o.e);
+      const w1 = {}; Object.assign(w1, o.e); const ks = Object.keys(w1); w1[ks[0]] = (w1[ks[0]] || 0) + 1;
+      const w2 = Object.assign({}, o.e); delete w2[ks[ks.length - 1]];
+      const alt = String(o.n / Object.keys(o.e).map(Number)[0]) + ' × ' + Object.keys(o.e)[0];
+      const opts = [right, str(w1), Object.keys(w2).length ? str(w2) : '1 × ' + o.n, alt].filter((v, i, a) => a.indexOf(v) === i);
+      while (opts.length < 4) opts.push(o.n + ' × 1' + ' '.repeat(opts.length));
+      return { q: o.n + ' を 素因数分解すると?', type: 'choice', opts: opts.slice(0, 4), a: 0, steps: ['小さい 素数で 順に 割る', o.n + ' = ' + right, 'かけて 確かめ: ' + right + ' = ' + o.n] }; }
+    const p = pick([2, 3, 5, 7]), q = pick([2, 3, 5].filter(x => x !== p)), b = R(1, 3); const n = p * q * q * Math.pow(p === 2 ? 3 : 2, 2 * (b - 1)) ; const sqf = p;
+    return { q: n + ' に できるだけ 小さい 自然数を かけて、ある 自然数の 2乗に したい。何を かければ よい?', type: 'num', a: sqf, steps: ['素因数分解する', '2乗の 数は どの 素数も 指数が 偶数', '指数が 奇数の 素数 ' + sqf + ' を もう1つ かければ よい → ' + sqf] };
+  });
+  add('c1', 'c1j', '📐', '作図と 図形の 移動', ['垂直二等分線 上の 点は 2点 A、B から 等しい 距離', '角の 二等分線 上の 点は 角の 2辺から 等しい 距離', '円の 接線は 接点を 通る 半径に 垂直', '移動は 平行移動・回転移動・対称移動 の 3種類'], () => {
+    const B = [
+      ['2点 A、B から 等しい 距離に ある 点を 集めると できる 線は?', '線分 AB の 垂直二等分線', '角の 二等分線', 'AB に 平行な 直線', '点 A を 中心と する 円'],
+      ['角の 2辺から 等しい 距離に ある 点を 集めると できる 線は?', '角の 二等分線', '垂直二等分線', '角の 頂点を 中心と する 円', '辺に 平行な 直線'],
+      ['円 O の 周上の 点 P を 通る 接線を 作図する とき、まず 引く 線は?', '半径 OP (を 延ばした 直線) と、P を 通る その 垂線', '直径 に 平行な 直線', 'P を 中心と する 大きな 円だけ', 'O を 通る 角の 二等分線'],
+      ['3つの 町 A、B、C から 等しい 距離に 公園を 作りたい。公園の 位置は?', '線分 AB と BC の 垂直二等分線の 交点', '角 A と 角 B の 二等分線の 交点', '三角形 ABC の 辺 BC の 中点', 'A から BC に 下ろした 垂線の 上'],
+      ['図形を 一定の 方向に 一定の 距離だけ ずらす 移動は?', '平行移動', '回転移動', '対称移動', '拡大'],
+      ['図形を 1つの 点を 中心に 一定の 角度だけ 回す 移動は?', '回転移動', '平行移動', '対称移動', '縮小'],
+      ['図形を 1つの 直線を 折り目に して 裏返す 移動は?', '対称移動', '平行移動', '回転移動', '点対称移動'],
+      ['180° の 回転移動を 特に 何という?', '点対称移動', '線対称移動', '平行移動', '垂直移動'],
+      ['点 P から 直線 ℓ に 垂線を 引く 作図で、最初に する ことは?', 'P を 中心に ℓ と 2点で 交わる 円を かく', 'ℓ に 平行な 線を 引く', 'P と ℓ を 定規で 結ぶ', '分度器で 90° を はかる'],
+      ['∠AOB = 60° の 角の 二等分線を 作図した。できた 1つの 角は?', '30°', '60°', '120°', '15°'],
+    ];
+    const b = pick(B); return { q: b[0], type: 'choice', opts: b.slice(1), a: 0, steps: ['正解: ' + b[1]] };
+  });
+  add('c2', 'c2i', '⫽', '平行線と 角', ['平行線では 同位角・錯角が 等しい', '同側内角の 和は 180°', 'くの字 (平行線の 間の 折れ線): 折れた 角 = 両側の 角の 和'], () => {
+    const kind = pick(['douri', 'sakkaku', 'naikaku', 'kunoji', 'kunoji']);
+    if (kind === 'kunoji') { const a = R(20, 65), b = R(20, 65);
+      const fig = SV(320, 170, Ln(20, 30, 300, 30) + Ln(20, 140, 300, 140) + Tx(306, 26, 'ℓ', '#555', 13) + Tx(306, 152, 'm', '#555', 13) + Ln(80, 30, 210, 85, '#2e5fa8', 2.5) + Ln(210, 85, 100, 140, '#2e5fa8', 2.5) + Tx(112, 52, a + '°', '#d0382a') + Tx(132, 132, b + '°', '#d0382a') + Tx(185, 90, 'x', '#2f8a4f', 17));
+      return { q: '直線 ℓ と m は 平行。図の ∠x は 何度?', fig: fig, type: 'num', a: a + b, steps: ['折れた 点を 通り ℓ、m に 平行な 補助線を 引く', '錯角が 等しいので ∠x = ' + a + '° + ' + b + '°', '= ' + (a + b) + '°'] }; }
+    const a = R(35, 145), P = [189, 50], Q = [131, 125];
+    const OFF = { ru: [24, -8], rd: [26, 20], lu: [-26, -8], ld: [-24, 20] }, NM = { ru: '右上', rd: '右下', lu: '左上', ld: '左下' };
+    const T = { douri: ['ru', 'ru', a, '同位角は 等しい'], sakkaku: ['rd', 'lu', a, '錯角は 等しい (平行線の 内側で、交わる 直線の 反対側)'], naikaku: ['rd', 'ru', 180 - a, '同側内角の 和は 180° (平行線の 内側で、同じ 側)'] }[kind];
+    const lab = (pt, k, t, c, sz) => Tx(pt[0] + OFF[k][0], pt[1] + OFF[k][1], t, c, sz);
+    const fig = SV(320, 170, Ln(20, 50, 300, 50) + Ln(20, 125, 300, 125) + Tx(306, 46, 'ℓ', '#555', 13) + Tx(306, 137, 'm', '#555', 13) + Ln(100, 165, 220, 10, '#2e5fa8', 2.5) + Tx(P[0] - 6, P[1] - 12, 'P', '#555', 12) + Tx(Q[0] - 14, Q[1] + 14, 'Q', '#555', 12) + lab(P, T[0], a + '°', '#d0382a') + lab(Q, T[1], 'x', '#2f8a4f', 17));
+    return { q: 'ℓ ∥ m。点 P の ' + NM[T[0]] + 'の 角が ' + a + '° の とき、点 Q の ' + NM[T[1]] + 'の 角 x は 何度?', fig: fig, type: 'num', a: T[2], steps: [T[3], T[2] === a ? 'x = ' + a + '°' : 'x = 180° − ' + a + '° = ' + T[2] + '°'] };
+  });
+  add('c2', 'c2j', '🔺', '三角形の 合同条件', ['① 3組の 辺が それぞれ 等しい', '② 2組の 辺と その間の 角が それぞれ 等しい', '③ 1組の 辺と その両端の 角が それぞれ 等しい', '直角三角形: 斜辺と 1つの 鋭角 / 斜辺と 他の 1辺'], () => {
+    const S = '3組の 辺が それぞれ 等しい', SA = '2組の 辺と その間の 角が それぞれ 等しい', AS = '1組の 辺と その両端の 角が それぞれ 等しい', NG = '合同とは いえない';
+    const B = [
+      ['AB = DE、BC = EF、CA = FD', S], ['AB = DE、BC = EF、∠B = ∠E', SA], ['BC = EF、∠B = ∠E、∠C = ∠F', AS], ['AB = DE、BC = EF、∠A = ∠D', NG], ['∠A = ∠D、∠B = ∠E、∠C = ∠F', NG],
+      ['CA = FD、AB = DE、∠A = ∠D', SA], ['AB = DE、∠A = ∠D、∠B = ∠E', AS], ['AB = DE、CA = FD、∠C = ∠F', NG],
+    ];
+    const kind = pick(['tri', 'tri', 'tri', 'rt']);
+    if (kind === 'rt') { const R2 = [['∠C = ∠F = 90°、AB = DE、∠A = ∠D', '斜辺と 1つの 鋭角が それぞれ 等しい'], ['∠C = ∠F = 90°、AB = DE、BC = EF', '斜辺と 他の 1辺が それぞれ 等しい']]; const r = pick(R2);
+      return { q: '直角三角形 △ABC と △DEF で ' + r[0] + '。使う 合同条件は?', type: 'choice', opts: [r[1], r[1] === R2[0][1] ? R2[1][1] : R2[0][1], SA, NG], a: 0, steps: ['直角三角形の 斜辺は 直角の 向かいの 辺 (AB、DE)', r[1]] }; }
+    const b = pick(B); const opts = [b[1]].concat([S, SA, AS, NG].filter(x => x !== b[1]));
+    return { q: '△ABC と △DEF で ' + b[0] + ' の とき、どの 合同条件で 合同と いえる?', type: 'choice', opts: opts, a: 0, steps: [b[1] === NG ? '等しい 角が 2辺の 間に ない (または 角だけ) ので 合同とは いえない' : '条件を 当てはめる → ' + b[1]] };
+  });
+  add('c2', 'c2k', '▱', '平行四辺形の 性質', ['2組の 対辺は それぞれ 等しい', '2組の 対角は それぞれ 等しい (となりの 角の 和は 180°)', '対角線は それぞれの 中点で 交わる'], () => {
+    const fig = SV(300, 150, Pg([[40, 125], [200, 125], [260, 25], [100, 25]], '#eef3f9') + Ln(40, 125, 260, 25, '#8a8a9a', 1.5, 1) + Ln(200, 125, 100, 25, '#8a8a9a', 1.5, 1) + Tx(30, 140, 'A') + Tx(208, 142, 'B') + Tx(270, 22, 'C') + Tx(92, 20, 'D') + Tx(150, 92, 'O', '#555', 13));
+    const kind = pick(['ang', 'ang2', 'side', 'diag']);
+    if (kind === 'ang') { const a = R(50, 130); return { q: '平行四辺形 ABCD で ∠A = ' + a + '° の とき、∠B は?', fig: fig, type: 'num', a: 180 - a, steps: ['となりあう 角の 和は 180° (AD ∥ BC の 同側内角)', '∠B = 180° − ' + a + '° = ' + (180 - a) + '°'] }; }
+    if (kind === 'ang2') { const a = R(50, 130); return { q: '平行四辺形 ABCD で ∠A = ' + a + '° の とき、∠C は?', fig: fig, type: 'num', a: a, steps: ['対角は 等しい', '∠C = ∠A = ' + a + '°'] }; }
+    if (kind === 'side') { const ab = R(3, 12), bc = R(4, 15); return { q: '平行四辺形 ABCD で AB = ' + ab + 'cm、BC = ' + bc + 'cm の とき、周の 長さは?', fig: fig, type: 'num', a: 2 * (ab + bc), steps: ['対辺は 等しい: CD = ' + ab + '、DA = ' + bc, '(' + ab + ' + ' + bc + ') × 2 = ' + 2 * (ab + bc) + 'cm'] }; }
+    const ac = 2 * R(3, 10); return { q: '平行四辺形 ABCD の 対角線の 交点を O と する。AC = ' + ac + 'cm の とき、AO は?', fig: fig, type: 'num', a: ac / 2, steps: ['対角線は それぞれの 中点で 交わる', 'AO = ' + ac + ' ÷ 2 = ' + ac / 2 + 'cm'] };
+  });
+  add('c2', 'c2l', '🚰', '一次関数の 利用', ['「はじめの 量」が 切片 b、「1分 (1個) あたり 増える 量」が 傾き a', 'y = ax + b に x を 代入すれば 量が わかる', '逆に y から x を 求める ときは 方程式を 解く'], () => {
+    const kind = pick(['tank', 'candle', 'fee', 'tankx']);
+    if (kind === 'tank') { const b = R(2, 20), a = R(2, 8), t = R(3, 12); return { q: '水が ' + b + 'L 入った 水そうに、毎分 ' + a + 'L ずつ 水を 入れる。' + t + '分後の 水の 量は 何L?', type: 'num', a: a * t + b, steps: ['x 分後の 水の 量を y L と すると y = ' + a + 'x + ' + b, 'x = ' + t + ' を 代入: ' + a + ' × ' + t + ' + ' + b + ' = ' + (a * t + b)] }; }
+    if (kind === 'tankx') { const b = R(2, 20), a = R(2, 8), t = R(3, 12), y = a * t + b; return { q: '水が ' + b + 'L 入った 水そうに、毎分 ' + a + 'L ずつ 水を 入れる。水が ' + y + 'L に なるのは 何分後?', type: 'num', a: t, steps: ['y = ' + a + 'x + ' + b, y + ' = ' + a + 'x + ' + b + ' → ' + a + 'x = ' + (y - b), 'x = ' + t] }; }
+    if (kind === 'candle') { const L0 = R(15, 30), a = pick([0.5, 1, 1.5, 2]), t = R(2, Math.floor((L0 - 2) / a)), y = Math.round((L0 - a * t) * 10) / 10; return { q: '長さ ' + L0 + 'cm の ろうそくに 火を つけると、1分に ' + a + 'cm ずつ 短く なる。' + t + '分後の 長さは?', type: 'num', a: y, steps: ['y = −' + a + 'x + ' + L0 + ' (傾きは マイナス)', '−' + a + ' × ' + t + ' + ' + L0 + ' = ' + y] }; }
+    const base = R(10, 30) * 100, per = R(2, 9) * 10, u = R(5, 30), y = base + per * u; return { q: 'ある 電話料金は 基本料金 ' + base + '円に、1分 ' + per + '円の 通話料が 加わる。' + u + '分 話した ときの 料金は?', type: 'num', a: y, steps: ['y = ' + per + 'x + ' + base, per + ' × ' + u + ' + ' + base + ' = ' + y + '円'] };
+  });
+  add('c3', 'c3k', '📏', '平行線と 線分の 比', ['DE ∥ BC なら AD : AB = AE : AC = DE : BC', 'また AD : DB = AE : EC', '平行線に はさまれた 線分の 比も 等しい'], () => {
+    const m = R(1, 4), n = R(1, 4); if (m === n && Math.random() < 0.5) return null;
+    const k = R(1, 3), AD = m * k * 2, DB = n * k * 2;
+    const fig = SV(300, 190, Pg([[150, 15], [30, 175], [270, 175]]) + Ln(150 - 120 * m / (m + n), 15 + 160 * m / (m + n), 150 + 120 * m / (m + n), 15 + 160 * m / (m + n), '#2e5fa8', 2.5) + Tx(150, 12, 'A') + Tx(20, 188, 'B') + Tx(282, 188, 'C') + Tx(150 - 120 * m / (m + n) - 12, 20 + 160 * m / (m + n), 'D') + Tx(150 + 120 * m / (m + n) + 12, 20 + 160 * m / (m + n), 'E'));
+    const kind = pick(['ec', 'de']);
+    if (kind === 'ec') { const t = R(1, 3), AE = m * t * 3, EC = n * t * 3; return { q: '△ABC で DE ∥ BC。AD = ' + AD + '、DB = ' + DB + '、AE = ' + AE + ' の とき、EC は?', fig: fig, type: 'num', a: EC, steps: ['AD : DB = AE : EC', AD + ' : ' + DB + ' = ' + AE + ' : EC', 'EC = ' + AE + ' × ' + DB + ' ÷ ' + AD + ' = ' + EC] }; }
+    const BC = (m + n) * R(1, 4); return { q: '△ABC で DE ∥ BC。AD = ' + AD + '、DB = ' + DB + '、BC = ' + BC + ' の とき、DE は?', fig: fig, type: 'num', a: fr(BC * m, m + n), steps: ['AD : AB = DE : BC (AB = AD + DB = ' + (AD + DB) + ')', 'DE = ' + BC + ' × ' + AD + ' ÷ ' + (AD + DB) + ' = ' + fs(fr(BC * m, m + n))] };
+  });
+  add('c3', 'c3l', '🔻', '中点連結定理', ['△ABC で AB、AC の 中点を M、N と すると MN ∥ BC', 'MN = BC の 半分', '四角形の 各辺の 中点を 結ぶと 平行四辺形が できる'], () => {
+    const fig = SV(300, 190, Pg([[130, 15], [30, 175], [270, 175]]) + Ln(80, 95, 200, 95, '#2e5fa8', 2.5) + Tx(130, 12, 'A') + Tx(20, 188, 'B') + Tx(282, 188, 'C') + Tx(66, 98, 'M') + Tx(214, 98, 'N'));
+    const kind = pick(['mn', 'bc', 'peri']);
+    if (kind === 'mn') { const bc = 2 * R(3, 15); return { q: '△ABC で M、N は それぞれ AB、AC の 中点。BC = ' + bc + 'cm の とき、MN は?', fig: fig, type: 'num', a: bc / 2, steps: ['中点連結定理: MN = BC ÷ 2', bc + ' ÷ 2 = ' + bc / 2 + 'cm'] }; }
+    if (kind === 'bc') { const mn = R(3, 15); return { q: '△ABC で M、N は それぞれ AB、AC の 中点。MN = ' + mn + 'cm の とき、BC は?', fig: fig, type: 'num', a: mn * 2, steps: ['MN = BC ÷ 2 だから BC = MN × 2', mn + ' × 2 = ' + mn * 2 + 'cm'] }; }
+    const ab = 2 * R(3, 9), bc = 2 * R(3, 9), ca = 2 * R(3, 9); if (ab + bc <= ca || bc + ca <= ab || ca + ab <= bc) return null;
+    return { q: '△ABC の 3辺 AB = ' + ab + '、BC = ' + bc + '、CA = ' + ca + ' の 中点を 結んで できる 三角形の 周の 長さは?', type: 'num', a: (ab + bc + ca) / 2, steps: ['中点を 結んだ 線は、向かいの 辺の 半分', '(' + ab + ' + ' + bc + ' + ' + ca + ') ÷ 2 = ' + (ab + bc + ca) / 2] };
+  });
+
   function make(u) { let r = null; for (let i = 0; i < 60 && !r; i++) { try { r = u.gen(); } catch (e) { r = null; } } return r; }
   const ORD = GROUPS.map(g => g.id); U.sort((a, b) => ORD.indexOf(a.g) - ORD.indexOf(b.g));
   return { title: '中学・高校 数学ラダー', icon: '📈', U: U, GROUPS: GROUPS, make: make, byId: id => U.find(u => u.id === id), _fs: fs,
