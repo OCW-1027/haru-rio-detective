@@ -209,7 +209,7 @@ const WxLab = (function () {
     { id: 'fcst', icon: '📡', name: '予報演習', sub: '天気図の 動きから あすの 天気を 予報', lv: '応用' },
     { id: 'upper', icon: '🛰️', name: '高層天気図', sub: '500hPa の トラフ・寒気、850hPa の −6℃線', lv: '予報士' },
     { id: 'desc', icon: '📝', name: '実技 記述', sub: '予報士試験 ふうの 文を 完成させよう', lv: '予報士' },
-    { id: 'gakka', icon: '📘', name: '学科 一般知識', sub: '大気の 構造・熱力学・雲・放射・力学・気象業務法 など 10分野', lv: '予報士' },
+    { id: 'gakka', icon: '📘', name: '学科 ドリル', sub: '一般知識 10分野 + 専門知識 5分野 (観測・数値予報・解析・季節予報・防災情報)', lv: '予報士' },
   ];
   let run = null;
   function open() { showPage('pageWxLab'); home(); }
@@ -500,17 +500,25 @@ const WxLab = (function () {
   // ---------- 学科 一般知識 (data/wx-gakka.js の 問題 バンク) ----------
   function gakkaMenu() {
     const d = data(), G = (typeof WX_GAKKA !== 'undefined') ? WX_GAKKA : { cats: [], q: [] }, gk = d.gk || {};
-    let h = '<div class="wl-top"><button class="wl-back" id="wlQuit">← もどる</button><b>📘 学科 一般知識</b><span>' + G.q.length + '問</span></div>';
-    h += '<div class="wl-card"><p class="wl-gk-intro">気象予報士試験の 「学科 一般知識」で 出る 分野を 10問ずつ。まずは ランダムで 腕だめし、苦手な 分野は 個別に 練習しよう。</p>';
-    h += '<button class="wl-gk all" data-c="all"><span>🎲</span><b>ランダム 10問</b><small>全分野から</small>' + (gk.all != null ? '<i>最高 ' + gk.all + ' / 10</i>' : '') + '</button><div class="wl-gks">';
-    G.cats.forEach(([id, ic, nm]) => { const n = G.q.filter(q => q[0] === id).length; h += '<button class="wl-gk" data-c="' + id + '"><span>' + ic + '</span><b>' + nm + '</b><small>' + n + '問</small>' + (gk[id] != null ? '<i>最高 ' + gk[id] + ' / 10</i>' : '') + '</button>'; });
-    h += '</div></div>';
+    const best = k => gk[k] != null ? '<i>最高 ' + gk[k] + ' / 10</i>' : '';
+    let h = '<div class="wl-top"><button class="wl-back" id="wlQuit">← もどる</button><b>📘 学科 ドリル</b><span>' + G.q.length + '問</span></div>';
+    h += '<div class="wl-card"><p class="wl-gk-intro">気象予報士試験の 学科は 「一般知識」と 「専門知識」の 2つ。分野ごとに 10問ずつ 練習しよう。まずは ランダムで 腕だめし!</p>';
+    [['ippan', '一般知識', '大気の しくみ・法律'], ['senmon', '専門知識', '観測・数値予報・解析・防災情報']].forEach(([g, nm, sub]) => {
+      const cs = G.cats.filter(c => (c[3] || 'ippan') === g); if (!cs.length) return;
+      const n = G.q.filter(q => cs.some(c => c[0] === q[0])).length;
+      h += '<h3 class="wl-gk-h">' + nm + ' <small>' + sub + '</small></h3>';
+      h += '<button class="wl-gk all" data-c="all-' + g + '"><span>🎲</span><b>' + nm + ' ランダム 10問</b><small>' + n + '問から</small>' + best('all-' + g) + '</button><div class="wl-gks">';
+      cs.forEach(([id, ic, cn]) => { const k = G.q.filter(q => q[0] === id).length; h += '<button class="wl-gk" data-c="' + id + '"><span>' + ic + '</span><b>' + cn + '</b><small>' + k + '問</small>' + best(id) + '</button>'; });
+      h += '</div>';
+    });
+    h += '</div>';
     frame(h);
     $('wlQuit').onclick = () => { sfx('click'); home(); };
     $('wlArea').querySelectorAll('[data-c]').forEach(b => b.onclick = () => { sfx('click'); gakkaStart(b.dataset.c); });
   }
   function gakkaStart(cat) {
-    const G = WX_GAKKA, pool = shuffle(G.q.filter(q => cat === 'all' || q[0] === cat)).slice(0, 10);
+    const G = WX_GAKKA, grp = c => { const x = G.cats.find(k => k[0] === c); return x ? (x[3] || 'ippan') : 'ippan'; };
+    const pool = shuffle(G.q.filter(q => cat.indexOf('all-') === 0 ? grp(q[0]) === cat.slice(4) : q[0] === cat)).slice(0, 10);
     const cn = c => { const x = G.cats.find(k => k[0] === c); return x ? x[1] + ' ' + x[2] : ''; };
     const items = pool.map(q => mk('<small class="wl-gk-cat">' + esc(cn(q[0])) + '</small><br>' + esc(q[1]), null, q.slice(2, 6).map(esc), '<b>' + esc(q[2]) + '</b><br>' + esc(q[6])));
     items.forEach(it => it.txt = true);
