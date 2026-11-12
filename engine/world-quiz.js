@@ -88,7 +88,7 @@ const WorldQuiz = (function () {
   /* ---------- 国旗ぬりえ ----------
    * FLAGS.svg の 図形を 元の 色ごとに グループに して、タップで パレットの 色を ぬる。
    * 正解 = 元の 色に いちばん 近い パレット色 (CIE Lab 距離)。境目の 色は 2番目に 近い 色も 正解に する。
-   * パレットと 遠すぎる 色 (紋章の 金・茶など) は 最初から 本物の 色で 描いて ぬらない 部分に する。 */
+   * パレットと 遠すぎる 色や 灰色は 最初から 本物の 色で 描いて ぬらない 部分に する。 */
   const Paint = (function () {
     const PAL = [['赤', '#d7192d'], ['えんじ', '#8d1b3d'], ['オレンジ', '#ff8a1e'], ['黄', '#fcd116'], ['緑', '#009b3a'], ['深緑', '#00573f'], ['水色', '#75aadb'], ['青', '#1f4fb4'], ['紺', '#0b2361'], ['茶', '#8c5a2b'], ['白', '#ffffff'], ['黒', '#141414']];
     const lab = hex => { const v = [1, 3, 5].map(i => { const c = parseInt(hex.substr(i, 2), 16) / 255; return c > 0.04045 ? Math.pow((c + 0.055) / 1.055, 2.4) : c / 12.92; });
@@ -99,7 +99,7 @@ const WorldQuiz = (function () {
     const norm = c => { if (!c || c === 'none') return null; c = c.trim().toLowerCase(); if (NAMED[c]) return NAMED[c]; if (/^#[0-9a-f]{6}$/.test(c)) return c; if (/^#[0-9a-f]{3}$/.test(c)) return '#' + c[1] + c[1] + c[2] + c[2] + c[3] + c[3]; return null; };
     function judge(hex) {   // → { ok: [正解の パレット番号], fixed: パレットに ない 色か }
       const L = lab(hex), d = PL.map(q => Math.hypot(L[0] - q[0], L[1] - q[1], L[2] - q[2])), m = Math.min.apply(null, d);
-      return { ok: d.map((x, i) => [x, i]).filter(x => x[0] <= m * 1.22 + 5).map(x => x[1]), fixed: m > 30, best: d.indexOf(m) };
+      return { ok: d.map((x, i) => [x, i]).filter(x => x[0] <= m * 1.22 + 5).map(x => x[1]), fixed: m > 40 || (Math.hypot(L[1], L[2]) < 8 && L[0] > 22 && L[0] < 88), best: d.indexOf(m) };   // 灰色 (マルタの 十字など) も ぬらない
     }
     const cache = {};
     // 国旗の 図形を 読む (DOM を 使わず SVG 文字列から)
