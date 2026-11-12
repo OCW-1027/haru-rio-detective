@@ -138,6 +138,7 @@ const WeatherChallenge = (function () {
     h += '<div class="wx-box wx-rec"><div><b>' + mine.length + '</b><small>本番 予報</small></div><div><b>' + avg(mine.map(x => x.score)) + '</b><small>平均点 (あなた)</small></div><div><b>' + avg(mine.filter(x => x.pro != null).map(x => x.pro)) + '</b><small>平均点 (プロの 予報)</small></div></div>';
     h += '<button class="wx-primary" id="wxLive">☀ あしたの ' + esc(city(cityId).name) + 'を 予報する (本番)</button>';
     h += '<button class="wx-secondary" id="wxPrac">🎲 練習モード (過去の 1日で すぐ 答え合わせ)</button>';
+    if (typeof WxLab !== 'undefined') h += '<button class="wx-secondary" id="wxMap">🗺️ 予報の 前に きょうの 本物の 天気図を 見る</button>';
     if (d.done.length) {
       h += '<div class="wx-h2">📒 予報の 記録</div><div class="wx-hist">';
       d.done.slice(-12).reverse().forEach(x => { h += '<div class="wx-hrow"><span>' + (x.mode === 'live' ? '本番' : '練習') + ' ' + esc((city(x.city) || {}).name || '') + ' ' + jpDate(x.date) + '</span><span>' + WX[x.p.wx].i + '→' + WX[x.a.wx].i + '</span><b>' + x.score + '点</b></div>'; });
@@ -148,6 +149,7 @@ const WeatherChallenge = (function () {
     area().querySelectorAll('[data-city]').forEach(b => b.onclick = () => { sfx('click'); cityId = b.dataset.city; home(); });
     document.getElementById('wxLive').onclick = () => { sfx('click'); live(); };
     document.getElementById('wxPrac').onclick = () => { sfx('click'); practice(); };
+    const mb = document.getElementById('wxMap'); if (mb) mb.onclick = () => { sfx('click'); stop(); WxLab.open(); WxLab.live(); };
     checkPending();
   }
   async function checkPending() {

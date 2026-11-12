@@ -218,10 +218,11 @@ const WxLab = (function () {
     let h = '<div class="wl-hero"><div><div class="wl-kicker">気象予報士への 第一歩</div><h1>天気図 実技道場</h1><p>天気図は 空の 「設計図」。記号と 等圧線を 読めれば、あすの 天気が 見えて くる。</p></div>' + heroMap() + '</div>';
     h += '<div class="wl-mods">';
     MODS.forEach(m => { const b = d.best[m.id]; h += '<button class="wl-mod" data-m="' + m.id + '"><span class="wl-mi">' + m.icon + '</span><b>' + m.name + '</b><small>' + m.sub + '</small><em class="lv-' + m.lv + '">' + m.lv + '</em>' + (b != null ? '<i>最高 ' + b + ' / 10</i>' : '') + '</button>'; });
+    h += '<button class="wl-mod lab live" data-m="live"><span class="wl-mi">📡</span><b>きょうの 本物の 天気図</b><small>本物の 気圧データで 作図 → 読み取り → 予報へ</small><em class="lv-実況">実況</em></button>';
     h += '<button class="wl-mod lab" data-m="lab"><span class="wl-mi">🧪</span><b>天気図ラボ</b><small>高気圧・低気圧を 置いて 等圧線と 風を 観察</small><em class="lv-自由">自由研究</em></button>';
     h += '</div><p class="wl-foot">地図: Natural Earth (パブリックドメイン)。天気図は 学習用に 自動で 作った もので、本物の 観測では ありません。</p>';
     frame(h);
-    $('wlArea').querySelectorAll('.wl-mod').forEach(b => b.onclick = () => { sfx('click'); b.dataset.m === 'lab' ? lab() : start(b.dataset.m); });
+    $('wlArea').querySelectorAll('.wl-mod').forEach(b => b.onclick = () => { sfx('click'); b.dataset.m === 'lab' ? lab() : b.dataset.m === 'live' ? live() : start(b.dataset.m); });
   }
   function heroMap() { const p = pattern('spring'); return '<div class="wl-hero-map">' + mapSVG({ sp: p.sp, fronts: p.fronts, centers: p.centers, view: [180, 120, 260, 220] }) + '</div>'; }
 
@@ -542,6 +543,114 @@ const WxLab = (function () {
     $('wlHome').onclick = () => { sfx('click'); home(); };
   }
 
+  // ---------- きょうの 本物の 天気図 (Open-Meteo の 海面気圧 予報値から 作図) ----------
+  // 東経105〜160・北緯20〜55 を 2.5度ごと (23×15 = 345地点) の 海面気圧を 取得 → 双一次補間 → 等圧線。高・低は 格子の 極値。
+  // 地点の 天気記号と 風は 主要 8都市の 天気コード・風向・風速。データは 3時間 キャッシュ (端末の localStorage)。
+  const LG = { lon0: 105, lon1: 160, lat0: 20, lat1: 55, d: 2.5 };
+  const LIVE_CITIES = ['sapporo', 'sendai', 'niigata', 'tokyo', 'osaka', 'fukuoka', 'kagoshima', 'naha'];
+  const OM = 'https://api.open-meteo.com/v1/forecast';
+  let liveD = null, liveT = 'today';
+  function liveGrid() { const lons = [], lats = []; for (let la = LG.lat0; la <= LG.lat1 + 1e-6; la += LG.d) for (let lo = LG.lon0; lo <= LG.lon1 + 1e-6; lo += LG.d) { lons.push(lo); lats.push(la); } return { lons: lons, lats: lats, nx: Math.round((LG.lon1 - LG.lon0) / LG.d) + 1, ny: Math.round((LG.lat1 - LG.lat0) / LG.d) + 1 }; }
+  async function omJSON(params) { const q = Object.keys(params).map(k => k + '=' + encodeURIComponent(params[k])).join('&'); const r = await fetch(OM + '?' + q); if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }
+  async function liveFetch() {
+    const key = 'haru-wxlab-live', now = Date.now();
+    try { const c = JSON.parse(localStorage.getItem(key) || 'null'); if (c && now - c.at < 3 * 3600e3 && c.p && c.p.length) return c; } catch (e) {}
+    const g = liveGrid(), chunk = 105, P = [];
+    for (let i = 0; i < g.lons.length; i += chunk) {
+      const j = await omJSON({ latitude: g.lats.slice(i, i + chunk).map(v => v.toFixed(2)).join(','), longitude: g.lons.slice(i, i + chunk).map(v => v.toFixed(2)).join(','), hourly: 'pressure_msl', forecast_days: 2, timezone: 'Asia/Tokyo', cell_selection: 'nearest' });
+      (Array.isArray(j) ? j : [j]).forEach(o => P.push(o.hourly.pressure_msl));
+    }
+    const cs = await omJSON({ latitude: LIVE_CITIES.map(i => CITY[i][2]).join(','), longitude: LIVE_CITIES.map(i => CITY[i][1]).join(','), hourly: 'weather_code,wind_speed_10m,wind_direction_10m,temperature_2m', wind_speed_unit: 'ms', forecast_days: 2, timezone: 'Asia/Tokyo' });
+    const C = (Array.isArray(cs) ? cs : [cs]).map(o => o.hourly);
+    const t0 = (Array.isArray(cs) ? cs[0] : cs).hourly.time;
+    const d = { at: now, p: P, c: C, time: t0 };
+    try { localStorage.setItem(key, JSON.stringify(d)); } catch (e) {}
+    return d;
+  }
+  function liveIdx(d, which) { if (which === 'today') return 9; if (which === 'tomorrow') return 33; const h = new Date(Date.now() + 9 * 3600e3).getUTCHours(); return Math.min(47, h); }
+  function liveField(d, idx) {
+    const g = liveGrid(), V = d.p.map(a => a[idx]);
+    const at = (i, j) => V[j * g.nx + i];
+    const f = (x, y) => {
+      const lon = x / (S * WXMAP.K) + WXMAP.L0, lat = WXMAP.T0 - y / S;
+      let fi = (lon - LG.lon0) / LG.d, fj = (lat - LG.lat0) / LG.d;
+      fi = Math.max(0, Math.min(g.nx - 1.001, fi)); fj = Math.max(0, Math.min(g.ny - 1.001, fj));
+      const i = Math.floor(fi), j = Math.floor(fj), u = fi - i, v = fj - j;
+      return at(i, j) * (1 - u) * (1 - v) + at(i + 1, j) * u * (1 - v) + at(i, j + 1) * (1 - u) * v + at(i + 1, j + 1) * u * v;
+    };
+    // 高・低: 5×5 近傍で 極値、周りとの 差 2hPa 以上
+    const cen = [];
+    for (let j = 1; j < g.ny - 1; j++) for (let i = 1; i < g.nx - 1; i++) {
+      const p = at(i, j); let mx = true, mn = true, sum = 0, n = 0;
+      for (let b = -2; b <= 2; b++) for (let a = -2; a <= 2; a++) {
+        const ii = i + a, jj = j + b; if ((!a && !b) || ii < 0 || jj < 0 || ii >= g.nx || jj >= g.ny) continue;
+        const q = at(ii, jj); if (q >= p) mx = false; if (q <= p) mn = false; sum += q; n++;
+      }
+      const dm = p - sum / n;
+      if ((mx && (dm >= 1.5 || p >= 1024)) || (mn && (-dm >= 1.5 || p <= 1000))) cen.push({ x: Math.round(X(LG.lon0 + i * LG.d)), y: Math.round(Y(LG.lat0 + j * LG.d)), t: mx ? 'H' : 'L' });
+    }
+    return { sp: { f: f }, centers: cen };
+  }
+  function wmoSym(c) { if (c === 0) return 'kaisei'; if (c <= 2) return 'hare'; if (c === 3) return 'kumori'; if (c === 45 || c === 48) return 'kiri'; if (c >= 95) return 'kaminari'; if ((c >= 71 && c <= 77) || c === 85 || c === 86) return 'yuki'; if (c >= 51) return 'ame'; return 'kumori'; }
+  const BEAU = [0.3, 1.6, 3.4, 5.5, 8, 10.8, 13.9, 17.2, 20.8, 24.5, 28.5, 32.7];
+  const beaufort = ms => { let f = 0; while (f < 12 && ms >= BEAU[f]) f++; return f; };
+  function liveStations(d, idx) { return LIVE_CITIES.map((id, k) => { const h = d.c[k]; if (!h) return null; const ws = h.wind_speed_10m[idx]; return { x: cx(id), y: cy(id), wx: wmoSym(h.weather_code[idx]), d: Math.round(h.wind_direction_10m[idx] / 45) % 8, f: beaufort(ws), name: CITY[id][0], ws: ws, t: h.temperature_2m[idx], id: id }; }).filter(Boolean); }
+  const LIVE_VIEW = () => [Math.round(X(LG.lon0)), Math.round(Y(LG.lat1)), Math.round(X(LG.lon1) - X(LG.lon0)), Math.round(Y(LG.lat0) - Y(LG.lat1))];
+  function live() {
+    frame('<div class="wl-top"><button class="wl-back" id="wlQuit">← もどる</button><b>📡 きょうの 本物の 天気図</b></div><div class="wl-card"><p class="wl-q">気象データを 読みこみ中…</p></div>');
+    $('wlQuit').onclick = () => { sfx('click'); home(); };
+    liveFetch().then(d => { liveD = d; drawLive(); }).catch(() => {
+      if (!$('wlArea')) return;
+      $('wlArea').querySelector('.wl-card').innerHTML = '<p class="wl-q">⚠️ 気象データを 読みこめませんでした。インターネットに つながって いるか 確かめて、もう一度 ためして ね。</p><button class="wl-go" id="wlRetry">もう一度</button>';
+      $('wlRetry').onclick = () => { sfx('click'); live(); };
+    });
+  }
+  function drawLive() {
+    const d = liveD, idx = liveIdx(d, liveT), fl = liveField(d, idx), st = liveStations(d, idx);
+    const tm = (d.time[idx] || '').replace('T', ' ');
+    let h = '<div class="wl-top"><button class="wl-back" id="wlQuit">← もどる</button><b>📡 きょうの 本物の 天気図</b></div><div class="wl-card">';
+    h += '<div class="wl-tools">' + [['today', 'きょう 9時'], ['now', 'いま'], ['tomorrow', 'あす 9時 (予想)']].map(([k, n]) => '<button data-lt="' + k + '" class="' + (liveT === k ? 'on' : '') + '">' + n + '</button>').join('') + '</div>';
+    h += '<div class="wl-mapbox wide">' + mapSVG({ sp: fl.sp, centers: fl.centers, stations: st, view: LIVE_VIEW() }) + '</div>';
+    h += '<p class="wl-cap">' + esc(tm) + ' (日本時間) の 海面気圧 · 等圧線 4hPaごと · 前線は 表示して いません</p>';
+    // 本物の データで 読み取り クイズ (答えは データから 決まる)
+    const qs = liveQuiz(d, idx, fl, st);
+    h += '<div class="wl-live-q"><h3>🔎 この 天気図を 読もう</h3>' + qs.map((q, k) => '<div class="wl-lq" data-k="' + k + '"><p>' + q.q + '</p><div class="wl-opts">' + q.opts.map((o, j) => '<button class="wl-opt" data-j="' + j + '">' + esc(o) + '</button>').join('') + '</div><div class="wl-lfb"></div></div>').join('') + '</div>';
+    h += '<div class="wl-rbtns"><button class="wl-go" id="wlToChal">☀️ この 天気図で あすの 天気を 予報する</button></div>';
+    h += '<p class="wl-foot">データ: Open-Meteo (各国気象機関の 数値予報) · 東経105〜160度・北緯20〜55度を 2.5度ごとに 取得して 作図。正式な 天気図は 気象庁 「天気図」の ページで 見られる。</p></div>';
+    frame(h);
+    $('wlQuit').onclick = () => { sfx('click'); home(); };
+    $('wlArea').querySelectorAll('[data-lt]').forEach(b => b.onclick = () => { sfx('click'); liveT = b.dataset.lt; drawLive(); });
+    $('wlToChal').onclick = () => { sfx('click'); if (typeof WeatherChallenge !== 'undefined') WeatherChallenge.open(); };
+    $('wlArea').querySelectorAll('.wl-lq').forEach(box => {
+      const q = qs[+box.dataset.k];
+      box.querySelectorAll('.wl-opt').forEach(b => b.onclick = () => {
+        if (box.dataset.done) return; box.dataset.done = 1; const ok = +b.dataset.j === q.ans;
+        box.querySelectorAll('.wl-opt').forEach((x, j) => { x.disabled = true; if (j === q.ans) x.classList.add('ok'); else if (x === b) x.classList.add('ng'); });
+        sfx(ok ? 'correct' : 'wrong');
+        box.querySelector('.wl-lfb').innerHTML = '<div class="wl-fb ' + (ok ? 'ok' : 'ng') + '">' + (ok ? '⭕ ' : '❌ ') + q.exp + '</div>';
+      });
+    });
+  }
+  function liveQuiz(d, idx, fl, st) {
+    const out = [], P0 = (x, y) => fl.sp.f(x, y), mkq = (q, opts, exp) => { const o = shuffle(opts.map((x, i) => i)); return { q: q, opts: o.map(i => opts[i]), ans: o.indexOf(0), exp: exp }; };
+    // ① 東京の 気圧
+    const pt = P0(cx('tokyo'), cy('tokyo')), r = Math.round(pt);
+    out.push(mkq('東京の 海面気圧は 約 何hPa?', [r + 'hPa', (r + 6) + 'hPa', (r - 6) + 'hPa', (r + 12) + 'hPa'], '東京は 約 <b>' + r + 'hPa</b> (データ ' + pt.toFixed(1) + 'hPa)。近くの 等圧線の 数字から 読み取ろう。'));
+    // ② いちばん 風が 強い 都市 (風速)
+    const s4 = shuffle(st).slice(0, 4), mx = s4.slice().sort((a, b) => b.ws - a.ws);
+    if (mx[0].ws - mx[1].ws >= 1) out.push(mkq('次の 4都市で、風が いちばん 強いのは?', [mx[0].name].concat(mx.slice(1).map(s => s.name)), '<b>' + mx[0].name + '</b> (' + mx[0].ws.toFixed(1) + 'm/s、風力' + beaufort(mx[0].ws) + ')。天気図では 矢羽根の 数が 多い ほど 強い。' + s4.map(s => s.name + ' ' + s.ws.toFixed(1)).join(' / ') + ' m/s'));
+    // ③ 東京の 気圧の 変化 (きょう9時 → あす9時) → 天気の 傾向
+    const ft = liveField(d, 33).sp.f(cx('tokyo'), cy('tokyo')), f0 = liveField(d, 9).sp.f(cx('tokyo'), cy('tokyo')), df = ft - f0;
+    if (Math.abs(df) >= 2) {
+      const down = df < 0;
+      out.push(mkq('東京の 気圧は きょう9時から あす9時に かけて ' + (down ? '下がる' : '上がる') + ' 予想 (' + (df > 0 ? '+' : '') + df.toFixed(1) + 'hPa)。天気は どう なりそう?', [down ? 'くずれる (下り坂)' : '回復する (上り坂)', down ? '回復する (上り坂)' : 'くずれる (下り坂)', '気圧と 天気は 関係ない'], down ? '気圧が 下がるのは 低気圧や 前線が 近づく サイン → 天気は <b>下り坂</b> の ことが 多い。' : '気圧が 上がるのは 高気圧が 近づく サイン → 天気は <b>回復</b> に 向かう ことが 多い。'));
+    }
+    // ④ 高・低の 数
+    const nh = fl.centers.filter(c => c.t === 'H').length, nl = fl.centers.filter(c => c.t === 'L').length;
+    if (nh + nl > 0) out.push(mkq('この 天気図に 「高」と 「低」は いくつ ある?', ['高' + nh + '・低' + nl, '高' + (nh + 1) + '・低' + nl, '高' + nh + '・低' + (nl + 1), '高' + Math.max(0, nh - 1) + '・低' + (nl + 2)], '<b>高' + nh + '・低' + nl + '</b>。周りより 気圧が 高い ところが 「高」、低い ところが 「低」。'));
+    return out;
+  }
+
   // ---------- 天気図ラボ (自由研究) ----------
   let labSp = null, labTool = 'H';
   function lab() {
@@ -582,5 +691,5 @@ const WxLab = (function () {
 
   function report() { const d = data(); const rows = MODS.filter(m => d.best[m.id] != null); if (!rows.length) return ''; return '<table class="pr-tbl"><thead><tr><th>モジュール</th><th>最高点</th></tr></thead><tbody>' + rows.map(m => '<tr><th>' + m.icon + ' ' + m.name + '</th><td>' + d.best[m.id] + ' / 10</td></tr>').join('') + '</tbody></table>'; }
   function stats() { const d = data(); const v = MODS.map(m => d.best[m.id]).filter(x => x != null); return { done: v.length, sum: v.reduce((a, b) => a + b, 0) }; }
-  return { open: open, stats: stats, report: report, _gen: GEN, _P: P, _wind: wind, _pattern: pattern, _mapSVG: mapSVG };
+  return { open: open, live: live, stats: stats, report: report, _liveField: liveField, _gen: GEN, _P: P, _wind: wind, _pattern: pattern, _mapSVG: mapSVG };
 })();

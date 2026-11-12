@@ -84,3 +84,9 @@
   .wl-two { grid-template-columns: 1fr; }
   .wl-opt { font-size: 14px; }
 }
+.wl-mod em.lv-実況 { background: #e3f0ff; color: #1f5fbf; }
+.wl-mod.live { border-color: #8fbfe0; border-style: solid; background: linear-gradient(135deg, #fff, #eef6fc); }
+.wl-cap { font-size: 12px; color: #5a6a78; margin: -6px 0 10px; text-align: center; }
+.wl-live-q h3 { font-family: 'RocknRoll One'; font-size: 16px; margin: 6px 0 8px; }
+.wl-lq { border-top: 1px dashed #cfe1ec; padding: 10px 0; }
+.wl-lq p { margin: 0 0 8px; font-size: 15px; line-height: 1.6; }
