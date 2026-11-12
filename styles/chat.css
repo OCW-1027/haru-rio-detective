@@ -23,6 +23,8 @@
 }
 .chat-entry-btn:hover { background: #ffd700; }
 .chat-entry-btn:active { transform: scale(0.95); }
+.chat-entry-btn { transition: opacity .2s, transform .2s; }
+.chat-entry-btn.chat-tucked { opacity: 0; transform: translateY(-12px); pointer-events: none; }
 
 .chat-entry-badge {
   position: absolute;

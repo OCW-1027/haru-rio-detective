@@ -29,6 +29,18 @@ function injectEntryButton() {
   entryBtn.addEventListener('click', () => {
     openChatModal();
   });
+  // 画面を 下に スクロールしている 間は 右上の ボタンを かくす (下の ボタンと 重なって 押しまちがえない ように)。
+  // 一番 上に もどると また 出る。未読が あるときは かくさない。
+  const tuck = (e) => {
+    const t = e && e.target;
+    if (!t || !t.classList || !t.classList.contains('page') || !t.classList.contains('active')) return;
+    const unread = badgeEl && !badgeEl.classList.contains('chat-hidden');
+    entryBtn.classList.toggle('chat-tucked', t.scrollTop > 60 && !unread);
+  };
+  document.addEventListener('scroll', tuck, true);
+  // 画面が 切りかわったら いったん 戻す
+  const mo = new MutationObserver(() => { const a = document.querySelector('.page.active'); if (!a || a.scrollTop <= 60) entryBtn.classList.remove('chat-tucked'); });
+  document.querySelectorAll('.page').forEach((pg) => mo.observe(pg, { attributes: true, attributeFilter: ['class'] }));
 }
 
 function updateBadge(count) {

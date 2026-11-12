@@ -47,6 +47,24 @@ const MainStory = (function () {
     return ({ suiri: SCENE_IMAGES.schoolGate, kagaku: ce('science'), ijin: (typeof SCIENTISTS_STORY !== 'undefined' ? SCIENTISTS_STORY[0].illustration : ''), kisho: ce('wea'), sansu: ce('math'), chiri: ce('world'), shakai: ce('soc'), rekishi: ce('hist'), okane: ce('mon'), biz: ce('biz'), geijutsu: ce('lit'), eigo: 'assets/img/world/cities/london.webp' })[f.id] || SCENE_IMAGES.library;
   }
   const gotN = () => Object.keys(data().got).length;
+  // まだ 光が 弱い カケラ → 条件の コンテンツへ 直接 行ける ボタン (COND の 順番と 同じ)
+  const L = (tab, title) => () => Hub.openList(tab, title);
+  const GO1 = {
+    suiri: [['名探偵物語', L('story', '🔍 ハル&リオの 名探偵物語')]],
+    kagaku: [['科学探偵', L('science', '🔬 科学探偵')], ['ラボ探偵', () => LabDetective.open()]],
+    ijin: [['偉人科学者ファイル', L('scientists', '👨‍🔬 偉人科学者ファイル')]],
+    kisho: [['気象予報士', L('wea', '🌦 気象予報士')], ['お天気チャレンジ', () => WeatherChallenge.open()]],
+    sansu: [['算数·数学', L('math', '🔢 算数·数学')], ['インド式 計算道場', () => IndianMath.open()]],
+    chiri: [['世界遺産の旅', L('world', '🌍 世界遺産の旅')], ['世界追跡', () => WorldChase.open()]],
+    shakai: [['社会科総合', L('soc', '🏛 社会科総合')]],
+    rekishi: [['世界経済·貿易史', L('hist', '🌐 世界経済·貿易史')]],
+    okane: [['日常のお金', L('mon', '💴 日常のお金')]],
+    biz: [['ビジネス·企業', L('biz', '📊 ビジネス·企業')]],
+    geijutsu: [['文学·芸術', L('lit', '🎭 文学·芸術')]],
+    eigo: [['英検道場', () => Eiken.open()]],
+  };
+  const goBtns = (gs) => (gs || []).map((g, k) => '<button class="ms-pri' + (k ? ' sub' : '') + '" data-go1="' + k + '">▶ ' + esc(g[0]) + 'へ 行く</button>').join('');
+  const bindGo = (gs) => area().querySelectorAll('[data-go1]').forEach(b => b.onclick = () => { sfx('click'); stop(); try { gs[+b.dataset.go1][1](); } catch (e) { map(); } });
 
   // ---------- 立ち絵 ----------
   const BLANK_SVG = '<svg viewBox="0 0 100 120" class="ms-blank"><path d="M50 4 L58 30 L42 30 Z" fill="#3a3550"/><ellipse cx="50" cy="52" rx="30" ry="27" fill="#2c2840"/><path d="M22 58 Q8 100 24 116 L76 116 Q92 100 78 58 Z" fill="#231f35"/><rect x="30" y="44" width="40" height="12" rx="6" fill="#f2f2f2"/><circle cx="41" cy="50" r="3" fill="#2c2840"/><circle cx="59" cy="50" r="3" fill="#2c2840"/><circle cx="50" cy="92" r="9" fill="none" stroke="#8a86a0" stroke-dasharray="2 2"/></svg>';
@@ -113,7 +131,8 @@ const MainStory = (function () {
       let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">' + f.icon + ' ' + esc(f.name) + 'の カケラ</div></div>';
       h += '<div class="ms-card gray"><span class="ms-img" style="background-image:url(\'' + cover(f) + '\')"></span></div>';
       h += '<div class="ms-boxw"><div class="ms-talk">' + portrait('kd', 'hint') + '<div><b>コラドン</b><p>この カケラは まだ 光が 弱いよ。<br>' + esc(f.need) + 'で 取りもどせる!</p>' + c.map(x => '<div class="ms-cond"><span class="ms-pg"><span style="width:' + Math.min(100, Math.round(x[0] / x[1] * 100)) + '%"></span></span> ' + Math.min(x[0], x[1]) + ' / ' + x[1] + '</div>').join('') + '</div></div></div>';
-      area().innerHTML = h; $('msBack').onclick = () => { sfx('click'); map(); };
+      h += goBtns(GO1[f.id]);
+      area().innerHTML = h; $('msBack').onclick = () => { sfx('click'); map(); }; bindGo(GO1[f.id]);
       return;
     }
     talk(f.lines, f.name + 'の カケラ', () => {
