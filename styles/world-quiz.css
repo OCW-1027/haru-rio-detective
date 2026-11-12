@@ -53,3 +53,27 @@
 /* 国旗モード */
 .wq-flag { display: flex; justify-content: center; margin: 12px 0 6px; }
 .wq-flag .flag-svg { width: min(260px, 70vw); height: auto; border-radius: 4px; box-shadow: 0 3px 10px rgba(40, 50, 70, .18); }
+/* 国旗ぬりえ */
+.wq-paint { display: flex; justify-content: center; margin: 12px 0 8px; }
+.wq-paint .flag-svg { width: min(340px, 88vw); height: auto; border-radius: 4px; box-shadow: 0 3px 12px rgba(40, 50, 70, .2); touch-action: manipulation; }
+.wq-paint .wq-pe { cursor: pointer; }
+.wq-paint .wq-pe[data-kind="f"] { vector-effect: non-scaling-stroke; }
+.wq-paint .wq-bad { pointer-events: none; stroke: #e0245e !important; stroke-width: 2.6 !important; stroke-dasharray: 5 3; vector-effect: non-scaling-stroke; animation: wqBad 1s ease-in-out 3; }
+@keyframes wqBad { 50% { stroke-opacity: .25; } }
+.wq-pal { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 6px 0 4px; }
+.wq-sw { display: flex; flex-direction: column; align-items: center; gap: 3px; border: 2px solid #d5dee8; background: #fff; border-radius: 12px; padding: 6px 2px 4px; cursor: pointer; font-family: 'RocknRoll One'; font-size: 11px; color: #1f3f5c; white-space: nowrap; letter-spacing: -.5px; }
+.wq-sw i { width: 30px; height: 30px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .25); }
+.wq-sw.on { border-color: #1f3f5c; background: #eef4fa; transform: translateY(-2px); box-shadow: 0 3px 8px rgba(31, 63, 92, .2); }
+.wq-phint { text-align: center; font-size: 13px; color: #4a6078; margin: 6px 0; min-height: 1.4em; }
+.wq-phint.warn { color: #c0392b; font-weight: bold; }
+.wq-pbtns { display: flex; gap: 8px; }
+.wq-pbtns > * { flex: 1; margin: 0 !important; }
+.wq-pbtns button:disabled { opacity: .45; }
+.wq-pcmp { display: flex; justify-content: center; margin: 8px 0; }
+.wq-pcmp div { text-align: center; }
+.wq-pcmp small { display: block; font-size: 11px; color: #667; margin-bottom: 2px; }
+.wq-pcmp .flag-svg { width: 140px; height: auto; border-radius: 3px; box-shadow: 0 2px 6px rgba(0, 0, 0, .15); }
+.wq-pused { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.wq-chip { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; background: #fff; border: 1px solid #d5dee8; border-radius: 99px; padding: 1px 7px 1px 3px; }
+.wq-chip i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .25); }
+@media (min-width: 560px) { .wq-pal { grid-template-columns: repeat(12, 1fr); } }
