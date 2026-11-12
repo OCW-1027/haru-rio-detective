@@ -450,7 +450,7 @@ const SCILAD = (function () {
       const h0 = R(0, 23), day = R(10, 25), t = h0 - dh; const nd = day + Math.floor(t / 24), nh = ((t % 24) + 24) % 24;
       const fmt = (d, h) => '1月' + d + '日 ' + (h < 12 ? '午前' + h : '午後' + (h - 12)) + '時';
       const right = fmt(nd, nh), wr = [fmt(day + Math.floor((h0 + dh) / 24), (((h0 + dh) % 24) + 24) % 24), fmt(nd + (nd === day ? 1 : -1), nh), fmt(nd, (nh + 12) % 24)].filter(w => w !== right);
-      return { q: a[0] + ' が ' + fmt(day, h0) + ' の とき、' + b[0] + ' は 何日の 何時? (標準時子午線: ' + a[0] + ' ' + a[1] + '°、' + b[0] + ' ' + b[1] + '°、東経を +、西経を − と する。サマータイムは 考えない)', type: 'choice', a: 0, opts: [right].concat([...new Set(wr)]).slice(0, 4), steps: ['時差 = (' + a[1] + ' − ' + P(b[1]) + ') ÷ 15 = ' + dh + ' 時間 (' + (dh > 0 ? b[0] + ' の 方が おそい' : b[0] + ' の 方が 進んでいる') + ')', fmt(day, h0) + ' ' + (dh > 0 ? '− ' + dh : '+ ' + (-dh)) + ' 時間 → ' + right] };
+      return { q: a[0] + ' が ' + fmt(day, h0) + ' の とき、' + b[0] + ' は 何日の 何時? (標準時子午線: ' + a[0] + ' ' + a[1] + '°、' + b[0] + ' ' + b[1] + '°、東経を +、西経を − と する。サマータイムは 考えない)', type: 'choice', a: 0, opts: [right].concat([...new Set(wr)]).slice(0, 4), steps: ['時差 = (' + a[1] + ' − ' + (b[1] < 0 ? '(' + b[1] + ')' : b[1]) + ') ÷ 15 = ' + dh + ' 時間 (' + (dh > 0 ? b[0] + ' の 方が おそい' : b[0] + ' の 方が 進んでいる') + ')', fmt(day, h0) + ' ' + (dh > 0 ? '− ' + dh : '+ ' + (-dh)) + ' 時間 → ' + right] };
     }
     if (kind === 'scale') { const sc = pick([25000, 50000]), cm = pick([2, 3, 4, 6, 8, 1.5, 2.5]); const m = sc * cm / 100;
       return { q: sc === 25000 ? '2万5千分の1 の 地形図上で ' + cm + 'cm の 長さは、実際には 何m?' : '5万分の1 の 地形図上で ' + cm + 'cm の 長さは、実際には 何m?', type: 'num', a: m, steps: [cm + ' × ' + sc + ' = ' + (cm * sc) + 'cm', '= ' + m + ' m'] }; }
@@ -1022,6 +1022,66 @@ const SCILAD = (function () {
       const o = chq('地図 (' + R.n + ') の ' + li + ' の 地形・海の 名前は?', x[0], ord.filter(f => f !== x).map(f => f[0]).concat(others(4)), [ord.map((f, i) => L[i] + ' = ' + f[0]).join('、'), x[4]]); return o && Object.assign(o, { fig: wMap(r, null, null, ord.map((f, i) => [f[1], f[2], L[i]])) }); }
     const hide = t => t.split(x[0].replace(/ \(.*\)/, '')).join('〇〇').replace(/アマゾン川|ニジェール川/g, '〇〇川');
     const o = chq('次の 説明に あてはまる ' + x[3] + 'は? (' + R.n + ')\n「' + hide(x[4]) + '」', x[0], others(5), [x[0] + ' — 地図で 位置も 確認しよう']); return o && Object.assign(o, { fig: wMap(r, null, null, [[x[1], x[2], '★']]) });
+  });
+  // ======================= 地形図の 読み取り (図つき・毎回 地形が 変わる) =======================
+  const TOPO = (function () {
+    const W = 300, H = 200, CS = 5;
+    function terrain() { const hills = []; const n = R(1, 2); for (let i = 0; i < n; i++) hills.push({ x: R(70, 230), y: R(50, 150), a: R(60, 140), s: R(40, 72), sx: 0.7 + Math.random() * 0.8 }); const base = R(5, 30);
+      return { base: base, hills: hills, h: (x, y) => base + hills.reduce((t, k) => t + k.a * Math.exp(-(((x - k.x) / k.sx) ** 2 + (y - k.y) ** 2) / (2 * k.s * k.s)), 0) }; }
+    function contours(T, step) {   // マーチングスクエア (線分の まま 描く)
+      const nx = W / CS, ny = H / CS, G = []; for (let j = 0; j <= ny; j++) { G.push([]); for (let i = 0; i <= nx; i++) G[j].push(T.h(i * CS, j * CS)); }
+      let thin = '', bold = '', max = 0, labs = ''; G.forEach(r => r.forEach(v => { if (v > max) max = v; }));
+      for (let lv = step; lv < max; lv += step) { let d = '', lab = null;
+        for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const a = G[j][i], b = G[j][i + 1], c = G[j + 1][i + 1], e = G[j + 1][i], pts = [];
+          const ip = (x1, y1, v1, x2, y2, v2) => { const t = (lv - v1) / (v2 - v1); return [(x1 + (x2 - x1) * t) * CS, (y1 + (y2 - y1) * t) * CS]; };
+          if ((a < lv) !== (b < lv)) pts.push(ip(i, j, a, i + 1, j, b)); if ((b < lv) !== (c < lv)) pts.push(ip(i + 1, j, b, i + 1, j + 1, c)); if ((c < lv) !== (e < lv)) pts.push(ip(i + 1, j + 1, c, i, j + 1, e)); if ((e < lv) !== (a < lv)) pts.push(ip(i, j + 1, e, i, j, a));
+          for (let k = 0; k + 1 < pts.length; k += 2) { d += 'M' + pts[k][0].toFixed(1) + ',' + pts[k][1].toFixed(1) + 'L' + pts[k + 1][0].toFixed(1) + ',' + pts[k + 1][1].toFixed(1); if (lv % (step * 5) === 0) { const mx = pts[k][0], my = pts[k][1], sc = Math.abs(my - 100) + Math.abs(mx - 150) * 0.2; if (mx > 25 && mx < 275 && my > 18 && my < 185 && (!lab || sc < lab[2])) lab = [mx, my, sc]; } } }
+        if (lv % (step * 5) === 0) { bold += d; if (lab) labs += '<text x="' + lab[0].toFixed(1) + '" y="' + (lab[1] + 4).toFixed(1) + '" font-size="10" text-anchor="middle" font-weight="700" fill="#8a5420" stroke="#f7f3e6" stroke-width="3" paint-order="stroke">' + lv + '</text>'; } else thin += d; }
+      return { thin: thin, bold: bold, max: max, labs: labs };
+    }
+    function svg(T, step, extra) { const c = contours(T, step);
+      return '<svg viewBox="0 0 ' + (W + 40) + ' ' + (H + 26) + '" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif"><rect x="0" y="0" width="' + W + '" height="' + H + '" fill="#f7f3e6" stroke="#8a7a5a"/>' +
+        '<path d="' + c.thin + '" fill="none" stroke="#b07a3a" stroke-width="0.9"/><path d="' + c.bold + '" fill="none" stroke="#8a5420" stroke-width="2"/>' + c.labs +
+        '<g transform="translate(' + (W + 20) + ',22)"><polygon points="0,-16 6,4 0,0 -6,4" fill="#2a2a3a"/><text x="0" y="18" font-size="12" text-anchor="middle" font-weight="700">N</text></g>' +
+        '<text x="' + (W + 20) + '" y="' + (H - 20) + '" font-size="9" text-anchor="middle" fill="#6a5a3a">' + (step === 10 ? '1/25000' : '1/50000') + '</text>' + (extra || '') +
+        '<text x="0" y="' + (H + 18) + '" font-size="10" fill="#6a5a3a">細い 線 = 主曲線 (' + step + 'm ごと)・太い 線 = 計曲線 (' + step * 5 + 'm ごと)</text></svg>'; }
+    const dot = (x, y, lab) => '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="4" fill="#d0382a" stroke="#fff" stroke-width="1.5"/><text x="' + (x + 7).toFixed(1) + '" y="' + (y - 6).toFixed(1) + '" font-size="13" font-weight="700" fill="#d0382a">' + lab + '</text>';
+    // 等高線 (lv) の 上に ある 点を さがす
+    function onLevel(T, lv, avoid) { for (let k = 0; k < 4000; k++) { const x = R(20, W - 20), y = R(20, H - 20); if (Math.abs(T.h(x, y) - lv) < 0.6 && (!avoid || avoid.every(p => Math.hypot(p[0] - x, p[1] - y) > 50))) return [x, y]; } return null; }
+    const crossings = (T, p, q, step) => { let n = 0, prev = Math.floor(T.h(p[0], p[1]) / step); for (let i = 1; i <= 60; i++) { const x = p[0] + (q[0] - p[0]) * i / 60, y = p[1] + (q[1] - p[1]) * i / 60, cur = Math.floor(T.h(x, y) / step); n += Math.abs(cur - prev); prev = cur; } return n; };
+    return { terrain: terrain, svg: svg, dot: dot, onLevel: onLevel, crossings: crossings, W: W, H: H };
+  })();
+  const SYM = [
+    ['田 (水田)', '<line x1="-6" y1="-8" x2="-6" y2="8"/><line x1="6" y1="-8" x2="6" y2="8"/>'], ['畑', '<path d="M-9,-4 L-6,6 L-3,-4 M3,-4 L6,6 L9,-4"/>'], ['果樹園', '<circle cx="0" cy="3" r="6"/><line x1="0" y1="-3" x2="0" y2="-10"/>'], ['茶畑', '<circle cx="0" cy="-6" r="2.4" fill="#2a2a3a"/><circle cx="-6" cy="5" r="2.4" fill="#2a2a3a"/><circle cx="6" cy="5" r="2.4" fill="#2a2a3a"/>'],
+    ['針葉樹林', '<path d="M-8,8 L0,-9 L8,8"/>'], ['広葉樹林', '<circle cx="0" cy="-1" r="7"/><line x1="0" y1="6" x2="0" y2="11"/>'], ['神社', '<line x1="-11" y1="-7" x2="11" y2="-7"/><line x1="-9" y1="-2" x2="9" y2="-2"/><line x1="-6" y1="-7" x2="-6" y2="10"/><line x1="6" y1="-7" x2="6" y2="10"/>'],
+    ['寺院', '<text x="0" y="8" font-size="22" text-anchor="middle" stroke="none" fill="#2a2a3a">卍</text>'], ['学校 (小・中学校)', '<text x="0" y="8" font-size="22" text-anchor="middle" stroke="none" fill="#2a2a3a">文</text>'], ['郵便局', '<circle cx="0" cy="0" r="11"/><text x="0" y="7" font-size="16" text-anchor="middle" stroke="none" fill="#2a2a3a">〒</text>'],
+    ['警察署', '<circle cx="0" cy="0" r="11"/><path d="M-6,-6 L6,6 M6,-6 L-6,6"/>'], ['交番', '<path d="M-8,-8 L8,8 M8,-8 L-8,8"/>'], ['消防署', '<path d="M0,10 L0,-2 M-8,-10 L-8,-2 L8,-2 L8,-10"/>'], ['市役所', '<circle cx="0" cy="0" r="11"/><circle cx="0" cy="0" r="6"/>'],
+    ['図書館', '<path d="M0,-6 L0,8 M0,-6 Q-6,-10 -11,-7 L-11,7 Q-6,4 0,8 M0,-6 Q6,-10 11,-7 L11,7 Q6,4 0,8"/>'], ['博物館・美術館', '<path d="M-11,-3 L0,-11 L11,-3 Z M-9,9 L9,9 M-6,-3 L-6,9 M0,-3 L0,9 M6,-3 L6,9"/>'], ['老人ホーム', '<path d="M-11,1 L0,-10 L11,1 M-7,-3 L-7,10 L7,10 L7,-3 M3,10 L3,3 Q3,0 0,0"/>'],
+    ['温泉', '<text x="0" y="9" font-size="24" text-anchor="middle" stroke="none" fill="#2a2a3a">♨</text>'], ['工場', '<circle cx="0" cy="0" r="7"/><circle cx="0" cy="0" r="2.5"/>' + [0, 45, 90, 135, 180, 225, 270, 315].map(a => '<line x1="' + (7 * Math.cos(a * Math.PI / 180)).toFixed(1) + '" y1="' + (7 * Math.sin(a * Math.PI / 180)).toFixed(1) + '" x2="' + (11 * Math.cos(a * Math.PI / 180)).toFixed(1) + '" y2="' + (11 * Math.sin(a * Math.PI / 180)).toFixed(1) + '"/>').join('')],
+    ['風車', '<line x1="0" y1="0" x2="0" y2="11"/><line x1="0" y1="0" x2="0" y2="-10"/><line x1="0" y1="0" x2="9" y2="5"/><line x1="0" y1="0" x2="-9" y2="5"/>'],
+  ];
+  const symSVG = i => '<svg viewBox="-60 -22 120 44" xmlns="http://www.w3.org/2000/svg"><rect x="-24" y="-20" width="48" height="40" fill="#fbf8ee" stroke="#d8cfb6" rx="6"/><g fill="none" stroke="#2a2a3a" stroke-width="2" stroke-linecap="round">' + SYM[i][1] + '</g></svg>';
+  add('sg', 'xg8', '🗺', '地形図の 読み取り (図つき)', ['等高線: 2万5千分の1 は 主曲線 10m・計曲線 50m ごと (5万分の1 は 20m・100m)', '等高線の 間隔が せまい ほど 急な 斜面、広い ほど ゆるやかな 斜面', '地形図は ふつう 上が 北。2万5千分の1 なら 地図上 1cm = 実際 250m'], () => {
+    const kind = pick(['elev', 'elev', 'steep', 'dir', 'dist', 'sym', 'sym', 'peak']), step = kind === 'elev' && Math.random() < 0.3 ? 20 : 10;
+    if (kind === 'sym') { const i = R(0, SYM.length - 1), wr = [], pool = SYM.map(s => s[0]).filter((s, j) => j !== i); while (wr.length < 3) { const w = pick(pool); if (wr.indexOf(w) < 0) wr.push(w); }
+      return { q: 'この 地図記号は 何を 表す?', fig: symSVG(i), type: 'choice', a: 0, opts: [SYM[i][0]].concat(wr), steps: ['正解: ' + SYM[i][0], '地図記号は 形の 由来と セットで 覚えよう (例: 文 → 文字を 学ぶ 学校、⊗ → 警棒が 交わる 警察署)'] }; }
+    const T = TOPO.terrain();
+    if (kind === 'elev') { const lv1 = step * R(1, 6), dl = step * R(2, 8), lv2 = lv1 + dl; const A = TOPO.onLevel(T, lv1), B = A && TOPO.onLevel(T, lv2, [A]); if (!A || !B) return null;
+      return { q: '地形図の 地点 A と 地点 B は どちらも 等高線の 上に ある。A と B の 標高差は 何m? (この 地図は ' + (step === 10 ? '2万5千分の1' : '5万分の1') + ')', fig: TOPO.svg(T, step, TOPO.dot(A[0], A[1], 'A') + TOPO.dot(B[0], B[1], 'B')), type: 'num', a: dl,
+        steps: ['主曲線は ' + step + 'm ごと (太い 計曲線は ' + step * 5 + 'm ごと)', 'A から B まで 等高線を ' + dl / step + '本 こえる', dl / step + ' × ' + step + ' = ' + dl + 'm'] }; }
+    if (kind === 'steep') { const L = 70; let best = null; for (let k = 0; k < 300 && !best; k++) { const p1 = [R(30, 230), R(30, 170)], a1 = Math.random() * Math.PI * 2, q1 = [p1[0] + L * Math.cos(a1), p1[1] + L * Math.sin(a1)], p2 = [R(30, 230), R(30, 170)], a2 = Math.random() * Math.PI * 2, q2 = [p2[0] + L * Math.cos(a2), p2[1] + L * Math.sin(a2)];
+        if ([q1, q2].some(q => q[0] < 10 || q[0] > 290 || q[1] < 10 || q[1] > 190) || Math.hypot(p1[0] - p2[0], p1[1] - p2[1]) < 60) continue; const c1 = TOPO.crossings(T, p1, q1, 10), c2 = TOPO.crossings(T, p2, q2, 10); if (Math.abs(c1 - c2) >= 3 && Math.max(c1, c2) >= 4) best = [p1, q1, p2, q2, c1, c2]; }
+      if (!best) return null; const [p1, q1, p2, q2, c1, c2] = best, ln = (p, q, c) => '<line x1="' + p[0].toFixed(1) + '" y1="' + p[1].toFixed(1) + '" x2="' + q[0].toFixed(1) + '" y2="' + q[1].toFixed(1) + '" stroke="' + c + '" stroke-width="3"/>';
+      const ex = ln(p1, q1, '#2e5fa8') + ln(p2, q2, '#2f8a4f') + TOPO.dot(p1[0], p1[1], 'P') + TOPO.dot(q1[0], q1[1], 'Q') + TOPO.dot(p2[0], p2[1], 'R') + TOPO.dot(q2[0], q2[1], 'S');
+      return { q: '同じ 長さの 道 P〜Q (青) と R〜S (緑)。坂が 急なのは どちら?', fig: TOPO.svg(T, 10, ex), type: 'choice', a: 0, opts: c1 > c2 ? ['P〜Q', 'R〜S', 'どちらも 同じ'] : ['R〜S', 'P〜Q', 'どちらも 同じ'], steps: ['P〜Q は 等高線を ' + c1 + '本、R〜S は ' + c2 + '本 横切る', '同じ 長さで 多く 横切る ほど 高さの 変化が 大きい = 急な 坂'] }; }
+    if (kind === 'peak') { const k = T.hills.reduce((a, b) => T.h(a.x, a.y) > T.h(b.x, b.y) ? a : b), top = T.h(k.x, k.y), lo = Math.floor(top / 10) * 10; if (lo < 30) return null;
+      const opts = [lo + '〜' + (lo + 10) + 'm', (lo - 10) + '〜' + lo + 'm', (lo + 10) + '〜' + (lo + 20) + 'm', (lo - 20) + '〜' + (lo - 10) + 'm'];
+      return { q: '図の 山頂 (▲) の 標高は どの はんい? (2万5千分の1。数字の ついた 太い 計曲線から 内側へ 細い 線を 数えよう)', fig: TOPO.svg(T, 10, '<polygon points="' + k.x + ',' + (k.y - 7) + ' ' + (k.x - 6) + ',' + (k.y + 4) + ' ' + (k.x + 6) + ',' + (k.y + 4) + '" fill="#d0382a"/>'), type: 'choice', a: 0, opts: opts,
+        steps: ['太い 計曲線 (50m ごと) から 数えて、いちばん 内側の 等高線は ' + lo + 'm', '山頂は それより 高く、次の 等高線 (' + (lo + 10) + 'm) は ない → ' + lo + '〜' + (lo + 10) + 'm'] }; }
+    if (kind === 'dir') { const D = ['北', '北東', '東', '南東', '南', '南西', '西', '北西'], k = R(0, 7), A = [150, 100], ang = (90 - k * 45) * Math.PI / 180, B = [A[0] + 70 * Math.cos(ang), A[1] - 70 * Math.sin(ang)]; const wr = [D[(k + 4) % 8], D[(k + 2) % 8], D[(k + 6) % 8]];
+      return { q: '地点 A から 見て、地点 B は どの 方位に ある? (地図の 上が 北)', fig: TOPO.svg(T, 10, TOPO.dot(A[0], A[1], 'A') + TOPO.dot(B[0], B[1], 'B')), type: 'choice', a: 0, opts: [D[k]].concat(wr), steps: ['地形図は 上が 北、右が 東、下が 南、左が 西', 'A から B への 向きは ' + D[k]] }; }
+    const n = R(2, 8), A = [40, 160], B = [40 + n * 30, 160]; let grid = ''; for (let x = 10; x <= 290; x += 30) grid += '<line x1="' + x + '" y1="0" x2="' + x + '" y2="200" stroke="#9ab4d0" stroke-width="0.6"/>'; for (let y = 10; y <= 190; y += 30) grid += '<line x1="0" y1="' + y + '" x2="300" y2="' + y + '" stroke="#9ab4d0" stroke-width="0.6"/>';
+    return { q: 'この 2万5千分の1 の 地形図で、青い 方眼の 1マスは 地図上 1cm。A から B までの 実際の 距離は 何m?', fig: TOPO.svg(T, 10, grid + TOPO.dot(A[0], A[1], 'A') + TOPO.dot(B[0], B[1], 'B')), type: 'num', a: n * 250, steps: ['A から B まで ' + n + 'マス = 地図上 ' + n + 'cm', '2万5千分の1 → 1cm = 25000cm = 250m', n + ' × 250 = ' + n * 250 + 'm'] };
   });
   const GROUPS = [
     { id: 'sj1', name: '中学 理科 (物理・化学)', color: '#2a7aa8' }, { id: 'sj2', name: '中学 理科 (生物・地学)', color: '#3a8a5a' },
