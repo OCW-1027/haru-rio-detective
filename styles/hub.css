@@ -65,3 +65,68 @@
   .hub-study { grid-template-columns: repeat(2, 1fr); }
 }
 .hub-study-btn.hot { border-color: #2a7a8a; background: linear-gradient(135deg, #e6f4f1, #fffdf5); box-shadow: 0 4px 0 #2a7a8a; }
+
+/* ===== 2026-11 개편 ===== */
+.hub-h { font-size: 18px; margin: 22px 2px 10px; }
+.hub-h.small { font-size: 15px; margin: 16px 2px 8px; color: #6a5a40; }
+.hub-today { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; margin: 0; }
+.hub-chip { display: flex; align-items: center; gap: 10px; text-align: left; padding: 10px 14px; border-radius: 14px; border: 2px solid #cfe1dc; background: #fff; color: #1a4a5a; cursor: pointer; box-shadow: 0 3px 0 #cfe1dc; min-width: 0; }
+.hub-chip small { display: block; font-family: 'Klee One'; font-size: 11.5px; color: #4a8a9a; }
+.hub-chip b { display: block; font-family: 'RocknRoll One'; font-size: 15px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hub-chip > span:last-child { min-width: 0; }
+.hub-chip.review { border-color: #e6c65a; box-shadow: 0 3px 0 #e6c65a; }
+.hub-chip.review small { color: #a07a2a; }
+.hub-chip.news { border-color: #e7a39e; box-shadow: 0 3px 0 #e7a39e; }
+.hub-chip.news small { color: #c8332b; }
+.hub-chip.done { opacity: 0.8; }
+.hub-chip:active { transform: translateY(2px); box-shadow: none; }
+.hub-ico { font-size: 28px; line-height: 1; flex-shrink: 0; width: 36px; text-align: center; }
+.hub-ico-img { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0; }
+.hub-stories { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hub-stories .hub-story { margin: 0; text-align: left; }
+.hub-story-t { display: block; font-family: 'Klee One'; font-size: 12px; opacity: 0.85; margin-bottom: 6px; }
+.hub-doors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.hub-door { position: relative; display: flex; flex-direction: column; padding: 0; border: none; border-radius: 18px; overflow: hidden; background: #fff; cursor: pointer; text-align: left; box-shadow: 0 3px 0 color-mix(in srgb, var(--dc) 45%, #fff), 0 8px 18px rgba(80, 60, 30, 0.12); }
+.hub-door-img { display: block; aspect-ratio: 2 / 1; background-size: cover; background-position: center; }
+.hub-door-body { padding: 10px 12px 12px; border-top: 4px solid var(--dc); }
+.hub-door-body b { display: flex; align-items: center; gap: 6px; font-family: 'RocknRoll One'; font-weight: 400; font-size: 16px; color: var(--deep-ink); line-height: 1.25; }
+.hub-door-body b i { font-style: normal; font-size: 20px; }
+.hub-door-body small { display: block; font-family: 'Klee One'; font-size: 12px; color: #6a7a8a; margin-top: 3px; }
+.hub-door:active { transform: translateY(2px); }
+.hub-new-dot { position: absolute; top: 8px; right: 8px; font-style: normal; font-family: 'RocknRoll One'; font-size: 11px; color: #fff; background: #e05a3a; padding: 3px 9px; border-radius: 999px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+.hub-cat-head { position: relative; margin: 0 -16px 6px; height: 170px; background-size: cover; background-position: center; border-radius: 0 0 24px 24px; overflow: hidden; }
+.hub-cat-shade { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(25, 30, 40, 0.75), rgba(25, 30, 40, 0.15) 70%); }
+.hub-cat-back { position: absolute; top: 14px; left: 14px; z-index: 2; border: none; background: rgba(255,255,255,0.92); color: #2b3a48; border-radius: 999px; padding: 8px 14px; font-family: 'RocknRoll One'; font-size: 14px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.hub-cat-title { position: absolute; left: 20px; bottom: 14px; z-index: 2; color: #fff; display: flex; align-items: center; gap: 10px; }
+.hub-cat-title span { font-size: 40px; }
+.hub-cat-title h1 { font-family: 'RocknRoll One'; font-size: 28px; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+.hub-cat-title p { margin: 0 0 0 4px; font-family: 'Klee One'; font-size: 13px; opacity: 0.9; display: none; }
+.hub-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+.hub-tile { display: flex; align-items: center; gap: 12px; text-align: left; padding: 12px 14px; border-radius: 16px; border: 2px solid color-mix(in srgb, var(--dc) 25%, #fff); background: #fffdf8; cursor: pointer; box-shadow: 0 3px 0 color-mix(in srgb, var(--dc) 25%, #fff); }
+.hub-tile .hub-ico { font-size: 32px; width: 44px; }
+.hub-tile .hub-ico-img { width: 46px; height: 46px; }
+.hub-tile-body { flex: 1; min-width: 0; }
+.hub-tile-body b { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-family: 'RocknRoll One'; font-weight: 400; font-size: 16px; color: var(--deep-ink); }
+.hub-tile-body small { display: block; font-family: 'Klee One'; font-size: 12px; color: #6a7a8a; margin-top: 2px; line-height: 1.45; }
+.hub-tile-go { font-size: 26px; color: color-mix(in srgb, var(--dc) 70%, #fff); }
+.hub-tile:active { transform: translateY(2px); box-shadow: none; }
+.hub-tag { font-style: normal; font-family: 'RocknRoll One'; font-size: 10px; color: #fff; background: #e05a3a; padding: 2px 7px; border-radius: 999px; }
+.hub-tag.on-cover { position: absolute; top: 8px; left: 8px; }
+.hub-foot { margin-top: 26px; }
+@media (max-width: 700px) {
+  .hub-hero { height: 210px; }
+  .hub-hero-text { top: 44px; }
+  .hub-hero-title { font-size: 30px; margin-bottom: 10px; }
+  .hub-hero-char { height: 170px; }
+  .hub-hero-char.rio { height: 162px; }
+  .hub-hero-spirit.kd { top: 150px; }
+  .hub-hero-spirit.kr { top: 156px; }
+  .hub-today { grid-template-columns: 1fr; }
+  .hub-doors { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hub-door-body b { font-size: 14.5px; }
+  .hub-door-body small { font-size: 11px; }
+  .hub-tiles { grid-template-columns: 1fr; }
+  .hub-cat-head { height: 140px; }
+  .hub-cat-title h1 { font-size: 24px; }
+}
+@media (max-width: 700px) { .hub-door-img { aspect-ratio: 16 / 10; } }

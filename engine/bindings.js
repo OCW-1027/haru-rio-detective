@@ -59,7 +59,7 @@ loadState();
 document.getElementById('btnStart').onclick = () => {
   initAudio();
   playBGM('title');
-  Hub.open();  // v2 P4: 허브(ハル探偵事務所)로
+  Hub.home();  // 허브(ハル探偵事務所) 메인으로
 };
 
 document.getElementById('btnBackTitle').onclick = () => { stopVoice(); Hub.open(); };
