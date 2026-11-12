@@ -141,7 +141,7 @@ function showEngMysteryPuzzle() {
           b.classList.add('wrong');
           sfx('wrong');
           State.stats.totalWrong++;
-          showModal('🤔', 'ちがうかも…', o.why, [{text:'もういちど', cb:closeModal}], 'fail');
+          showModal('🤔', '違うかも…', o.why, [{text:'もういちど', cb:closeModal}], 'fail');
           setTimeout(() => b.classList.remove('wrong'), 800);
         }
       };
@@ -171,7 +171,7 @@ function showEngMysteryPuzzle() {
       } else {
         sfx('wrong');
         State.stats.totalWrong++;
-        showModal('🤔', 'ちがうみたい…', 'もう一度 がんばろう!', [{text:'OK', cb:closeModal}], 'fail');
+        showModal('🤔', '違うみたい…', 'もう一度 がんばろう!', [{text:'OK', cb:closeModal}], 'fail');
       }
     };
   }
@@ -199,7 +199,7 @@ function finishEngMystery() {
   saveState();
   sfx('chime');
   triggerConfetti();
-  showModal('🏆', engCh.title + ' クリア!', '英語と 推理を 両方 つかったね!\nすごい!',
+  showModal('🏆', engCh.title + ' クリア!', '英語と 推理を 両方 使ったね!\nすごい!',
     [{text:'もくじへ', cb:() => { closeModal(); buildChapterGrid(); showPage('pageSelect'); }}], 'success');
 }
 
@@ -248,7 +248,7 @@ function showPuzzle() {
         const idx = parseInt(el.dataset.idx);
         const s = p.suspects[idx];
         if (s.correct) onCorrect();
-        else { sfx('wrong'); showModal('🤔','ちがうかも…','「'+s.alibi+'」と言ってるね。\n他を考えてみよう。',[{text:'もういちど', cb:closeModal}],'fail'); }
+        else { sfx('wrong'); showModal('🤔','違うかも…','「'+s.alibi+'」と言ってるね。\n他を考えてみよう。',[{text:'もういちど', cb:closeModal}],'fail'); }
       };
     });
   } else if (p.type === 'timetable') {
@@ -380,7 +380,7 @@ function onCorrect() {
 
 function onWrong() {
   sfx('wrong');
-  showModal('😅', 'ちがうみたい…', 'もう一度 ヒントを 読んで みよう!', [{text:'もういちど', cb:closeModal}], 'fail');
+  showModal('😅', '違うみたい…', 'もう一度 ヒントを 読んで みよう!', [{text:'もういちど', cb:closeModal}], 'fail');
 }
 
 function afterPuzzle() {
@@ -399,11 +399,11 @@ function finishChapter() {
   if (isLastChapter) {
     // 15장 클리어 후에도 마지막 관문 (보스 관문)
     sfx('chime');
-    showModal('🏆','第' + (State.currentChapter + 1) + '章 クリア!','つぎは 最終関門だ!\n5問 ぜんぶ 正解で クリア!',
+    showModal('🏆','第' + (State.currentChapter + 1) + '章 クリア!','次は 最終関門だ!\n5問 全部 正解で クリア!',
       [{text:'最終関門へ', cb:() => { closeModal(); startGate(State.currentChapter); }}], 'success');
   } else {
     sfx('chime');
-    showModal('⭐', '第' + (State.currentChapter + 1) + '章 クリア!', 'つぎは 関門 クイズ!\n5問 ぜんぶ 正解で 次の 章が 開く!',
+    showModal('⭐', '第' + (State.currentChapter + 1) + '章 クリア!', '次は 関門 クイズ!\n5問 全部 正解で 次の 章が 開く!',
       [{text:'関門へ →', cb:() => { closeModal(); startGate(State.currentChapter); }},
        {text:'あとで', cb:() => { closeModal(); buildChapterGrid(); showPage('pageSelect'); }}], 'success');
   }
@@ -609,7 +609,7 @@ function showSpellPuzzle(q) {
       sfx('wrong');
       State.stats.totalWrong++;
       addWrongWord(wordItem);
-      showModal('😅', 'ちがうみたい','正しいスペル: ' + word, [{text:'OK', cb:() => {
+      showModal('😅', '違うみたい','正しいスペル: ' + word, [{text:'OK', cb:() => {
         closeModal();
         Array.from(slots.children).forEach(s => { s.textContent = ''; s.classList.remove('placed'); });
         bank.querySelectorAll('.bank-letter').forEach(b => b.classList.remove('used'));
