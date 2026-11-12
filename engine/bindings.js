@@ -71,6 +71,7 @@ document.getElementById('btnIndianBack').onclick = () => { IndianMath.stop(); Hu
 document.getElementById('btnParentBack').onclick = () => { Hub.open(); };
 document.getElementById('btnBadgesBack').onclick = () => { Hub.open(); };
 document.getElementById('btnWQBack').onclick = () => { Hub.open(); };
+document.getElementById('btnNBBack').onclick = () => { Hub.open(); };
 document.getElementById('btnMwBack').onclick = () => { MathWorld.stop(); Hub.open(); };
 document.getElementById('btnStoryBack').onclick = () => { MainStory.stop(); Hub.open(); };
 document.getElementById('btnHubBack').onclick = () => { stopVoice(); showPage('pageTitle'); };

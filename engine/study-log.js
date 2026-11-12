@@ -12,7 +12,7 @@ const Study = (function () {
     pageEng: 'english', pageWriting: 'english', pageGrammar: 'english', pageComposition: 'english', pagePhraseDict: 'english', pageDaily: 'english', pageNews: 'english', pageCompound: 'english',
     pageScience: 'science', pageScienceList: 'science', pageScientists: 'science', pageScientistsLearn: 'science',
     pageWorld: 'geo', pageWQ: 'geo', pageJapanTrip: 'geo', pageHist: 'hist', pageTimeTravel: 'hist', pageSoc: 'soc', pageNews2: 'soc', pageJustice: 'soc', pageMon: 'money', pageBiz: 'biz', pageLit: 'lit',
-    pageGame: 'game', pageFreeQuiz: 'game', pageGate: 'game',
+    pageNewsBox: 'english', pageGame: 'game', pageFreeQuiz: 'game', pageGate: 'game',
   };
   const NAME = {
     eiken: '英検道場', indian: 'インド式 計算', mathw: '世界の 算数道場', math: '算数', chase: '世界追跡', lab: 'ラボ探偵', weather: 'お天気',
