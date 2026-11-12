@@ -126,6 +126,9 @@
 .kk-mini { width: 110px; height: 110px; margin: 8px auto 0; }
 .kk-next { display: block; width: 100%; margin-top: 10px; border: none; background: #2b2b2b; color: #fff6e8; border-radius: 8px; padding: 12px; font-family: 'RocknRoll One'; font-size: 16px; }
 
+.kk-kousei-key { font-size: 12.5px; line-height: 1.55; background: #f8f1e2; border-radius: 6px; padding: 8px 10px; margin: -4px 0 12px; color: #4a4336; }
+.kk-kousei-key b { color: #c8332b; }
+
 /* 手書き */
 .kk-slots { display: flex; justify-content: center; gap: 6px; margin: 6px 0 4px; flex-wrap: wrap; }
 .kk-slot { width: 52px; height: 52px; border: 2px solid #d9cfb8; border-radius: 6px; background: #fff; font-family: 'Klee One'; font-weight: 600; font-size: 34px; line-height: 48px; text-align: center; color: #2b2b2b; }

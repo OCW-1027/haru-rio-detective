@@ -22,12 +22,17 @@ const Kanken = (function () {
     okuri: { name: '送りがな', icon: '🌱', note: '正しい 送りがなは?' },
     onkun: { name: '音と訓', icon: '🔤', note: '音読み? 訓読み?' },
     taigi: { name: '対義語', icon: '↔️', note: '反対の 意味の ことば' },
+    ruigi: { name: '類義語', icon: '🤝', note: '似た 意味の ことば' },
+    kousei: { name: '熟語の 構成', icon: '🧱', note: 'どんな 組み立て?' },
     douon: { name: '同音異字', icon: '🔁', note: '同じ 読みの 漢字を 使い分け' },
     sanji: { name: '三字熟語', icon: '🧩', note: '□に 入る 漢字は?' },
     bushu: { name: '部首', icon: '🏷️', note: '部首と 部首名' },
   };
   // 本番形式: [分野, 問題数, 1問の 点]  (合計 200点に 換算・140点以上が 合格の めやす)
   const MOCK = [['read', 20, 1], ['bushu', 10, 1], ['stroke', 10, 1], ['okuri', 10, 2], ['onkun', 10, 1], ['taigi', 10, 2], ['douon', 10, 2], ['sanji', 10, 2], ['write', 20, 2]];
+  const ORDER = ['read', 'write', 'stroke', 'okuri', 'onkun', 'taigi', 'ruigi', 'kousei', 'douon', 'sanji', 'bushu'];
+  const ARR = { okuri: 'OKURI', onkun: 'ONKUN', taigi: 'TAIGI', ruigi: 'RUIGI', kousei: 'KOUSEI', douon: 'DOUON', sanji: 'SANJI', bushu: 'BUSHU' };
+  const KOUSEI = { ア: '同じような 意味の 字を 重ねた もの (例: 岩石)', イ: '反対や 対の 意味の 字を 重ねた もの (例: 高低)', ウ: '上の 字が 下の 字を 説明 (修飾) して いる もの (例: 洋画)', エ: '下の 字が 「〜を」「〜に」に あたる もの (例: 着席 = 席に 着く)' };
   let lv = 7, run = null, writers = [];
   const HW = () => typeof HanziWriter !== 'undefined';
 
@@ -133,6 +138,19 @@ const Kanken = (function () {
     return finish({ key: 'onkun:' + i, sec: 'onkun', q: '<div class="kk-big">' + esc(k) + '<small>(' + esc(r) + ')</small></div><div class="kk-ask">この 読み方は 音読み? 訓読み?</div>', opts: [t + '読み', (t === '音' ? '訓' : '音') + '読み'],
       exp: '「' + esc(r) + '」は <b>' + t + '読み</b>。' + (t === '音' ? '音読みは 中国から 伝わった 読み方で、それだけ 聞いても 意味が わかりにくい。' : '訓読みは 漢字に 日本語の 意味を あてた 読み方で、聞くと 意味が わかる。'), fixed: true });
   }
+  function secs() { const Lv = L(); return ORDER.filter(s => !ARR[s] || (Lv[ARR[s]] && Lv[ARR[s]].length)); }
+  function mockPlan() { return (L() && L().mock) || MOCK; }
+  function ruigiItem(i) {
+    const [a, b] = split(L().RUIGI[i]);
+    const others = shuffle(L().RUIGI.filter((x, j) => j !== i).map(x => split(x)[Math.random() < 0.5 ? 0 : 1]));
+    const opts = [b]; others.forEach(x => { if (opts.length < 4 && opts.indexOf(x) < 0 && x !== a) opts.push(x); });
+    return finish({ key: 'ruigi:' + i, sec: 'ruigi', q: '<div class="kk-big">' + esc(a) + '</div><div class="kk-ask">似た 意味の ことば (類義語) は?</div>', opts: opts, exp: '<b>' + esc(a) + ' ≒ ' + esc(b) + '</b>', big: true });
+  }
+  function kouseiItem(i) {
+    const [w, t] = split(L().KOUSEI[i]);
+    return { key: 'kousei:' + i, sec: 'kousei', q: '<div class="kk-big">' + esc(w) + '</div><div class="kk-ask">この 熟語の 組み立ては?</div><div class="kk-kousei-key">' + Object.keys(KOUSEI).map(x => '<div><b>' + x + '</b> ' + esc(KOUSEI[x]) + '</div>').join('') + '</div>',
+      opts: ['ア', 'イ', 'ウ', 'エ'], ans: 'アイウエ'.indexOf(t), exp: '<b>' + esc(w) + '</b> → ' + t + ': ' + esc(KOUSEI[t].replace(/ \(例.*\)/, '')), big: true };
+  }
   function taigiItem(i) {
     const [a, b] = split(L().TAIGI[i]);
     const others = shuffle(L().TAIGI.filter((x, j) => j !== i).map(x => split(x)[Math.random() < 0.5 ? 0 : 1]));
@@ -181,6 +199,8 @@ const Kanken = (function () {
     else if (sec === 'okuri') take(Lv.OKURI.length, okuriItem);
     else if (sec === 'onkun') take(Lv.ONKUN.length, onkunItem);
     else if (sec === 'taigi') take(Lv.TAIGI.length, taigiItem);
+    else if (sec === 'ruigi') take(Lv.RUIGI.length, ruigiItem);
+    else if (sec === 'kousei') take(Lv.KOUSEI.length, kouseiItem);
     else if (sec === 'douon') take(Lv.DOUON.length, j => blankItem('douon', j, Lv.DOUON, '〔 〕の カタカナに あう 漢字は?'));
     else if (sec === 'sanji') take(Lv.SANJI.length, j => blankItem('sanji', j, Lv.SANJI, '〔 〕に 入る 漢字は?'));
     else if (sec === 'bushu') take(Lv.BUSHU.length, bushuItem);
@@ -196,6 +216,8 @@ const Kanken = (function () {
       if (sec === 'okuri') return Lv.OKURI[i] ? okuriItem(i) : null;
       if (sec === 'onkun') return Lv.ONKUN[i] ? onkunItem(i) : null;
       if (sec === 'taigi') return Lv.TAIGI[i] ? taigiItem(i) : null;
+      if (sec === 'ruigi') return Lv.RUIGI && Lv.RUIGI[i] ? ruigiItem(i) : null;
+      if (sec === 'kousei') return Lv.KOUSEI && Lv.KOUSEI[i] ? kouseiItem(i) : null;
       if (sec === 'douon') return Lv.DOUON[i] ? blankItem('douon', i, Lv.DOUON, '〔 〕の カタカナに あう 漢字は?') : null;
       if (sec === 'sanji') return Lv.SANJI[i] ? blankItem('sanji', i, Lv.SANJI, '〔 〕に 入る 漢字は?') : null;
       if (sec === 'bushu') return Lv.BUSHU[i] ? bushuItem(i) : null;
@@ -239,6 +261,7 @@ const Kanken = (function () {
   }
 
   function menu() {
+    data().lastLv = lv; save();
     const Lv = L(), cnt = newKanji().length, m = mastered(), weak = weakKeys().length;
     const best = (data().mock[lv] || {}).best;
     let h = '<div class="kk-top"><button class="kk-back" id="kkHome">← 級を えらぶ</button><b>' + lv + '級</b><span>' + LV_TARGET[lv] + '</span></div>';
@@ -247,10 +270,10 @@ const Kanken = (function () {
     h += '<div class="kk-main-btns">';
     h += '<button class="kk-mbtn card" id="kkCards"><span>📇</span><b>漢字カード</b><small>書き順 アニメ・例文</small></button>';
     if (HW()) h += '<button class="kk-mbtn hw" id="kkHW"><span>✍️</span><b>手書き 書き取り</b><small>指で 書いて 判定</small></button>';
-    h += '<button class="kk-mbtn mock" id="kkMock"><span>⏱️</span><b>本番形式</b><small>' + MOCK.reduce((a, x) => a + x[1], 0) + '問 · 200点</small></button>';
+    h += '<button class="kk-mbtn mock" id="kkMock"><span>⏱️</span><b>本番形式</b><small>' + mockPlan().reduce((a, x) => a + x[1], 0) + '問 · 200点</small></button>';
     h += '<button class="kk-mbtn weak" id="kkWeak"' + (weak ? '' : ' disabled') + '><span>❗</span><b>苦手 復習</b><small>' + weak + '問</small></button>';
     h += '</div><h2 class="kk-h2">分野別 ドリル <small>(10問ずつ)</small></h2><div class="kk-secgrid">';
-    ['read', 'write', 'stroke', 'okuri', 'onkun', 'taigi', 'douon', 'sanji', 'bushu'].forEach(s => {
+    secs().forEach(s => {
       h += '<button class="kk-sec" data-s="' + s + '"><span>' + SEC[s].icon + '</span><b>' + SEC[s].name + '</b><small>' + SEC[s].note + '</small></button>';
     });
     h += '</div><label class="kk-set"><input type="checkbox" id="kkInput"' + (data().set.input ? ' checked' : '') + '> 読みは 自分で 入力して 答える (本番と 同じ)</label>';
@@ -333,7 +356,7 @@ const Kanken = (function () {
     start('❗ 苦手 復習', items, 'weak');
   }
   function startMock() {
-    const items = []; MOCK.forEach(([s, n, p]) => gen(s, n).forEach(it => { it.pts = p; it.part = s; items.push(it); }));
+    const items = []; mockPlan().forEach(([s, n, p]) => gen(s, n).forEach(it => { it.pts = p; it.part = s; items.push(it); }));
     start('⏱️ ' + lv + '級 本番形式', items, 'mock');
   }
   function start(title, items, mode) { run = { title: title, items: items, i: 0, ok: 0, mode: mode, res: [] }; ask(); }
@@ -355,7 +378,7 @@ const Kanken = (function () {
     if (svg) strokeData(svg.dataset.k).then(d => { svg.innerHTML = strokeSVG(d, +svg.dataset.s); }).catch(() => { svg.textContent = svg.dataset.k; });
     if (useInput) {
       const inp = $('kkIn'); setTimeout(() => inp.focus(), 50);
-      const go = () => { const v = k2h(inp.value.trim().replace(/\s/g, '')); if (!v) return; answer(v === it.input, null, v); };
+      const go = () => { const v = k2h(inp.value.trim().replace(/\s/g, '')); if (!v) return; answer(v === k2h(it.input), null, v); };
       $('kkOk').onclick = go; inp.onkeydown = e => { if (e.key === 'Enter') go(); };
       $('kkIdk').onclick = () => answer(false, null, '');
     } else $('kkArea').querySelectorAll('.kk-opt').forEach(b => b.onclick = () => answer(+b.dataset.j === it.ans, +b.dataset.j));
@@ -452,7 +475,7 @@ const Kanken = (function () {
       const score = Math.round(raw / max * 200), pass = score >= 140;
       const m = data().mock[lv] || (data().mock[lv] = {}); m.best = Math.max(m.best || 0, score); m.last = (m.last || []).concat([[Date.now(), score]]).slice(-10); save();
       h += '<div class="kk-score' + (pass ? ' pass' : '') + '"><b>' + score + '</b><span>/ 200点</span></div><div class="kk-verdict">' + (pass ? '🌸 合格ライン 突破!' : '合格の めやすは 140点。あと ' + (140 - score) + '点!') + '</div><table class="kk-tbl">';
-      MOCK.forEach(([s]) => { const p = per[s]; if (p) h += '<tr><td>' + SEC[s].icon + ' ' + SEC[s].name + '</td><td>' + p[0] + ' / ' + p[1] + '</td><td><div class="kk-bar mini"><i style="width:' + Math.round(p[0] / p[1] * 100) + '%"></i></div></td></tr>'; });
+      mockPlan().forEach(([s]) => { const p = per[s]; if (p) h += '<tr><td>' + SEC[s].icon + ' ' + SEC[s].name + '</td><td>' + p[0] + ' / ' + p[1] + '</td><td><div class="kk-bar mini"><i style="width:' + Math.round(p[0] / p[1] * 100) + '%"></i></div></td></tr>'; });
       h += '</table>';
     } else {
       h += '<div class="kk-score' + (run.ok >= n * 0.8 ? ' pass' : '') + '"><b>' + run.ok + '</b><span>/ ' + n + '問</span></div><div class="kk-verdict">' + (run.ok === n ? '💮 全問 正解!' : run.ok >= n * 0.8 ? '🌸 よく できました!' : '💪 苦手 復習で もう一度!') + '</div>';
@@ -466,7 +489,10 @@ const Kanken = (function () {
     $('kkMenu').onclick = () => { sfx('click'); menu(); };
   }
 
-  function stats() { const d = data(); let n = 0; Object.keys(d.rec).forEach(k => { if (d.rec[k][2] === 1) n++; }); const save = lv; lv = 7; const m = mastered(); lv = save; return { solved: n, mastered7: m, best: (d.mock[7] || {}).best }; }
+  function stats() {
+    const d = data(); let n = 0; Object.keys(d.rec).forEach(k => { if (d.rec[k][2] === 1) n++; });
+    const save = lv; lv = d.lastLv || 7; const out = { solved: n, lv: lv, mastered: L() ? mastered() : 0, total: newKanji().length, best: (d.mock[lv] || {}).best }; lv = save; return out;
+  }
   // 保護者レポート用: 級ごとの 覚えた字数・模試・分野別 (最後の 答えが 正解の 割合)
   function report() {
     const d = data(); if (!Object.keys(d.rec).length) return '';
