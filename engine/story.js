@@ -141,6 +141,7 @@ function showEngMysteryPuzzle() {
           b.classList.add('wrong');
           sfx('wrong');
           State.stats.totalWrong++;
+          try { const mi = ENG_MYSTERY_STORIES.indexOf(engCh.story); if (mi >= 0) ReviewEngine.record('story', 1000 + mi, 0); } catch (e) {}
           showModal('🤔', '違うかも…', o.why, [{text:'もういちど', cb:closeModal}], 'fail');
           setTimeout(() => b.classList.remove('wrong'), 800);
         }
@@ -248,7 +249,7 @@ function showPuzzle() {
         const idx = parseInt(el.dataset.idx);
         const s = p.suspects[idx];
         if (s.correct) onCorrect();
-        else { sfx('wrong'); showModal('🤔','違うかも…','「'+s.alibi+'」と言ってるね。\n他を考えてみよう。',[{text:'もういちど', cb:closeModal}],'fail'); }
+        else { sfx('wrong'); try { ReviewEngine.record('story', State.currentChapter, 0); } catch (e) {} showModal('🤔','違うかも…','「'+s.alibi+'」と言ってるね。\n他を考えてみよう。',[{text:'もういちど', cb:closeModal}],'fail'); }
       };
     });
   } else if (p.type === 'timetable') {

@@ -42,6 +42,7 @@ const ReviewEngine = (function () {
   function dueCount(series) { return due(series).length; }
   function question(r) {
     if (r.s === 'scientists') return sciQuestion(r);
+    if (r.s === 'story') return storyQuestion(r);
     const eng = CaseEngine.get(r.s);
     const c = eng && eng.cfg.story[r.c];
     const step = c && c.steps && c.steps[r.q];
@@ -59,6 +60,25 @@ const ReviewEngine = (function () {
     const ans = st.options.findIndex(o => o.isCorrect); if (ans < 0) return null;
     const exp = (st.options[ans].response || []).map(l => typeof l === 'string' ? l : (l.text || '')).filter(Boolean).join(' ');
     return { c: c, step: { title: st.title || ('推理 ' + (r.q + 1)), puzzle: { prompt: st.question, options: st.options.map(o => o.label), answer: ans, explanation: exp } }, title: '偉人科学者ファイル' };
+  }
+  // 名探偵物語 (独自エンジン): c < 1000 = 章の 真犯人 推理, 1000〜 = 英語推理, 2000〜 = 関門 クイズ (カテゴリ番号 + 問題番号)
+  function storyQuestion(r) {
+    const T = 'ハル&リオの 名探偵物語';
+    if (r.c >= 2000) {
+      const cat = typeof QUIZ_CATEGORIES !== 'undefined' && QUIZ_CATEGORIES[r.c - 2000];
+      const q = cat && cat.data[r.q]; if (!q || !q.opts) return null;
+      return { c: { title: '関門 クイズ' }, step: { title: cat.label, puzzle: { prompt: q.q, options: q.opts, answer: q.a, explanation: q.exp || ('正解は「' + q.opts[q.a] + '」') } }, title: T };
+    }
+    if (r.c >= 1000) {
+      const s = typeof ENG_MYSTERY_STORIES !== 'undefined' && ENG_MYSTERY_STORIES[r.c - 1000];
+      const p = s && s.puzzle; if (!p || p.type !== 'eng_choice') return null;
+      const ans = p.options.findIndex(o => o.correct); if (ans < 0) return null;
+      return { c: { title: s.title }, step: { title: '英語で 推理', puzzle: { prompt: p.question, options: p.options.map(o => o.text), answer: ans, explanation: p.options[ans].why || '' } }, title: T };
+    }
+    const ch = typeof STORY !== 'undefined' && STORY[r.c];
+    const p = ch && ch.puzzle; if (!p || p.type !== 'final' || !p.suspects) return null;
+    const ans = p.suspects.findIndex(s => s.correct); if (ans < 0) return null;
+    return { c: { title: '第' + ch.id + '章 ' + ch.title }, step: { title: '真犯人 推理', puzzle: { prompt: (p.title || '').replace(/^🔍\s*/, '') + ' (ヒント: ' + (p.hint || '') + ')', options: p.suspects.map(s => s.name + '「' + s.alibi + '」'), answer: ans, explanation: p.explanation || '' } }, title: T };
   }
   function answer(r, ok) {
     if (ok) {

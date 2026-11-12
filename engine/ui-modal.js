@@ -70,6 +70,14 @@ function buildChapterGrid() {
   grid.appendChild(statBar);
 
   if (State.currentTab === 'story') {
+    let dueN = 0; try { dueN = ReviewEngine.dueCount('story'); } catch (e) {}
+    if (dueN > 0) {
+      const rv = document.createElement('div');
+      rv.style.cssText = 'grid-column:1/-1;text-align:center;';
+      rv.innerHTML = '<button class="v2-review-btn" id="storyReviewBtn">🔁 間違えた 問題を 復習 (' + dueN + '問)</button>';
+      rv.querySelector('button').onclick = () => { sfx('click'); ReviewEngine.open('story', () => { buildChapterGrid(); }); };
+      grid.appendChild(rv);
+    }
     STORY.forEach((ch, i) => {
       // v27: 이전 장 클리어 + 이전 장 관문 통과(15장은 14장까지)가 조건
       const locked = !UNLOCK_ALL && i > 0 && (!State.cleared[i - 1] || !State.gateCleared[i - 1]);

@@ -20,8 +20,8 @@ function startGate(chapterIdx) {
   GateState.chapterIdx = chapterIdx;
   // 모든 카테고리에서 무작위 5문제 선택
   const allQs = [];
-  QUIZ_CATEGORIES.forEach(c => {
-    c.data.forEach(q => allQs.push({ ...q, cat: c.label }));
+  QUIZ_CATEGORIES.forEach((c, ci) => {
+    c.data.forEach((q, qi) => allQs.push({ ...q, cat: c.label, ci: ci, qi: qi }));
   });
   // 셔플 후 5개
   for (let i = allQs.length - 1; i > 0; i--) {
@@ -143,6 +143,7 @@ function renderGate() {
       });
       const ok = chosen === correct;
       GateState.results[nextIdx] = ok ? 'correct' : 'wrong';
+      if (!ok && q.ci != null) { try { ReviewEngine.record('story', 2000 + q.ci, q.qi); } catch (e) {} }
       if (ok) sfx('correct'); else sfx('wrong');
       // 피드백
       const fb = document.getElementById('gateFeedback');
