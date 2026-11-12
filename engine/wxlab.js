@@ -580,6 +580,7 @@ const WxLab = (function () {
     };
   }
 
+  function report() { const d = data(); const rows = MODS.filter(m => d.best[m.id] != null); if (!rows.length) return ''; return '<table class="pr-tbl"><thead><tr><th>モジュール</th><th>最高点</th></tr></thead><tbody>' + rows.map(m => '<tr><th>' + m.icon + ' ' + m.name + '</th><td>' + d.best[m.id] + ' / 10</td></tr>').join('') + '</tbody></table>'; }
   function stats() { const d = data(); const v = MODS.map(m => d.best[m.id]).filter(x => x != null); return { done: v.length, sum: v.reduce((a, b) => a + b, 0) }; }
-  return { open: open, stats: stats, _gen: GEN, _P: P, _wind: wind, _pattern: pattern, _mapSVG: mapSVG };
+  return { open: open, stats: stats, report: report, _gen: GEN, _P: P, _wind: wind, _pattern: pattern, _mapSVG: mapSVG };
 })();
