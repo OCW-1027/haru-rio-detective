@@ -147,13 +147,13 @@ const Hub = (function () {
     h += '<button class="hub-story s2" id="hubStory2"><span class="hub-story-k">シーズン2</span><b>白紙の ページ</b><small class="hub-story-t">怪盗ブランクの 正体</small><span class="hub-story-bar"><span style="width:' + (s2g / 6 * 100) + '%"></span></span><small>真実の カケラ ' + s2g + ' / 6</small></button>';
     h += '</section>';
 
-    // カテゴリ
-    h += '<h2 class="hub-h">🚪 メニュー</h2><section class="hub-doors">';
+    // カテゴリ: 見出し (タップで くわしい 画面) + 中身を すべて ボタンで 表示
     CATS.forEach(c => {
-      const its = all.filter(x => x.cat === c.id), nNew = its.filter(x => !S[x.id]).length;
-      h += '<button class="hub-door" data-cat="' + c.id + '" style="--dc:' + c.col + '"><span class="hub-door-img" style="background-image:url(' + c.img + ')"></span><span class="hub-door-body"><b><i>' + c.icon + '</i>' + c.name + '</b><small>' + c.sub + '</small></span>' + (nNew ? '<em class="hub-new-dot">NEW ' + nNew + '</em>' : '') + '</button>';
+      const its = all.filter(x => x.cat === c.id);
+      h += '<section class="hub-panel" style="--dc:' + c.col + '"><button class="hub-panel-head" data-cat="' + c.id + '"><span class="hub-panel-thumb" style="background-image:url(' + c.img + ')"></span><span class="hub-panel-t"><b>' + c.icon + ' ' + c.name + '</b><small>' + c.sub + '</small></span><span class="hub-panel-more">くわしく ›</span></button><div class="hub-chips">';
+      its.forEach(it => { h += '<button class="hub-mini" data-it="' + it.id + '">' + (it.img ? '<img src="' + it.img + '" alt="">' : '<span>' + it.icon + '</span>') + '<b>' + esc(it.name) + '</b>' + (!S[it.id] ? '<em class="hub-tag">NEW</em>' : '') + '</button>'; });
+      h += '</div></section>';
     });
-    h += '</section>';
     h += '<div class="hub-foot"><button class="hub-parent" id="hubParent">👪 保護者レポート</button><button class="hub-parent no-furi" id="hubFuri">ふりがな: ' + (window.Furigana && !Furigana.isOn() ? 'OFF' : 'ON') + '</button></div>';
     root.innerHTML = h;
 
