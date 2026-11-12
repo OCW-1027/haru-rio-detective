@@ -35,6 +35,7 @@
 <link rel="stylesheet" href="styles/hub.css">
 <link rel="stylesheet" href="styles/eiken.css">
 <link rel="stylesheet" href="styles/kanken.css">
+<link rel="stylesheet" href="styles/wxlab.css">
 <link rel="stylesheet" href="styles/world.css">
 <link rel="stylesheet" href="styles/weather-ch.css">
 <link rel="stylesheet" href="styles/lab.css">
@@ -71,6 +72,12 @@
   <div class="page eiken-page" id="pageEiken">
     <button class="back-btn ek-exit" id="btnEikenBack">← 事務所</button>
     <div class="ek-wrap" id="eikenArea"></div>
+  </div>
+
+  <!-- 天気図 実技道場 -->
+  <div class="page wxlab-page" id="pageWxLab">
+    <button class="back-btn wl-exit" id="btnWxLabBack">← 事務所</button>
+    <div class="wl-wrap" id="wlArea"></div>
   </div>
 
   <!-- 漢検道場 -->
@@ -797,6 +804,8 @@
 <script src="data/world-cities.js"></script>
 <script src="engine/world.js"></script>
 <script src="engine/weather-challenge.js"></script>
+<script src="data/wxmap-base.js"></script>
+<script src="engine/wxlab.js"></script>
 <script src="engine/lab.js"></script>
 <script src="data/indian-math.js"></script>
 <script src="engine/indian-math.js"></script>

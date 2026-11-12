@@ -1,0 +1,83 @@
+/* styles/wxlab.css — 天気図 実技道場 (空色・水彩) */
+.wxlab-page { background: linear-gradient(180deg, #e2f0f8 0%, #f6f1e3 100%); overflow-y: auto; padding: 0 0 56px; }
+.wl-wrap { width: 100%; max-width: 820px; margin: 0 auto; padding: 64px 16px 0; color: #24323f; }
+.wl-exit { position: absolute; top: 14px; left: 14px; z-index: 5; }
+.wxlab-page button { font-family: inherit; cursor: pointer; }
+
+.wl-hero { display: flex; align-items: center; gap: 14px; background: linear-gradient(135deg, #2a6f9c, #3d8fb8); color: #fff; border-radius: 20px; padding: 18px 18px; box-shadow: 0 8px 24px rgba(42, 111, 156, 0.25); }
+.wl-hero h1 { font-family: 'RocknRoll One'; font-size: 28px; margin: 2px 0 6px; }
+.wl-hero p { margin: 0; font-size: 13.5px; line-height: 1.6; opacity: 0.95; }
+.wl-kicker { font-size: 12.5px; opacity: 0.85; }
+.wl-hero-map { flex-shrink: 0; width: 150px; border-radius: 12px; overflow: hidden; border: 2px solid rgba(255,255,255,0.7); }
+.wl-hero-map svg { display: block; width: 100%; height: auto; }
+.wl-mods { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; margin-top: 16px; }
+.wl-mod { position: relative; text-align: left; display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; column-gap: 8px; background: #fff; border: 2px solid #cfe1ec; border-radius: 14px; padding: 12px; color: #24323f; }
+.wl-mod .wl-mi { grid-row: span 2; font-size: 30px; align-self: center; }
+.wl-mod b { font-family: 'RocknRoll One'; font-size: 16px; }
+.wl-mod small { font-size: 12px; color: #5a6a78; }
+.wl-mod em { position: absolute; top: 8px; right: 10px; font-style: normal; font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #e8f2f8; color: #2a6f9c; }
+.wl-mod em.lv-応用 { background: #fff1d6; color: #9a6400; }
+.wl-mod em.lv-予報士 { background: #fde4e1; color: #b0342a; }
+.wl-mod em.lv-自由 { background: #e6f5e6; color: #2f7a3a; }
+.wl-mod i { grid-column: 2; font-style: normal; font-size: 12px; color: #2a6f9c; margin-top: 2px; }
+.wl-mod.lab { border-style: dashed; }
+.wl-mod:active { transform: translateY(1px); }
+.wl-foot { font-size: 11.5px; color: #7a8894; margin-top: 18px; }
+
+.wl-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.wl-top b { font-family: 'RocknRoll One'; font-size: 18px; }
+.wl-top span { margin-left: auto; font-size: 13px; color: #5a6a78; }
+.wl-back { border: 1.5px solid #2a6f9c; background: #fff; border-radius: 999px; padding: 5px 12px; font-size: 13px; color: #2a6f9c; }
+.wl-bar { height: 6px; border-radius: 3px; background: #d6e4ec; overflow: hidden; margin-bottom: 12px; }
+.wl-bar i { display: block; height: 100%; background: #3d8fb8; transition: width .3s; }
+.wl-card { background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 16px rgba(42,111,156,0.12); }
+.wl-q { font-size: 16px; line-height: 1.7; margin-bottom: 10px; }
+.wl-q small { color: #5a6a78; font-size: 12.5px; }
+.wl-mapbox { margin: 6px auto 12px; max-width: 360px; border-radius: 10px; overflow: hidden; border: 1px solid #b9cfdc; }
+.wl-mapbox.wide { max-width: 100%; }
+.wl-map { display: block; width: 100%; height: auto; touch-action: manipulation; }
+.wl-iso { font-size: 8px; text-anchor: middle; fill: #333; paint-order: stroke; stroke: #dcebf4; stroke-width: 3px; font-family: sans-serif; }
+.wl-H { font-size: 17px; font-weight: 700; fill: #1f5fbf; text-anchor: middle; font-family: sans-serif; }
+.wl-L { font-size: 17px; font-weight: 700; fill: #c8332b; text-anchor: middle; font-family: sans-serif; }
+.wl-T { font-size: 15px; font-weight: 700; fill: #c8332b; text-anchor: middle; font-family: sans-serif; }
+.wl-cp { font-size: 9px; text-anchor: middle; fill: #222; font-family: sans-serif; paint-order: stroke; stroke: #fff; stroke-width: 2.5px; }
+.wl-st { font-size: 9px; fill: #222; font-family: sans-serif; paint-order: stroke; stroke: #fff; stroke-width: 2.5px; }
+.wl-star { font-size: 18px; text-anchor: middle; fill: #e8a400; paint-order: stroke; stroke: #fff; stroke-width: 2px; }
+.wl-mk { font-size: 11px; font-weight: 700; text-anchor: middle; fill: #c8332b; font-family: sans-serif; }
+.wl-sym { width: 72px; height: 72px; display: block; margin: 4px auto; background: #fff; border-radius: 8px; }
+.wl-sym.in { display: inline-block; width: 36px; height: 36px; vertical-align: middle; margin: 0; }
+.wl-mapbox .wl-sym, .wl-mapbox > .wl-sym { width: 120px; height: 120px; }
+.wl-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.wl-opt { border: 2px solid #cfe1ec; background: #f8fbfd; border-radius: 12px; padding: 10px 8px; font-size: 15px; color: #24323f; min-height: 52px; line-height: 1.4; }
+.wl-opt .wl-sym { width: 60px; height: 60px; background: transparent; }
+.wl-opt.ok { border-color: #2f8a4e; background: #e8f6ec; }
+.wl-opt.ng { border-color: #c8332b; background: #fdeaea; }
+.wl-opt:disabled { cursor: default; }
+.wl-fb { margin-top: 12px; padding: 12px 14px; border-radius: 12px; font-size: 14.5px; line-height: 1.7; }
+.wl-fb.ok { background: #eef8f0; border: 1.5px solid #9ccfaa; }
+.wl-fb.ng { background: #fdf0ee; border: 1.5px solid #e6a59f; }
+.wl-fb > b { font-family: 'RocknRoll One'; font-size: 16px; }
+.wl-next { display: block; width: 100%; margin-top: 10px; border: none; background: #2a6f9c; color: #fff; border-radius: 10px; padding: 12px; font-family: 'RocknRoll One'; font-size: 16px; }
+.wl-two { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.wl-two figure { margin: 0; }
+.wl-two figcaption { text-align: center; font-size: 12px; color: #2a6f9c; padding: 3px 0 5px; background: #f2f8fb; }
+.wl-desc { font-size: 17px; line-height: 2.1; background: #fbf8ef; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+.wl-fill { display: inline-block; min-width: 3.2em; text-align: center; border-bottom: 2.5px solid #9ab; margin: 0 2px; padding: 0 4px; line-height: 1.5; }
+.wl-fill.cur { border-color: #e8a400; background: #fff6dc; }
+.wl-fill.ok { border-color: #2f8a4e; color: #1f6a3a; font-weight: 600; }
+.wl-res { text-align: center; }
+.wl-score b { font-family: 'RocknRoll One'; font-size: 56px; color: #2a6f9c; }
+.wl-score span { font-size: 18px; color: #5a6a78; }
+.wl-rbtns { display: flex; gap: 8px; margin-top: 12px; }
+.wl-go { flex: 1; border: none; background: #2a6f9c; color: #fff; border-radius: 10px; padding: 12px; font-family: 'RocknRoll One'; font-size: 16px; }
+.wl-back2 { flex: 1; border: 2px solid #2a6f9c; background: #fff; color: #2a6f9c; border-radius: 10px; font-family: 'RocknRoll One'; font-size: 15px; }
+.wl-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.wl-tools button { border: 1.5px solid #9ab; background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 13.5px; }
+.wl-tools button.on { background: #2a6f9c; color: #fff; border-color: #2a6f9c; }
+.wl-labinfo { font-size: 14px; background: #f2f8fb; border-radius: 8px; padding: 8px 10px; }
+@media (max-width: 520px) {
+  .wl-hero { flex-direction: column; align-items: flex-start; }
+  .wl-hero-map { width: 100%; }
+  .wl-two { grid-template-columns: 1fr; }
+  .wl-opt { font-size: 14px; }
+}

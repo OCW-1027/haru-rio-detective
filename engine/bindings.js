@@ -64,6 +64,7 @@ document.getElementById('btnStart').onclick = () => {
 
 document.getElementById('btnBackTitle').onclick = () => { stopVoice(); Hub.open(); };
 document.getElementById('btnEikenBack').onclick = () => { Eiken.stop(); Hub.open(); };
+document.getElementById('btnWxLabBack').onclick = () => Hub.open();
 document.getElementById('btnKankenBack').onclick = () => { try { speechSynthesis.cancel(); } catch (e) {} Hub.open(); };
 document.getElementById('btnWorldBack').onclick = () => { WorldChase.stop(); Hub.open(); };
 document.getElementById('btnWxBack').onclick = () => { WeatherChallenge.stop(); Hub.open(); };

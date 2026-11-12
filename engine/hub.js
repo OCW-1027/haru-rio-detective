@@ -35,6 +35,7 @@ const Hub = (function () {
   // 학습·게임
   const STUDY = [
     { id: 'eiken', icon: '🥋', name: '英検道場', sub: '2級·準1級 単語·リスニング·作文', go: () => Eiken.open(), hot: true },
+    { id: 'wxlab', icon: '🗺️', name: '天気図 実技道場', sub: '等圧線・前線・気圧配置 → 予報士の 実技へ', go: () => WxLab.open(), hot: true },
     { id: 'kanken', icon: '🈴', name: '漢検道場', sub: '書き順 アニメ · 手書き 書き取り · 本番形式', go: () => Kanken.open(), hot: true },
     { id: 'newsbox', icon: '📰', name: '英語ニュース', sub: '海外の 子ども ニュース · 単語メモ クイズ', go: () => NewsBox.open(), hot: true },
     { id: 'eng', icon: '🔤', name: '英語', sub: '単語·文法·作文 (前からの 練習)', go: () => openList('eng', '🔤 英語') },
