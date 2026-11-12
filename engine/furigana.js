@@ -1,6 +1,7 @@
 /* engine/furigana.js — むずかしい 漢字に 自動で ふりがな (ルビ) を つける
  *
- * - 4年生 以上で 習う 漢字 (と 常用外の 漢字) を ふくむ 語に、画面に 表示された ときに <ruby> を つける。
+ * - 4年生 以上で 習う 漢字 (と 常用外の 漢字) を ふくむ 語に、画面に 表示された ときに 読みを つける。
+ *   表示は <f-r data-r="よみ"> + CSS の ::before (本文の 幅・改行・行の 高さは 変わらない。textContent にも 読みは 入らない)。
  * - 辞書は data/furigana-dict.json (tools/furigana/ (build_raw.py → finalize.py) で ゲーム内の 文章 全体から 作成)。
  *   { "縄文": [["縄文","じょうもん"]], "驚か": [["驚","おどろ"],"か"], ... }
  * - 元の データ (問題文・答え) は 変えない。表示だけ 変える ので 答え合わせには 影響しない。
@@ -9,7 +10,7 @@
 (function () {
   const KEY = 'harugame_furigana';
   const SKIP = new Set(['RUBY', 'RT', 'RP', 'SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'SELECT', 'OPTION', 'CODE', 'PRE', 'SVG', 'svg', 'NOSCRIPT', 'text']);
-  const SKIP_SEL = '.no-furi, [contenteditable="true"], .chat-modal, .chat-entry-btn, [class^="chat-"]';
+  const SKIP_SEL = 'f-r, f-w, .no-furi, [contenteditable="true"], .chat-modal, .chat-entry-btn, [class^="chat-"]';
   const HASK = /[一-鿿々]/;
   let IDX = null, ready = false, queue = new Set(), raf = 0;
 
@@ -17,11 +18,20 @@
   function apply() { document.documentElement.classList.toggle('furi-off', !on()); }
 
   function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  // <ruby> は 読みが 長いと 漢字の 間が 空いたり 行の 高さが 変わったり するので、
+  // 本文の 幅・行送りを 一切 変えない「上に 浮かせる ラベル」(::before + data-r) で 表示する。
+  // タグは 独自要素 <f-r> (画面側の CSS「… span {…}」などに 巻きこまれない ように)。
+  // 読みが 漢字より 長い ときは 横に 縮めて (--fs) となりと 重ならない ように する。
+  function span(base, rd) {
+    const room = base.length + 0.3, need = rd.length * 0.5;
+    const fs = need > room ? Math.max(0.55, room / need) : 1;
+    return '<f-r data-r="' + esc(rd) + '"' + (fs < 1 ? ' style="--fs:' + fs.toFixed(2) + '"' : '') + '>' + esc(base) + '</f-r>';
+  }
   function build(dict) {
     IDX = new Map();
     Object.keys(dict).forEach(sf => {
       const parts = dict[sf];
-      const html = parts.map(p => typeof p === 'string' ? esc(p) : '<ruby>' + esc(p[0]) + '<rt>' + esc(p[1]) + '</rt></ruby>').join('');
+      const html = parts.map(p => typeof p === 'string' ? esc(p) : span(p[0], p[1])).join('');
       const c = sf[0];
       if (!IDX.has(c)) IDX.set(c, []);
       IDX.get(c).push([sf, html]);
@@ -66,8 +76,22 @@
     const h = convert(t.nodeValue);
     if (h === null) return;
     const tpl = document.createElement('template');
-    tpl.innerHTML = h;
+    tpl.innerHTML = '<f-w>' + h + '</f-w>';   // 1つに まとめる (flex/grid の 中で 文字が 別々の 項目に 割れない ように)
+    const par = t.parentElement;
     t.parentNode.replaceChild(tpl.content, t);
+    roomFor(par);
+  }
+  // ふりがなが 上の 行に 重ならない よう、ふりがなを 含む ブロックの 行の 高さを 1.8 以上に そろえる
+  const done = new WeakSet();
+  function roomFor(el) {
+    for (let e = el; e && e !== document.body; e = e.parentElement) {
+      const cs = getComputedStyle(e);
+      if (cs.display === 'inline' || cs.display === 'contents') continue;
+      if (done.has(e)) return; done.add(e);
+      const fs = parseFloat(cs.fontSize) || 16, lh = cs.lineHeight === 'normal' ? fs * 1.25 : parseFloat(cs.lineHeight);
+      if (lh < fs * 1.75) e.classList.add('furi-lh');
+      return;
+    }
   }
 
   function flush() {
@@ -84,8 +108,8 @@
       processRoot(document.body);
       new MutationObserver(ms => {
         ms.forEach(m => {
-          if (m.type === 'characterData') { if (m.target.parentElement && m.target.parentElement.nodeName !== 'RT') enqueue(m.target); return; }
-          m.addedNodes.forEach(a => { if (a.nodeType === 1 && (a.nodeName === 'RUBY' || a.nodeName === 'RT')) return; enqueue(a); });
+          if (m.type === 'characterData') { if (m.target.parentElement && m.target.parentElement.nodeName !== 'RT' && m.target.parentElement.nodeName !== 'F-R') enqueue(m.target); return; }
+          m.addedNodes.forEach(a => { if (a.nodeType === 1 && (a.nodeName === 'RUBY' || a.nodeName === 'RT' || a.nodeName === 'F-R' || a.nodeName === 'F-W')) return; enqueue(a); });
         });
       }).observe(document.body, { childList: true, subtree: true, characterData: true });
     }).catch(e => console.warn('[furigana] dict load failed', e));
