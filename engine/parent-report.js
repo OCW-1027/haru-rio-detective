@@ -113,6 +113,7 @@ const ParentReport = (function () {
     h += '<section class="pr-card"><h3>📚 分野別</h3>' + (areas.length ? '<table class="pr-tbl pr-areas"><thead><tr><th>分野</th><th>時間</th><th>問題</th><th>正答率</th></tr></thead><tbody>' + areas.map(a => { const v = S.sum[a], p = pct(v[1], v[0]); return '<tr><th>' + esc(Study.NAME[a] || a) + '</th><td>' + fmtMin(v[2]) + '</td><td>' + v[0] + '</td><td class="' + tone(p) + '">' + (p == null ? '—' : p + '%') + '</td></tr>'; }).join('') + '</tbody></table>' : '<p class="pr-empty">この 期間の 記録は まだ ありません。</p>') + '</section>';
     h += '<section class="pr-card"><h3>💡 おすすめ</h3><ul class="pr-tips">' + tips(S7.sum, S7.days).map(t => '<li>' + esc(t) + '</li>').join('') + '</ul></section>';
     h += '<section class="pr-card"><h3>🇬🇧 英検道場 (これまでの 合計)</h3>' + eikenBlock() + '</section>';
+    try { const kb = typeof Kanken !== 'undefined' && Kanken.report(); if (kb) h += '<section class="pr-card"><h3>🈴 漢検道場</h3>' + kb + '</section>'; } catch (e) {}
     const ib = indianBlock(); if (ib) h += '<section class="pr-card"><h3>🇮🇳 インド式 計算道場</h3>' + ib + '</section>';
     const eb = ladderBlock(typeof ELAD !== 'undefined' ? ELAD : null); if (eb) h += '<section class="pr-card"><h3>🎒 小学 算数 ラダー</h3>' + eb + '</section>';
     const lb = ladderBlock(typeof LADDER !== 'undefined' ? LADDER : null); if (lb) h += '<section class="pr-card"><h3>📈 中学・高校 数学ラダー</h3>' + lb + '</section>';

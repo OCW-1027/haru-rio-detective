@@ -35,6 +35,7 @@ const Hub = (function () {
   // 학습·게임
   const STUDY = [
     { id: 'eiken', icon: '🥋', name: '英検道場', sub: '2級·準1級 単語·リスニング·作文', go: () => Eiken.open(), hot: true },
+    { id: 'kanken', icon: '🈴', name: '漢検道場', sub: '書き順 アニメ · 手書き 書き取り · 本番形式', go: () => Kanken.open(), hot: true },
     { id: 'newsbox', icon: '📰', name: '英語ニュース', sub: '海外の 子ども ニュース · 単語メモ クイズ', go: () => NewsBox.open(), hot: true },
     { id: 'eng', icon: '🔤', name: '英語', sub: '単語·文法·作文 (前からの 練習)', go: () => openList('eng', '🔤 英語') },
     { id: 'quiz', icon: '🧠', name: 'クイズ', sub: 'ニュース·熟語 クイズ', go: () => openList('quiz', '🧠 クイズ') },
@@ -148,6 +149,7 @@ const Hub = (function () {
     h += '<h2 class="hub-h">📚 学習室</h2><section class="hub-study">';
     STUDY.forEach(s => {
       let sub = s.sub;
+      if (s.id === 'kanken') { try { const ks = Kanken.stats(); if (ks.solved) sub = '7級 覚えた ' + ks.mastered7 + '/202字' + (ks.best != null ? ' · 模試 ' + ks.best + '点' : ''); } catch (e) {} }
       if (s.id === 'newsbox') { try { const ns = NewsBox.stats(); sub = (ns.today ? '✅ 今日 読んだ' : '📮 今日の ニュース') + ' · 単語 ' + ns.words + '語' + (ns.streak > 1 ? ' · 連続 ' + ns.streak + '日' : ''); } catch (e) {} }
       h += '<button class="hub-study-btn' + (s.hot ? ' hot' : '') + '" data-study="' + s.id + '"><span class="hub-study-icon">' + s.icon + '</span><span class="hub-study-name">' + s.name + '</span><span class="hub-study-sub">' + sub + '</span></button>';
     });

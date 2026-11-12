@@ -6,7 +6,7 @@
  */
 const Study = (function () {
   const AREA = {
-    pageEiken: 'eiken', pageIndian: 'indian', pageCodeLab: 'mathw', pageMathWorld: 'mathw', pageMath: 'math', pageMathLearn: 'math',
+    pageEiken: 'eiken', pageKanken: 'kanken', pageIndian: 'indian', pageCodeLab: 'mathw', pageMathWorld: 'mathw', pageMath: 'math', pageMathLearn: 'math',
     pageWorldChase: 'chase', pageLab: 'lab', pageWeatherCh: 'weather', pageWea: 'weather', pageWeaLearn: 'weather',
     pageStoryMain: 'story', pageStory: 'case', pageSelect: 'case', pagePuzzle: 'case',
     pageEng: 'english', pageWriting: 'english', pageGrammar: 'english', pageComposition: 'english', pagePhraseDict: 'english', pageDaily: 'english', pageNews: 'english', pageCompound: 'english',
@@ -15,11 +15,11 @@ const Study = (function () {
     pageNewsBox: 'english', pageGame: 'game', pageFreeQuiz: 'game', pageGate: 'game',
   };
   const NAME = {
-    eiken: '英検道場', indian: 'インド式 計算', mathw: '世界の 算数道場', math: '算数', chase: '世界追跡', lab: 'ラボ探偵', weather: 'お天気',
+    eiken: '英検道場', kanken: '漢検道場', indian: 'インド式 計算', mathw: '世界の 算数道場', math: '算数', chase: '世界追跡', lab: 'ラボ探偵', weather: 'お天気',
     story: 'メインストーリー', case: '推理 事件', english: '英語', science: '理科・偉人', geo: '世界地理', hist: '歴史', soc: '社会', money: 'お金',
     biz: 'ビジネス', lit: '文学', game: 'ゲーム・クイズ', other: 'その他',
   };
-  const EXPLICIT = { eiken: 1, indian: 1 };   // 엔진이 직접 Study.log 하는 영역 (sfx 자동 기록에서 제외)
+  const EXPLICIT = { eiken: 1, indian: 1, kanken: 1 };   // 엔진이 직접 Study.log 하는 영역 (sfx 자동 기록에서 제외)
   const KEEP_DAYS = 120;
   let lastAct = 0, minuteMark = 0, dirty = false;
 

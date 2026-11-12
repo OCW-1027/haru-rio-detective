@@ -34,6 +34,7 @@
 <link rel="stylesheet" href="styles/vocab-learn.css">
 <link rel="stylesheet" href="styles/hub.css">
 <link rel="stylesheet" href="styles/eiken.css">
+<link rel="stylesheet" href="styles/kanken.css">
 <link rel="stylesheet" href="styles/world.css">
 <link rel="stylesheet" href="styles/weather-ch.css">
 <link rel="stylesheet" href="styles/lab.css">
@@ -70,6 +71,12 @@
   <div class="page eiken-page" id="pageEiken">
     <button class="back-btn ek-exit" id="btnEikenBack">← 事務所</button>
     <div class="ek-wrap" id="eikenArea"></div>
+  </div>
+
+  <!-- 漢検道場 -->
+  <div class="page kanken-page no-furi" id="pageKanken">
+    <button class="back-btn kk-exit" id="btnKankenBack">← 事務所</button>
+    <div class="kk-wrap" id="kkArea"></div>
   </div>
 
   <!-- v2 新コンテンツ①: コラドン航空 世界追跡 -->
@@ -764,6 +771,10 @@
 <script src="data/eiken-interview.js"></script>
 <script src="engine/eiken-interview.js"></script>
 <script src="engine/eiken.js"></script>
+<script src="assets/vendor/hanzi-writer.min.js"></script>
+<script src="data/kanken-base.js"></script>
+<script src="data/kanken-7.js"></script>
+<script src="engine/kanken.js"></script>
 <script src="data/world-map.js"></script>
 <script src="data/world-cities.js"></script>
 <script src="engine/world.js"></script>

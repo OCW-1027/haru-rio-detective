@@ -1,0 +1,162 @@
+/* styles/kanken.css — 漢検道場 (和紙 · 墨 · 朱) */
+.kanken-page { background: #f6f0e1 radial-gradient(circle at 20% 10%, rgba(255,255,255,0.7), transparent 60%); overflow-y: auto; padding: 0 0 56px; }
+.kk-wrap { width: 100%; max-width: 760px; margin: 0 auto; padding: 64px 16px 0; color: #2b2b2b; }
+.kk-exit { position: absolute; top: 14px; left: 14px; z-index: 5; }
+.kanken-page button { font-family: inherit; cursor: pointer; }
+.kanken-page button:disabled { cursor: default; }
+
+/* ホーム */
+.kk-head { display: flex; align-items: center; gap: 14px; background: #fffaf0; border: 2px solid #2b2b2b; border-radius: 6px; padding: 16px 18px; box-shadow: 5px 5px 0 rgba(43,43,43,0.12); }
+.kk-head h1 { font-family: 'RocknRoll One'; font-size: 30px; margin: 0 0 4px; letter-spacing: 2px; }
+.kk-head p { margin: 0; font-size: 14px; color: #5a5245; }
+.kk-seal { flex-shrink: 0; width: 62px; height: 62px; border-radius: 8px; background: #c8332b; color: #fff6e8; font-family: 'Klee One'; font-weight: 600; font-size: 38px; display: flex; align-items: center; justify-content: center; transform: rotate(-4deg); box-shadow: inset 0 0 0 3px rgba(255,246,232,0.5); }
+.kk-lvgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 18px; }
+.kk-lv { position: relative; text-align: left; background: #fffdf7; border: 2px solid #d9cfb8; border-radius: 10px; padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 4px; color: #2b2b2b; }
+.kk-lv b { font-family: 'RocknRoll One'; font-size: 26px; }
+.kk-lv span { font-size: 12.5px; color: #6a6152; line-height: 1.5; }
+.kk-lv i { font-style: normal; font-size: 12px; color: #c8332b; }
+.kk-lv em { position: absolute; top: 10px; right: 10px; font-style: normal; font-size: 11px; background: #ebe3d0; color: #7a705e; padding: 2px 7px; border-radius: 999px; }
+.kk-lv.ready { border-color: #2b2b2b; box-shadow: 4px 4px 0 rgba(200,51,43,0.18); }
+.kk-lv.ready b { color: #c8332b; }
+.kk-lv:active { transform: translate(2px, 2px); box-shadow: none; }
+.kk-foot { margin-top: 22px; font-size: 11.5px; color: #8a8070; line-height: 1.6; }
+
+/* 共通 ヘッダー */
+.kk-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.kk-top b { font-family: 'RocknRoll One'; font-size: 19px; }
+.kk-top span { margin-left: auto; font-size: 13px; color: #7a705e; }
+.kk-back { border: 1.5px solid #2b2b2b; background: #fffdf7; border-radius: 999px; padding: 5px 12px; font-size: 13px; color: #2b2b2b; }
+.kk-bar { height: 10px; border-radius: 5px; background: #e6dcc6; overflow: hidden; }
+.kk-bar i { display: block; height: 100%; background: linear-gradient(90deg, #c8332b, #e0623a); border-radius: 5px; transition: width .3s; }
+.kk-bar.thin { height: 5px; margin: -4px 0 12px; }
+.kk-bar.mini { height: 7px; width: 90px; }
+
+/* 級メニュー */
+.kk-prog-card { background: #fffdf7; border: 2px solid #2b2b2b; border-radius: 8px; padding: 14px 16px; }
+.kk-prog-t { font-size: 15px; margin-bottom: 8px; }
+.kk-prog-t b { font-family: 'RocknRoll One'; font-size: 24px; color: #c8332b; }
+.kk-prog-t small { display: block; font-size: 11.5px; color: #8a8070; }
+.kk-prog-s { margin-top: 8px; font-size: 13.5px; }
+.kk-main-btns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 14px 0 6px; }
+.kk-mbtn { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 14px 8px; border-radius: 10px; border: 2px solid #2b2b2b; background: #fffdf7; color: #2b2b2b; box-shadow: 3px 3px 0 rgba(43,43,43,0.15); }
+.kk-mbtn span { font-size: 26px; }
+.kk-mbtn b { font-family: 'RocknRoll One'; font-size: 16px; }
+.kk-mbtn small { font-size: 12px; color: #6a6152; }
+.kk-mbtn.mock { background: #c8332b; color: #fff6e8; border-color: #8f1f19; }
+.kk-mbtn.mock small { color: #ffe1d6; }
+.kk-mbtn.weak:disabled { opacity: 0.45; }
+.kk-mbtn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: none; }
+.kk-h2 { font-family: 'RocknRoll One'; font-size: 17px; margin: 18px 0 8px; border-left: 6px solid #c8332b; padding-left: 8px; }
+.kk-h2 small { font-family: 'Klee One'; font-size: 12px; color: #7a705e; }
+.kk-secgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 8px; }
+.kk-sec { display: grid; grid-template-columns: 34px 1fr; grid-template-rows: auto auto; column-gap: 6px; text-align: left; background: #fffdf7; border: 1.5px solid #d9cfb8; border-radius: 8px; padding: 10px; color: #2b2b2b; }
+.kk-sec span { grid-row: span 2; font-size: 22px; align-self: center; }
+.kk-sec b { font-family: 'RocknRoll One'; font-size: 14px; }
+.kk-sec small { font-size: 11.5px; color: #7a705e; }
+.kk-sec:active { background: #f3e9d4; }
+.kk-set { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 13.5px; color: #4a4336; }
+.kk-set input { width: 18px; height: 18px; accent-color: #c8332b; }
+
+/* 漢字カード 一覧 */
+.kk-tip { font-size: 13px; color: #6a6152; margin: 0 0 10px; }
+.kk-kgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); gap: 6px; }
+.kk-k { aspect-ratio: 1; font-family: 'Klee One'; font-weight: 600; font-size: 30px; background: #fffdf7; border: 1.5px solid #d9cfb8; border-radius: 6px; color: #2b2b2b; padding: 0; }
+.kk-k.done { border-color: #c8332b; background: #fff1ea; position: relative; }
+.kk-k.done::after { content: '◎'; position: absolute; top: 1px; right: 3px; font-size: 10px; color: #c8332b; }
+
+/* 漢字カード */
+.kk-card { background: #fffdf7; border: 2px solid #2b2b2b; border-radius: 10px; padding: 16px; }
+.kk-grid-box { display: flex; justify-content: center; }
+.kk-writer, .kk-hwbox, .kk-mini { position: relative; background:
+  linear-gradient(#fff, #fff) padding-box;
+  border: 2px solid #c8332b; }
+.kk-writer { width: 260px; height: 260px; max-width: 100%; }
+.kk-writer::before, .kk-writer::after, .kk-hwbox::before, .kk-hwbox::after, .kk-mini::before, .kk-mini::after { content: ''; position: absolute; pointer-events: none; }
+.kk-writer::before, .kk-hwbox::before, .kk-mini::before { left: 50%; top: 0; bottom: 0; border-left: 1.5px dashed rgba(200,51,43,0.35); }
+.kk-writer::after, .kk-hwbox::after, .kk-mini::after { top: 50%; left: 0; right: 0; border-top: 1.5px dashed rgba(200,51,43,0.35); }
+.kk-writer svg, .kk-hwbox svg, .kk-mini svg { position: relative; z-index: 1; display: block; }
+.kk-plain { font-family: 'Klee One'; font-size: 180px; line-height: 256px; text-align: center; }
+.kk-meta { display: flex; justify-content: center; gap: 10px; margin: 10px 0; }
+.kk-meta span { background: #f3e9d4; border-radius: 999px; padding: 3px 12px; font-size: 13px; }
+.kk-cbtns { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.kk-cbtns button { border: 1.5px solid #2b2b2b; background: #fff; border-radius: 8px; padding: 7px 12px; font-size: 13.5px; color: #2b2b2b; }
+.kk-steps { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 12px; }
+.kk-step { width: 54px; text-align: center; font-size: 11px; color: #7a705e; }
+.kk-step svg { width: 54px; height: 54px; border: 1px solid #e0d6c0; background: #fff; border-radius: 4px; }
+.kk-svg { width: 100%; height: 100%; }
+.kk-ex { margin-top: 16px; border-top: 1.5px dashed #d9cfb8; padding-top: 10px; }
+.kk-ex h3 { font-family: 'RocknRoll One'; font-size: 15px; margin: 0 0 6px; }
+.kk-exrow { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; }
+.kk-exrow b { font-size: 18px; }
+.kk-exrow .kana { font-size: 13px; color: #8a8070; }
+.kk-exrow p { margin: 2px 0 0; font-size: 14px; line-height: 1.6; }
+.kk-say { flex-shrink: 0; border: none; background: #f3e9d4; border-radius: 999px; width: 32px; height: 32px; font-size: 15px; padding: 0; }
+.kk-nav { display: flex; justify-content: space-between; margin-top: 14px; }
+.kk-nav button { border: 1.5px solid #2b2b2b; background: #fff; border-radius: 8px; padding: 8px 16px; font-size: 14px; }
+.kk-nav button:disabled { opacity: 0.35; }
+
+/* 問題 */
+.kk-part { font-family: 'RocknRoll One'; font-size: 14px; color: #fff6e8; background: #2b2b2b; display: inline-block; padding: 4px 12px; border-radius: 4px; margin-bottom: 8px; }
+.kk-qcard { background: #fffdf7; border: 2px solid #2b2b2b; border-radius: 10px; padding: 18px 16px; box-shadow: 4px 4px 0 rgba(43,43,43,0.1); }
+.kk-sent { font-size: 20px; line-height: 2; text-align: center; }
+.kk-tgt { text-decoration: none; border-bottom: 3px solid #c8332b; padding: 0 2px; font-weight: 600; }
+.kk-tgt.kana { color: #c8332b; }
+.kk-big { font-family: 'Klee One'; font-weight: 600; font-size: 46px; text-align: center; line-height: 1.4; letter-spacing: 3px; }
+.kk-big.kana { font-size: 30px; }
+.kk-big small { display: block; font-size: 17px; letter-spacing: 0; color: #6a6152; font-weight: 400; }
+.kk-blank { display: inline-block; min-width: 1.3em; border: 2.5px solid #c8332b; border-radius: 4px; font-size: 0.42em; vertical-align: middle; padding: 2px 4px; color: #c8332b; letter-spacing: 0; line-height: 1.5; }
+.kk-svgbox { width: 200px; height: 200px; margin: 0 auto; background: #fff; border: 2px solid #c8332b; position: relative; }
+.kk-ask { text-align: center; font-size: 14.5px; color: #5a5245; margin: 10px 0 14px; }
+.kk-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kk-opt { border: 2px solid #d9cfb8; background: #fff; border-radius: 10px; padding: 12px 6px; font-size: 18px; color: #2b2b2b; min-height: 52px; }
+.kk-opts.big .kk-opt { font-family: 'Klee One'; font-weight: 600; font-size: 26px; }
+.kk-opt:active:not(:disabled) { background: #f3e9d4; }
+.kk-opt.ok { border-color: #2f8a4e; background: #e8f6ec; }
+.kk-opt.ng { border-color: #c8332b; background: #fdeaea; }
+.kk-inrow { display: flex; gap: 8px; }
+.kk-in { flex: 1; min-width: 0; font-size: 20px; padding: 10px 12px; border: 2px solid #2b2b2b; border-radius: 8px; font-family: inherit; background: #fff; }
+.kk-go { border: none; background: #c8332b; color: #fff; border-radius: 8px; padding: 10px 18px; font-family: 'RocknRoll One'; font-size: 16px; box-shadow: 0 3px 0 #8f1f19; }
+.kk-idk { margin-top: 8px; border: none; background: none; color: #7a705e; font-size: 13px; text-decoration: underline; }
+.kk-fb { margin-top: 14px; padding: 12px 14px; border-radius: 8px; font-size: 15px; line-height: 1.6; }
+.kk-fb.ok { background: #eef8f0; border: 1.5px solid #9ccfaa; }
+.kk-fb.ng { background: #fdf0ee; border: 1.5px solid #e6a59f; }
+.kk-fb > b { font-family: 'RocknRoll One'; font-size: 17px; }
+.kk-exp { margin-top: 4px; }
+.kk-exp .kk-say { width: 28px; height: 28px; font-size: 13px; vertical-align: middle; }
+.kk-mini { width: 110px; height: 110px; margin: 8px auto 0; }
+.kk-next { display: block; width: 100%; margin-top: 10px; border: none; background: #2b2b2b; color: #fff6e8; border-radius: 8px; padding: 12px; font-family: 'RocknRoll One'; font-size: 16px; }
+
+/* 手書き */
+.kk-slots { display: flex; justify-content: center; gap: 6px; margin: 6px 0 4px; flex-wrap: wrap; }
+.kk-slot { width: 52px; height: 52px; border: 2px solid #d9cfb8; border-radius: 6px; background: #fff; font-family: 'Klee One'; font-weight: 600; font-size: 34px; line-height: 48px; text-align: center; color: #2b2b2b; }
+.kk-slot.kana { border-color: transparent; background: none; font-weight: 400; font-size: 28px; }
+.kk-slot.on { border-color: #f2c14e; box-shadow: 0 0 0 3px rgba(242,193,78,0.45); }
+.kk-slot.fin { border-color: #2f8a4e; }
+.kk-slot.gave { border-color: #c8332b; color: #c8332b; }
+.kk-hwbig-wrap { display: flex; justify-content: center; }
+.kk-hwbox { flex-shrink: 0; touch-action: none; }
+.kk-hwbtns { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+.kk-hwbtns button { border: 1.5px solid #2b2b2b; background: #fff; border-radius: 8px; padding: 7px 14px; font-size: 13.5px; }
+
+/* 結果 */
+.kk-result { text-align: center; }
+.kk-score { display: inline-flex; align-items: baseline; gap: 6px; margin: 6px 0; }
+.kk-score b { font-family: 'RocknRoll One'; font-size: 54px; color: #2b2b2b; }
+.kk-score.pass b { color: #c8332b; }
+.kk-score span { font-size: 16px; color: #6a6152; }
+.kk-verdict { font-size: 16px; margin-bottom: 12px; }
+.kk-tbl { margin: 0 auto 12px; border-collapse: collapse; font-size: 14px; text-align: left; }
+.kk-tbl td { padding: 4px 8px; border-bottom: 1px dashed #e0d6c0; }
+.kk-wrong { text-align: left; background: #fdf6ea; border-radius: 8px; padding: 10px 12px; margin: 10px 0; font-size: 14.5px; line-height: 1.8; }
+.kk-wrong h3 { font-family: 'RocknRoll One'; font-size: 14px; margin: 0 0 4px; color: #c8332b; }
+.kk-rbtns { display: flex; gap: 8px; }
+.kk-rbtns .kk-go { flex: 1; padding: 12px; }
+.kk-back2 { flex: 1; border: 2px solid #2b2b2b; background: #fff; border-radius: 8px; font-family: 'RocknRoll One'; font-size: 15px; }
+
+@media (max-width: 420px) {
+  .kk-head h1 { font-size: 25px; }
+  .kk-big { font-size: 40px; }
+  .kk-sent { font-size: 18px; }
+  .kk-opt { font-size: 16px; }
+  .kk-opts.big .kk-opt { font-size: 23px; }
+}
