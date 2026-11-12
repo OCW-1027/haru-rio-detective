@@ -87,6 +87,8 @@ const Hub = (function () {
     if (due) {
       h += '<button class="hub-today-btn review" id="hubReview"><span class="hub-today-icon">🔁</span><span><small>コラリンの 復習</small>まちがえた 問題 ' + due + '問</span></button>';
     }
+    let nbs = null; try { nbs = NewsBox.stats(); } catch (e) {}
+    h += '<button class="hub-today-btn news" id="hubNewsBox"><span class="hub-today-icon">📰</span><span><small>' + (nbs && nbs.today ? '✅ 今日の ニュース 読んだ' : '今日の 英語ニュース') + '</small>英語ニュースBOX' + (nbs ? ' · 単語 ' + nbs.words + '語' : '') + '</span></button>';
     h += '</section>';
 
     // 메인 스토리
@@ -169,6 +171,8 @@ const Hub = (function () {
     if (hs2) hs2.onclick = () => { sfx('click'); MainStory.open(2); };
     const hs = document.getElementById('hubStory');
     if (hs) hs.onclick = () => { sfx('click'); MainStory.open(1); };
+    const hnb = document.getElementById('hubNewsBox');
+    if (hnb) hnb.onclick = () => { sfx('click'); NewsBox.open(); };
     const hi = document.getElementById('hubIndian');
     if (hi) hi.onclick = () => { sfx('click'); IndianMath.open(); };
     const hpr = document.getElementById('hubParent');
