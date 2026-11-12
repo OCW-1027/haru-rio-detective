@@ -26,12 +26,13 @@ const Kanken = (function () {
     kousei: { name: '熟語の 構成', icon: '🧱', note: 'どんな 組み立て?' },
     douon: { name: '同音異字', icon: '🔁', note: '同じ 読みの 漢字を 使い分け' },
     sanji: { name: '三字熟語', icon: '🧩', note: '□に 入る 漢字は?' },
+    yoji: { name: '四字熟語', icon: '🀄', note: '□に 入る 漢字は?' },
     bushu: { name: '部首', icon: '🏷️', note: '部首と 部首名' },
   };
   // 本番形式: [分野, 問題数, 1問の 点]  (合計 200点に 換算・140点以上が 合格の めやす)
   const MOCK = [['read', 20, 1], ['bushu', 10, 1], ['stroke', 10, 1], ['okuri', 10, 2], ['onkun', 10, 1], ['taigi', 10, 2], ['douon', 10, 2], ['sanji', 10, 2], ['write', 20, 2]];
-  const ORDER = ['read', 'write', 'stroke', 'okuri', 'onkun', 'taigi', 'ruigi', 'kousei', 'douon', 'sanji', 'bushu'];
-  const ARR = { okuri: 'OKURI', onkun: 'ONKUN', taigi: 'TAIGI', ruigi: 'RUIGI', kousei: 'KOUSEI', douon: 'DOUON', sanji: 'SANJI', bushu: 'BUSHU' };
+  const ORDER = ['read', 'write', 'stroke', 'okuri', 'onkun', 'taigi', 'ruigi', 'kousei', 'douon', 'sanji', 'yoji', 'bushu'];
+  const ARR = { okuri: 'OKURI', onkun: 'ONKUN', taigi: 'TAIGI', ruigi: 'RUIGI', kousei: 'KOUSEI', douon: 'DOUON', sanji: 'SANJI', yoji: 'YOJI', bushu: 'BUSHU' };
   const KOUSEI = { ア: '同じような 意味の 字を 重ねた もの (例: 岩石)', イ: '反対や 対の 意味の 字を 重ねた もの (例: 高低)', ウ: '上の 字が 下の 字を 説明 (修飾) して いる もの (例: 洋画)', エ: '下の 字が 「〜を」「〜に」に あたる もの (例: 着席 = 席に 着く)' };
   let lv = 7, run = null, writers = [];
   const HW = () => typeof HanziWriter !== 'undefined';
@@ -203,6 +204,7 @@ const Kanken = (function () {
     else if (sec === 'kousei') take(Lv.KOUSEI.length, kouseiItem);
     else if (sec === 'douon') take(Lv.DOUON.length, j => blankItem('douon', j, Lv.DOUON, '〔 〕の カタカナに あう 漢字は?'));
     else if (sec === 'sanji') take(Lv.SANJI.length, j => blankItem('sanji', j, Lv.SANJI, '〔 〕に 入る 漢字は?'));
+    else if (sec === 'yoji') take(Lv.YOJI.length, j => blankItem('yoji', j, Lv.YOJI, '〔 〕に 入る 漢字は?'));
     else if (sec === 'bushu') take(Lv.BUSHU.length, bushuItem);
     else if (sec === 'stroke') shuffle(newKanji()).slice(0, n).forEach((k, j) => out.push(strokeItem(k, j % 2 ? 'count' : 'order')));
     return out;
@@ -220,6 +222,7 @@ const Kanken = (function () {
       if (sec === 'kousei') return Lv.KOUSEI && Lv.KOUSEI[i] ? kouseiItem(i) : null;
       if (sec === 'douon') return Lv.DOUON[i] ? blankItem('douon', i, Lv.DOUON, '〔 〕の カタカナに あう 漢字は?') : null;
       if (sec === 'sanji') return Lv.SANJI[i] ? blankItem('sanji', i, Lv.SANJI, '〔 〕に 入る 漢字は?') : null;
+      if (sec === 'yoji') return Lv.YOJI && Lv.YOJI[i] ? blankItem('yoji', i, Lv.YOJI, '〔 〕に 入る 漢字は?') : null;
       if (sec === 'bushu') return Lv.BUSHU[i] ? bushuItem(i) : null;
       if (sec === 'stroke') return newKanji().indexOf(id) >= 0 ? strokeItem(id, 'count') : null;
       if (sec === 'order') return newKanji().indexOf(id) >= 0 ? strokeItem(id, 'order') : null;
