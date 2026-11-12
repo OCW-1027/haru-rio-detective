@@ -632,7 +632,7 @@ const BIZ_STORY = [
       { speaker: 'リオ', cls: 'rio', charKey: 'rio',
         text: '「IPO」 って 何ですか?' },
       { speaker: '西田さん', cls: 'sensei', charKey: 'ojiisan',
-        text: 'Initial Public Offering、新規株式公開だ。会社が 初めて 株式を 一般投資家に 売る こと。証券取引所の 厳しい 審査を 通って はじめて 上場できる。' },
+        text: 'Initial Public Offering、新規株式公開だ。会社が 初めて 株式を 一般投資家に 売る こと。証券取引所の 厳しい 審査を 通って 初めて 上場できる。' },
       { speaker: '西田さん', cls: 'sensei', charKey: 'ojiisan',
         text: '3人の 上場 関係者が 怪しい。みな IPOに 詳しい と 言うが…' },
       { speaker: 'ハル', cls: 'haru', charKey: 'haru',

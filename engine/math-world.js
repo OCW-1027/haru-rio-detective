@@ -1,6 +1,6 @@
 /* engine/math-world.js — 世界の 算数道場
  * コーナー: シンガポール式 線分図 (7タイプ × 5問) / ロシア式 思考パズル (24題) / 公式図鑑 (20) / 世界の 勉強法 / インド式 計算道場 (IndianMath へ)
- * 線分図: 問題 → 「線分図を かく」で 図が 出る → 答え → まちがえたら 解き方 ステップ
+ * 線分図: 問題 → 「線分図を かく」で 図が 出る → 答え → 間違えたら 解き方 ステップ
  * 保存: State.v2.mw = { sg: {id: best(0-5)}, ru: {i: 1}, fm: {id: 1} }
  * 画面: pageMathWorld (#mwArea). Dependencies: MW, State, saveState, showPage, sfx, escapeHtml, IndianMath (任意)
  */
@@ -45,7 +45,7 @@ const MathWorld = (function () {
     h += corner('mwRu', '🇷🇺', 'ロシア式 思考パズル', 'じっくり 考える 24題', ru + ' / ' + MW.RU.length, '#2e5fa8');
     h += corner('mwFm', '📘', '公式図鑑', '公式が「なぜ そうなるか」', fm + ' / ' + MW.FM.length, '#2a8a5a');
     h += corner('mwStudy', '🌏', '世界の 勉強法', '強い 国の 学び方', '📖', '#7a5aa8');
-    h += '</div><p class="mw-note">💡 同じ 問題でも、国に よって 考え方が ちがう。いちばん わかりやすい 方法を 自分で 選べるのが 最強!</p>';
+    h += '</div><p class="mw-note">💡 同じ 問題でも、国に よって 考え方が 違う。一番 分かりやすい 方法を 自分で 選べるのが 最強!</p>';
     area().innerHTML = h;
     $('mwIndian').onclick = () => { sfx('click'); stop(); if (typeof IndianMath !== 'undefined') IndianMath.open(); };
     $('mwLad').onclick = () => { sfx('click'); ladList(LADDER); };
@@ -87,7 +87,7 @@ const MathWorld = (function () {
     stop();
     const D = data();
     let h = head('🇸🇬 シンガポール式 線分図');
-    h += '<div class="mw-box"><b>線分図 (バー・モデル) って?</b><p>文章題の 量を「棒 (バー)」で かいて、どこが わかっていて どこが「?」かを 目で 見る 方法。シンガポールでは 小学1年から 使う。式を 立てる 前に 図を かくのが ポイント!</p>' + barSVG({ bars: [{ label: 'ハル', parts: [{ w: 3, t: '?', c: 0 }, { w: 2, t: '差', c: 1 }] }, { label: 'リオ', parts: [{ w: 3, t: '', c: 0 }] }], brace: '合計' }) + '</div>';
+    h += '<div class="mw-box"><b>線分図 (バー・モデル) って?</b><p>文章題の 量を「棒 (バー)」で かいて、どこが 分かっていて どこが「?」かを 目で 見る 方法。シンガポールでは 小学1年から 使う。式を 立てる 前に 図を かくのが ポイント!</p>' + barSVG({ bars: [{ label: 'ハル', parts: [{ w: 3, t: '?', c: 0 }, { w: 2, t: '差', c: 1 }] }, { label: 'リオ', parts: [{ w: 3, t: '', c: 0 }] }], brace: '合計' }) + '</div>';
     h += '<div class="mw-grid">';
     MW.SG.forEach(t => { const b = D.sg[t.id] || 0; h += '<button class="mw-card" data-sg="' + t.id + '"><span class="mw-ci">' + t.icon + '</span><span class="mw-cn">' + esc(t.name) + '</span><span class="mw-cs">' + (b >= 4 ? '🏅 ' : '') + b + ' / 5</span></button>'; });
     h += '</div>';
@@ -96,7 +96,7 @@ const MathWorld = (function () {
   }
   function sgPlay(t, skipLesson) {
     stop();
-    if (!skipLesson && typeof Lesson !== 'undefined' && Lesson.has('mw_' + t.id)) {   // まず くわしい 解説
+    if (!skipLesson && typeof Lesson !== 'undefined' && Lesson.has('mw_' + t.id)) {   // まず 詳しい 解説
       let h = head('📖 ' + t.icon + ' ' + esc(t.name), '一覧');
       h += '<div class="mw-rule">📏 ' + esc(t.rule) + '</div>' + Lesson.html('mw_' + t.id) + '<div class="mw-row"><button class="mw-primary" id="mwSgGo">✏ 5問 スタート</button></div>';
       area().innerHTML = h; bindBack(sgList); const pg = area().closest('.page'); if (pg) pg.scrollTop = 0;
@@ -120,7 +120,7 @@ const MathWorld = (function () {
   function sgAns(v) {
     const R = run; if (!R || R.done) return;
     const p = R.p, ok = same(v, p.a), fb = $('mwFb');
-    if (!ok && R.miss === 0) { R.miss = 1; sfx('wrong'); fb.innerHTML = '<div class="mw-ng">🤔 ちがうみたい。' + (R.drawn ? '図の「?」は どの 部分?' : '線分図を かいてみよう!') + ' もう1回!</div>'; if (!R.drawn) { R.drawn = true; $('mwFig').innerHTML = barSVG(p); } $('mwA').value = ''; return; }
+    if (!ok && R.miss === 0) { R.miss = 1; sfx('wrong'); fb.innerHTML = '<div class="mw-ng">🤔 違うみたい。' + (R.drawn ? '図の「?」は どの 部分?' : '線分図を かいてみよう!') + ' もう1回!</div>'; if (!R.drawn) { R.drawn = true; $('mwFig').innerHTML = barSVG(p); } $('mwA').value = ''; return; }
     R.done = true;
     if (ok) { R.ok++; sfx('correct'); } else sfx('wrong');
     $('mwFig').innerHTML = barSVG(p);
@@ -144,8 +144,8 @@ const MathWorld = (function () {
     stop();
     const D = data();
     let h = head('🇷🇺 ロシア式 思考パズル');
-    h += '<div class="mw-box"><b>数学サークルの 問題</b><p>速く 解くより「なぜ?」を 考える 問題たち。すぐに わからなくても だいじょうぶ。ヒントは 1回だけ 見られるよ。</p></div>';
-    if (typeof Lesson !== 'undefined' && Lesson.has('mw_ru')) h += '<details class="mw-box mw-ruls"><summary>📖 くわしい 解説: 考える ための 作戦</summary>' + Lesson.html('mw_ru') + '</details>';
+    h += '<div class="mw-box"><b>数学サークルの 問題</b><p>速く 解くより「なぜ?」を 考える 問題たち。すぐに 分からなくても だいじょうぶ。ヒントは 1回だけ 見られるよ。</p></div>';
+    if (typeof Lesson !== 'undefined' && Lesson.has('mw_ru')) h += '<details class="mw-box mw-ruls"><summary>📖 詳しい 解説: 考える ための 作戦</summary>' + Lesson.html('mw_ru') + '</details>';
     h += '<div class="mw-ru">';
     MW.RU.forEach((r, i) => { h += '<button class="mw-rub' + (D.ru[i] ? ' done' : '') + '" data-ru="' + i + '">' + (D.ru[i] ? '✓' : i + 1) + '</button>'; });
     h += '</div>';
@@ -165,7 +165,7 @@ const MathWorld = (function () {
       if (!run || run.done) return;
       if (same(v, r.a)) { D.ru[i] = 1; save(); sfx('correct'); ruReveal(true); return; }
       run.miss++; sfx('wrong'); $('mwA').value = '';
-      $('mwFb').innerHTML = '<div class="mw-ng">🤔 ちがうみたい (' + run.miss + '回目)。' + (run.hint ? '' : 'ヒントを 見てもいいよ。') + '</div>' + (run.hint ? '<div class="mw-hint">💡 ' + esc(r.hint) + '</div>' : '');
+      $('mwFb').innerHTML = '<div class="mw-ng">🤔 違うみたい (' + run.miss + '回目)。' + (run.hint ? '' : 'ヒントを 見てもいいよ。') + '</div>' + (run.hint ? '<div class="mw-hint">💡 ' + esc(r.hint) + '</div>' : '');
     });
   }
   function ruReveal(ok) {
@@ -180,14 +180,14 @@ const MathWorld = (function () {
   function figSVG(k) {
     const st = 'fill="#d6e8fb" stroke="#4a6a8a" stroke-width="2"', t = (x, y, s) => '<text x="' + x + '" y="' + y + '" text-anchor="middle" font-size="12" fill="#3a2a1a">' + s + '</text>', dash = 'stroke="#c0602a" stroke-width="1.5" stroke-dasharray="4 3" fill="none"';
     const F = {
-      rect: '<rect x="40" y="25" width="140" height="80" ' + st + '/>' + t(110, 120, '横') + t(25, 70, 'たて'),
+      rect: '<rect x="40" y="25" width="140" height="80" ' + st + '/>' + t(110, 120, '横') + t(25, 70, '縦'),
       tri: '<path d="M30 105 L190 105 L120 25 Z" ' + st + '/><line x1="120" y1="25" x2="120" y2="105" ' + dash + '/>' + t(110, 122, '底辺') + t(136, 70, '高さ'),
       para: '<path d="M30 105 L160 105 L190 25 L60 25 Z" ' + st + '/><line x1="60" y1="25" x2="60" y2="105" ' + dash + '/>' + t(95, 122, '底辺') + t(78, 70, '高さ'),
       trap: '<path d="M30 105 L190 105 L150 30 L70 30 Z" ' + st + '/><line x1="70" y1="30" x2="70" y2="105" ' + dash + '/>' + t(110, 22, '上底') + t(110, 122, '下底') + t(86, 72, '高さ'),
       rhom: '<path d="M110 15 L180 65 L110 115 L40 65 Z" ' + st + '/><line x1="110" y1="15" x2="110" y2="115" ' + dash + '/><line x1="40" y1="65" x2="180" y2="65" ' + dash + '/>' + t(150, 60, '対角線'),
       circ: '<circle cx="110" cy="65" r="50" ' + st + '/><line x1="110" y1="65" x2="160" y2="65" stroke="#c0602a" stroke-width="2"/>' + t(135, 60, '半径') + '<circle cx="110" cy="65" r="2.5" fill="#c0602a"/>',
       sector: '<path d="M70 105 L170 105 A100 100 0 0 0 120.7 18.4 Z" ' + st + '/>' + t(100, 98, '中心角') + t(125, 120, '半径'),
-      cuboid: '<path d="M40 50 L140 50 L140 115 L40 115 Z" ' + st + '/><path d="M40 50 L75 22 L175 22 L140 50 Z" fill="#eaf3fd" stroke="#4a6a8a" stroke-width="2"/><path d="M140 50 L175 22 L175 87 L140 115 Z" fill="#c4dcf4" stroke="#4a6a8a" stroke-width="2"/>' + t(90, 129, '横') + t(170, 112, 'たて') + t(22, 86, '高さ'),
+      cuboid: '<path d="M40 50 L140 50 L140 115 L40 115 Z" ' + st + '/><path d="M40 50 L75 22 L175 22 L140 50 Z" fill="#eaf3fd" stroke="#4a6a8a" stroke-width="2"/><path d="M140 50 L175 22 L175 87 L140 115 Z" fill="#c4dcf4" stroke="#4a6a8a" stroke-width="2"/>' + t(90, 129, '横') + t(170, 112, '縦') + t(22, 86, '高さ'),
       cyl: '<ellipse cx="110" cy="28" rx="55" ry="14" ' + st + '/><path d="M55 28 V100 A55 14 0 0 0 165 100 V28" fill="#d6e8fb" stroke="#4a6a8a" stroke-width="2"/>' + t(110, 32, '底面') + t(182, 68, '高さ'),
       speed: '<circle cx="110" cy="65" r="52" fill="#fffaf0" stroke="#7a6a5a" stroke-width="2"/><line x1="58" y1="65" x2="162" y2="65" stroke="#7a6a5a" stroke-width="2"/><line x1="110" y1="65" x2="110" y2="117" stroke="#7a6a5a" stroke-width="2"/><text x="110" y="50" text-anchor="middle" font-size="22" fill="#c0392b">き</text><text x="84" y="96" text-anchor="middle" font-size="22" fill="#2e5fa8">は</text><text x="136" y="96" text-anchor="middle" font-size="22" fill="#2a8a5a">じ</text>' + t(110, 26, '道のり') ,
       bar: '<rect x="20" y="45" width="180" height="30" fill="#eaf3fd" stroke="#4a6a8a" stroke-width="2"/><rect x="20" y="45" width="54" height="30" fill="#f6c9a8" stroke="#c07a4a" stroke-width="2"/>' + t(47, 65, '30%') + t(110, 95, 'もとにする量 = 100%'),
@@ -293,7 +293,7 @@ const MathWorld = (function () {
     const pct = Math.round(R.ok * 100 / R.n);
     h += '<div class="mw-result"><b>' + R.ok + ' / ' + R.n + '</b><p>' + (pct >= 85 ? '🏅 すばらしい! この レベルは ほぼ 完ぺき。次の 学年へ 進もう。' : pct >= 60 ? 'よく できました! 下の 苦手 単元を 練習すると 完成に 近づくよ。' : 'まずは 下の 単元の 要点と 例題から 始めよう。') + '</p></div>';
     h += '<div class="mw-box"><b>' + (R.diag === 's' || R.diag === 'r' ? '分野別' : '学年別') + '</b><table class="mw-dtbl">' + Object.keys(gs).map(g => { const G = L.GROUPS.find(x => x.id === g); return '<tr><th style="color:' + G.color + '">' + G.name + '</th><td>' + gs[g][0] + ' / ' + gs[g][1] + '</td><td><span class="mw-dbar"><i style="width:' + Math.round(gs[g][0] * 100 / gs[g][1]) + '%;background:' + G.color + '"></i></span></td></tr>'; }).join('') + '</table></div>';
-    if (weak.length) h += '<div class="mw-box"><b>📌 おすすめ 単元 (まちがえた ところ)</b><div class="mw-grid" style="margin-top:8px">' + weak.map(id => { const u = L.byId(id); return '<button class="mw-card" data-lu="' + id + '"><span class="mw-ci">' + u.icon + '</span><span class="mw-cn">' + esc(u.name) + '</span><span class="mw-cs">' + L.GROUPS.find(x => x.id === u.g).name + '</span></button>'; }).join('') + '</div></div>';
+    if (weak.length) h += '<div class="mw-box"><b>📌 おすすめ 単元 (間違えた ところ)</b><div class="mw-grid" style="margin-top:8px">' + weak.map(id => { const u = L.byId(id); return '<button class="mw-card" data-lu="' + id + '"><span class="mw-ci">' + u.icon + '</span><span class="mw-cn">' + esc(u.name) + '</span><span class="mw-cs">' + L.GROUPS.find(x => x.id === u.g).name + '</span></button>'; }).join('') + '</div></div>';
     h += '<div class="mw-row"><button class="mw-secondary" id="mwList">一覧へ</button></div>';
     area().innerHTML = h; bindBack(ladList);
     area().querySelectorAll('[data-lu]').forEach(b => b.onclick = () => { sfx('click'); ladUnit(L.byId(b.dataset.lu)); });
@@ -305,7 +305,7 @@ const MathWorld = (function () {
     const g = L.GROUPS.find(x => x.id === u.g), ex = L.make(u);
     let h = head(u.icon + ' ' + esc(u.name), '一覧');
     h += '<div class="mw-tag" style="background:' + g.color + '">' + g.name + '</div>';
-    if (typeof Lesson !== 'undefined' && Lesson.has(u.id)) h += '<button class="mw-lessonbtn" id="mwLesson"><span>📖</span><span><b>くわしい 解説を 読む</b><small>図・表・例題つきで ゼロから わかる</small></span></button>';
+    if (typeof Lesson !== 'undefined' && Lesson.has(u.id)) h += '<button class="mw-lessonbtn" id="mwLesson"><span>📖</span><span><b>くわしい 解説を 読む</b><small>図・表・例題つきで ゼロから 分かる</small></span></button>';
     h += '<div class="mw-box mw-point"><b>📌 要点</b><ul>' + u.point.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
     h += '<div class="mw-box"><b>📝 例題</b><div class="mw-q mw-pre">' + esc(ex.q) + (ex.fig ? '<div class="mw-qfig">' + ex.fig + '</div>' : '') + (ex.type === 'choice' ? '<div class="mw-exopts">' + ex.opts.map((o, i) => '<span>' + ['ア', 'イ', 'ウ', 'エ'][i] + ' ' + esc(o) + '</span>').join('') + '</div>' : '') + '</div><ol class="mw-steps" id="mwExSteps"></ol><div class="mw-row"><button class="mw-secondary" id="mwExNext">次の ステップ ▶</button><button class="mw-secondary" id="mwExNew">別の 例題</button></div></div>';
     h += '<div class="mw-row"><button class="mw-primary" id="mwLadGo">' + (u.ta ? '⏱ スタート (' + u.ta + '秒)' + (ladData()[u.id] ? ' ・ 自己ベスト ' + (ladData()[u.id].ta || 0) + '問' : '') : '✏ 練習 10問') + '</button></div>';
@@ -316,7 +316,7 @@ const MathWorld = (function () {
     const lb = $('mwLesson'); if (lb) lb.onclick = () => { sfx('click'); ladLesson(u); };
     $('mwLadGo').onclick = () => { sfx('click'); if (u.ta) { taStart(u); return; } run = { u: u, i: 0, ok: 0, n: 10, wrong: [] }; ladQ(); };
   }
-  function ladLesson(u) {   // くわしい 解説
+  function ladLesson(u) {   // 詳しい 解説
     stop();
     let h = head('📖 ' + u.icon + ' ' + esc(u.name), '単元');
     h += Lesson.html(u.id) + '<div class="mw-row"><button class="mw-secondary" id="mwLsBack">← 例題に もどる</button><button class="mw-primary" id="mwLsGo">' + (u.ta ? '⏱ スタート' : '✏ 練習 10問') + '</button></div>';
@@ -355,7 +355,7 @@ const MathWorld = (function () {
   }
   function ladAns(ok, btn) {
     const R = run; if (!R || R.done) return; const p = R.p, fb = $('mwFb');
-    if (!ok && R.miss === 0 && p.type !== 'choice' && p.type !== 'text' && !R.diag) { R.miss = 1; sfx('wrong'); fb.innerHTML = '<div class="mw-ng">🤔 ちがうみたい。もう1回! (符号・約分・計算ミスを 確認)</div>'; return; }
+    if (!ok && R.miss === 0 && p.type !== 'choice' && p.type !== 'text' && !R.diag) { R.miss = 1; sfx('wrong'); fb.innerHTML = '<div class="mw-ng">🤔 違うみたい。もう1回! (符号・約分・計算ミスを 確認)</div>'; return; }
     R.done = true; R.res = R.res || []; R.res[R.i] = ok; if (ok) R.ok++; else R.wrong.push(p);
     sfx(ok ? 'correct' : 'wrong');
     area().querySelectorAll('.mw-ch').forEach(b => { b.disabled = true; if (+b.dataset.ch === 0) b.classList.add('right'); }); if (btn && !ok) btn.classList.add('wrongc');
@@ -397,7 +397,7 @@ const MathWorld = (function () {
     const R = run, u = R.u, D = ladData(), r = D[u.id] || (D[u.id] = { best: 0, n: 0 }), before = r.best;
     r.best = Math.max(r.best || 0, R.ok); r.n = (r.n || 0) + 1; save();
     let h = head(u.icon + ' ' + esc(u.name) + ' — 結果', '単元');
-    h += '<div class="mw-result"><b>' + R.ok + ' / ' + R.n + '</b><p>' + (R.ok === 10 ? '🏅 パーフェクト! この 単元は 完全に マスター。' : R.ok >= 8 ? '★ 合格! 次の 単元へ 進もう。' : 'あと ' + (8 - R.ok) + '問で ★。まちがえた 問題の 解き方を 見直そう。') + (r.best > before && before ? '<br>(自己ベスト 更新)' : '') + '</p></div>';
+    h += '<div class="mw-result"><b>' + R.ok + ' / ' + R.n + '</b><p>' + (R.ok === 10 ? '🏅 パーフェクト! この 単元は 完全に マスター。' : R.ok >= 8 ? '★ 合格! 次の 単元へ 進もう。' : 'あと ' + (8 - R.ok) + '問で ★。間違えた 問題の 解き方を 見直そう。') + (r.best > before && before ? '<br>(自己ベスト 更新)' : '') + '</p></div>';
     const idx = L.U.indexOf(u), nx = L.U[idx + 1];
     h += '<div class="mw-row"><button class="mw-primary" id="mwAgain">もう一度 (新しい 問題)</button>' + (nx ? '<button class="mw-secondary" id="mwNextU">次の 単元: ' + esc(nx.name) + '</button>' : '') + '<button class="mw-secondary" id="mwList">一覧へ</button></div>';
     area().innerHTML = h; bindBack(() => ladUnit(u));

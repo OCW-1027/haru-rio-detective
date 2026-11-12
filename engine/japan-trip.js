@@ -1,7 +1,7 @@
 /* engine/japan-trip.js — シーズン2 新コンテンツ④ 日本列島ミステリー紀行
- * ブランク団 日本支部が 各地の「知のカケラ」を 盗んで にげる。証言 (名産・名所・祭り・歴史・地理) から
- * 次の 行き先の 都道府県を 推理して 追いかけ、最後は 地図で かくれ家を 当てる。
- *   事件 6 / 都道府県 図鑑 47 / 地図クイズ 3モード (地図で さがす・色の 県は?・県庁所在地)
+ * ブランク団 日本支部が 各地の「知のカケラ」を 盗んで 逃げる。証言 (名産・名所・祭り・歴史・地理) から
+ * 次の 行き先の 都道府県を 推理して 追いかけ、最後は 地図で 隠れ家を 当てる。
+ *   事件 6 / 都道府県 図鑑 47 / 地図クイズ 3モード (地図で 探す・色の 県は?・県庁所在地)
  * 画面: pageJapanTrip (#jtArea). 保存: State.v2.jp = { cleared: {caseId: stars}, seen: {prefId: 1}, quiz: {mode: best} }
  * Dependencies: JP_PREF, JPMAP, State, saveState, showPage, sfx, escapeHtml, buildChapterGrid
  */
@@ -65,7 +65,7 @@ const JapanTrip = (function () {
   // ---------- 図鑑 ----------
   function zukan() {
     const d = data();
-    let h = header('📖 都道府県 図鑑', '県を えらぶと くわしい カードが 出るよ');
+    let h = header('📖 都道府県 図鑑', '県を 選ぶと 詳しい カードが 出るよ');
     h += '<div class="jt-mapbox">' + map({ click: true, hl: Object.keys(d.seen).reduce((o, k) => (o[k] = 'seen', o), {}) }) + '</div>';
     REGS.forEach(r => {
       h += '<div class="jt-reg"><div class="jt-reg-h">' + r + '地方</div><div class="jt-chips">';
@@ -115,8 +115,8 @@ const JapanTrip = (function () {
     const c = CASES[ci], t = THIEF[c.thief];
     let h = header('第' + (ci + 1) + '事件 ' + esc(c.title), '', 'cases');
     h += pic('japan/thief_' + c.thief + '.webp', 'thief');
-    h += '<div class="jt-hero"><img src="' + SP + 'korarin_greet_01.webp" alt=""><div class="jt-say"><b>コラリン:</b> ' + esc(P(c.start).n) + 'で「' + esc(c.kakera) + '」が 盗まれました。犯人は ブランク団の <b>' + t[0] + '</b> (' + t[1] + ')。<br>町の 人に 聞きこみを して、次の 行き先を 推理しましょう。まちがえて いい のは 2回まで です。</div></div>';
-    h += '<div class="jt-rules"><div>🗣 聞きこみ: 1地点で 3人まで 話を 聞ける</div><div>💡 コラドンの ヒント: 地方が わかる (⭐が へる)</div><div>❤ まちがえて 飛ぶと ❤ が 1つ へる。3つ なくなると 犯人は にげる</div><div>🏁 最後は 地図で かくれ家を タップ!</div></div>';
+    h += '<div class="jt-hero"><img src="' + SP + 'korarin_greet_01.webp" alt=""><div class="jt-say"><b>コラリン:</b> ' + esc(P(c.start).n) + 'で「' + esc(c.kakera) + '」が 盗まれました。犯人は ブランク団の <b>' + t[0] + '</b> (' + t[1] + ')。<br>町の 人に 聞きこみを して、次の 行き先を 推理しましょう。間違えて いい のは 2回まで です。</div></div>';
+    h += '<div class="jt-rules"><div>🗣 聞きこみ: 1地点で 3人まで 話を 聞ける</div><div>💡 コラドンの ヒント: 地方が 分かる (⭐が 減る)</div><div>❤ 間違えて 飛ぶと ❤ が 1つ 減る。3つ なくなると 犯人は 逃げる</div><div>🏁 最後は 地図で 隠れ家を タップ!</div></div>';
     h += '<button class="jt-go" id="jtStart">🚄 追跡 開始</button>';
     area().innerHTML = h; bindGo(area());
     $('jtStart').onclick = () => { sound('click'); startCase(ci); };
@@ -148,7 +148,7 @@ const JapanTrip = (function () {
       // この 地点で 使う 手がかり (次の 県の 5つから 3つ)
       r.pool = shuffle(P(nxt).c.slice()).slice(0, 3);
     }
-    if (fresh) { r.topAt = r.i; top(); }   // 同じ 地点での 再描画 (証言・ヒント・まちがい) では 位置を 動かさない
+    if (fresh) { r.topAt = r.i; top(); }   // 同じ 地点での 再描画 (証言・ヒント・間違い) では 位置を 動かさない
     let h = header('第' + (r.ci + 1) + '事件 ' + esc(r.c.title), '地点 ' + (r.i + 1) + ' / ' + (r.route.length - 1) + ' ・ ' + '❤'.repeat(r.hearts) + '<span class="off">' + '❤'.repeat(3 - r.hearts) + '</span>', 'cases');
     h += '<div class="jt-mapbox small">' + map({ line: r.route.slice(0, r.i + 1), mark: cur, hl: Object.assign({ [cur]: 'here' }, r.wrong) }) + '</div>';
     h += pic('japan/reg_' + REG_IMG[pc.reg] + '.webp', 'thin') + '<div class="jt-now">📍 いま: <b>' + esc(pc.n) + '</b> (' + pc.reg + '地方)</div>';
@@ -156,13 +156,13 @@ const JapanTrip = (function () {
     if (!r.wit) r.wit = shuffle(WIT).slice(0, 3);
     h += '<div class="jt-wits">';
     r.wit.forEach((w, k) => {
-      if (k < r.asked) { const cl = r.pool[k]; h += '<div class="jt-wit done"><span class="jt-wi">' + w[0] + '</span><div><b>' + w[1] + '</b><p>' + (last && k === 0 ? 'あやしい 人が「最後の かくれ家へ 行く」と 話していたよ。場所は「<mark>' + esc(mask(P(nxt), cl[1])) + '</mark>」で 有名な ところ らしい。' : 'あやしい 人が「<mark>' + esc(mask(P(nxt), cl[1])) + '</mark>」で 有名な ところへ 行くと 言っていたよ。') + '</p></div></div>'; }
+      if (k < r.asked) { const cl = r.pool[k]; h += '<div class="jt-wit done"><span class="jt-wi">' + w[0] + '</span><div><b>' + w[1] + '</b><p>' + (last && k === 0 ? 'あやしい 人が「最後の 隠れ家へ 行く」と 話していたよ。場所は「<mark>' + esc(mask(P(nxt), cl[1])) + '</mark>」で 有名な ところ らしい。' : 'あやしい 人が「<mark>' + esc(mask(P(nxt), cl[1])) + '</mark>」で 有名な ところへ 行くと 言っていたよ。') + '</p></div></div>'; }
       else h += '<button class="jt-wit" data-w="' + k + '"' + (k > r.asked ? ' disabled' : '') + '><span class="jt-wi">' + w[0] + '</span><div><b>' + w[1] + '</b><p>' + (k === r.asked ? 'タップして 話を 聞く' : '…') + '</p></div></button>';
     });
     h += '</div>';
     h += '<div class="jt-row"><button class="jt-btn2" id="jtHint"' + (r.regionShown || !r.asked ? ' disabled' : '') + '>💡 コラドンの ヒント' + (r.regionShown ? ': ' + P(nxt).reg + '地方' : '') + '</button></div>';
     if (r.asked) {
-      if (last) h += '<div class="jt-final">🏁 かくれ家の 県を 地図で タップ!</div><div class="jt-mapbox tapme">' + map({ click: true, hl: Object.assign({}, r.wrong, { [cur]: 'here' }) }) + '</div>';
+      if (last) h += '<div class="jt-final">🏁 隠れ家の 県を 地図で タップ!</div><div class="jt-mapbox tapme">' + map({ click: true, hl: Object.assign({}, r.wrong, { [cur]: 'here' }) }) + '</div>';
       else {
         if (!r.opts) {
           const near = JP_PREF.map(p => p.id).filter(id => id !== nxt && id !== cur && !r.route.slice(0, r.i).includes(id)).sort((a, b) => dist(nxt, a) - dist(nxt, b));
@@ -189,7 +189,7 @@ const JapanTrip = (function () {
       const p = P(nxt);
       r.log.push(nxt);
       const fb = $('jtFb');
-      if (fb) fb.innerHTML = '<div class="jt-ok"><b>✔ ' + esc(p.n) + ' だ!</b> 「' + esc(r.pool.slice(0, r.asked).map(c => c[1]).join('」「')) + '」は ' + esc(p.n) + '。県庁所在地は ' + esc(p.cap) + '。</div><button class="jt-go" id="jtOn">' + (last ? '🚨 かくれ家に 突入!' : '🚄 ' + esc(p.n) + 'へ 向かう') + '</button>';
+      if (fb) fb.innerHTML = '<div class="jt-ok"><b>✔ ' + esc(p.n) + ' だ!</b> 「' + esc(r.pool.slice(0, r.asked).map(c => c[1]).join('」「')) + '」は ' + esc(p.n) + '。県庁所在地は ' + esc(p.cap) + '。</div><button class="jt-go" id="jtOn">' + (last ? '🚨 隠れ家に 突入!' : '🚄 ' + esc(p.n) + 'へ 向かう') + '</button>';
       area().querySelectorAll('[data-to],.jt-pf.tap').forEach(b => { b.onclick = null; });
       $('jtOn').onclick = () => { sound('click'); if (last) return arrest(); r.i++; r.asked = 0; r.clues = []; r.wit = null; r.opts = null; r.regionShown = false; r.wrong = {}; stop_(); };
       $('jtOn').scrollIntoView({ block: 'center', behavior: 'smooth' });
@@ -222,7 +222,7 @@ const JapanTrip = (function () {
   }
   function escaped() {
     const r = run; sound('wrong'); top();
-    let h = header('💨 にげられた…', esc(r.c.title), 'cases');
+    let h = header('💨 逃げられた…', esc(r.c.title), 'cases');
     h += '<div class="jt-hero"><img src="' + SP + 'korarin_greet_01.webp" alt=""><div class="jt-say"><b>コラリン:</b> ' + THIEF[r.c.thief][0] + 'は ' + esc(P(r.route[r.i + 1]).n) + 'に にげました。手がかりと 県の 特ちょうを 図鑑で 確認して、もう一度 挑戦しましょう!</div></div>';
     h += recap(r) + '<div class="jt-row"><button class="jt-go" id="jtAgain">🔁 もう一度</button><button class="jt-btn2" data-go="zukan">📖 図鑑で 確認</button></div>';
     area().innerHTML = h; bindGo(area());
@@ -231,9 +231,9 @@ const JapanTrip = (function () {
 
   // ---------- 地図クイズ ----------
   const QUIZ = [
-    { id: 'find', icon: '👆', name: '地図で さがす', desc: '県の 名前を 見て、地図で タップ' },
+    { id: 'find', icon: '👆', name: '地図で 探す', desc: '県の 名前を 見て、地図で タップ' },
     { id: 'name', icon: '🎨', name: '色の 県は?', desc: '色の ついた 県の 名前を 4択で' },
-    { id: 'cap', icon: '🏛', name: '県庁所在地', desc: '県庁所在地を 4択で (名前が ちがう 県が 多めに 出る)' },
+    { id: 'cap', icon: '🏛', name: '県庁所在地', desc: '県庁所在地を 4択で (名前が 違う 県が 多めに 出る)' },
   ];
   let qz = null;
   function quizMenu() {
@@ -257,7 +257,7 @@ const JapanTrip = (function () {
       const d = data(); const nb = q.ok > (d.quiz[q.mode] || 0); d.quiz[q.mode] = Math.max(d.quiz[q.mode] || 0, q.ok); save();
       let h = header('🗺 地図クイズ 結果', QUIZ.find(x => x.id === q.mode).name, 'quiz');
       h += '<div class="jt-res"><b>' + q.ok + '</b> / 10' + (nb ? ' 🏆 ベスト更新!' : '') + '</div>';
-      if (q.miss.length) { h += '<div class="jt-recap"><div class="jt-recap-h">❗ まちがえた 県</div>'; q.miss.forEach(id => { const p = P(id); h += '<div class="jt-rc"><b>' + esc(p.n) + '</b> <small>(' + p.reg + ' ・ ' + esc(p.cap) + ')</small><span>' + esc(p.c[0][1]) + '</span></div>'; }); h += '</div>'; }
+      if (q.miss.length) { h += '<div class="jt-recap"><div class="jt-recap-h">❗ 間違えた 県</div>'; q.miss.forEach(id => { const p = P(id); h += '<div class="jt-rc"><b>' + esc(p.n) + '</b> <small>(' + p.reg + ' ・ ' + esc(p.cap) + ')</small><span>' + esc(p.c[0][1]) + '</span></div>'; }); h += '</div>'; }
       h += '<div class="jt-row"><button class="jt-go" id="jtQA">🔁 もう一度</button><button class="jt-btn2" data-go="quiz">クイズ 一覧</button></div>';
       area().innerHTML = h; bindGo(area()); $('jtQA').onclick = () => { sound('click'); quizStart(q.mode); }; return;
     }

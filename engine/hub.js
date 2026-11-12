@@ -48,7 +48,7 @@ const Hub = (function () {
     const t = document.querySelector('#pageSelect .select-title');
     const s = document.querySelector('#pageSelect .select-sub');
     if (t) t.textContent = title;
-    if (s) s.textContent = tab === 'game' || tab === 'quiz' || tab === 'eng' ? '' : 'じけんを えらんで、なぞを とこう!';
+    if (s) s.textContent = tab === 'game' || tab === 'quiz' || tab === 'eng' ? '' : '事件を 選んで、謎を 解こう!';
     switchTab(tab);
     showPage('pageSelect');
     const page = document.getElementById('pageSelect');
@@ -100,7 +100,7 @@ const Hub = (function () {
     h += '<section class="hub-new">';
     h += '<button class="hub-new-btn s2" id="hubJapan"><span style="font-size:44px">🗾</span><span><b>日本列島ミステリー紀行<span class="tag">NEW</span></b><small>47都道府県を 推理で 追え · 解決 ' + (jts ? jts.cleared : 0) + ' / 6 · 図鑑 ' + (jts ? jts.seen : 0) + ' / 47</small></span></button>';
     let tts = null; try { tts = TimeTravel.stats(); } catch (e) {}
-    h += '<button class="hub-new-btn s2" id="hubTime"><span style="font-size:44px">⏳</span><span><b>タイムトラベル探偵<span class="tag">NEW</span></b><small>縄文〜令和を 追跡 · 時のゆがみ さがし · 年表 ならべかえ · 解決 ' + (tts ? tts.cleared : 0) + ' / 6</small></span></button>';
+    h += '<button class="hub-new-btn s2" id="hubTime"><span style="font-size:44px">⏳</span><span><b>タイムトラベル探偵<span class="tag">NEW</span></b><small>縄文〜令和を 追跡 · 時のゆがみ 探し · 年表 並べかえ · 解決 ' + (tts ? tts.cleared : 0) + ' / 6</small></span></button>';
     let cls = null; try { cls = CodeLab.stats(); } catch (e) {}
     h += '<button class="hub-new-btn s2" id="hubCode"><span style="font-size:44px">🔐</span><span><b>暗号解読局<span class="tag">NEW</span></b><small>シーザー暗号・数列・モールス・うそつきパズル · 解決 ' + (cls ? cls.cleared : 0) + ' / 6</small></span></button>';
     let nds = null; try { nds = NewsDetective.stats(); } catch (e) {}
@@ -120,7 +120,7 @@ const Hub = (function () {
     const imd = (State.v2 && State.v2.indian && State.v2.indian.t) || {};
     h += '<button class="hub-new-btn" id="hubIndian"><span style="font-size:44px">🇮🇳</span><span><b>インド式 計算道場<span class="tag">NEW</span></b><small>' + (typeof IM !== 'undefined' ? IM.T.length : 26) + 'の ワザ · 4コース 検定 · ★ ' + Object.keys(imd).reduce((a, k) => a + (imd[k].stars || 0), 0) + ' / ' + (typeof IM !== 'undefined' ? IM.T.length * 3 : 78) + '</small></span></button>';
     const mwd = (State.v2 && State.v2.mw) || {};
-    h += '<button class="hub-new-btn" id="hubElem"><span style="font-size:44px">🎒</span><span><b>小学 算数 ラダー<span class="tag">NEW</span></b><small>4年 〜 6年 · ' + (typeof ELAD !== 'undefined' ? ELAD.U.length : 25) + ' 単元 · 図つき くわしい 解説</small></span></button>';
+    h += '<button class="hub-new-btn" id="hubElem"><span style="font-size:44px">🎒</span><span><b>小学 算数 ラダー<span class="tag">NEW</span></b><small>4年 〜 6年 · ' + (typeof ELAD !== 'undefined' ? ELAD.U.length : 25) + ' 単元 · 図つき 詳しい 解説</small></span></button>';
     h += '<button class="hub-new-btn" id="hubMathWorld"><span style="font-size:44px">🌏</span><span><b>世界の 算数道場<span class="tag">NEW</span></b><small>中学・高校 数学ラダー · シンガポール式 · ロシア式 · 公式図鑑</small></span></button>';
     let wqs = null; try { wqs = WorldQuiz.stats(); } catch (e) {}
     h += '<button class="hub-new-btn" id="hubWQ"><span style="font-size:44px">🌐</span><span><b>世界の 国 クイズ<span class="tag">NEW</span></b><small>237の 国・地域と 首都を 4択で 全部 制覇 · 覚えた ' + (wqs ? wqs.map : 0) + ' / ' + (wqs ? wqs.total : 237) + '</small></span></button>';

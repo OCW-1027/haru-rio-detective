@@ -1343,7 +1343,7 @@ const LIT_STORY = [
       { speaker: 'ヘンリー 館長', cls: 'sensei', charKey: 'ojiisan',
         text: 'ハル君、リオ君、君たちの 推理力に 期待している。1~9事件の 真の 黒幕が この 美術館に 来ている。' },
       { speaker: 'リオ', cls: 'rio', charKey: 'rio',
-        text: 'ぜんぶの 事件が つながってたんだ!' },
+        text: '全部の 事件が つながってたんだ!' },
       { speaker: 'ヘンリー 館長', cls: 'sensei', charKey: 'ojiisan',
         text: '黒幕は 国際的な 美術品密売組織の リーダー。世界各地の 文学·芸術を 利用して 価値ある 物を 盗み 売り捌いて いた。' },
       { speaker: 'ヘンリー 館長', cls: 'sensei', charKey: 'ojiisan',

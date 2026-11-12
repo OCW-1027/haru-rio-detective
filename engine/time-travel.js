@@ -1,7 +1,7 @@
 /* engine/time-travel.js — シーズン2 新コンテンツ⑥ タイムトラベル探偵 (日本史)
  * ブランク団の 時間あやつり「クロノ」が 歴史を ゆがめながら 時代を 飛びまわる。
- *   事件: 各時代で ① 時代に 合わない もの (時のゆがみ) を 見つけ、② 手がかりの できごとから 次の 時代を 当てる
- *   年表 ならべかえ / 時代あて クイズ / 時代 図鑑
+ *   事件: 各時代で ① 時代に 合わない もの (時のゆがみ) を 見つけ、② 手がかりの 出来事から 次の 時代を 当てる
+ *   年表 並べかえ / 時代あて クイズ / 時代 図鑑
  * 画面: pageTimeTravel (#ttArea). 保存: State.v2.tt = { cleared: {caseId: stars}, best: {order, era} }
  * Dependencies: TT_ERAS, TT_EVENTS, TT_THINGS, TT_PEOPLE, State, saveState, showPage, sfx, escapeHtml, Hub
  */
@@ -38,12 +38,12 @@ const TimeTravel = (function () {
   function home() {
     const d = data();
     let h = header('⏳ タイムトラベル探偵', 'シーズン2 ・ 日本史を かけぬけろ');
-    h += '<div class="tt-hero"><img src="' + SP + 'korarin_greet_01.webp" alt=""><div class="tt-say"><b>コラリン:</b> ブランク団の <b>クロノ</b>が 時間を 飛びまわって、歴史に「時のゆがみ」を まぎれこませています! その時代に あるはずの ない ものを 見つけ、手がかりの できごとから 次の 時代を 当てて 追いかけましょう。</div></div>';
+    h += '<div class="tt-hero"><img src="' + SP + 'korarin_greet_01.webp" alt=""><div class="tt-say"><b>コラリン:</b> ブランク団の <b>クロノ</b>が 時間を 飛びまわって、歴史に「時のゆがみ」を まぎれこませています! その時代に あるはずの ない ものを 見つけ、手がかりの 出来事から 次の 時代を 当てて 追いかけましょう。</div></div>';
     h += '<div class="tt-menu">';
     h += '<button class="tt-mbtn" data-go="cases"><span class="i">🕰</span><b>事件ファイル</b><small>解決 ' + Object.keys(d.cleared).length + ' / ' + CASES.length + '</small></button>';
-    h += '<button class="tt-mbtn" data-go="order"><span class="i">📜</span><b>年表 ならべかえ</b><small>古い 順に タップ ・ ベスト ' + (d.best.order || 0) + ' / 5</small></button>';
+    h += '<button class="tt-mbtn" data-go="order"><span class="i">📜</span><b>年表 並べかえ</b><small>古い 順に タップ ・ ベスト ' + (d.best.order || 0) + ' / 5</small></button>';
     h += '<button class="tt-mbtn" data-go="era"><span class="i">🏯</span><b>時代あて クイズ</b><small>できごと・人物・ものの 時代 ・ ベスト ' + (d.best.era || 0) + ' / 10</small></button>';
-    h += '<button class="tt-mbtn" data-go="zukan"><span class="i">📖</span><b>時代 図鑑</b><small>' + E.length + 'の 時代の できごと・人物・もの</small></button>';
+    h += '<button class="tt-mbtn" data-go="zukan"><span class="i">📖</span><b>時代 図鑑</b><small>' + E.length + 'の 時代の 出来事・人物・もの</small></button>';
     h += '</div>' + line();
     area().innerHTML = h; bindGo(area());
   }
@@ -55,9 +55,9 @@ const TimeTravel = (function () {
     let h = header('📖 時代 図鑑', '時代を タップ', 'home') + line({ click: true, sel: { [sel]: 'on' } });
     h += eraPic(sel) + '<div class="tt-card"><div class="tt-card-h">' + e[0] + '時代 <small>' + (e[1] < 0 ? '約' + (-e[1]) + '年前〜' : e[1] + '年〜') + (E[sel + 1] ? (E[sel + 1][1] < 0 ? '' : E[sel + 1][1] + '年') : '') + '</small></div><p class="tt-card-p">' + e[2] + '</p>';
     const ev = TT_EVENTS.filter(x => x[1] === sel), th = TT_THINGS.filter(x => x[0] === sel), pp = TT_PEOPLE.filter(x => x[0] === sel);
-    if (ev.length) { h += '<div class="tt-sec">📜 できごと</div>'; ev.forEach(x => { h += '<div class="tt-ev"><span>' + yr(x[0]) + '</span>' + esc(x[2]) + '</div>'; }); }
+    if (ev.length) { h += '<div class="tt-sec">📜 出来事</div>'; ev.forEach(x => { h += '<div class="tt-ev"><span>' + yr(x[0]) + '</span>' + esc(x[2]) + '</div>'; }); }
     if (pp.length) { h += '<div class="tt-sec">👤 人物</div><div class="tt-chips">'; pp.forEach(x => { h += '<span class="tt-chip"><b>' + esc(x[1]) + '</b> ' + esc(x[2]) + '</span>'; }); h += '</div>'; }
-    if (th.length) { h += '<div class="tt-sec">🏺 この 時代の もの・ようす</div><div class="tt-chips">'; th.forEach(x => { h += '<span class="tt-chip">' + esc(x[1]) + '</span>'; }); h += '</div>'; }
+    if (th.length) { h += '<div class="tt-sec">🏺 この 時代の もの・様子</div><div class="tt-chips">'; th.forEach(x => { h += '<span class="tt-chip">' + esc(x[1]) + '</span>'; }); h += '</div>'; }
     h += '</div>';
     area().innerHTML = h; bindGo(area());
     area().querySelectorAll('[data-era]').forEach(b => b.onclick = () => { sound('click'); zukan(+b.dataset.era); });
@@ -122,7 +122,7 @@ const TimeTravel = (function () {
       sound(ok ? 'correct' : 'wrong');
       const o = r.scene.odd;
       $('ttFb').innerHTML = '<div class="' + (ok ? 'tt-ok' : 'tt-ng') + '">' + (ok ? '✔ 見つけた!' : '✗ ざんねん…') + ' 「' + esc(o[1]) + '」は <b>' + E[o[0]][0] + '時代</b>の もの。' + E[era][0] + '時代には まだ なかった。' + (ok ? '' : '<br>「' + esc(x[1]) + '」は ' + E[x[0]][0] + '時代の もの だよ。') + '</div>' +
-        (r.hearts <= 0 ? '<button class="tt-go" id="ttOn">💨 にげられた… 結果へ</button>' : '<button class="tt-go" id="ttOn">' + (last ? '🚨 クロノを 追いつめる!' : '⏭ クロノを 追う') + '</button>');
+        (r.hearts <= 0 ? '<button class="tt-go" id="ttOn">💨 逃げられた… 結果へ</button>' : '<button class="tt-go" id="ttOn">' + (last ? '🚨 クロノを 追いつめる!' : '⏭ クロノを 追う') + '</button>');
       $('ttOn').onclick = () => { sound('click'); r.lock = false; if (r.hearts <= 0) return result(false); if (last) return result(true); r.phase = 'jump'; r.scene = null; stage(); };
       $('ttOn').scrollIntoView({ block: 'center', behavior: 'smooth' });
     });
@@ -132,7 +132,7 @@ const TimeTravel = (function () {
       if (k === era || (r.wrongEra && r.wrongEra[k])) return;
       if (k === nx) {
         r.lock = true; sound('correct');
-        $('ttFb').innerHTML = '<div class="tt-ok">✔ 正解! 「' + esc(r.clue[2]) + '」は ' + yr(r.clue[0]) + '、' + E[nx][0] + '時代の できごと。</div><button class="tt-go" id="ttOn">🌀 ' + E[nx][0] + '時代へ タイムトラベル!</button>';
+        $('ttFb').innerHTML = '<div class="tt-ok">✔ 正解! 「' + esc(r.clue[2]) + '」は ' + yr(r.clue[0]) + '、' + E[nx][0] + '時代の 出来事。</div><button class="tt-go" id="ttOn">🌀 ' + E[nx][0] + '時代へ タイムトラベル!</button>';
         $('ttOn').onclick = () => { sound('click'); r.lock = false; r.i++; r.phase = 'gap'; r.clue = null; r.wrongEra = null; stage(); };
         $('ttOn').scrollIntoView({ block: 'center', behavior: 'smooth' });
       } else {
@@ -148,8 +148,8 @@ const TimeTravel = (function () {
     const st = r.miss === 0 ? 3 : r.miss <= 1 ? 2 : 1;
     if (win) { d.cleared[r.c.id] = Math.max(d.cleared[r.c.id] || 0, st); save(); try { if (typeof triggerConfetti === 'function') triggerConfetti(); } catch (e) {} }
     sound(win ? 'chime' : 'wrong');
-    let h = header(win ? '🚨 事件 解決!' : '💨 にげられた…', esc(r.c.title), 'cases');
-    h += '<div class="tt-hero"><img src="' + SP + (win ? 'koradon_greet_01' : 'korarin_greet_01') + '.webp" alt=""><div class="tt-say">' + (win ? '<b>コラドン:</b> クロノを つかまえた! 歴史の ゆがみは ぜんぶ 元に もどったぞ!' : '<b>コラリン:</b> クロノは 時の かなたへ にげました… 時代 図鑑で 復習して、もう一度!') + '</div></div>';
+    let h = header(win ? '🚨 事件 解決!' : '💨 逃げられた…', esc(r.c.title), 'cases');
+    h += '<div class="tt-hero"><img src="' + SP + (win ? 'koradon_greet_01' : 'korarin_greet_01') + '.webp" alt=""><div class="tt-say">' + (win ? '<b>コラドン:</b> クロノを つかまえた! 歴史の ゆがみは 全部 元に もどったぞ!' : '<b>コラリン:</b> クロノは 時の かなたへ にげました… 時代 図鑑で 復習して、もう一度!') + '</div></div>';
     if (win) h += '<div class="tt-res">' + '⭐'.repeat(st) + '<span class="off">' + '☆'.repeat(3 - st) + '</span><div>まちがい ' + r.miss + '回</div></div>';
     h += '<div class="tt-recap"><div class="tt-sec">🕰 追跡した 時代</div>';
     r.route.slice(0, r.i + 1).forEach(k => { h += '<div class="tt-ev"><span>' + E[k][0] + '</span>' + esc(E[k][2]) + '</div>'; });
@@ -158,23 +158,23 @@ const TimeTravel = (function () {
     const ci = r.ci; $('ttAgain').onclick = () => { sound('click'); startCase(ci); };
   }
 
-  // ---------- 年表 ならべかえ (5ラウンド) ----------
+  // ---------- 年表 並べかえ (5ラウンド) ----------
   let od = null;
   function orderStart() { od = { round: 0, ok: 0 }; orderRound(); }
   function orderRound() {
     top();
     if (od.round >= 5) {
       const d = data(), nb = od.ok > (d.best.order || 0); d.best.order = Math.max(d.best.order || 0, od.ok); save();
-      let h = header('📜 年表 ならべかえ 結果', '', 'home') + '<div class="tt-res"><b>' + od.ok + '</b> / 5 ラウンド 全問正解' + (nb ? ' 🏆' : '') + '</div><div class="tt-row"><button class="tt-go" id="ttOA">🔁 もう一度</button></div>';
+      let h = header('📜 年表 並べかえ 結果', '', 'home') + '<div class="tt-res"><b>' + od.ok + '</b> / 5 ラウンド 全問正解' + (nb ? ' 🏆' : '') + '</div><div class="tt-row"><button class="tt-go" id="ttOA">🔁 もう一度</button></div>';
       area().innerHTML = h; bindGo(area()); $('ttOA').onclick = () => { sound('click'); orderStart(); }; return;
     }
-    // 5つの できごと (年が 重ならない ように)
+    // 5つの 出来事 (年が 重ならない ように)
     const pool = shuffle(TT_EVENTS), set = [];
     pool.forEach(x => { if (set.length < 5 && !set.some(y => Math.abs(y[0] - x[0]) < (od.round < 2 ? 40 : 8))) set.push(x); });
     od.set = set; od.picked = [];
     draw();
     function draw() {
-      let h = header('📜 年表 ならべかえ', 'ラウンド ' + (od.round + 1) + ' / 5 ・ 古い 順に タップ', 'home') + '<div class="tt-ord">';
+      let h = header('📜 年表 並べかえ', 'ラウンド ' + (od.round + 1) + ' / 5 ・ 古い 順に タップ', 'home') + '<div class="tt-ord">';
       od.picked.forEach((x, n) => { h += '<div class="tt-slot"><span>' + (n + 1) + '</span>' + esc(x[2]) + '</div>'; });
       for (let n = od.picked.length; n < 5; n++) h += '<div class="tt-slot empty"><span>' + (n + 1) + '</span></div>';
       h += '</div><div class="tt-items">';
@@ -189,7 +189,7 @@ const TimeTravel = (function () {
       const ok = od.picked.every((x, n) => x === right[n]);
       if (ok) od.ok++;
       sound(ok ? 'correct' : 'wrong');
-      let h = header('📜 年表 ならべかえ', 'ラウンド ' + (od.round + 1) + ' / 5', 'home');
+      let h = header('📜 年表 並べかえ', 'ラウンド ' + (od.round + 1) + ' / 5', 'home');
       h += '<div class="' + (ok ? 'tt-ok' : 'tt-ng') + '">' + (ok ? '✔ 完ぺき!' : '✗ 正しい 順番は こう!') + '</div><div class="tt-ord">';
       right.forEach((x, n) => { const mine = od.picked[n] === x; h += '<div class="tt-slot ' + (mine ? 'good' : 'bad') + '"><span>' + yr(x[0]) + '</span>' + esc(x[2]) + ' <small>(' + E[x[1]][0] + ')</small></div>'; });
       h += '</div><button class="tt-go" id="ttON">次の ラウンド →</button>';
@@ -212,7 +212,7 @@ const TimeTravel = (function () {
     if (eq.i >= eq.list.length) {
       const d = data(), nb = eq.ok > (d.best.era || 0); d.best.era = Math.max(d.best.era || 0, eq.ok); save();
       let h = header('🏯 時代あて 結果', '', 'home') + '<div class="tt-res"><b>' + eq.ok + '</b> / 10' + (nb ? ' 🏆 ベスト更新!' : '') + '</div>';
-      if (eq.miss.length) { h += '<div class="tt-recap"><div class="tt-sec">❗ まちがえた 問題</div>'; eq.miss.forEach(m => { h += '<div class="tt-ev"><span>' + E[m.era][0] + '</span>' + esc(m.note) + '</div>'; }); h += '</div>'; }
+      if (eq.miss.length) { h += '<div class="tt-recap"><div class="tt-sec">❗ 間違えた 問題</div>'; eq.miss.forEach(m => { h += '<div class="tt-ev"><span>' + E[m.era][0] + '</span>' + esc(m.note) + '</div>'; }); h += '</div>'; }
       h += '<div class="tt-row"><button class="tt-go" id="ttEA">🔁 もう一度</button></div>';
       area().innerHTML = h; bindGo(area()); $('ttEA').onclick = () => { sound('click'); eraStart(); }; return;
     }

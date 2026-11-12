@@ -360,7 +360,7 @@ const SCIENTISTS_STORY = [
         { speaker: 'haru',        text: 'はじめまして。林檎博士から お話を 聞いて 来ました。' },
         { speaker: 'shiraga_ein', text: 'ふむふむ、ちょうど 困った 事が あってのう…' },
         { speaker: 'shiraga_ein', text: '見て おくれ、この 二つの 時計を。' },
-        { speaker: 'narrator',    text: '机の上に、まったく 同じ モデルの 懐中時計が 二つ 並んでいた。' },
+        { speaker: 'narrator',    text: '机の上に、全く 同じ モデルの 懐中時計が 二つ 並んでいた。' },
         { speaker: 'shiraga_ein', text: '同じ時計じゃ。同じ日に 同じ工場で 作られた。じゃが…' },
         { speaker: 'hinata',      text: 'え… 時刻が ずれています!時計Bが 約30秒 遅れている。' },
         { speaker: 'rio',         text: 'ええっ、なんで!?' },
@@ -423,7 +423,7 @@ const SCIENTISTS_STORY = [
             label: '時計Aの 場所だけ 確認',
             isCorrect: false,
             response: [
-              { speaker: 'haru', text: '両方を 比べないと 差が わからないよ。' },
+              { speaker: 'haru', text: '両方を 比べないと 差が 分からないよ。' },
             ],
           },
         ],
@@ -641,7 +641,7 @@ const SCIENTISTS_STORY = [
             label: '光の 色だけ 確認',
             isCorrect: false,
             response: [
-              { speaker: 'haru', text: '色 だけでは 原因が わからないよ。もっと 全体を 調べよう。' },
+              { speaker: 'haru', text: '色 だけでは 原因が 分からないよ。もっと 全体を 調べよう。' },
             ],
           },
           {
@@ -1243,7 +1243,7 @@ const SCIENTISTS_STORY = [
             label: '澄んだ スープB だけ 見る',
             isCorrect: false,
             response: [
-              { speaker: 'haru', text: '腐った 方と 比べないと 違いが わからないよ。 両方 見よう。' },
+              { speaker: 'haru', text: '腐った 方と 比べないと 違いが 分からないよ。 両方 見よう。' },
             ],
           },
         ],
@@ -1368,7 +1368,7 @@ const SCIENTISTS_STORY = [
         id: 'step1',
         title: '🌱 STEP 1: 親の 世代を 確認',
         bg: 'bg_ch06_monastery',
-        question: 'まず、 最初の 親の 豆を 確認しよう。 何が わかる?',
+        question: 'まず、 最初の 親の 豆を 確認しよう。 何が 分かる?',
         options: [
           {
             label: '純粋な 白い 花 と 純粋な 紫の 花 — 混じり気の ない 親',
@@ -1673,7 +1673,7 @@ const SCIENTISTS_STORY = [
             isCorrect: true,
             response: [
               { speaker: 'hinata',            text: '点は 木星の 左右を 往復 しています — まるで 木星を まわる みたいに。' },
-              { speaker: 'rio',               text: '木星の まわりを グルグル! だから 左右に 見えるんだ!' },
+              { speaker: 'rio',               text: '木星の 周りを グルグル! だから 左右に 見えるんだ!' },
               { speaker: 'haru',              text: '横から 見てるから、 円運動が 左右の 往復に 見える のか…' },
               { speaker: 'galileo_telescope', text: '鋭い! 円を 横から 見れば、 往復に 見える。 その通りなのだ。' },
             ],
@@ -2079,7 +2079,7 @@ const SCIENTISTS_STORY = [
         { speaker: 'haru',      text: 'プリズムで 光を 分けて いるんだ… 何を 調べて いるんだろう。' },
         { speaker: 'bohr_atom', text: 'ようこそ。 私が ボーアです。 不思議な 光の 謎が あってね。' },
         { speaker: 'bohr_atom', text: 'まず これを 見て ください。 太陽の 光を プリズムに 通すと…' },
-        { speaker: 'rio',       text: 'わぁ、 虹! 赤から 紫まで、 ぜんぶ つながってる!' },
+        { speaker: 'rio',       text: 'わぁ、 虹! 赤から 紫まで、 全部 つながってる!' },
         { speaker: 'bohr_atom', text: 'そう、 連続した 虹に なります。 では、 この 元素の 光は どうでしょう。' },
         { speaker: 'narrator',  text: '光る 管の 光を プリズムに 通すと — 虹では なく、 とびとびの 数本の 色の 線 だけが 現れた。' },
         { speaker: 'haru',      text: 'えっ、 連続して ない! 数本の 線 だけ…?' },
@@ -2157,7 +2157,7 @@ const SCIENTISTS_STORY = [
               { speaker: 'hinata',    text: '水素は ここ、 別の 元素は 違う 場所に 線が… 元素ごとに 違います!' },
               { speaker: 'rio',       text: '光の 指紋だ! どの 元素か 見分けられる!' },
               { speaker: 'haru',      text: '位置が 決まってる… 原子の 種類で 決まる 何か が ある。' },
-              { speaker: 'bohr_atom', text: 'お見事。 線の 位置は 元素の 「指紋」。 これで 星の 成分も わかるのです。' },
+              { speaker: 'bohr_atom', text: 'お見事。 線の 位置は 元素の 「指紋」。 これで 星の 成分も 分かるのです。' },
             ],
           },
           {
@@ -2176,11 +2176,11 @@ const SCIENTISTS_STORY = [
         question: 'ボーアが 原子の 模型を 見せた。 原子は どんな 構造?',
         options: [
           {
-            label: '中心に 核、 その まわりを 電子が まわっている',
+            label: '中心に 核、 その 周りを 電子が まわっている',
             isCorrect: true,
             response: [
-              { speaker: 'haru',      text: '真ん中に 「核」、 その まわりを 小さな 「電子」 が まわってる…' },
-              { speaker: 'rio',       text: '太陽の まわりの 惑星 みたい! ガリレオの 話 とも 似てる!' },
+              { speaker: 'haru',      text: '真ん中に 「核」、 その 周りを 小さな 「電子」 が まわってる…' },
+              { speaker: 'rio',       text: '太陽の 周りの 惑星 みたい! ガリレオの 話 とも 似てる!' },
               { speaker: 'hinata',    text: '光は きっと、 この 電子と 関係が あるんですね。' },
               { speaker: 'bohr_atom', text: 'その通り。 光の 秘密は、 電子の 動きに あるのです。' },
             ],
@@ -2262,7 +2262,7 @@ const SCIENTISTS_STORY = [
         { speaker: 'bohr_atom', text: '皆の おかげで、 原子の 模型を きちんと 説明 できました。 ありがとう。' },
         { speaker: 'bohr_atom', text: '目に 見えない 原子の 中にも、 階段の ような 美しい 規則が ある。 不思議でしょう?' },
         { speaker: 'rio',       text: 'とびとびの 光が、 原子の 階段を 教えてくれたんだ!' },
-        { speaker: 'haru',      text: '光の 線で 星の 成分まで わかる… 宇宙と 原子が つながってる。' },
+        { speaker: 'haru',      text: '光の 線で 星の 成分まで 分かる… 宇宙と 原子が つながってる。' },
         { speaker: 'hinata',    text: 'キューリィ夫人の 放射能とも、 どこか つながって ますね。' },
         { speaker: 'bohr_atom', text: 'その通り。 原子の 世界を、 もう 少し 学んで みましょう。' },
         { speaker: 'penta',     text: 'ペンッ! 原子の 勉強、 ペン!' },
@@ -2277,7 +2277,7 @@ const SCIENTISTS_STORY = [
       },
       {
         q: '原子の 構造は?',
-        options: ['空っぽ', '核 + まわりの 電子', '電子だけ', '核だけ'],
+        options: ['空っぽ', '核 + 周りの 電子', '電子だけ', '核だけ'],
         correct: 1,
       },
       {
@@ -2536,7 +2536,7 @@ const SCIENTISTS_STORY = [
         { speaker: 'rio',        text: 'やったー! 全部 クリア!' },
         { speaker: 'haru',       text: 'みんなで 力を 合わせたから… ヒナタも ペンタも、 ありがとう。' },
         { speaker: 'hinata',     text: '科学者たちの 「知ろうと する 心」、 私も 受け継ぎたい です。' },
-        { speaker: 'togo_kenja', text: '知ろうと する 心が ある かぎり、 世界の 謎は いつか 解ける のじゃ。' },
+        { speaker: 'togo_kenja', text: '知ろうと する 心が ある 限り、 世界の 謎は いつか 解ける のじゃ。' },
         { speaker: 'togo_kenja', text: 'さあ、 学んだ 全てを、 もう一度 振り返って みよう。 9つの 物語の 総まとめじゃ。' },
         { speaker: 'penta',      text: 'ペンッ! 全部 クリア、 ペン! みんな すごいペン!' },
       ],

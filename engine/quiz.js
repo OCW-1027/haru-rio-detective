@@ -49,13 +49,13 @@ function renderGate() {
     saveState();
     let html = '<div class="gate-header">';
     html += '<div class="gate-h-title">🎯 関門 ' + (GateState.chapterIdx + 1) + ' 突破!</div>';
-    html += '<div class="gate-h-sub">5問 ぜんぶ 正解!</div>';
+    html += '<div class="gate-h-sub">5問 全部 正解!</div>';
     html += '</div>';
     html += '<div class="gate-success-msg">';
     html += '<div class="gate-success-h">✨ クリア!</div>';
     html += '<div class="gate-success-text">';
     if (GateState.chapterIdx === STORY.length - 1) {
-      html += '🏆 全 ' + STORY.length + ' 関門を 突破した!<br>きみは ほんとうの 名探偵だ!';
+      html += '🏆 全 ' + STORY.length + ' 関門を 突破した!<br>きみは 本当の 名探偵だ!';
     } else {
       html += '次の 章が ひらいたよ!<br>第 ' + (GateState.chapterIdx + 2) + ' 章に 挑戦!';
     }
@@ -89,14 +89,14 @@ function renderGate() {
       const wrongCount = GateState.results.filter(r => r === 'retry').length;
       let html = '<div class="gate-header">';
       html += '<div class="gate-h-title">🎯 関門 ' + (GateState.chapterIdx + 1) + '</div>';
-      html += '<div class="gate-h-sub">5問 ぜんぶ 正解で 突破!</div>';
+      html += '<div class="gate-h-sub">5問 全部 正解で 突破!</div>';
       html += '</div>';
       html += renderProgressDots();
       html += '<div class="gate-fail-msg">';
       html += '<div class="gate-fail-h">あと ' + wrongCount + ' 問</div>';
       html += '<div class="gate-fail-text">';
-      html += 'まちがえた 問題が ' + wrongCount + ' つ あります。<br>';
-      html += '正解した 問題は そのまま、 まちがえた 問題だけ もう一度 挑戦しよう!';
+      html += '間違えた 問題が ' + wrongCount + ' つ あります。<br>';
+      html += '正解した 問題は そのまま、 間違えた 問題だけ もう一度 挑戦しよう!';
       html += '</div></div>';
       html += '<button class="gate-next-btn" id="gateRetryStart">もう一度 挑戦 →</button>';
       area.innerHTML = html;
@@ -115,7 +115,7 @@ function renderGate() {
 
   let html = '<div class="gate-header">';
   html += '<div class="gate-h-title">🎯 関門 ' + (GateState.chapterIdx + 1) + ' / ' + STORY.length + '</div>';
-  html += '<div class="gate-h-sub">5問 ぜんぶ 正解で 突破!</div>';
+  html += '<div class="gate-h-sub">5問 全部 正解で 突破!</div>';
   html += '</div>';
   html += renderProgressDots();
   html += '<div class="gate-q-card">';

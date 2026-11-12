@@ -1,6 +1,6 @@
 /* engine/lab.js — 新コンテンツ③ ラボ探偵 v2 (物理·化学·生物の 仮想実験)
  * 流れ: 事件ファイル (証拠と 証言) → 実験室で 全員の 証言を 再現して 検証 → 推理 (法則 → 計算 → 矛盾) → 犯人の 指名
- * 「証拠の 数値」と「証言どおりに 実験した 数値」を くらべて、うそや 犯人を 見ぬく。
+ * 「証拠の 数値」と「証言どおりに 実験した 数値」を 比べて、うそや 犯人を 見ぬく。
  * 画面: pageLab (#labArea). 保存: State.v2.lab = { cleared: {caseId: stars} }
  * 絵: assets/img/lab/… が あれば 使い、なければ 絵文字で 代用 (docs/GEMINI_ART_REQUEST.md)
  * Dependencies: State, saveState, showPage, sfx, escapeHtml, CHAR_IMAGES
@@ -43,7 +43,7 @@ const LabDetective = (function () {
     const f = LIGHT[p.l][1] * WATER[p.w][1] * TEMP[p.t][1];
     return { h: 2 + 14 * f + (p.l === 'dark' ? 14 : 0), pale: p.l === 'dark', wilt: p.w === 'w7', stem: p.l === 'dark' ? 'ひょろひょろ' : 'しっかり' };
   }
-  const SPRING = { normal: ['ふつうの ばね', 1], soft: ['やわらかい ばね', 1.2], hard: ['かたい ばね', 0.8] };
+  const SPRING = { normal: ['普通の ばね', 1], soft: ['やわらかい ばね', 1.2], hard: ['かたい ばね', 0.8] };
   function scale(sp, z, w) { return w * SPRING[sp][1] + z; }
   function frac(x) { if (x >= 0.99 && x <= 1.01) return '同じ (1倍)'; if (x < 1) return '1/' + Math.round(1 / x); return Math.round(x * 10) / 10 + '倍'; }
 
@@ -51,23 +51,23 @@ const LabDetective = (function () {
   const CASES = [
     { id: 'pendulum', icon: '🕰', name: '遅れる 時計塔', field: '物理 · ふりこ', level: '★★',
       story: '町の 時計塔の ふりこ時計が、整備の あとから 毎日 遅れるように なった。整備の 記録には 4人の 名前。だれかが うそを ついている…?',
-      evidence: ['時計は <b>1日に 約14分</b> 遅れる (3日間 毎日 同じ)', '整備前の ふりこ: ひもの 長さ <b>1.00m</b>・おもり <b>200g</b>・ふれはば <b>5°</b>', 'ふりこの 時計は「ふりこが 1往復するたびに 針が 進む」しくみ'],
+      evidence: ['時計は <b>1日に 約14分</b> 遅れる (3日間 毎日 同じ)', '整備前の ふりこ: ひもの 長さ <b>1.00m</b>・おもり <b>200g</b>・ふれはば <b>5°</b>', 'ふりこの 時計は「ふりこが 1往復するたびに 針が 進む」仕組み'],
       suspects: [
         { id: 'a', face: '👷', name: '整備士 アキラ', says: 'おもりを 200g から 400g の ものに 取りかえた だけだよ。', test: c => near(c.M, 400) && near(c.L, 1) && near(c.A, 5), how: 'おもり 400g・長さ 1.00m・ふれはば 5°' },
         { id: 'b', face: '🧑‍🔧', name: '助手 ベン', says: '古い ひもを 新品に 交換した。長さは 1cm しか 変わってないよ。', test: c => near(c.L, 1.01) && near(c.A, 5), how: '長さ 1.01m・ふれはば 5°' },
         { id: 'c', face: '👩‍🏫', name: '見学の 先生 チカ', says: 'ふれはばを 5° から 10° に 大きくして 生徒に 見せました。', test: c => near(c.L, 1) && near(c.A, 10), how: '長さ 1.00m・ふれはば 10°' },
-        { id: 'd', face: '🧓', name: '時計番 ドロ', says: '針を 正しい 時刻に 合わせ直した だけじゃ。ふりこには さわっとらん。', test: null } ],
+        { id: 'd', face: '🧓', name: '時計番 ドロ', says: '針を 正しい 時刻に 合わせ直した だけじゃ。ふりこには 触っとらん。', test: null } ],
       sim: 'pendulum',
       qs: [
-        { q: 'ふりこの 1往復の 時間を いちばん 大きく 変えるのは?', o: ['ひもの 長さ', 'おもりの 重さ', 'ふれはば (5°〜10°の 範囲)'], hint: '長さ・重さ・ふれはばを 1つずつ 変えて、1往復の 時間を くらべてみよう。' },
+        { q: 'ふりこの 1往復の 時間を 一番 大きく 変えるのは?', o: ['ひもの 長さ', 'おもりの 重さ', 'ふれはば (5°〜10°の 範囲)'], hint: '長さ・重さ・ふれはばを 1つずつ 変えて、1往復の 時間を 比べてみよう。' },
         { q: 'ベンの 言うとおり ひもが 1cm 長く なったら、時計は 1日に 約何分 遅れる?', o: ['約7分', '約1分', '約14分', '遅れない'], hint: '長さ 1.01m・ふれはば 5° で 実験して「1日の ずれ」を 見よう。' },
-        { q: '証拠の「1日に 約14分 遅れる」に なるのは、ひもが 何cm 長く なったとき?', o: ['2cm', '1cm', '5cm', '14cm'], hint: '長さを 1.01m、1.02m、1.03m… と 変えて 1日の ずれを くらべよう。' } ],
+        { q: '証拠の「1日に 約14分 遅れる」に なるのは、ひもが 何cm 長く なったとき?', o: ['2cm', '1cm', '5cm', '14cm'], hint: '長さを 1.01m、1.02m、1.03m… と 変えて 1日の ずれを 比べよう。' } ],
       culprit: 'b',
       reveal: 'ベンは「1cm しか 変わってない」と 言ったが、実際には ひもが <b>2cm</b> 長く なっていた。1cm なら 1日 約7分、2cm なら 約14分 遅れる。数値が 証拠と 合わない 証言は うそ!',
       vocab: [['pendulum', 'ふりこ'], ['period', '周期 (1往復の 時間)'], ['length', '長さ'], ['evidence', '証拠'], ['measure', 'はかる']],
       summary: 'ふりこの 周期は ほぼ「ひもの 長さ」だけで 決まる (おもりの 重さには 関係なし。ふれはばは 大きくすると ほんの 少しだけ 長くなる)。長さが 1% 長くなると 周期は 約0.5% 長くなり、1日 (86400秒) では 約7分の 遅れに なる。' },
     { id: 'circuit', icon: '💡', name: '暗く なった 看板', field: '物理 · 電気回路', level: '★★',
-      story: '商店街の 看板の 豆電球が 暗く なった。ところが 電池は なかなか 切れない。配線を さわった 4人の 証言を、回路を 組んで 1つずつ たしかめよう。',
+      story: '商店街の 看板の 豆電球が 暗く なった。ところが 電池は なかなか 切れない。配線を 触った 4人の 証言を、回路を 組んで 1つずつ 確かめよう。',
       evidence: ['看板の 豆電球 1個の 明るさが 前の <b>1/4</b> に なった', '電池の もちが 前の <b>4倍</b> に なった (1か月 たっても 切れない)', '前の 回路: 電池 1個・豆電球 1個'],
       suspects: [
         { id: 'a', face: '🧑‍💼', name: '店長 ダイ', says: '電池を 2個 並列に つないで 長持ちするように した。', test: c => c.bn === '2p' && c.ln === '1', how: '電池 2個 並列・豆電球 1個' },
@@ -76,11 +76,11 @@ const LabDetective = (function () {
         { id: 'd', face: '🧑‍🏭', name: '配線係 ゲン', says: '電池を 並列に して、豆電球も 2個 直列に した。', test: c => c.bn === '2p' && c.ln === '2s', how: '電池 2個 並列・豆電球 2個 直列' } ],
       sim: 'circuit',
       qs: [
-        { q: '豆電球を 2個 直列に すると、1個の 明るさは?', o: ['1/4 に なる', '1/2 に なる', '変わらない', '2倍に なる'], hint: '電池 1個のまま、豆電球 1個 と 2個 直列 を くらべよう。' },
-        { q: '電池を 2個 並列に すると?', o: ['明るさは 同じで、電池が 長持ちする', '明るさが 2倍に なる', '暗く なる', '電池が 早く なくなる'], hint: '豆電球 1個のまま、電池 1個 と 2個 並列 を くらべよう。' },
-        { q: '証拠 (明るさ 1/4・もち 4倍) と ぴったり 合う つなぎ方は?', o: ['電池 2個 並列 + 豆電球 2個 直列', '電池 1個 + 豆電球 2個 直列', '電池 2個 並列 + 豆電球 1個', '電池 2個 直列 + 豆電球 2個 直列'], hint: '明るさだけで なく「電池の もち」も 証拠と くらべよう。エミの つなぎ方は もち 何倍?' } ],
+        { q: '豆電球を 2個 直列に すると、1個の 明るさは?', o: ['1/4 に なる', '1/2 に なる', '変わらない', '2倍に なる'], hint: '電池 1個のまま、豆電球 1個 と 2個 直列 を 比べよう。' },
+        { q: '電池を 2個 並列に すると?', o: ['明るさは 同じで、電池が 長持ちする', '明るさが 2倍に なる', '暗く なる', '電池が 早く なくなる'], hint: '豆電球 1個のまま、電池 1個 と 2個 並列 を 比べよう。' },
+        { q: '証拠 (明るさ 1/4・もち 4倍) と ぴったり 合う つなぎ方は?', o: ['電池 2個 並列 + 豆電球 2個 直列', '電池 1個 + 豆電球 2個 直列', '電池 2個 並列 + 豆電球 1個', '電池 2個 直列 + 豆電球 2個 直列'], hint: '明るさだけで なく「電池の もち」も 証拠と 比べよう。エミの つなぎ方は もち 何倍?' } ],
       culprit: 'd',
-      reveal: 'エミの つなぎ方でも 明るさは 1/4 に なるが、電池の もちは 2倍。<b>明るさ 1/4 と もち 4倍</b> の 両方が 合うのは、ゲンの「電池 並列 + 豆電球 直列」だけ。証拠は 1つでなく 全部 くらべよう!',
+      reveal: 'エミの つなぎ方でも 明るさは 1/4 に なるが、電池の もちは 2倍。<b>明るさ 1/4 と もち 4倍</b> の 両方が 合うのは、ゲンの「電池 並列 + 豆電球 直列」だけ。証拠は 1つでなく 全部 比べよう!',
       vocab: [['circuit', '回路'], ['series', '直列'], ['parallel', '並列'], ['current', '電流'], ['brightness', '明るさ']],
       summary: '豆電球を 直列に すると 抵抗が 2倍で 電流が 半分 → 1個の 明るさは 1/4 (明るさは 電流の 2乗に 比例)。電池を 並列に すると 電圧は 同じで、2個で 電流を 分けあうので 長持ち。電流が 半分 × 2個で 分担 → もちは 4倍。' },
     { id: 'dissolve', icon: '🧂', name: '理科室の 白い 結晶', field: '化学 · もののとけ方', level: '★★★',
@@ -93,56 +93,56 @@ const LabDetective = (function () {
       sim: 'dissolve',
       qs: [
         { q: '60℃の 水 100g に 50g が 全部 とけるのは?', o: ['ミョウバンと 硝酸カリウム', '食塩だけ', '3つとも', '硝酸カリウムだけ'], hint: '3つの 物質で 50g・60℃ を ためそう。「とけ残り」が 出るのは どれ?' },
-        { q: '50g を 60℃で とかして 20℃に 冷やしたとき、結晶が 約18g 出るのは?', o: ['硝酸カリウム', 'ミョウバン', '食塩', 'どれも 出ない'], hint: '50g・60℃→20℃ で 3つ くらべよう。' },
+        { q: '50g を 60℃で とかして 20℃に 冷やしたとき、結晶が 約18g 出るのは?', o: ['硝酸カリウム', 'ミョウバン', '食塩', 'どれも 出ない'], hint: '50g・60℃→20℃ で 3つ 比べよう。' },
         { q: 'ジュンの 言うとおり 硝酸カリウム 30g なら、20℃で 結晶は?', o: ['出ない (20℃でも 31.6g まで とける)', '約18g 出る', '約30g 出る', '約11g 出る'], hint: 'ジュンの 証言どおりに 実験してみよう。' } ],
       culprit: 'c',
       reveal: '証拠は「50g の ふくろ」と「結晶 約18g」。これに 合うのは <b>硝酸カリウム 50g</b> だけ (20℃で とけるのは 31.6g → 50 − 31.6 = 18.4g)。ジュンは 本当は 50g を とかしたのに「30g だけ」と うそを ついた!',
       vocab: [['dissolve', 'とける'], ['solution', '水よう液'], ['crystal', '結晶'], ['solubility', '溶解度 (とける 量)'], ['cool', '冷やす']],
       summary: 'とける 量 (溶解度) は 物質と 温度で 決まる。食塩は 温度が 変わっても ほとんど 同じ。ミョウバンや 硝酸カリウムは 温度が 高いほど たくさん とけ、冷やすと とけきれない 分が 結晶に なる (再結晶)。出てくる 結晶 = とけていた 量 − 冷えた 温度で とける 量。' },
     { id: 'plant', icon: '🌱', name: '育たない 苗', field: '生物 · 植物の 成長', level: '★★★',
-      story: '温室の トマトの 苗が ひょろひょろで 色も うすく、葉まで しおれている。管理係 3人の 証言を「対照実験」で 1つずつ たしかめよう。原因は 1つとは かぎらない…!',
+      story: '温室の トマトの 苗が ひょろひょろで 色も うすく、葉まで しおれている。管理係 3人の 証言を「対照実験」で 1つずつ 確かめよう。原因は 1つとは 限らない…!',
       evidence: ['苗が <b>ひょろ長く</b> 伸びて、葉の 色が <b>うすい</b>', '葉が <b>しおれて</b> 下を 向いている', '前の 温室: 日なた・水やり 毎日・25℃'],
       suspects: [
-        { id: 'a', face: '👩‍🌾', name: '水やり係 ミサキ', says: '節約の ために、水やりを 1週間に 1回に 減らしました。', test: c => c.diff === 'w' && c.vals.includes('daily') && c.vals.includes('w7'), how: '水だけを「毎日」と「1週間に1回」で くらべる' },
-        { id: 'b', face: '🧔', name: '温度係 ゴロウ', says: '暖房の 温度を 25℃から 20℃に 下げたよ。', test: c => c.diff === 't' && c.vals.includes('t25') && c.vals.includes('t20'), how: '温度だけを「25℃」と「20℃」で くらべる' },
-        { id: 'c', face: '🕵', name: '清掃係 ヨル', says: '日差しが まぶしいので、窓に 黒い シートを はりました。', test: c => c.diff === 'l' && c.vals.includes('sun') && c.vals.includes('dark'), how: '光だけを「日なた」と「黒い シート」で くらべる' } ],
+        { id: 'a', face: '👩‍🌾', name: '水やり係 ミサキ', says: '節約の ために、水やりを 1週間に 1回に 減らしました。', test: c => c.diff === 'w' && c.vals.includes('daily') && c.vals.includes('w7'), how: '水だけを「毎日」と「1週間に1回」で 比べる' },
+        { id: 'b', face: '🧔', name: '温度係 ゴロウ', says: '暖房の 温度を 25℃から 20℃に 下げたよ。', test: c => c.diff === 't' && c.vals.includes('t25') && c.vals.includes('t20'), how: '温度だけを「25℃」と「20℃」で 比べる' },
+        { id: 'c', face: '🕵', name: '清掃係 ヨル', says: '日差しが まぶしいので、窓に 黒い シートを はりました。', test: c => c.diff === 'l' && c.vals.includes('sun') && c.vals.includes('dark'), how: '光だけを「日なた」と「黒い シート」で 比べる' } ],
       sim: 'plant',
       qs: [
-        { q: '原因を たしかめる 正しい くらべ方は?', o: ['変える 条件を 1つだけに して、他は 同じに する', '条件を ぜんぶ 変えて くらべる', '1つの 鉢だけで 育てる', '毎回 ちがう 種類の 植物を 使う'], hint: '2つの 鉢で 条件が 2つ 以上 ちがうと、どれが 原因か わからない。' },
+        { q: '原因を 確かめる 正しい 比べ方は?', o: ['変える 条件を 1つだけに して、他は 同じに する', '条件を 全部 変えて 比べる', '1つの 鉢だけで 育てる', '毎回 違う 種類の 植物を 使う'], hint: '2つの 鉢で 条件が 2つ 以上 違うと、どれが 原因か 分からない。' },
         { q: '苗が ひょろ長く、葉の 色が うすく なる 原因は?', o: ['光が 足りない', '水が 足りない', '温度が 20℃', '肥料が 多すぎる'], hint: '光だけを 変えた 対照実験の 結果を 見よう。' },
         { q: '葉が しおれる 原因は?', o: ['水が 足りない', '光が 足りない', '温度が 20℃', 'シートが 黒い'], hint: '水だけを 変えた 対照実験の 結果を 見よう。' } ],
       culprit: ['a', 'c'],
       reveal: '原因は 2つ! ひょろ長く 色が うすいのは ヨルの 黒い シート (光不足)、しおれは ミサキの 水やり 減らし (水不足)。ゴロウの 20℃は 少し 小さく なる だけで、どちらの 症状も 出ない。',
-      vocab: [['photosynthesis', '光合成'], ['variable', '条件 (変数)'], ['control', '対照 (くらべる 基準)'], ['wilt', 'しおれる'], ['cause', '原因']],
+      vocab: [['photosynthesis', '光合成'], ['variable', '条件 (変数)'], ['control', '対照 (比べる 基準)'], ['wilt', 'しおれる'], ['cause', '原因']],
       summary: '原因を 調べる ときは「変える 条件を 1つだけ」に する (対照実験)。光が 足りないと 光合成が できず、光を 求めて ひょろ長く 伸び、葉の 色が うすく なる (もやしと 同じ)。水が 足りないと 葉が しおれる。症状が 2つ あれば 原因も 2つ かもしれない。' },
     { id: 'spring', icon: '⚖', name: 'ばねばかりの いかさま', field: '物理 · ばねと 比例', level: '★★★',
-      story: '八百屋の ばねばかりで はかった 野菜が、家で はかると 軽い! お客さんの 苦情で 調査開始。ばねばかりを さわった 3人の 証言を、グラフで たしかめよう。',
+      story: '八百屋の ばねばかりで はかった 野菜が、家で はかると 軽い! お客さんの 苦情で 調査開始。ばねばかりを 触った 3人の 証言を、グラフで 確かめよう。',
       evidence: ['何も のせない とき: <b>0kg</b> を 指す', '1kg の 分銅: <b>1.2kg</b> を 指す', '2kg の 分銅: <b>2.4kg</b> を 指す'],
       suspects: [
         { id: 'a', face: '🧑‍🌾', name: '店主 マサ', says: 'ばねが 古く なったから、やわらかい ばねに 取りかえた。目盛りは そのまま。', test: c => c.sp === 'soft' && near(c.z, 0) && c.w >= 1, how: 'やわらかい ばね・0点 そのまま で 1kg 以上を はかる' },
-        { id: 'b', face: '👩‍💼', name: '店員 リコ', says: '掃除の ときに、目盛りの 板が 0.2kg 分 下に ずれちゃったかも。', test: c => c.sp === 'normal' && near(c.z, 0.2) && c.w >= 1, how: 'ふつうの ばね・0点を 0.2kg ずらして 1kg 以上を はかる' },
+        { id: 'b', face: '👩‍💼', name: '店員 リコ', says: '掃除の ときに、目盛りの 板が 0.2kg 分 下に ずれちゃったかも。', test: c => c.sp === 'normal' && near(c.z, 0.2) && c.w >= 1, how: '普通の ばね・0点を 0.2kg ずらして 1kg 以上を はかる' },
         { id: 'c', face: '🧑‍🦱', name: '常連客 トオル', says: '店主が かたい ばねに 取りかえるのを 見たよ。', test: c => c.sp === 'hard' && near(c.z, 0) && c.w >= 1, how: 'かたい ばね・0点 そのまま で 1kg 以上を はかる' } ],
       sim: 'spring',
       qs: [
-        { q: 'ばねの のびと 重さの 関係は?', o: ['重さが 2倍に なると のびも 2倍 (比例)', '重さに 関係なく 同じだけ のびる', '重さが 2倍でも のびは 1.2倍', '重いほど のびなく なる'], hint: '同じ ばねで 1kg・2kg・3kg を はかって くらべよう。' },
-        { q: 'リコの 言うとおり 0点が 0.2kg ずれたら、2kg の 分銅は 何kg を 指す?', o: ['2.2kg', '2.4kg', '2.0kg', '1.8kg'], hint: 'ふつうの ばね・0点 0.2kg ずらし で 2kg を はかろう。' },
-        { q: '証拠 (0kg→0、1kg→1.2、2kg→2.4) と 合うのは?', o: ['やわらかい ばね (どの 重さも 1.2倍)', '0点の ずれ (どの 重さも +0.2kg)', 'かたい ばね (どの 重さも 0.8倍)', 'ふつうの ばね'], hint: '0kg の とき 0 を 指すか、2kg の とき 2.4 に なるかを グラフで くらべよう。' } ],
+        { q: 'ばねの のびと 重さの 関係は?', o: ['重さが 2倍に なると のびも 2倍 (比例)', '重さに 関係なく 同じだけ のびる', '重さが 2倍でも のびは 1.2倍', '重いほど のびなく なる'], hint: '同じ ばねで 1kg・2kg・3kg を はかって 比べよう。' },
+        { q: 'リコの 言うとおり 0点が 0.2kg ずれたら、2kg の 分銅は 何kg を 指す?', o: ['2.2kg', '2.4kg', '2.0kg', '1.8kg'], hint: '普通の ばね・0点 0.2kg ずらし で 2kg を はかろう。' },
+        { q: '証拠 (0kg→0、1kg→1.2、2kg→2.4) と 合うのは?', o: ['やわらかい ばね (どの 重さも 1.2倍)', '0点の ずれ (どの 重さも +0.2kg)', 'かたい ばね (どの 重さも 0.8倍)', '普通の ばね'], hint: '0kg の とき 0 を 指すか、2kg の とき 2.4 に なるかを グラフで 比べよう。' } ],
       culprit: 'a',
       reveal: '0点が ずれただけなら 何も のせなくても 0.2kg を 指し、2kg は 2.2kg に なる。証拠は 0→0、2kg→2.4kg = <b>どの 重さも 1.2倍</b>。これは やわらかい ばねに 取りかえた とき だけ! トオルの 目撃は 見まちがいだった。',
       vocab: [['spring', 'ばね'], ['proportional', '比例'], ['scale', 'はかり'], ['weight', '重さ'], ['graph', 'グラフ']],
-      summary: 'ばねの のびは のせた 重さに 比例する (フックの 法則)。やわらかい ばねは 同じ 重さで よく のびるので、目盛りが そのままだと どの 重さも 同じ 倍率で 重く 出る。0点の ずれは どの 重さにも 同じ 量を 足す。グラフに すると「傾きの ちがい」と「切片の ちがい」に なる。' },
+      summary: 'ばねの のびは 乗せた 重さに 比例する (フックの 法則)。やわらかい ばねは 同じ 重さで よく のびるので、目盛りが そのままだと どの 重さも 同じ 倍率で 重く 出る。0点の ずれは どの 重さにも 同じ 量を 足す。グラフに すると「傾きの 違い」と「切片の 違い」に なる。' },
   ];
 
   // ================= 一覧 =================
   function list() {
     stop();
     const d = data();
-    let h = '<div class="lb-hero"><div><div class="lb-kicker">ハル&リオの</div><h1 class="lb-h1">ラボ探偵</h1><p>証言どおりに 実験して、証拠の 数値と くらべよう。合わない 証言は うそだ!</p></div>' + art(IMG + 'hero.webp', '<img src="' + KORARIN + '" alt="">', 'lb-hero-art') + '</div><div class="lb-cases">';
+    let h = '<div class="lb-hero"><div><div class="lb-kicker">ハル&リオの</div><h1 class="lb-h1">ラボ探偵</h1><p>証言どおりに 実験して、証拠の 数値と 比べよう。合わない 証言は うそだ!</p></div>' + art(IMG + 'hero.webp', '<img src="' + KORARIN + '" alt="">', 'lb-hero-art') + '</div><div class="lb-cases">';
     CASES.forEach((c, i) => {
       const s = d.cleared[c.id] || 0;
-      h += '<button class="lb-case" data-i="' + i + '">' + art(IMG + 'case_' + c.id + '.webp', '<span class="lb-case-i">' + c.icon + '</span>', 'lb-case-art') + '<span><b>' + (i + 1) + '. ' + esc(c.name) + '</b><small>' + esc(c.field) + ' ・ むずかしさ ' + c.level + '</small><span class="lb-stars">' + (s ? '★'.repeat(s) + '☆'.repeat(3 - s) : '未解決') + '</span></span></button>';
+      h += '<button class="lb-case" data-i="' + i + '">' + art(IMG + 'case_' + c.id + '.webp', '<span class="lb-case-i">' + c.icon + '</span>', 'lb-case-art') + '<span><b>' + (i + 1) + '. ' + esc(c.name) + '</b><small>' + esc(c.field) + ' ・ 難しさ ' + c.level + '</small><span class="lb-stars">' + (s ? '★'.repeat(s) + '☆'.repeat(3 - s) : '未解決') + '</span></span></button>';
     });
-    h += '</div><div class="lb-note">🔬 捜査の 手順: ① 事件ファイルで 証拠を 読む → ② 実験室で <b>全員の 証言を 再現</b> → ③ 推理 (法則 → 計算 → 証拠と くらべる) → ④ 犯人を 指名</div>';
+    h += '</div><div class="lb-note">🔬 捜査の 手順: ① 事件ファイルで 証拠を 読む → ② 実験室で <b>全員の 証言を 再現</b> → ③ 推理 (法則 → 計算 → 証拠と 比べる) → ④ 犯人を 指名</div>';
     area().innerHTML = h;
     area().querySelectorAll('[data-i]').forEach(b => b.onclick = () => { sfx('click'); startCase(CASES[+b.dataset.i]); });
   }
@@ -169,7 +169,7 @@ const LabDetective = (function () {
     h += art(IMG + 'case_' + c.id + '.webp', '', 'lb-scene');
     h += '<div class="lb-box lb-talk"><img src="' + CHAR_IMAGES.haru + '" alt="" class="lb-haru"><div><b>ハル</b><p>' + esc(c.story) + '</p></div></div>';
     h += evidenceBox(c);
-    h += '<div class="lb-h2">🗣 証言 (全員 実験で たしかめよう)</div>' + testimony(c);
+    h += '<div class="lb-h2">🗣 証言 (全員 実験で 確かめよう)</div>' + testimony(c);
     h += '<button class="lb-primary" id="lbExp">🔬 実験室へ</button>';
     if (allVerified()) h += '<button class="lb-secondary" id="lbSolve2">🕵 推理する</button>';
     area().innerHTML = h; bindHead();
@@ -232,7 +232,7 @@ const LabDetective = (function () {
       sfx('click');
       const len = +(+L.value).toFixed(2), a = +A.value, m = +M.value, T = period(len, a), lag = dayLagMin(len, a);
       const lagTxt = Math.abs(lag) < 0.05 ? 'ずれない' : '約' + Math.abs(lag).toFixed(1) + '分 ' + (lag > 0 ? '遅れる' : '進む');
-      document.getElementById('pOut').innerHTML = '⏱ 100往復: <b>' + (100 * T).toFixed(1) + '秒</b> → 1往復 <b>' + T.toFixed(3) + '秒</b><br>🕰 この ふりこの 時計は 1日に <b>' + lagTxt + '</b> <span class="lb-small">(整備前 1往復 ' + T0.toFixed(3) + '秒 と くらべて)</span>';
+      document.getElementById('pOut').innerHTML = '⏱ 100往復: <b>' + (100 * T).toFixed(1) + '秒</b> → 1往復 <b>' + T.toFixed(3) + '秒</b><br>🕰 この ふりこの 時計は 1日に <b>' + lagTxt + '</b> <span class="lb-small">(整備前 1往復 ' + T0.toFixed(3) + '秒 と 比べて)</span>';
       record('長さ ' + len.toFixed(2) + 'm ・ ' + m + 'g ・ ' + a + '° → 1往復 ' + T.toFixed(3) + '秒 ・ 1日 ' + lagTxt, { L: len, M: m, A: a }, '1日 ' + lagTxt);
     };
   }
@@ -259,7 +259,7 @@ const LabDetective = (function () {
     const NM = { '1': '1個', '2s': '2個 直列', '2p': '2個 並列' };
     document.getElementById('cRun').onclick = () => {
       sfx('click'); upd(true); const r = circuit(cfg.bn, cfg.ln);
-      document.getElementById('cOut').innerHTML = '電圧 ' + r.V + 'V ・ 電流 ' + r.I.toFixed(2) + 'A<br>💡 豆電球 1個の 明るさ: <b>' + frac(r.bright) + '</b> ・ 🔋 電池の もち: <b>' + frac(r.life) + '</b> <span class="lb-small">(電池1個・豆電球1個 と くらべて)</span>';
+      document.getElementById('cOut').innerHTML = '電圧 ' + r.V + 'V ・ 電流 ' + r.I.toFixed(2) + 'A<br>💡 豆電球 1個の 明るさ: <b>' + frac(r.bright) + '</b> ・ 🔋 電池の もち: <b>' + frac(r.life) + '</b> <span class="lb-small">(電池1個・豆電球1個 と 比べて)</span>';
       record('電池 ' + NM[cfg.bn] + ' ・ 豆電球 ' + NM[cfg.ln] + ' → 明るさ ' + frac(r.bright) + ' ・ もち ' + frac(r.life), { bn: cfg.bn, ln: cfg.ln }, '明るさ ' + frac(r.bright) + '・もち ' + frac(r.life));
     };
   }
@@ -297,7 +297,7 @@ const LabDetective = (function () {
     const sel = (i, k, M) => '<div><b>' + ({ l: '光', w: '水', t: '温度' })[k] + '</b>' + Object.keys(M).map(v => '<button class="lb-opt' + (pots[i][k] === v ? ' on' : '') + '" data-p="' + i + '" data-k="' + k + '" data-v="' + v + '">' + M[v][0] + '</button>').join('') + '</div>';
     const leaf = (x, y, r) => '<ellipse cx="' + x + '" cy="' + y + '" rx="10" ry="4.5" fill="' + (r.pale ? '#c9df85' : '#4caf50') + '" transform="rotate(' + (r.wilt ? 45 : -15) + ' ' + x + ' ' + y + ')"/>';
     const render = () => {
-      let h = '<div class="lb-h2">🌱 2つの 鉢で くらべる (14日間)</div><div class="lb-pots">';
+      let h = '<div class="lb-h2">🌱 2つの 鉢で 比べる (14日間)</div><div class="lb-pots">';
       [0, 1].forEach(i => { h += '<div class="lb-pot"><div class="lb-pot-h">鉢 ' + 'AB'[i] + '</div>' + sel(i, 'l', LIGHT) + sel(i, 'w', WATER) + sel(i, 't', TEMP) + '</div>'; });
       h += '</div><button class="lb-secondary" id="gRun">📆 14日間 育てる</button><div id="gOut" class="lb-out"></div>';
       box.innerHTML = h;
@@ -311,25 +311,25 @@ const LabDetective = (function () {
         o += '</svg>';
         const D = r => '高さ <b>' + r.h.toFixed(1) + 'cm</b> ・ くき ' + r.stem + ' ・ 葉 ' + (r.pale ? 'うすい 黄緑' : '緑') + (r.wilt ? ' ・ <b>しおれている</b>' : '');
         g.forEach((r, i) => { o += '<div>鉢' + 'AB'[i] + ': ' + D(r) + '</div>'; });
-        if (diff.length !== 1) o += '<div class="lb-warn">⚠ コラリン:「' + (diff.length ? '条件が ' + diff.length + 'つ ちがうよ! どれが 原因か わからない。変える 条件は 1つだけに しよう (対照実験)。' : '2つとも 同じ 条件だよ。1つだけ 変えて くらべよう。') + '」</div>';
+        if (diff.length !== 1) o += '<div class="lb-warn">⚠ コラリン:「' + (diff.length ? '条件が ' + diff.length + 'つ 違うよ! どれが 原因か 分からない。変える 条件は 1つだけに しよう (対照実験)。' : '2つとも 同じ 条件だよ。1つだけ 変えて 比べよう。') + '」</div>';
         document.getElementById('gOut').innerHTML = o;
         const P = p => LIGHT[p.l][0] + '/' + WATER[p.w][0] + '/' + TEMP[p.t][0];
         const sym = r => (r.pale ? 'ひょろ・色うすい' : '') + (r.wilt ? (r.pale ? '・' : '') + 'しおれ' : '') || '元気';
         const k = diff[0], vals = diff.length === 1 ? [pots[0][k], pots[1][k]] : [];
-        record('A(' + P(pots[0]) + ') ' + g[0].h.toFixed(1) + 'cm ' + sym(g[0]) + ' ⇔ B(' + P(pots[1]) + ') ' + g[1].h.toFixed(1) + 'cm ' + sym(g[1]) + (diff.length === 1 ? ' ✅ 対照実験' : ' ⚠ 条件 ' + diff.length + 'つ ちがい'),
+        record('A(' + P(pots[0]) + ') ' + g[0].h.toFixed(1) + 'cm ' + sym(g[0]) + ' ⇔ B(' + P(pots[1]) + ') ' + g[1].h.toFixed(1) + 'cm ' + sym(g[1]) + (diff.length === 1 ? ' ✅ 対照実験' : ' ⚠ 条件 ' + diff.length + 'つ 違い'),
           { diff: diff.length === 1 ? k : null, vals: vals }, diff.length === 1 ? sym(g[0]) + ' ⇔ ' + sym(g[1]) : '');
       };
     };
     render();
   }
 
-  // ---- ⑤ ばねばかり (グラフで くらべる) ----
+  // ---- ⑤ ばねばかり (グラフで 比べる) ----
   function simSpring(box) {
     const pts = [];
     box.innerHTML = '<div class="lb-h2">⚖ ばねばかり 実験台</div>' +
       '<div class="lb-opts"><div><b>ばね</b>' + Object.keys(SPRING).map((k, i) => '<button class="lb-opt' + (i ? '' : ' on') + '" data-k="sp" data-v="' + k + '">' + SPRING[k][0] + '</button>').join('') + '</div>' +
       '<div><b>0点</b><button class="lb-opt on" data-k="z" data-v="0">そのまま</button><button class="lb-opt" data-k="z" data-v="0.2">0.2kg 下に ずらす</button></div></div>' +
-      slider('sW', 'のせる 分銅', 0, 3, 0.5, 1, 'kg') + '<button class="lb-secondary" id="sRun">⚖ はかる</button><div id="sOut" class="lb-out"></div><div id="sGraph"></div>';
+      slider('sW', '乗せる 分銅', 0, 3, 0.5, 1, 'kg') + '<button class="lb-secondary" id="sRun">⚖ はかる</button><div id="sOut" class="lb-out"></div><div id="sGraph"></div>';
     const cfg = { sp: 'normal', z: '0' };
     const COL = { normal: '#3a7bc8', soft: '#d35400', hard: '#27ae60' };
     const graph = () => {
@@ -369,7 +369,7 @@ const LabDetective = (function () {
     h += evidenceBox(c) + notesBox();
     h += '<div class="lb-box"><div class="lb-h2">Q' + (cur.q + 1) + '. ' + esc(Q.q) + '</div><div class="lb-reasons">';
     shuffle(Q.o.map((t, i) => [t, i])).forEach(([t, i]) => { h += '<button class="lb-rs" data-r="' + i + '">' + esc(t) + '</button>'; });
-    h += '</div><div id="lbFb"></div></div><button class="lb-secondary" id="lbBackLab">🔬 実験室に もどって たしかめる</button>';
+    h += '</div><div id="lbFb"></div></div><button class="lb-secondary" id="lbBackLab">🔬 実験室に もどって 確かめる</button>';
     area().innerHTML = h; bindHead();
     document.getElementById('lbBackLab').onclick = () => { sfx('click'); labView(); };
     area().querySelectorAll('[data-r]').forEach(x => x.onclick = () => {
@@ -392,7 +392,7 @@ const LabDetective = (function () {
       const ans = [].concat(c.culprit).sort().join(), got = ids.sort().join();
       if (ans === got) { sfx('unlock'); return setTimeout(clear, 500); }
       sfx('wrong'); cur.miss++;
-      document.getElementById('lbFb').innerHTML = '<div class="lb-warn">✗ ちがうようだ… 証拠の 数値と、それぞれの 証言を 再現した 結果を もう一度 くらべよう。' + (multi ? ' (症状は 2つ あるよ)' : '') + '</div>';
+      document.getElementById('lbFb').innerHTML = '<div class="lb-warn">✗ 違うようだ… 証拠の 数値と、それぞれの 証言を 再現した 結果を もう一度 比べよう。' + (multi ? ' (症状は 2つ あるよ)' : '') + '</div>';
     };
     area().querySelectorAll('[data-s]').forEach(b => b.onclick = () => {
       sfx('click');

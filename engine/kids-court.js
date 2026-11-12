@@ -1,6 +1,6 @@
 /* engine/kids-court.js — シーズン2 新コンテンツ⑤ こども裁判所 (法と 権利)
  * 法廷で 証言と 証拠の「むじゅん」を 見つけて「異議あり!」。最後に 判決と 法律の 問題。
- *   事件 5 (刑事・民事、弁護人・検察官・裁判官・裁判員の 立場) / 裁判の しくみ カード / 法律クイズ 10問
+ *   事件 5 (刑事・民事、弁護人・検察官・裁判官・裁判員の 立場) / 裁判の 仕組み カード / 法律クイズ 10問
  * 画面: pageJustice (#kcArea). 保存: State.v2.court = { cleared: {caseId: stars}, best: n }
  * Dependencies: KC_CASES, KC_LEARN, KC_QUIZ, State, saveState, showPage, sfx, escapeHtml, Hub
  */
@@ -21,15 +21,15 @@ const KidsCourt = (function () {
   function home() {
     const d = data();
     let h = header('⚖ こども裁判所', 'シーズン2 ・ 証拠で 真実を 明らかに');
-    h += '<div class="kc-hero"><img src="' + SP + 'koradon_greet_01.webp" alt=""><div class="kc-say"><b>コラドン:</b> ブランク団が うその 証言で 裁判を ゆがめようと している! 証言と 証拠を よく くらべて、むじゅんを 見つけたら「<b>異議あり!</b>」だ。</div></div>';
+    h += '<div class="kc-hero"><img src="' + SP + 'koradon_greet_01.webp" alt=""><div class="kc-say"><b>コラドン:</b> ブランク団が うその 証言で 裁判を ゆがめようと している! 証言と 証拠を よく 比べて、むじゅんを 見つけたら「<b>異議あり!</b>」だ。</div></div>';
     h += '<div class="kc-menu">';
     h += '<button class="kc-mbtn" data-go="cases"><span class="i">🏛</span><b>法廷バトル</b><small>解決 ' + Object.keys(d.cleared).length + ' / ' + KC_CASES.length + '</small></button>';
-    h += '<button class="kc-mbtn" data-go="learn"><span class="i">📘</span><b>裁判の しくみ</b><small>' + KC_LEARN.length + 'まいの カード</small></button>';
+    h += '<button class="kc-mbtn" data-go="learn"><span class="i">📘</span><b>裁判の 仕組み</b><small>' + KC_LEARN.length + 'まいの カード</small></button>';
     h += '<button class="kc-mbtn" data-go="quiz"><span class="i">📝</span><b>法律クイズ</b><small>10問 ・ ベスト ' + (d.best || 0) + '</small></button>';
     area().innerHTML = h + '</div>'; bindGo(area());
   }
   function learn() {
-    let h = header('📘 裁判の しくみ', '法廷バトルの 前に 読んで おこう', 'home') + '<div class="kc-cards">';
+    let h = header('📘 裁判の 仕組み', '法廷バトルの 前に 読んで おこう', 'home') + '<div class="kc-cards">';
     KC_LEARN.forEach(([t, s]) => { h += '<div class="kc-card"><b>' + esc(t) + '</b><p>' + esc(s) + '</p></div>'; });
     area().innerHTML = h + '</div>'; bindGo(area());
   }
@@ -72,14 +72,14 @@ const KidsCourt = (function () {
     const c = KC_CASES[ci]; top();
     let h = header('第' + (ci + 1) + '事件 ' + esc(c.title), c.kind + '裁判 ・ ハルは ' + c.role, 'cases') + pic('court/courtroom.webp');
     h += '<div class="kc-intro">' + esc(c.intro) + '</div><div class="kc-h2">🗂 証拠ファイル</div>' + evidenceHtml(c);
-    h += '<div class="kc-rules">証言を 1つ えらび → むじゅんする 証拠を 1つ えらび → 「異議あり!」。まちがえると ❤ が へる (3つ)。</div><button class="kc-go" id="kcStart">🔨 開廷!</button>';
+    h += '<div class="kc-rules">証言を 1つ 選び → むじゅんする 証拠を 1つ 選び → 「異議あり!」。間違えると ❤ が 減る (3つ)。</div><button class="kc-go" id="kcStart">🔨 開廷!</button>';
     area().innerHTML = h; bindGo(area());
     $('kcStart').onclick = () => { sound('click'); run = { ci: ci, r: 0, hearts: 3, miss: 0, line: -1, ev: null, phase: 'round' }; court(); };
   }
   function court() {
     const R = run, c = KC_CASES[R.ci];
     if (R.phase === 'verdict' || R.phase === 'law') return judge();
-    if (R.topAt !== R.r) { R.topAt = R.r; top(); }   // 証言・証拠を えらぶ たびに 上へ 飛ばない
+    if (R.topAt !== R.r) { R.topAt = R.r; top(); }   // 証言・証拠を 選ぶ たびに 上へ 飛ばない
     const rd = c.rounds[R.r];
     let h = header('第' + (R.ci + 1) + '事件 ' + esc(c.title), '証言 ' + (R.r + 1) + ' / ' + c.rounds.length + ' ・ ' + '❤'.repeat(R.hearts) + '<span class="off">' + '❤'.repeat(3 - R.hearts) + '</span>', 'cases');
     h += '<div class="kc-wit">' + esc(rd.who) + ' の 証言</div><div class="kc-lines">';
@@ -101,7 +101,7 @@ const KidsCourt = (function () {
       } else {
         sound('wrong'); R.hearts--; R.miss++;
         if (R.hearts <= 0) return lose();
-        const msg = !lineOk ? 'その 証言は 証拠と むじゅん して いない みたい…' : 'その 証言で 合っているけど、つきつける 証拠が ちがう!';
+        const msg = !lineOk ? 'その 証言は 証拠と むじゅん して いない みたい…' : 'その 証言で 合っているけど、つきつける 証拠が 違う!';
         court(); $('kcFb').innerHTML = '<div class="kc-ng">✗ ' + msg + '</div>';
       }
     };

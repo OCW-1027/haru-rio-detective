@@ -45,15 +45,15 @@ const MiniLearn = (function () {
   // lv 0: 基本 / 1: 技 (11倍・5の2乗・100から・25倍) / 2: 2けた×2けた の 技
   function mentalQ(lv) {
     const T = [];
-    T.push(() => { const a = 12 + rnd(78), b = 12 + rnd(78); return { q: a + ' + ' + b, a: a + b, tip: '十の位 → 一の位の 順に たす。' }; });
-    T.push(() => { const a = 50 + rnd(50), b = 11 + rnd(a - 11); return { q: a + ' − ' + b, a: a - b, tip: 'ひく数を キリの いい 数に して 調整 (例: −29 = −30 + 1)。' }; });
+    T.push(() => { const a = 12 + rnd(78), b = 12 + rnd(78); return { q: a + ' + ' + b, a: a + b, tip: '十の位 → 一の位の 順に 足す。' }; });
+    T.push(() => { const a = 50 + rnd(50), b = 11 + rnd(a - 11); return { q: a + ' − ' + b, a: a - b, tip: '引く数を キリの いい 数に して 調整 (例: −29 = −30 + 1)。' }; });
     T.push(() => { const a = 3 + rnd(7), b = 12 + rnd(38); return { q: b + ' × ' + a, a: a * b, tip: '(十の位 × ' + a + ') + (一の位 × ' + a + ') に 分ける。' }; });
     if (lv >= 1) {
       T.push(() => { const a = 12 + rnd(87); return { q: a + ' × 11', a: a * 11, tip: '11倍: 両はしの 数字の 間に 2つの 和を 入れる (' + String(a)[0] + '|' + (+String(a)[0] + +String(a)[1]) + '|' + String(a)[1] + '、くり上がりに 注意)。' }; });
       T.push(() => { const t = 1 + rnd(9), n = t * 10 + 5; return { q: n + ' × ' + n, a: n * n, tip: '5の 2乗: ' + t + '×' + (t + 1) + '=' + t * (t + 1) + ' の 後ろに 25。' }; });
-      T.push(() => { const b = 11 + rnd(88); return { q: '100 − ' + b, a: 100 - b, tip: '100 から ひく: 十の位は 9 から、一の位は 10 から ひく。' }; });
-      T.push(() => { const a = 4 + rnd(36); return { q: a + ' × 25', a: a * 25, tip: '25倍 = 100倍して 4で わる。' }; });
-      T.push(() => { const a = 12 + rnd(88); return { q: a + ' × 5', a: a * 5, tip: '5倍 = 10倍して 2で わる。' }; });
+      T.push(() => { const b = 11 + rnd(88); return { q: '100 − ' + b, a: 100 - b, tip: '100 から 引く: 十の位は 9 から、一の位は 10 から 引く。' }; });
+      T.push(() => { const a = 4 + rnd(36); return { q: a + ' × 25', a: a * 25, tip: '25倍 = 100倍して 4で 割る。' }; });
+      T.push(() => { const a = 12 + rnd(88); return { q: a + ' × 5', a: a * 5, tip: '5倍 = 10倍して 2で 割る。' }; });
     }
     if (lv >= 2) {
       T.push(() => { const a = 91 + rnd(9), b = 91 + rnd(9); return { q: a + ' × ' + b, a: a * b, tip: '100に 近い 数: (' + a + '−' + (100 - b) + ')=' + (a + b - 100) + ' の 後ろに ' + (100 - a) + '×' + (100 - b) + '=' + String((100 - a) * (100 - b)).padStart(2, '0') + '。' }; });
@@ -123,7 +123,7 @@ const MiniLearn = (function () {
     h += '<div class="ml-card"><div class="ml-icon">' + g.icon + '</div><h2 class="ml-title">' + g.name + '</h2><p class="ml-desc">' + g.desc + '</p>';
     h += '<div class="ml-meta">🏆 ベスト <b>' + best(id) + '</b> ・ 🎯 目標 <b>' + g.target + '</b>点 → ' + (daily().got[id] ? 'きょうの トークンは もらった ✅' : 'きょう 初めて 超えると トークン +1 🎮') + '</div>';
     if (id === 'word') h += '<div class="ml-lv"><button class="ml-lvb' + (wordLv === 'g2' ? ' on' : '') + '" data-lv="g2">2級</button><button class="ml-lvb' + (wordLv === 'p1' ? ' on' : '') + '" data-lv="p1">準1級</button></div>';
-    if (id === 'mental') h += '<p class="ml-small">点が 増えるほど 難しい 問題 (11倍・5の2乗・100に 近い 数の かけ算 …) が 出るよ。まちがえると 技の ヒントが 出る。</p>';
+    if (id === 'mental') h += '<p class="ml-small">点が 増えるほど 難しい 問題 (11倍・5の2乗・100に 近い 数の 掛け算 …) が 出るよ。間違えると 技の ヒントが 出る。</p>';
     h += '<button class="ml-go" id="mlGo">▶ スタート</button></div>';
     area().innerHTML = h;
     area().querySelector('.ml-quit').onclick = quit;
@@ -227,7 +227,7 @@ const MiniLearn = (function () {
     h += '<div class="ml-res"><b>' + r.score + '</b> 点</div><div class="ml-meta">' + r.n + '問 挑戦 ・ 最高 ' + r.maxCombo + ' 連続 ・ 🏆 ベスト ' + best(r.id) + (nb ? ' (更新!)' : '') + '</div>';
     if (token) h += '<div class="ml-token">🎮 目標 達成! ゲームトークン +1 (いま ' + State.gameTokens + '個)</div>';
     else if (r.score < r.g.target) h += '<div class="ml-meta">あと ' + (r.g.target - r.score) + '点で 目標!</div>';
-    if (r.miss.length) { h += '<div class="ml-miss"><div class="ml-miss-h">❗ まちがえた 問題</div>'; r.miss.slice(0, 12).forEach(m => { h += '<div class="ml-miss-r">' + esc(m) + '</div>'; }); h += '</div>'; }
+    if (r.miss.length) { h += '<div class="ml-miss"><div class="ml-miss-h">❗ 間違えた 問題</div>'; r.miss.slice(0, 12).forEach(m => { h += '<div class="ml-miss-r">' + esc(m) + '</div>'; }); h += '</div>'; }
     h += '<button class="ml-go" id="mlAgain">🔁 もう一度</button></div>';
     area().innerHTML = h;
     area().querySelector('.ml-quit').onclick = quit;

@@ -39,11 +39,11 @@ const LADDER = (function () {
   const add = (g, id, icon, name, point, gen) => U.push({ g: g, id: id, icon: icon, name: name, point: point, gen: gen });
 
   // ======================= 中1 =======================
-  add('c1', 'c1a', '➖', '正負の数の 計算', ['かけ算・わり算を 先に、たし算・ひき算は 後', '負の数を かける・わる と 符号が 変わる', '−3² = −9 と (−3)² = 9 は ちがう (² が どこに かかるか)'], () => {
+  add('c1', 'c1a', '➖', '正負の数の 計算', ['掛け算・割り算を 先に、足し算・引き算は 後', '負の数を かける・割る と 符号が 変わる', '−3² = −9 と (−3)² = 9 は 違う (² が どこに かかるか)'], () => {
     if (Math.random() < 0.5) {
       const a = NZ(-9, 9), b = NZ(-9, 9), d = NZ(-6, 6), c = d * NZ(-6, 6), p = a * b, qq = c / d;
       return { q: P(a) + ' × ' + P(b) + ' − ' + P(c) + ' ÷ ' + P(d) + ' を 計算しよう', type: 'num', a: p - qq,
-        steps: ['先に かけ算と わり算: ' + P(a) + ' × ' + P(b) + ' = ' + M(p) + '、' + P(c) + ' ÷ ' + P(d) + ' = ' + M(qq), M(p) + ' − ' + P(qq) + ' = ' + M(p - qq)] };
+        steps: ['先に 掛け算と 割り算: ' + P(a) + ' × ' + P(b) + ' = ' + M(p) + '、' + P(c) + ' ÷ ' + P(d) + ' = ' + M(qq), M(p) + ' − ' + P(qq) + ' = ' + M(p - qq)] };
     }
     const a = R(2, 5), b = R(2, 5), c = NZ(-4, 4), v = -(a * a) + b * b * c;
     return { q: '−' + a + '² + (−' + b + ')² × ' + P(c) + ' を 計算しよう', type: 'num', a: v,
@@ -54,7 +54,7 @@ const LADDER = (function () {
     return { q: 'x = ' + M(x) + '、y = ' + M(y) + ' の とき、' + lin(a, b, 'x', 'y²') + ' の 値は?', type: 'num', a: v,
       steps: [a + ' × ' + P(x) + ' = ' + M(a * x), 'y² = ' + P(y) + '² = ' + (y * y) + ' → ' + M(b) + ' × ' + (y * y) + ' = ' + M(b * y * y), M(a * x) + ' + ' + P(b * y * y) + ' = ' + M(v)] };
   });
-  add('c1', 'c1c', '⚖', '一次方程式', ['x の 項を 左、数を 右へ 移項 (符号が 変わる)', '分数が あるときは 分母の 最小公倍数を かけて 分母を はらう', '最後に x の 係数で わる'], () => {
+  add('c1', 'c1c', '⚖', '一次方程式', ['x の 項を 左、数を 右へ 移項 (符号が 変わる)', '分数が あるときは 分母の 最小公倍数を かけて 分母を はらう', '最後に x の 係数で 割る'], () => {
     if (Math.random() < 0.55) {
       const x = NZ(-9, 9); let a = NZ(-7, 7), c = NZ(-7, 7); while (c === a) c = NZ(-7, 7);
       const b = R(-15, 15), d = a * x + b - c * x;
@@ -86,7 +86,7 @@ const LADDER = (function () {
     const v = fr(r * r * t, 360);
     return { q: '半径 ' + r + 'cm、中心角 ' + t + '° の おうぎ形の 面積は □π cm²。□ は?', type: 'num', a: v, steps: ['π × ' + r + '² × ' + t + '/360', '= ' + (r * r) + ' × ' + t + '/360 π = ' + fs(v) + 'π cm²'] };
   });
-  add('c1', 'c1f', '📊', '代表値 (平均・中央値・最頻値・範囲)', ['中央値: 小さい 順に 並べた まん中 (偶数個なら まん中 2つの 平均)', '最頻値: いちばん 多く 出てくる 値', '範囲 = 最大値 − 最小値'], () => {
+  add('c1', 'c1f', '📊', '代表値 (平均・中央値・最頻値・範囲)', ['中央値: 小さい 順に 並べた まん中 (偶数個なら まん中 2つの 平均)', '最頻値: 一番 多く 出てくる 値', '範囲 = 最大値 − 最小値'], () => {
     const n = pick([7, 9]); const xs = Array.from({ length: n }, () => R(1, 20)); xs[R(0, n - 1)] = xs[0]; const s = xs.slice().sort((a, b) => a - b);
     const kind = pick(['med', 'rng', 'mode']);
     if (kind === 'mode') { const cnt = {}; s.forEach(v => cnt[v] = (cnt[v] || 0) + 1); const mx = Math.max(...Object.values(cnt)); const modes = Object.keys(cnt).filter(k => cnt[k] === mx); if (modes.length > 1) { xs.push(+modes[0]); s.push(+modes[0]); s.sort((a, b) => a - b); } }
@@ -94,25 +94,25 @@ const LADDER = (function () {
     const cnt = {}; s.forEach(v => cnt[v] = (cnt[v] || 0) + 1); const mode = +Object.keys(cnt).reduce((a, b) => cnt[b] > cnt[a] ? b : a);
     const v = kind === 'med' ? med : kind === 'rng' ? s[s.length - 1] - s[0] : mode;
     return { q: 'データ: ' + xs.join(', ') + '\nこの データの ' + { med: '中央値', rng: '範囲', mode: '最頻値' }[kind] + 'は?', type: 'num', a: v,
-      steps: ['小さい 順: ' + s.join(', '), kind === 'med' ? (s.length % 2 ? (s.length + 1) / 2 + '番目 = ' + v : 'まん中 2つの 平均 = ' + v) : kind === 'rng' ? s[s.length - 1] + ' − ' + s[0] + ' = ' + v : mode + ' が ' + cnt[mode] + '回 で いちばん 多い'] };
+      steps: ['小さい 順: ' + s.join(', '), kind === 'med' ? (s.length % 2 ? (s.length + 1) / 2 + '番目 = ' + v : 'まん中 2つの 平均 = ' + v) : kind === 'rng' ? s[s.length - 1] + ' − ' + s[0] + ' = ' + v : mode + ' が ' + cnt[mode] + '回 で 一番 多い'] };
   });
 
   // ======================= 中2 =======================
-  add('c2', 'c2a', '🧮', '式の 計算 (多項式)', ['分配法則で かっこを はずす: −2(a − 4b) = −2a + 8b', '同類項 (同じ 文字) どうしを まとめる'], () => {
+  add('c2', 'c2a', '🧮', '式の 計算 (多項式)', ['分配法則で かっこを 外す: −2(a − 4b) = −2a + 8b', '同類項 (同じ 文字) どうしを まとめる'], () => {
     const p = NZ(-4, 5), q = NZ(-5, 5), r = NZ(-5, 5), s = NZ(-5, 5), t = NZ(-4, 4);
     const A = p * q + t * r, B = p * s * 0 + t * s; // p(qa) + t(ra + sb)
     const b0 = NZ(-5, 5), B2 = p * b0 + t * s;
     const right = lin(A, B2);
     return { q: M(p) + '(' + lin(q, b0) + ') ' + (t < 0 ? '− ' + (-t) : '+ ' + t) + '(' + lin(r, s) + ') を 計算しよう', type: 'choice', a: 0,
       opts: choices(right, [lin(A, p * b0 - t * s), lin(p * q - t * r, B2), lin(A + t, B2), lin(q + r, b0 + s)]),
-      steps: ['かっこを はずす: ' + lin(p * q, p * b0) + ' ' + (t * r < 0 ? '' : '+ ') + lin(t * r, t * s).replace(/^−/, '− '), 'a の 項: ' + M(p * q) + ' + ' + P(t * r) + ' = ' + M(A) + '、 b の 項: ' + M(p * b0) + ' + ' + P(t * s) + ' = ' + M(B2), '= ' + right] };
+      steps: ['かっこを 外す: ' + lin(p * q, p * b0) + ' ' + (t * r < 0 ? '' : '+ ') + lin(t * r, t * s).replace(/^−/, '− '), 'a の 項: ' + M(p * q) + ' + ' + P(t * r) + ' = ' + M(A) + '、 b の 項: ' + M(p * b0) + ' + ' + P(t * s) + ' = ' + M(B2), '= ' + right] };
   });
-  add('c2', 'c2b', '🔗', '連立方程式', ['加減法: 片方の 文字の 係数を そろえて ひく (たす)', '代入法: 1つの 式を x = … に して もう一方へ 代入', '出た 答えを 元の 式に 入れて 確かめる'], () => {
+  add('c2', 'c2b', '🔗', '連立方程式', ['加減法: 片方の 文字の 係数を そろえて 引く (たす)', '代入法: 1つの 式を x = … に して もう一方へ 代入', '出た 答えを 元の 式に 入れて 確かめる'], () => {
     const x = NZ(-6, 6), y = NZ(-6, 6); let a1, b1, a2, b2; do { a1 = NZ(-5, 5); b1 = NZ(-5, 5); a2 = NZ(-5, 5); b2 = NZ(-5, 5); } while (a1 * b2 - a2 * b1 === 0);
     const c1 = a1 * x + b1 * y, c2 = a2 * x + b2 * y, D = a1 * b2 - a2 * b1;
     const eq = (a, b, c) => lin(a, b, 'x', 'y') + ' = ' + M(c);
     return { q: '{ ' + eq(a1, b1, c1) + '\n{ ' + eq(a2, b2, c2) + '\nを 解こう。', type: 'pair', labels: ['x', 'y'], a: [x, y],
-      steps: ['y を 消す: 上の 式 × ' + P(b2) + '、下の 式 × ' + P(b1) + ' を して ひく', '(' + M(a1 * b2) + ' − ' + P(a2 * b1) + ')x = ' + M(c1 * b2) + ' − ' + P(c2 * b1) + ' → ' + M(D) + 'x = ' + M(D * x) + ' → x = ' + M(x), 'x = ' + M(x) + ' を 上の 式に 代入: ' + M(a1 * x) + ' + ' + P(b1) + 'y = ' + M(c1) + ' → y = ' + M(y)] };
+      steps: ['y を 消す: 上の 式 × ' + P(b2) + '、下の 式 × ' + P(b1) + ' を して 引く', '(' + M(a1 * b2) + ' − ' + P(a2 * b1) + ')x = ' + M(c1 * b2) + ' − ' + P(c2 * b1) + ' → ' + M(D) + 'x = ' + M(D * x) + ' → x = ' + M(x), 'x = ' + M(x) + ' を 上の 式に 代入: ' + M(a1 * x) + ' + ' + P(b1) + 'y = ' + M(c1) + ' → y = ' + M(y)] };
   });
   add('c2', 'c2c', '📈', '一次関数 (2点を 通る 直線)', ['y = ax + b (a: 傾き = y の 増加量 ÷ x の 増加量、b: 切片)', '2点から 傾きを 求めて、1点を 代入して b を 出す'], () => {
     const a = NZ(-4, 4), b = R(-8, 8); let x1 = R(-5, 5), x2 = R(-5, 5); while (x2 === x1) x2 = R(-5, 5);
@@ -125,7 +125,7 @@ const LADDER = (function () {
     if (kind === 'ext') return { q: '正' + n + '角形の 1つの 外角は 何度?', type: 'num', a: 360 / n, steps: ['360 ÷ ' + n + ' = ' + (360 / n)] };
     return { q: '正' + n + '角形の 1つの 内角は 何度?', type: 'num', a: 180 - 360 / n, steps: ['外角 = 360 ÷ ' + n + ' = ' + (360 / n) + '°', '内角 = 180 − ' + (360 / n) + ' = ' + (180 - 360 / n) + '°'] };
   });
-  add('c2', 'c2e', '🎲', '確率 (サイコロ 2個)', ['すべての 出方は 6 × 6 = 36 通り (同様に 確からしい)', '表を かいて 数える', '「少なくとも 1つ」は 1 − (どちらも ちがう 確率) が 速い'], () => {
+  add('c2', 'c2e', '🎲', '確率 (サイコロ 2個)', ['すべての 出方は 6 × 6 = 36 通り (同様に 確からしい)', '表を かいて 数える', '「少なくとも 1つ」は 1 − (どちらも 違う 確率) が 速い'], () => {
     const kind = pick(['sum', 'sum2', 'atleast', 'prodeven', 'same']); let cnt = 0, txt = '', stp = '';
     for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) {
       if (kind === 'sum' && a + b === 7) cnt++; if (kind === 'sum2' && a + b >= 10) cnt++; if (kind === 'atleast' && (a === 6 || b === 6)) cnt++; if (kind === 'prodeven' && a * b % 2 === 0) cnt++; if (kind === 'same' && a === b) cnt++;
@@ -144,11 +144,11 @@ const LADDER = (function () {
       opts: choices(poly([A, B, Cc]), [poly([A, a * d - b * c, Cc]), poly([A, B, -Cc]), poly([A, 0, Cc]), poly([A, B + 1, Cc])]),
       steps: [poly([a]).replace(/^1$/, '') + 'x × ' + poly([c]).replace(/^1$/, '') + 'x = ' + poly([A, 0, 0]), '外側 + 内側: ' + M(a * d) + 'x + ' + P(b * c) + 'x = ' + poly([B, 0]), M(b) + ' × ' + P(d) + ' = ' + M(Cc), '= ' + poly([A, B, Cc])] };
   });
-  add('c3', 'c3b', '🧩', '因数分解', ['x² + px + q → たして p、かけて q に なる 2数を 探す', 'a² − b² = (a + b)(a − b)', 'まず 共通因数で くくれないか 確かめる'], () => {
+  add('c3', 'c3b', '🧩', '因数分解', ['x² + px + q → 足して p、かけて q に なる 2数を 探す', 'a² − b² = (a + b)(a − b)', 'まず 共通因数で くくれないか 確かめる'], () => {
     if (Math.random() < 0.7) {
       const m = NZ(-9, 9), n = NZ(-9, 9), f = (u, w) => '(x ' + (u < 0 ? '− ' + (-u) : '+ ' + u) + ')(x ' + (w < 0 ? '− ' + (-w) : '+ ' + w) + ')';
       return { q: poly([1, m + n, m * n]) + ' を 因数分解しよう', type: 'choice', a: 0, opts: choices(f(m, n), [f(-m, -n), f(m, -n), f(-m, n), f(m + n, 1)]),
-        steps: ['たして ' + M(m + n) + '、かけて ' + M(m * n) + ' の 2数 → ' + M(m) + ' と ' + M(n), '= ' + f(m, n)] };
+        steps: ['足して ' + M(m + n) + '、かけて ' + M(m * n) + ' の 2数 → ' + M(m) + ' と ' + M(n), '= ' + f(m, n)] };
     }
     const a = R(2, 9), k = R(1, 3); const sq2 = k === 1 ? 'x²' : (k * k) + 'x²';
     const r = '(' + (k === 1 ? '' : k) + 'x + ' + a + ')(' + (k === 1 ? '' : k) + 'x − ' + a + ')';
@@ -167,7 +167,7 @@ const LADDER = (function () {
   });
   add('c3', 'c3d', '✌', '二次方程式', ['因数分解できれば (x − m)(x − n) = 0 → x = m, n', 'できなければ 解の公式 x = (−b ± √(b² − 4ac)) / 2a', 'x² + 2px + q = 0 は x = −p ± √(p² − q) が 速い'], () => {
     if (Math.random() < 0.55) { const m = NZ(-9, 9), n = R(-9, 9);
-      return { q: poly([1, -(m + n), m * n]) + ' = 0 を 解こう (解を 2つ、重解なら 同じ 数を 2つ)', type: 'set', a: [m, n], steps: ['たして ' + M(-(m + n)) + '、かけて ' + M(m * n) + ' → (x ' + (m < 0 ? '+ ' + (-m) : '− ' + m) + ')(x ' + (n < 0 ? '+ ' + (-n) : '− ' + n) + ') = 0', 'x = ' + M(m) + ', ' + M(n)] }; }
+      return { q: poly([1, -(m + n), m * n]) + ' = 0 を 解こう (解を 2つ、重解なら 同じ 数を 2つ)', type: 'set', a: [m, n], steps: ['足して ' + M(-(m + n)) + '、かけて ' + M(m * n) + ' → (x ' + (m < 0 ? '+ ' + (-m) : '− ' + m) + ')(x ' + (n < 0 ? '+ ' + (-n) : '− ' + n) + ') = 0', 'x = ' + M(m) + ', ' + M(n)] }; }
     let p, q, D; do { p = NZ(-5, 5); q = R(-10, 10); D = p * p - q; } while (D <= 1 || Number.isInteger(Math.sqrt(D)));
     const [o, i] = sq(D), r = (p ? M(-p) + ' ' : '') + '± ' + rt(o, i);
     return { q: poly([1, 2 * p, q]) + ' = 0 を 解こう', type: 'choice', a: 0, opts: choices('x = ' + r, ['x = ' + (p ? M(p) + ' ' : '') + '± ' + rt(o, i), 'x = ' + (p ? M(-p) + ' ' : '') + '± ' + rt(1, D + 2 * Math.abs(q) || 2), 'x = ' + (p ? M(-2 * p) + ' ' : '') + '± ' + rt(o, i)]),
@@ -250,7 +250,7 @@ const LADDER = (function () {
     if (kind === 'rw') { const v = fr(r * w, C(N, 2)); return { q: '赤玉 ' + r + '個、白玉 ' + w + '個の 袋から 同時に 2個 取り出す。赤と 白が 1個ずつの 確率は?', type: 'num', a: v, steps: ['全体: ' + N + 'C2 = ' + C(N, 2), '赤1・白1: ' + r + ' × ' + w + ' = ' + (r * w), (r * w) + '/' + C(N, 2) + ' = ' + fs(v)] }; }
     const v = fr(C(N, 2) - C(r, 2), C(N, 2)); return { q: '赤玉 ' + r + '個、白玉 ' + w + '個の 袋から 同時に 2個 取り出す。少なくとも 1個 白の 確率は?', type: 'num', a: v, steps: ['余事象 = 2個とも 赤: ' + C(r, 2) + '/' + C(N, 2), '1 − ' + C(r, 2) + '/' + C(N, 2) + ' = ' + fs(v)] };
   });
-  add('hA', 'hAc', '🔁', 'ユークリッドの 互除法', ['a を b で わった 余りを r と すると gcd(a, b) = gcd(b, r)', '余りが 0 に なる 直前の わる数が 最大公約数'], () => {
+  add('hA', 'hAc', '🔁', 'ユークリッドの 互除法', ['a を b で わった 余りを r と すると gcd(a, b) = gcd(b, r)', '余りが 0 に なる 直前の 割る数が 最大公約数'], () => {
     const g = R(3, 29), a = g * R(11, 60), b = g * R(5, 40); if (a === b) return null;
     let x = Math.max(a, b), y = Math.min(a, b); const st = [];
     while (y) { st.push(x + ' = ' + y + ' × ' + Math.floor(x / y) + ' + ' + (x % y)); [x, y] = [y, x % y]; }
@@ -278,9 +278,9 @@ const LADDER = (function () {
       return { q: 'log' + '₍' + b + '₎ ' + val + ' の 値は?', type: 'num', a: e, steps: [val + ' = ' + b + '^' + M(e), 'よって log₍' + b + '₎ ' + val + ' = ' + M(e)] }; }
     const b = pick([2, 3, 6]), e = R(1, 4), x = pick([2, 3, 5, 7]);
     if (kind === 'sum') { const y = b ** e * 1; const p1 = x, p2 = (b ** e); if (gcd(p2, p1) !== 1 && p2 % p1 === 0) return null;
-      return { q: 'log₍' + b + '₎ ' + (p2 * p1) + ' − log₍' + b + '₎ ' + p1 + ' の 値は?', type: 'num', a: e, steps: ['ひき算は わり算に: log₍' + b + '₎ (' + (p2 * p1) + ' ÷ ' + p1 + ') = log₍' + b + '₎ ' + p2, p2 + ' = ' + b + '^' + e + ' → ' + e] }; }
+      return { q: 'log₍' + b + '₎ ' + (p2 * p1) + ' − log₍' + b + '₎ ' + p1 + ' の 値は?', type: 'num', a: e, steps: ['引き算は 割り算に: log₍' + b + '₎ (' + (p2 * p1) + ' ÷ ' + p1 + ') = log₍' + b + '₎ ' + p2, p2 + ' = ' + b + '^' + e + ' → ' + e] }; }
     const c = b ** e; const d1 = pick([2, 3, 4].filter(d => c % d === 0 || true)), m1 = x, m2 = fr(c, x);
-    return { q: 'log₍' + b + '₎ ' + fs(m2) + ' + log₍' + b + '₎ ' + m1 + ' の 値は?', type: 'num', a: e, steps: ['たし算は かけ算に: log₍' + b + '₎ (' + fs(m2) + ' × ' + m1 + ') = log₍' + b + '₎ ' + c, c + ' = ' + b + '^' + e + ' → ' + e] };
+    return { q: 'log₍' + b + '₎ ' + fs(m2) + ' + log₍' + b + '₎ ' + m1 + ' の 値は?', type: 'num', a: e, steps: ['足し算は 掛け算に: log₍' + b + '₎ (' + fs(m2) + ' × ' + m1 + ') = log₍' + b + '₎ ' + c, c + ' = ' + b + '^' + e + ' → ' + e] };
   });
   add('h2', 'h2c', '🌀', '弧度法・三角関数', ['180° = π ラジアン', 'θ° = θ × π/180 ラジアン', '単位円で 角を 回して 座標 (cosθ, sinθ) を 読む'], () => {
     if (Math.random() < 0.6) { const d = pick([30, 45, 60, 90, 120, 135, 150, 210, 225, 240, 270, 300, 315, 330, 360]); const v = fr(d, 180);
@@ -346,7 +346,7 @@ const LADDER = (function () {
   add('h3', 'h3a', '∞', '極限', ['0/0 の 形は 因数分解して 約分', 'n → ∞ の 分数式は 最高次の 係数の 比', 'lim(x→0) sinx / x = 1'], () => {
     const kind = pick(['factor', 'inf', 'sin']);
     if (kind === 'factor') { const a = NZ(-5, 5), b = R(-5, 5); return { q: 'lim (x → ' + M(a) + ') (' + poly([1, b - a, -a * b]) + ') / (x ' + (a < 0 ? '+ ' + (-a) : '− ' + a) + ') は?', type: 'num', a: a + b, steps: ['分子 = (x ' + (a < 0 ? '+ ' + (-a) : '− ' + a) + ')(x ' + (b < 0 ? '− ' + (-b) : '+ ' + b) + ')', '約分 → x ' + (b < 0 ? '− ' + (-b) : '+ ' + b) + ' に x = ' + M(a) + ' を 代入 = ' + M(a + b)] }; }
-    if (kind === 'inf') { const p = NZ(-6, 6), q = R(1, 5), r = R(-5, 5), s = R(-5, 5); const v = fr(p, q); return { q: 'lim (n → ∞) (' + poly([p, r, 1], 'n') + ') / (' + poly([q, s, 2], 'n') + ') は?', type: 'num', a: v, steps: ['分母・分子を n² で わる', 'n → ∞ で 1/n → 0 → ' + M(p) + '/' + q + ' = ' + fs(v)] }; }
+    if (kind === 'inf') { const p = NZ(-6, 6), q = R(1, 5), r = R(-5, 5), s = R(-5, 5); const v = fr(p, q); return { q: 'lim (n → ∞) (' + poly([p, r, 1], 'n') + ') / (' + poly([q, s, 2], 'n') + ') は?', type: 'num', a: v, steps: ['分母・分子を n² で 割る', 'n → ∞ で 1/n → 0 → ' + M(p) + '/' + q + ' = ' + fs(v)] }; }
     const a = R(2, 6), b = R(1, 5); const v = fr(a, b); return { q: 'lim (x → 0) sin(' + a + 'x) / (' + (b === 1 ? '' : b) + 'x) は?', type: 'num', a: v, steps: ['sin(' + a + 'x)/(' + (b === 1 ? '' : b) + 'x) = (' + a + '/' + b + ') × sin(' + a + 'x)/(' + a + 'x)', 'sinθ/θ → 1 → ' + fs(v)] };
   });
 
@@ -395,13 +395,13 @@ const LADDER = (function () {
   });
   add('c3', 'c3j', '🏞', '二次方程式の 文章題', ['求めたい 長さを x と おいて 式を 作る', '解が 2つ 出たら 問題に 合う 方 (正の 値など) を 選ぶ'], () => {
     const W = R(10, 20), H = R(8, 16), x = R(1, 3), A = (W - 2 * x) * (H - 2 * x);
-    return { q: '縦 ' + H + 'm、横 ' + W + 'm の 土地の まわりに、同じ 幅の 道を 作ったら、残りの 土地の 面積が ' + A + 'm² に なった。道の 幅は 何m?', type: 'num', a: x,
+    return { q: '縦 ' + H + 'm、横 ' + W + 'm の 土地の 周りに、同じ 幅の 道を 作ったら、残りの 土地の 面積が ' + A + 'm² に なった。道の 幅は 何m?', type: 'num', a: x,
       steps: ['道幅を x と おく: (' + W + ' − 2x)(' + H + ' − 2x) = ' + A, '展開: 4x² − ' + (2 * (W + H)) + 'x + ' + (W * H - A) + ' = 0', 'x = ' + x + ' (もう1つの 解は 土地より 大きく なり 不適)'] };
   });
   add('h1', 'h1g', '🔘', '集合と 要素の 個数', ['n(A ∪ B) = n(A) + n(B) − n(A ∩ B)', '補集合: n(Ā) = n(U) − n(A)', '1〜N の 中の k の 倍数の 個数 = N ÷ k の 整数部分'], () => {
     const N = pick([100, 120, 150, 200]), a = pick([2, 3, 4]), b = pick([5, 6, 7].filter(x => x % a)), l = a * b / gcd(a, b), na = Math.floor(N / a), nb = Math.floor(N / b), nab = Math.floor(N / l);
-    if (Math.random() < 0.5) return { q: '1 から ' + N + ' までの 整数で、' + a + ' または ' + b + ' で わり切れる 数は 何個?', type: 'num', a: na + nb - nab, steps: [a + ' の 倍数 ' + na + '個、' + b + ' の 倍数 ' + nb + '個', '両方 (' + l + ' の 倍数) ' + nab + '個', na + ' + ' + nb + ' − ' + nab + ' = ' + (na + nb - nab)] };
-    return { q: '1 から ' + N + ' までの 整数で、' + a + ' でも ' + b + ' でも わり切れない 数は 何個?', type: 'num', a: N - (na + nb - nab), steps: ['どちらかで わり切れる: ' + na + ' + ' + nb + ' − ' + nab + ' = ' + (na + nb - nab), '補集合: ' + N + ' − ' + (na + nb - nab) + ' = ' + (N - (na + nb - nab))] };
+    if (Math.random() < 0.5) return { q: '1 から ' + N + ' までの 整数で、' + a + ' または ' + b + ' で 割り切れる 数は 何個?', type: 'num', a: na + nb - nab, steps: [a + ' の 倍数 ' + na + '個、' + b + ' の 倍数 ' + nb + '個', '両方 (' + l + ' の 倍数) ' + nab + '個', na + ' + ' + nb + ' − ' + nab + ' = ' + (na + nb - nab)] };
+    return { q: '1 から ' + N + ' までの 整数で、' + a + ' でも ' + b + ' でも 割り切れない 数は 何個?', type: 'num', a: N - (na + nb - nab), steps: ['どちらかで 割り切れる: ' + na + ' + ' + nb + ' − ' + nab + ' = ' + (na + nb - nab), '補集合: ' + N + ' − ' + (na + nb - nab) + ' = ' + (N - (na + nb - nab))] };
   });
   add('h1', 'h1h', '△', '三角形の 面積 (sin を 使う)', ['S = ½ bc sinA', 'sin30° = 1/2、 sin60° = √3/2、 sin90° = 1、 sin150° = 1/2'], () => {
     const b = R(2, 12), c = R(2, 12), A = pick([30, 90, 150]); const v = A === 90 ? fr(b * c, 2) : fr(b * c, 4);
@@ -418,7 +418,7 @@ const LADDER = (function () {
     if (kind === 'count') { const b = R(-8, 8), c = R(-8, 10), D = b * b - 4 * c; return { q: 'y = ' + poly([1, b, c]) + ' の グラフと x軸の 共有点は 何個?', type: 'num', a: D > 0 ? 2 : D === 0 ? 1 : 0, steps: ['D = ' + P(b) + '² − 4 × 1 × ' + P(c) + ' = ' + M(D), D > 0 ? 'D > 0 → 2個' : D === 0 ? 'D = 0 → 1個 (接する)' : 'D < 0 → 0個'] }; }
     const b = 2 * NZ(-5, 5), k = b * b / 4; return { q: 'y = ' + poly([1, b, 0]) + ' + k の グラフが x軸に 接する ときの k は?', type: 'num', a: k, steps: ['接する ⇔ D = 0', P(b) + '² − 4k = 0 → k = ' + k] };
   });
-  add('hA', 'hAe', '🔎', '条件付き確率', ['P_A(B) = P(A ∩ B) / P(A) (A が 起きた ときに B が 起きる 確率)', '「A が 起きた と わかった 後」は 全体が A に しぼられる'], () => {
+  add('hA', 'hAe', '🔎', '条件付き確率', ['P_A(B) = P(A ∩ B) / P(A) (A が 起きた ときに B が 起きる 確率)', '「A が 起きた と 分かった 後」は 全体が A に しぼられる'], () => {
     const r = R(3, 6), w = R(2, 5), N = r + w;
     const v = fr(r - 1, N - 1);
     return { q: '赤玉 ' + r + '個・白玉 ' + w + '個の 袋から 1個ずつ 2回 取り出す (戻さない)。1回目が 赤だった とき、2回目も 赤の 確率は?', type: 'num', a: v, steps: ['1回目に 赤を 取った 後: 赤 ' + (r - 1) + '個、全部 ' + (N - 1) + '個', (r - 1) + '/' + (N - 1) + (fs(v) === (r - 1) + '/' + (N - 1) ? '' : ' = ' + fs(v))] };
@@ -427,8 +427,8 @@ const LADDER = (function () {
     let a, b; do { a = R(3, 11); b = R(2, 9); } while (gcd(a, b) !== 1 || a === b);
     const x0 = R(1, b), y0 = R(-a, a), c = a * x0 + b * y0; // 最小の 正の x
     let xm = ((x0 % b) + b) % b; if (xm === 0) xm = b; const ym = (c - a * xm) / b;
-    return { q: a + 'x + ' + b + 'y = ' + c + ' を 満たす 整数 x, y の うち、x が いちばん 小さい 正の 整数に なる 解は?', type: 'pair', labels: ['x', 'y'], a: [xm, ym],
-      steps: ['x を 1, 2, 3 … と 試して ' + c + ' − ' + a + 'x が ' + b + ' で わり切れる ものを 探す', 'x = ' + xm + ' → ' + b + 'y = ' + (c - a * xm) + ' → y = ' + M(ym), '(一般解: x = ' + xm + ' + ' + b + 'k、y = ' + M(ym) + ' − ' + a + 'k)'] };
+    return { q: a + 'x + ' + b + 'y = ' + c + ' を 満たす 整数 x, y の うち、x が 一番 小さい 正の 整数に なる 解は?', type: 'pair', labels: ['x', 'y'], a: [xm, ym],
+      steps: ['x を 1, 2, 3 … と 試して ' + c + ' − ' + a + 'x が ' + b + ' で 割り切れる ものを 探す', 'x = ' + xm + ' → ' + b + 'y = ' + (c - a * xm) + ' → y = ' + M(ym), '(一般解: x = ' + xm + ' + ' + b + 'k、y = ' + M(ym) + ' − ' + a + 'k)'] };
   });
   add('hA', 'hAg', '📐', '角の 二等分線と 比', ['∠A の 二等分線が 辺 BC と 交わる 点 D: BD : DC = AB : AC', '中線・重心: 重心は 中線を 2 : 1 に 分ける'], () => {
     const ab = R(3, 12), ac = R(3, 12); if (ab === ac) return null; const sAC = ab + ac, u = sAC / gcd(ab, sAC), cand = []; for (let t = u; t < sAC; t += u) if (t > Math.abs(ab - ac)) cand.push(t); if (!cand.length) return null; const BC = pick(cand), bd = BC * ab / sAC;
@@ -477,7 +477,7 @@ const LADDER = (function () {
       return Math.random() < 0.5 ? { q: '確率 1/' + den + ' で 起こる 試行を ' + n + '回 行う。起こる 回数 X の 期待値は?', type: 'num', a: E, steps: ['X は 二項分布 B(' + n + ', 1/' + den + ')', 'E(X) = np = ' + n + ' × 1/' + den + ' = ' + fs(E)] }
         : { q: '確率 1/' + den + ' で 起こる 試行を ' + n + '回 行う。起こる 回数 X の 分散は?', type: 'num', a: V, steps: ['X は 二項分布 B(' + n + ', 1/' + den + ')', 'V(X) = np(1 − p) = ' + n + ' × 1/' + den + ' × ' + (den - 1) + '/' + den + ' = ' + fs(V)] }; }
     const pr = [R(100, 500), R(10, 90), 0]; const ps = [1, 3, 6]; const num = pr[0] * ps[0] + pr[1] * ps[1]; const E = fr(num, 10);
-    return { q: 'くじ 10本: 1等 ' + pr[0] + '円 が 1本、2等 ' + pr[1] + '円 が 3本、はずれ 6本。1本 引く ときの 賞金の 期待値は? (円)', type: 'num', a: E, steps: [pr[0] + ' × 1/10 + ' + pr[1] + ' × 3/10 + 0 × 6/10', '= ' + num + '/10 = ' + fs(E) + '円'] };
+    return { q: 'くじ 10本: 1等 ' + pr[0] + '円 が 1本、2等 ' + pr[1] + '円 が 3本、外れ 6本。1本 引く ときの 賞金の 期待値は? (円)', type: 'num', a: E, steps: [pr[0] + ' × 1/10 + ' + pr[1] + ' × 3/10 + 0 × 6/10', '= ' + num + '/10 = ' + fs(E) + '円'] };
   });
   add('h3', 'h3b', '🔗', '微分 (積・商・合成関数)', ['積: (fg)′ = f′g + fg′', '商: (f/g)′ = (f′g − fg′)/g²', '合成: {f(g(x))}′ = f′(g(x))·g′(x)、 例 {(ax+b)ⁿ}′ = na(ax+b)ⁿ⁻¹'], () => {
     const kind = pick(['chain', 'prod']);
@@ -499,11 +499,11 @@ const LADDER = (function () {
   });
 
   // ======================= 追加 単元 (v3: 高難度) =======================
-  add('c2', 'c2h', '🧪', '連立方程式の 文章題', ['わからない 量を 2つ x, y と おく', '「合計」の 式と「もう1つの 関係」の 式を 立てる', '濃度: 食塩の 量 = 食塩水 × 濃度'], () => {
+  add('c2', 'c2h', '🧪', '連立方程式の 文章題', ['分からない 量を 2つ x, y と おく', '「合計」の 式と「もう1つの 関係」の 式を 立てる', '濃度: 食塩の 量 = 食塩水 × 濃度'], () => {
     const kind = pick(['coin', 'salt', 'speed']);
-    if (kind === 'coin') { const x = R(3, 15), y = R(3, 15), a = pick([50, 80, 100, 120]), b = pick([150, 200, 250].filter(v => v !== a)); return { q: '1個 ' + a + '円の ノートと 1個 ' + b + '円の ペンを 合わせて ' + (x + y) + '個 買い、代金は ' + (a * x + b * y) + '円 だった。ノートと ペンを それぞれ 何個 買った?', type: 'pair', labels: ['ノート', 'ペン'], a: [x, y], steps: ['x + y = ' + (x + y) + '、' + a + 'x + ' + b + 'y = ' + (a * x + b * y), '1つ目 × ' + a + ' を ひく: ' + (b - a) + 'y = ' + ((a * x + b * y) - a * (x + y)) + ' → y = ' + y, 'x = ' + (x + y) + ' − ' + y + ' = ' + x] }; }
+    if (kind === 'coin') { const x = R(3, 15), y = R(3, 15), a = pick([50, 80, 100, 120]), b = pick([150, 200, 250].filter(v => v !== a)); return { q: '1個 ' + a + '円の ノートと 1個 ' + b + '円の ペンを 合わせて ' + (x + y) + '個 買い、代金は ' + (a * x + b * y) + '円 だった。ノートと ペンを それぞれ 何個 買った?', type: 'pair', labels: ['ノート', 'ペン'], a: [x, y], steps: ['x + y = ' + (x + y) + '、' + a + 'x + ' + b + 'y = ' + (a * x + b * y), '1つ目 × ' + a + ' を 引く: ' + (b - a) + 'y = ' + ((a * x + b * y) - a * (x + y)) + ' → y = ' + y, 'x = ' + (x + y) + ' − ' + y + ' = ' + x] }; }
     if (kind === 'salt') { const p1 = pick([4, 5, 6]), p2 = pick([10, 12, 15]), x = R(1, 6) * 50, y = R(1, 6) * 50, salt = (p1 * x + p2 * y) / 100, tot = x + y; const pc = salt * 100 / tot; if (!Number.isInteger(pc * 10)) return null;
-      return { q: p1 + '% の 食塩水と ' + p2 + '% の 食塩水を 混ぜて、' + Math.round(pc * 10) / 10 + '% の 食塩水を ' + tot + 'g つくった。' + p1 + '% と ' + p2 + '% を それぞれ 何g 混ぜた?', type: 'pair', labels: [p1 + '% (g)', p2 + '% (g)'], a: [x, y], steps: ['x + y = ' + tot, '食塩: ' + (p1 / 100) + 'x + ' + (p2 / 100) + 'y = ' + salt + ' (= ' + tot + ' × ' + Math.round(pc * 10) / 10 + '%)', '解くと x = ' + x + '、y = ' + y] }; }
+      return { q: p1 + '% の 食塩水と ' + p2 + '% の 食塩水を 混ぜて、' + Math.round(pc * 10) / 10 + '% の 食塩水を ' + tot + 'g 作った。' + p1 + '% と ' + p2 + '% を それぞれ 何g 混ぜた?', type: 'pair', labels: [p1 + '% (g)', p2 + '% (g)'], a: [x, y], steps: ['x + y = ' + tot, '食塩: ' + (p1 / 100) + 'x + ' + (p2 / 100) + 'y = ' + salt + ' (= ' + tot + ' × ' + Math.round(pc * 10) / 10 + '%)', '解くと x = ' + x + '、y = ' + y] }; }
     const v1 = pick([3, 4, 5]), v2 = pick([10, 12, 15]), t1 = R(1, 3), t2 = R(1, 3); const d1 = v1 * t1, d2 = v2 * t2;
     return { q: '家から ' + (d1 + d2) + 'km 離れた 町まで、はじめは 時速 ' + v1 + 'km で 歩き、途中から 時速 ' + v2 + 'km の 自転車に 乗ったら、全体で ' + (t1 + t2) + '時間 かかった。歩いた 道のりと 自転車の 道のりは それぞれ 何km?', type: 'pair', labels: ['歩き (km)', '自転車 (km)'], a: [d1, d2], steps: ['x + y = ' + (d1 + d2) + '、x/' + v1 + ' + y/' + v2 + ' = ' + (t1 + t2), '解くと x = ' + d1 + '、y = ' + d2] };
   });
@@ -524,11 +524,11 @@ const LADDER = (function () {
     const sa = pick([1, -1]), sb = pick([1, -1]), mx = Math.random() < 0.6;
     return { q: 'y = ' + (sa < 0 ? '−' : '') + a + 'sinθ ' + (sb < 0 ? '− ' : '+ ') + b + 'cosθ の ' + (mx ? '最大値' : '最小値') + 'は?', type: 'num', a: mx ? r : -r, steps: ['合成: √(' + a + '² + ' + b + '²) = ' + r, 'y = ' + r + ' sin(θ + α) → ' + (mx ? '最大 ' + r : '最小 −' + r)] };
   });
-  add('h2', 'h2p', '÷', '剰余の 定理・因数定理', ['P(x) を x − a で わった 余りは P(a)', 'P(a) = 0 ⇔ P(x) は x − a で わり切れる (因数定理)'], () => {
+  add('h2', 'h2p', '÷', '剰余の 定理・因数定理', ['P(x) を x − a で わった 余りは P(a)', 'P(a) = 0 ⇔ P(x) は x − a で 割り切れる (因数定理)'], () => {
     const c = [NZ(-3, 3), R(-5, 5), R(-6, 6), R(-9, 9)], a = NZ(-3, 3), v = ((c[0] * a + c[1]) * a + c[2]) * a + c[3];
     if (Math.random() < 0.6) return { q: 'P(x) = ' + poly(c) + ' を x ' + (a < 0 ? '+ ' + (-a) : '− ' + a) + ' で わった 余りは?', type: 'num', a: v, steps: ['余り = P(' + M(a) + ')', '= ' + M(c[0]) + '×' + P(a) + '³ + ' + P(c[1]) + '×' + P(a) + '² + ' + P(c[2]) + '×' + P(a) + ' + ' + P(c[3]) + ' = ' + M(v)] };
     const k = -(c[0] * a ** 3 + c[1] * a * a + c[2] * a);
-    return { q: 'P(x) = ' + poly([c[0], c[1], c[2], 0]) + ' + k が x ' + (a < 0 ? '+ ' + (-a) : '− ' + a) + ' で わり切れる ような 定数 k は?', type: 'num', a: k, steps: ['因数定理: P(' + M(a) + ') = 0', M(c[0] * a ** 3 + c[1] * a * a + c[2] * a) + ' + k = 0 → k = ' + M(k)] };
+    return { q: 'P(x) = ' + poly([c[0], c[1], c[2], 0]) + ' + k が x ' + (a < 0 ? '+ ' + (-a) : '− ' + a) + ' で 割り切れる ような 定数 k は?', type: 'num', a: k, steps: ['因数定理: P(' + M(a) + ') = 0', M(c[0] * a ** 3 + c[1] * a * a + c[2] * a) + ' + k = 0 → k = ' + M(k)] };
   });
   add('hB', 'hBg', '📍', '内分点・重心 (ベクトル・座標)', ['A, B を m : n に 内分する 点 = (nA + mB)/(m + n)', '三角形の 重心 = (A + B + C)/3'], () => {
     if (Math.random() < 0.6) { const m = R(1, 4), n = R(1, 4), Ax = R(-6, 6), Ay = R(-6, 6), s = m + n, Bx = Ax + s * R(-3, 3), By = Ay + s * R(-3, 3);
@@ -560,14 +560,14 @@ const LADDER = (function () {
     if (k === 'xcospi') return { q: '∫ (0 から π まで) ' + cs + 'x cos x dx の 値は?', type: 'num', a: -2 * c, steps: ['原始関数: x sin x + cos x', '[x sin x + cos x] (0〜π) = (0 + (−1)) − (0 + 1) = −2', '× ' + c + ' → ' + M(-2 * c)] };
     return { q: '∫ (0 から 1 まで) ' + cs + 'x² eˣ dx = Ae + B の とき、A と B は?', type: 'pair', a: [c, -2 * c], labels: ['A', 'B'], steps: ['部分積分を 2回: ∫x² eˣ dx = x² eˣ − 2∫x eˣ dx = (x² − 2x + 2)eˣ', '[(x² − 2x + 2)eˣ] (0〜1) = (1 − 2 + 2)e − 2 = e − 2', '× ' + c + ' → A = ' + c + '、B = ' + M(-2 * c)] };
   });
-  add('h3', 'h3h', '🏺', '回転体の 体積', ['x 軸の まわり: V = π∫ y² dx', 'y 軸の まわり: V = π∫ x² dy', '答えは「V = kπ」の k を 入力 (分数 OK)'], () => {
+  add('h3', 'h3h', '🏺', '回転体の 体積', ['x 軸の 周り: V = π∫ y² dx', 'y 軸の 周り: V = π∫ x² dy', '答えは「V = kπ」の k を 入力 (分数 OK)'], () => {
     const k = pick(['x2', 'cone', 'sqrt', 'yax', 'ball', 'sin']);
-    if (k === 'x2') { const a = R(1, 3); return { q: '曲線 y = x² と x 軸、直線 x = ' + a + ' で 囲まれた 部分を x 軸の まわりに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(a ** 5, 5), steps: ['V = π∫ (0〜' + a + ') (x²)² dx = π∫ x⁴ dx', '= π[x⁵/5] = π × ' + (a ** 5) + '/5', 'k = ' + fs(fr(a ** 5, 5))] }; }
-    if (k === 'cone') { const c = R(1, 3), a = R(2, 4); return { q: '直線 y = ' + (c === 1 ? '' : c) + 'x と x 軸、直線 x = ' + a + ' で 囲まれた 三角形を x 軸の まわりに 1回転 させた 立体 (円すい) の 体積を V = kπ と する。k は?', type: 'num', a: fr(c * c * a ** 3, 3), steps: ['V = π∫ (0〜' + a + ') ' + (c * c) + 'x² dx = π × ' + (c * c) + ' × ' + (a ** 3) + '/3', 'k = ' + fs(fr(c * c * a ** 3, 3)), '確認: 円すいの 公式 (1/3)πr²h、r = ' + (c * a) + '、h = ' + a + ' と 一致'] }; }
-    if (k === 'sqrt') { const a = R(2, 6); return { q: '曲線 y = √x と x 軸、直線 x = ' + a + ' で 囲まれた 部分を x 軸の まわりに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(a * a, 2), steps: ['y² = x なので V = π∫ (0〜' + a + ') x dx', '= π[x²/2] = π × ' + (a * a) + '/2', 'k = ' + fs(fr(a * a, 2))] }; }
-    if (k === 'yax') { const b = R(2, 6); return { q: '曲線 y = x² (x ≧ 0) と y 軸、直線 y = ' + b + ' で 囲まれた 部分を y 軸の まわりに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(b * b, 2), steps: ['y 軸の まわりは x² を y で 表して 積分: x² = y', 'V = π∫ (0〜' + b + ') y dy = π × ' + (b * b) + '/2', 'k = ' + fs(fr(b * b, 2))] }; }
-    if (k === 'ball') { const r = R(1, 4); return { q: '半円 y = √(' + (r * r) + ' − x²) と x 軸で 囲まれた 部分を x 軸の まわりに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(4 * r ** 3, 3), steps: ['V = π∫ (−' + r + '〜' + r + ') (' + (r * r) + ' − x²) dx = 2π[' + (r * r) + 'x − x³/3] (0〜' + r + ')', '= 2π(' + (r ** 3) + ' − ' + fs(fr(r ** 3, 3)) + ') = (' + fs(fr(4 * r ** 3, 3)) + ')π', '球の 体積 (4/3)πr³ と 一致'] }; }
-    return { q: '曲線 y = sin x (0 ≦ x ≦ π) と x 軸で 囲まれた 部分を x 軸の まわりに 1回転 させた 立体の 体積を V = kπ² と する。k は?', type: 'num', a: [1, 2], steps: ['V = π∫ (0〜π) sin²x dx', 'sin²x = (1 − cos 2x)/2 (半角の 公式)', '= π[x/2 − sin 2x/4] (0〜π) = π × π/2 → k = 1/2'] };
+    if (k === 'x2') { const a = R(1, 3); return { q: '曲線 y = x² と x 軸、直線 x = ' + a + ' で 囲まれた 部分を x 軸の 周りに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(a ** 5, 5), steps: ['V = π∫ (0〜' + a + ') (x²)² dx = π∫ x⁴ dx', '= π[x⁵/5] = π × ' + (a ** 5) + '/5', 'k = ' + fs(fr(a ** 5, 5))] }; }
+    if (k === 'cone') { const c = R(1, 3), a = R(2, 4); return { q: '直線 y = ' + (c === 1 ? '' : c) + 'x と x 軸、直線 x = ' + a + ' で 囲まれた 三角形を x 軸の 周りに 1回転 させた 立体 (円すい) の 体積を V = kπ と する。k は?', type: 'num', a: fr(c * c * a ** 3, 3), steps: ['V = π∫ (0〜' + a + ') ' + (c * c) + 'x² dx = π × ' + (c * c) + ' × ' + (a ** 3) + '/3', 'k = ' + fs(fr(c * c * a ** 3, 3)), '確認: 円すいの 公式 (1/3)πr²h、r = ' + (c * a) + '、h = ' + a + ' と 一致'] }; }
+    if (k === 'sqrt') { const a = R(2, 6); return { q: '曲線 y = √x と x 軸、直線 x = ' + a + ' で 囲まれた 部分を x 軸の 周りに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(a * a, 2), steps: ['y² = x なので V = π∫ (0〜' + a + ') x dx', '= π[x²/2] = π × ' + (a * a) + '/2', 'k = ' + fs(fr(a * a, 2))] }; }
+    if (k === 'yax') { const b = R(2, 6); return { q: '曲線 y = x² (x ≧ 0) と y 軸、直線 y = ' + b + ' で 囲まれた 部分を y 軸の 周りに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(b * b, 2), steps: ['y 軸の 周りは x² を y で 表して 積分: x² = y', 'V = π∫ (0〜' + b + ') y dy = π × ' + (b * b) + '/2', 'k = ' + fs(fr(b * b, 2))] }; }
+    if (k === 'ball') { const r = R(1, 4); return { q: '半円 y = √(' + (r * r) + ' − x²) と x 軸で 囲まれた 部分を x 軸の 周りに 1回転 させた 立体の 体積を V = kπ と する。k は?', type: 'num', a: fr(4 * r ** 3, 3), steps: ['V = π∫ (−' + r + '〜' + r + ') (' + (r * r) + ' − x²) dx = 2π[' + (r * r) + 'x − x³/3] (0〜' + r + ')', '= 2π(' + (r ** 3) + ' − ' + fs(fr(r ** 3, 3)) + ') = (' + fs(fr(4 * r ** 3, 3)) + ')π', '球の 体積 (4/3)πr³ と 一致'] }; }
+    return { q: '曲線 y = sin x (0 ≦ x ≦ π) と x 軸で 囲まれた 部分を x 軸の 周りに 1回転 させた 立体の 体積を V = kπ² と する。k は?', type: 'num', a: [1, 2], steps: ['V = π∫ (0〜π) sin²x dx', 'sin²x = (1 − cos 2x)/2 (半角の 公式)', '= π[x/2 − sin 2x/4] (0〜π) = π × π/2 → k = 1/2'] };
   });
   add('h3', 'h3i', '♾', '無限級数', ['無限等比級数 a + ar + ar² + … = a/(1 − r) (|r| < 1 の とき 収束)', '部分分数分解: 1/(n(n+1)) = 1/n − 1/(n+1) (となりどうし 消える)', '循環小数: 0.ȧ = a/9、0.ȧḃ = ab/99'], () => {
     const k = pick(['geo', 'geo', 'rep', 'tel', 'tel2', 'part']);

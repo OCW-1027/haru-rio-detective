@@ -1,5 +1,5 @@
 /* engine/news-detective.js — シーズン2 新コンテンツ⑦ ニュース探偵 (メディア・リテラシー)
- * ブランク団が 町に「まちがった ニュース」を 流している。グラフの わな・事実と 意見・情報源・相関と 因果・
+ * ブランク団が 町に「間違った ニュース」を 流している。グラフの わな・事実と 意見・情報源・相関と 因果・
  * 見出しの 大げさ・割合の 読みちがい を 見ぬいて、正しい 情報を 取りもどす。
  * 画面: pageNews2 (#ndArea). 保存: State.v2.news = { cleared: {caseId: stars}, best: {kind: n} }
  * Dependencies: State, saveState, showPage, sfx, escapeHtml, Hub
@@ -38,23 +38,23 @@ const NewsDetective = (function () {
     const a = base + Math.max(1, Math.round(base * (0.03 + rnd(5) / 100))), b = base;
     const y0 = Math.floor(b * 0.97), y1 = Math.ceil(a * 1.01);
     const ratio = Math.round(a / b * 100) / 100;
-    const opts = shuffle(['' + topic[0] + 'は ' + topic[1] + 'より 少し 多い (約' + ratio + '倍) が、差は 小さい', '' + topic[0] + 'は ' + topic[1] + 'の 何倍も 多い', '' + topic[1] + 'の 方が 多い', 'グラフからは どちらが 多いか わからない']);
+    const opts = shuffle(['' + topic[0] + 'は ' + topic[1] + 'より 少し 多い (約' + ratio + '倍) が、差は 小さい', '' + topic[0] + 'は ' + topic[1] + 'の 何倍も 多い', '' + topic[1] + 'の 方が 多い', 'グラフからは どちらが 多いか 分からない']);
     return { kind: 'graph', title: 'グラフの わな', q: '<p class="nd-p">ブランク団の チラシ:「' + topic[0] + 'が 圧勝! ' + topic[1] + 'を 大きく 引きはなした!」</p>' + bars([topic[0], topic[1]], [a, b], y0, y1, topic[3], topic[2]) + '<p class="nd-p">グラフを よく 見て、正しい 読み取りは どれ?</p>', opts: opts, ans: opts.findIndex(o => o.includes('少し')), exp: '縦軸が 0 から ではなく ' + y0 + ' から 始まっているので、差が 大きく 見える。実際は ' + a + ' と ' + b + ' で、約' + ratio + '倍。グラフを 見る ときは まず 軸の 目もりを 確認!' };
   }
   // B: 事実か 意見か
   const FO = [
-    ['富士山の 高さは 3776m だ。', 1], ['富士山は 日本で いちばん 美しい 山だ。', 0], ['この 町の 人口は 10年で 2割 減った。', 1], ['この 町は もっと 観光に 力を 入れる べきだ。', 0],
+    ['富士山の 高さは 3776m だ。', 1], ['富士山は 日本で 一番 美しい 山だ。', 0], ['この 町の 人口は 10年で 2割 減った。', 1], ['この 町は もっと 観光に 力を 入れる べきだ。', 0],
     ['水は 0℃で こおる (1気圧の とき)。', 1], ['冬は 夏より 過ごしやすい 季節だ。', 0], ['きのうの 最高気温は 35.2℃ だった。', 1], ['35℃を こえる 日は 外で 遊ぶのを やめた 方が いい。', 0],
-    ['この 本は 全国で 100万部 売れた。', 1], ['この 本は だれもが 読む べき 名作だ。', 0], ['給食の 残りは 先月より 15% 減った。', 1], ['給食は カレーの 日が いちばん おいしい。', 0],
+    ['この 本は 全国で 100万部 売れた。', 1], ['この 本は だれもが 読む べき 名作だ。', 0], ['給食の 残りは 先月より 15% 減った。', 1], ['給食は カレーの 日が 一番 おいしい。', 0],
     ['日本の 首都は 東京だ。', 1], ['東京は 住むには 人が 多すぎる。', 0], ['新しい 駅は 2027年に 開業する 予定だと 市が 発表した。', 1], ['新しい 駅が できれば 町は きっと 元気に なる。', 0],
     ['調査では 小学生の 6割が 自分の スマホを 持っている と 答えた。', 1], ['小学生に スマホは まだ 早い。', 0], ['選手は 100m を 9秒台で 走った。', 1], ['あの 選手は 史上 最高の スプリンターだ。', 0],
-    ['市の 図書館は 月曜日が 休館日だ。', 1], ['図書館は 毎日 開ける べきだ。', 0], ['地球は 約1年で 太陽の まわりを 1周する。', 1], ['宇宙旅行は お金の むだ だ。', 0],
+    ['市の 図書館は 月曜日が 休館日だ。', 1], ['図書館は 毎日 開ける べきだ。', 0], ['地球は 約1年で 太陽の 周りを 1周する。', 1], ['宇宙旅行は お金の むだ だ。', 0],
     ['この ゲームは 発売 1週間で 50万本 売れた。', 1], ['この ゲームは 子どもに 悪い 影響を あたえる。', 0], ['きょうの 朝刊の 1面は 地震の ニュースだった。', 1], ['新聞は ネットの ニュースより 信用できる。', 0],
   ];
   function factQ() {
     const t = pick(FO);
     return { kind: 'fact', title: '事実か 意見か', q: '<div class="nd-quote">' + esc(t[0]) + '</div><p class="nd-p">これは 確かめられる「事実」? それとも 人の 考えである「意見」?</p>', opts: ['事実', '意見'], ans: t[1] ? 0 : 1,
-      exp: t[1] ? '数字・記録・発表など、正しいか どうか 調べて 確かめられる ことは「事実」。' : '「〜べきだ」「美しい」「おいしい」「きっと」など、人に よって 考えが ちがう ことは「意見」。' };
+      exp: t[1] ? '数字・記録・発表など、正しいか どうか 調べて 確かめられる ことは「事実」。' : '「〜べきだ」「美しい」「おいしい」「きっと」など、人に よって 考えが 違う ことは「意見」。' };
   }
   // C: 情報源
   const SRC = [
@@ -69,23 +69,23 @@ const NewsDetective = (function () {
   ];
   function srcQ() {
     const t = pick(SRC), opts = shuffle([t[1]].concat(t[2]));
-    return { kind: 'src', title: '情報源を えらぶ', q: '<p class="nd-p"><b>' + esc(t[0]) + '</b>。いちばん 信頼できる 情報源は?</p>', opts: opts, ans: opts.indexOf(t[1]), exp: '「だれが・いつ・何を もとに」出した 情報かを 確かめる。公式の 機関・専門家・最新の 発表が 基本。うわさや 古い 情報、出どころ不明の 投稿は 要注意。' };
+    return { kind: 'src', title: '情報源を 選ぶ', q: '<p class="nd-p"><b>' + esc(t[0]) + '</b>。一番 信頼できる 情報源は?</p>', opts: opts, ans: opts.indexOf(t[1]), exp: '「だれが・いつ・何を もとに」出した 情報かを 確かめる。公式の 機関・専門家・最新の 発表が 基本。うわさや 古い 情報、出どころ不明の 投稿は 要注意。' };
   }
   // D: 相関と 因果
   const COR = [
-    ['アイスクリームが よく 売れる 日は、水の 事故も 多い', '気温が 高い (暑いと アイスも 売れるし、水遊びも ふえる)'],
+    ['アイスクリームが よく 売れる 日は、水の 事故も 多い', '気温が 高い (暑いと アイスも 売れるし、水遊びも 増える)'],
     ['消防車が たくさん 来た 火事ほど、被害が 大きい', '火事の 大きさ (大きな 火事ほど 消防車が 多く 来る)'],
     ['くつの サイズが 大きい 小学生ほど、漢字を たくさん 知っている', '学年 (年齢) が 上 (成長して 足も 大きく、習った 漢字も 多い)'],
     ['傘を 持っている 人が 多い 日は、道が ぬれている', '雨が ふっている'],
-    ['テレビを 長く 見る 子ほど、成績が 低い という 調査が ある', 'ほかの 要因 (勉強時間・睡眠など) も 関係するので、テレビだけが 原因とは 言えない'],
-    ['朝ごはんを 食べる 子ほど、テストの 点が 高い という 調査が ある', '生活リズムなど 別の 要因も ある (朝ごはん だけで 点が 上がるとは かぎらない)'],
+    ['テレビを 長く 見る 子ほど、成績が 低い という 調査が ある', '他の 要因 (勉強時間・睡眠など) も 関係するので、テレビだけが 原因とは 言えない'],
+    ['朝ごはんを 食べる 子ほど、テストの 点が 高い という 調査が ある', '生活リズムなど 別の 要因も ある (朝ごはん だけで 点が 上がるとは 限らない)'],
     ['病院が 多い 町ほど、病気の 人が 多い', '人口が 多い (人が 多い 町は 病院も 患者も 多い)'],
     ['セミが たくさん 鳴く 日は、プールに 来る 人が 多い', '夏の 暑い 時期 (セミも プールも 夏に 多い)'],
   ];
   function corQ() {
     const t = pick(COR), others = shuffle(COR.filter(x => x !== t)).slice(0, 2).map(x => x[1]);
     const opts = shuffle([t[1], 'だから 前の ことが 後の ことの 原因だ'].concat(others.slice(0, 2)));
-    return { kind: 'cor', title: '相関と 因果', q: '<div class="nd-quote">「' + esc(t[0]) + '」</div><p class="nd-p">ブランク団:「だから 一方が もう一方の 原因だ!」── 本当は どう 考えるのが 正しい?</p>', opts: opts, ans: opts.indexOf(t[1]), exp: '2つの ことが 一緒に 起きても (相関)、一方が 原因 (因果) とは かぎらない。両方に 関係する「第3の 要因」が かくれて いないか 考えよう。正解: ' + t[1] + '。' };
+    return { kind: 'cor', title: '相関と 因果', q: '<div class="nd-quote">「' + esc(t[0]) + '」</div><p class="nd-p">ブランク団:「だから 一方が もう一方の 原因だ!」── 本当は どう 考えるのが 正しい?</p>', opts: opts, ans: opts.indexOf(t[1]), exp: '2つの ことが 一緒に 起きても (相関)、一方が 原因 (因果) とは 限らない。両方に 関係する「第3の 要因」が 隠れて いないか 考えよう。正解: ' + t[1] + '。' };
   }
   // E: 見出しの 大げさ
   function headQ() {
@@ -93,28 +93,28 @@ const NewsDetective = (function () {
     const before = T[2], after = before + Math.max(1, Math.round(before * (0.02 + rnd(4) / 100)));
     const pct = Math.round((after - before) / before * 1000) / 10;
     const opts = shuffle(['見出しは 大げさ。実際は 約' + pct + '% の 増加に すぎない', '見出しの とおり、数が 何倍にも なった', '数が 減ったのに 増えたと うそを 書いている', '見出しと 記事は 同じ ことを 言っている']);
-    return { kind: 'head', title: '見出しの 大げさ', q: '<div class="nd-paper"><div class="nd-hl">' + esc(T[0]) + '、記録的 大爆発!!</div><p>記事: ' + esc(T[0]) + 'は 去年の ' + before + T[1] + 'から、ことしは ' + after + T[1] + 'に なった。</p></div><p class="nd-p">見出しと 記事を くらべて、正しい ものは?</p>', opts: opts, ans: opts.findIndex(o => o.includes('大げさ')), exp: '増えたのは ' + (after - before) + T[1] + ' (' + before + ' → ' + after + '、約' + pct + '%)。見出しは 目立たせる ために 大げさに なる ことが ある。数字は 本文で 確かめよう。' };
+    return { kind: 'head', title: '見出しの 大げさ', q: '<div class="nd-paper"><div class="nd-hl">' + esc(T[0]) + '、記録的 大爆発!!</div><p>記事: ' + esc(T[0]) + 'は 去年の ' + before + T[1] + 'から、ことしは ' + after + T[1] + 'に なった。</p></div><p class="nd-p">見出しと 記事を 比べて、正しい ものは?</p>', opts: opts, ans: opts.findIndex(o => o.includes('大げさ')), exp: '増えたのは ' + (after - before) + T[1] + ' (' + before + ' → ' + after + '、約' + pct + '%)。見出しは 目立たせる ために 大げさに なる ことが ある。数字は 本文で 確かめよう。' };
   }
   // F: 割合の 読みちがい
   function rateQ() {
     const T = pick([
-      () => { const a = 2 + rnd(3); return { q: 'ある 病気に かかる 人が「2倍に 増えた!」。調べると 1万人に ' + a + '人 → 1万人に ' + 2 * a + '人 だった。', ok: 'たしかに 2倍だが、もともと とても 少ない 数で、1万人あたり ' + a + '人 ふえた だけ', ng: ['1万人の 半分が かかる ように なった', '町の ほとんどの 人が かかった', '数は 変わって いない'], exp: '「2倍」のような 割合の 変化だけで なく、もとの 数 (1万人に ' + a + '人) も 見る こと。' }; },
+      () => { const a = 2 + rnd(3); return { q: 'ある 病気に かかる 人が「2倍に 増えた!」。調べると 1万人に ' + a + '人 → 1万人に ' + 2 * a + '人 だった。', ok: 'たしかに 2倍だが、もともと とても 少ない 数で、1万人あたり ' + a + '人 増えた だけ', ng: ['1万人の 半分が かかる ように なった', '町の ほとんどの 人が かかった', '数は 変わって いない'], exp: '「2倍」のような 割合の 変化だけで なく、もとの 数 (1万人に ' + a + '人) も 見る こと。' }; },
       () => { const n = 10 + rnd(10); return { q: '「この ゲームを 遊んだ 人の 90% が 満足!」。よく 読むと 調査した のは ' + n + '人 だけ だった。', ok: '調べた 人数が 少ないので、全体の 意見とは 言い切れない', ng: ['日本中の 90% が 満足している', '少ない 人数の 方が 正確だ', '人数は 結果に 関係ない'], exp: '調査の 人数 (標本の 大きさ) が 少ないと、たまたまの かたよりが 大きく なる。' }; },
       () => { return { q: '「3人に 1人が 持っている!」と 広告に ある。', ok: '約33% (3分の1) の 人が 持っている という 意味', ng: ['ほとんど 全員が 持っている', '3人しか 持っていない', '100人中 3人が 持っている'], exp: '3人に 1人 = 1 ÷ 3 ≒ 0.33 = 約33%。言い方を 変えて 多く 見せる ことが ある。' }; },
-      () => { const p = 40 + rnd(20); return { q: '「' + p + '% が 賛成!」と 書かれた 調査。でも 質問は「〇〇に 反対しますか?」で、「いいえ」と 答えた 人を 賛成と 数えていた。', ok: '質問の しかたで 結果が 変わる ので、そのまま 信じない 方が いい', ng: ['' + p + '% が 賛成なのは まちがいない', '質問の しかたは 結果に 関係ない', '反対の 人は 0人だった'], exp: '「反対しない」=「賛成」とは かぎらない (わからない・どちらでもない 人も いる)。質問文も 確かめよう。' }; },
+      () => { const p = 40 + rnd(20); return { q: '「' + p + '% が 賛成!」と 書かれた 調査。でも 質問は「〇〇に 反対しますか?」で、「いいえ」と 答えた 人を 賛成と 数えていた。', ok: '質問の 仕方で 結果が 変わる ので、そのまま 信じない 方が いい', ng: ['' + p + '% が 賛成なのは 間違いない', '質問の 仕方は 結果に 関係ない', '反対の 人は 0人だった'], exp: '「反対しない」=「賛成」とは 限らない (わからない・どちらでもない 人も いる)。質問文も 確かめよう。' }; },
     ])();
     const opts = shuffle([T.ok].concat(T.ng));
     return { kind: 'rate', title: '割合・調査の わな', q: '<div class="nd-quote">' + esc(T.q) + '</div><p class="nd-p">正しい 考え方は どれ?</p>', opts: opts, ans: opts.indexOf(T.ok), exp: T.exp };
   }
   const KINDS = { graph: graphQ, fact: factQ, src: srcQ, cor: corQ, head: headQ, rate: rateQ };
-  const TRAIN = [['graph', '📊', 'グラフの わな'], ['fact', '🗣', '事実か 意見か'], ['src', '🏛', '情報源を えらぶ'], ['cor', '🔗', '相関と 因果'], ['head', '📰', '見出しの 大げさ'], ['rate', '％', '割合・調査の わな']];
+  const TRAIN = [['graph', '📊', 'グラフの わな'], ['fact', '🗣', '事実か 意見か'], ['src', '🏛', '情報源を 選ぶ'], ['cor', '🔗', '相関と 因果'], ['head', '📰', '見出しの 大げさ'], ['rate', '％', '割合・調査の わな']];
 
   // ---------- ホーム ----------
   function home() {
     const d = data();
     let h = header('📰 ニュース探偵', 'シーズン2 ・ うその ニュースを 見ぬけ');
     h += '<img class="s2-banner" src="assets/img/s2/news/newsroom.webp" alt="" loading="lazy" onerror="this.remove()">';
-    h += '<div class="nd-hero"><img src="' + SP + 'korarin_greet_01.webp" alt=""><div class="nd-say"><b>コラリン:</b> ブランク団が 町じゅうに「まちがった ニュース」を ばらまいています。グラフの 目もり・数字・情報の 出どころを よく 見て、本当の ことを 見ぬきましょう!</div></div>';
+    h += '<div class="nd-hero"><img src="' + SP + 'korarin_greet_01.webp" alt=""><div class="nd-say"><b>コラリン:</b> ブランク団が 町じゅうに「間違った ニュース」を ばらまいています。グラフの 目もり・数字・情報の 出どころを よく 見て、本当の ことを 見ぬきましょう!</div></div>';
     h += '<button class="nd-big" data-go="cases">🕵️ 事件ファイル <small>解決 ' + Object.keys(d.cleared).length + ' / ' + CASES.length + '</small></button>';
     h += '<div class="nd-h2">🏋 トレーニング (10問)</div><div class="nd-menu">';
     TRAIN.forEach(([k, i, n]) => { h += '<button class="nd-mbtn" data-t="' + k + '"><span class="i">' + i + '</span><b>' + n + '</b><small>ベスト ' + (d.best[k] || 0) + ' / 10</small></button>'; });
@@ -149,7 +149,7 @@ const NewsDetective = (function () {
   // ---------- 事件 ----------
   const CASES = [
     { id: 'n1', title: 'うわさの 号外', steps: ['fact', 'src', 'fact', 'head'] },
-    { id: 'n2', title: 'ふしぎな グラフ', steps: ['graph', 'rate', 'graph', 'fact'] },
+    { id: 'n2', title: '不思議な グラフ', steps: ['graph', 'rate', 'graph', 'fact'] },
     { id: 'n3', title: '原因は アイス?', steps: ['cor', 'fact', 'cor', 'src'] },
     { id: 'n4', title: '大げさ 新聞社', steps: ['head', 'graph', 'head', 'rate'] },
     { id: 'n5', title: '数字の 魔術師', steps: ['rate', 'cor', 'graph', 'rate'] },
@@ -158,7 +158,7 @@ const NewsDetective = (function () {
   let run = null;
   function cases() {
     const d = data();
-    let h = header('🕵️ 事件ファイル', 'フェイクを ぜんぶ 見ぬけば 解決', 'home') + '<div class="nd-cases">';
+    let h = header('🕵️ 事件ファイル', 'フェイクを 全部 見ぬけば 解決', 'home') + '<div class="nd-cases">';
     CASES.forEach((c, i) => { const st = d.cleared[c.id]; h += '<button class="nd-case' + (st ? ' done' : '') + '" data-c="' + i + '"><span class="nd-cn">第' + (i + 1) + '事件</span><b>' + esc(c.title) + '</b><small>' + c.steps.map(s => TRAIN.find(x => x[0] === s)[1]).join(' → ') + '</small><span class="nd-st">' + (st ? '⭐'.repeat(st) + '☆'.repeat(3 - st) : '') + '</span></button>'; });
     area().innerHTML = h + '</div>'; bindGo(area());
     area().querySelectorAll('[data-c]').forEach(b => b.onclick = () => { sound('click'); run = { ci: +b.dataset.c, i: 0, miss: 0 }; step(); });
@@ -169,11 +169,11 @@ const NewsDetective = (function () {
       const st = r.miss === 0 ? 3 : r.miss <= 1 ? 2 : 1, d = data(); d.cleared[c.id] = Math.max(d.cleared[c.id] || 0, st); save();
       try { if (typeof triggerConfetti === 'function') triggerConfetti(); } catch (e) {}
       sound('chime');
-      area().innerHTML = header('🗞 事件 解決!', esc(c.title), 'cases') + '<div class="nd-hero"><img src="' + SP + 'koradon_greet_01.webp" alt=""><div class="nd-say"><b>コラドン:</b> ブランク団の フェイクニュースを ぜんぶ 見ぬいた! 町の 人たちも 正しい 情報を 知る ことが できたぞ。</div></div><div class="nd-res">' + '⭐'.repeat(st) + '<span class="off">' + '☆'.repeat(3 - st) + '</span><div>まちがい ' + r.miss + '回</div></div><button class="nd-go" data-go="cases">事件ファイルへ</button>';
+      area().innerHTML = header('🗞 事件 解決!', esc(c.title), 'cases') + '<div class="nd-hero"><img src="' + SP + 'koradon_greet_01.webp" alt=""><div class="nd-say"><b>コラドン:</b> ブランク団の フェイクニュースを 全部 見ぬいた! 町の 人たちも 正しい 情報を 知る ことが できたぞ。</div></div><div class="nd-res">' + '⭐'.repeat(st) + '<span class="off">' + '☆'.repeat(3 - st) + '</span><div>まちがい ' + r.miss + '回</div></div><button class="nd-go" data-go="cases">事件ファイルへ</button>';
       bindGo(area()); return;
     }
     const P = KINDS[c.steps[r.i]]();
-    showQ(P, header('第' + (r.ci + 1) + '事件 ' + esc(c.title), 'ニュース ' + (r.i + 1) + ' / ' + c.steps.length + ' ・ まちがい ' + r.miss, 'cases'), (ok, fb) => {
+    showQ(P, header('第' + (r.ci + 1) + '事件 ' + esc(c.title), 'ニュース ' + (r.i + 1) + ' / ' + c.steps.length + ' ・ 間違い ' + r.miss, 'cases'), (ok, fb) => {
       if (!ok) r.miss++;
       fb.innerHTML = '<div class="' + (ok ? 'nd-ok' : 'nd-ng') + '">' + (ok ? '✔ 見ぬいた!' : '✗ だまされた…') + ' ' + esc(P.exp) + '</div><button class="nd-go" id="ndN">' + (r.i + 1 < c.steps.length ? '次の ニュースへ →' : '🗞 結果へ') + '</button>';
       $('ndN').onclick = () => { sound('click'); r.i++; step(); };

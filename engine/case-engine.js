@@ -38,7 +38,7 @@ const CaseEngine = (function () {
     html += cfg.desc + ' (進行: ' + clearedCount + ' / ' + totalCases + ')';
     html += '</div>';
     const dueN = ReviewEngine.dueCount(cfg.key);
-    if (dueN > 0) html += '<button class="v2-review-btn" id="' + P + 'ReviewBtn">🔁 まちがえた 問題を 復習 (' + dueN + '問)</button>';
+    if (dueN > 0) html += '<button class="v2-review-btn" id="' + P + 'ReviewBtn">🔁 間違えた 問題を 復習 (' + dueN + '問)</button>';
     html += '</div>';
 
     // 사건 카드들
@@ -347,7 +347,7 @@ const CaseEngine = (function () {
       html += '<div class="sci-resolved">';
       html += '<div class="sci-resolved-title">🏆 事件 解決!</div>';
       const gotStars = st.lastStars || 3;
-      html += '<div class="v2-stars-result">' + starText(gotStars) + '<span>' + (gotStars === 3 ? 'ノーミス! 完ぺきな 推理!' : gotStars === 2 ? 'ナイス 推理! ノーミスで ⭐3つに 挑戦しよう' : '解決! もう一度 挑戦して ⭐を ふやそう') + '</span></div>';
+      html += '<div class="v2-stars-result">' + starText(gotStars) + '<span>' + (gotStars === 3 ? 'ノーミス! 完ぺきな 推理!' : gotStars === 2 ? 'ナイス 推理! ノーミスで ⭐3つに 挑戦しよう' : '解決! もう一度 挑戦して ⭐を 増やそう') + '</span></div>';
       html += '<div style="font-family:Klee One;font-size:14px;color:var(--deep-ink);line-height:1.7;white-space:pre-wrap;">' + escapeHtml(c.finalQ.explanation) + '</div>';
       html += '<div class="sci-learned-box">';
       html += '<div class="v2-korarin-h"><img src="' + KORARIN_IMG + '" alt=""><span>コラリンの まとめ</span></div>';

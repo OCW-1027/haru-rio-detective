@@ -1,6 +1,6 @@
-/* engine/lesson.js — くわしい 解説 (図・表つき) の 共通エンジン
+/* engine/lesson.js — 詳しい 解説 (図・表つき) の 共通エンジン
  * データ: data/lessons-*.js が LESSON(id, {...}) で 登録する。
- *   { lead: 一言で いうと, secs: [{ h: 見出し, p: [段落], fig: SVG, tbl: {head, rows, note}, ex: {q, steps, a}, tip }], miss: [よくある まちがい], check: [{q, a}] }
+ *   { lead: 一言で いうと, secs: [{ h: 見出し, p: [段落], fig: SVG, tbl: {head, rows, note}, ex: {q, steps, a}, tip }], miss: [よくある 間違い], check: [{q, a}] }
  *   本文の **太字** は <b>、[[赤]] [[青:...]] [[緑:...]] は 色つき。
  * 図の 道具: LF.numline / LF.graph / LF.area / LF.tape / LF.svg + LF.line, LF.poly, LF.txt, LF.circle, LF.arc, LF.arrow
  * 表示: Lesson.render(id, onBack) → #mwArea などの 中に HTML。Lesson.has(id)
@@ -54,7 +54,7 @@ const LF = (function () {
     s = '<g clip-path="none">' + s + '</g>';
     return svg(W, H, s, 'lf-graph');
   }
-  // 面積図 (かけ算): {top: [ラベル], left: [ラベル], cells: [[値]], tw: [幅], lh: [高さ], colors}
+  // 面積図 (掛け算): {top: [ラベル], left: [ラベル], cells: [[値]], tw: [幅], lh: [高さ], colors}
   function area(o) {
     const tw = o.tw || o.top.map(() => 110), lh = o.lh || o.left.map(() => 70), X0 = 60, Y0 = 40, cols = o.colors || ['paleY', 'pale', 'paleG', 'paleR'];
     let s = '', x = X0;
@@ -93,8 +93,8 @@ const Lesson = (function () {
       if (s.tip) h += '<div class="lf-tip">🌟 ' + fmt(s.tip) + '</div>';
       h += '</section>';
     });
-    if (d.miss && d.miss.length) h += '<div class="lf-miss"><b>⚠ よくある まちがい</b><ul>' + d.miss.map(x => '<li>' + fmt(x) + '</li>').join('') + '</ul></div>';
-    if (d.check && d.check.length) h += '<div class="lf-check"><b>✅ たしかめ (タップで 答え)</b>' + d.check.map(c => '<details><summary>' + fmt(c.q) + '</summary><div>' + fmt(c.a) + '</div></details>').join('') + '</div>';
+    if (d.miss && d.miss.length) h += '<div class="lf-miss"><b>⚠ よくある 間違い</b><ul>' + d.miss.map(x => '<li>' + fmt(x) + '</li>').join('') + '</ul></div>';
+    if (d.check && d.check.length) h += '<div class="lf-check"><b>✅ 確かめ (タップで 答え)</b>' + d.check.map(c => '<details><summary>' + fmt(c.q) + '</summary><div>' + fmt(c.a) + '</div></details>').join('') + '</div>';
     return h + '</div>';
   }
   return { has: has, html: html, fmt: fmt };

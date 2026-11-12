@@ -1,6 +1,6 @@
 /* engine/indian-math.js — インド式 計算道場
  * 20の ワザ × (解説 → 例題 → 練習 10問 (2段階) → 60秒 チャレンジ) + コース検定 + 今日の 復習 + インド数学 ものがたり
- * まちがえた 問題は その場で「その問題の 解き方」を ステップで 表示する。
+ * 間違えた 問題は その場で「その問題の 解き方」を ステップで 表示する。
  * 星: ★1 練習で 8/10 以上 · ★2 ステップ2で 9/10 以上 かつ 平均 目標秒 以内 · ★3 60秒で 目標数 以上
  * 画面: pageIndian (#imArea). 保存: State.v2.indian = { t: {id: {stars, sprint, n, ok, ng, avg}}, exam: {course: best}, badge: {course: 1} }
  * Dependencies: IM (data/indian-math.js), State, saveState, showPage, sfx, escapeHtml
@@ -31,7 +31,7 @@ const IndianMath = (function () {
   function home() {
     stop();
     const D = data(), total = IM.T.reduce((a, t) => a + tr(t.id).stars, 0);
-    let h = '<div class="im-hero">' + aarya('big') + '<div><div class="im-kicker">インド式</div><h1 class="im-h1">計算道場</h1><p>アーリヤ:「ナマステ! わたしは インドの ベンガルールから 来た アーリヤ。インドの 子どもたちが 使う 計算の ワザを ' + IM.T.length + 'こ 教えるよ。ワザには 全部 ちゃんと 理由が あるんだ!」</p></div></div>';
+    let h = '<div class="im-hero">' + aarya('big') + '<div><div class="im-kicker">インド式</div><h1 class="im-h1">計算道場</h1><p>アーリヤ:「ナマステ! わたしは インドの ベンガルールから 来た アーリヤ。インドの 子どもたちが 使う 計算の ワザを ' + IM.T.length + '個 教えるよ。ワザには 全部 ちゃんと 理由が あるんだ!」</p></div></div>';
     h += '<div class="im-stats"><div><b>' + total + '</b><small>/ ' + IM.T.length * 3 + ' ★</small></div><div><b>' + IM.T.filter(t => tr(t.id).stars >= 1).length + '</b><small>おぼえた ワザ</small></div><div><b>' + IM.COURSES.filter(c => D.badge[c.id]).length + '</b><small>/ ' + IM.COURSES.length + ' 検定 合格</small></div></div>';
     h += '<div class="im-row"><button class="im-primary" id="imReview">📅 今日の 復習 (10問)</button><button class="im-secondary" id="imStory">📜 インド数学 ものがたり</button></div>';
     IM.COURSES.forEach(c => {
@@ -40,7 +40,7 @@ const IndianMath = (function () {
       list.forEach(t => { const r = tr(t.id); h += '<button class="im-card" data-t="' + t.id + '"><span class="im-ci">' + t.icon + '</span><span class="im-cn">' + esc(t.name) + '</span><span class="im-cs">' + stars(r.stars) + '</span></button>'; });
       h += '</div></div>';
     });
-    h += '<p class="im-note">💡 どの ワザも「解説 → 例題 → 練習 → 60秒」の 順で 進めよう。まちがえたら、その 問題の 解き方が ステップで 出るよ。</p>';
+    h += '<p class="im-note">💡 どの ワザも「解説 → 例題 → 練習 → 60秒」の 順で 進めよう。間違えたら、その 問題の 解き方が ステップで 出るよ。</p>';
     area().innerHTML = h;
     area().querySelectorAll('[data-t]').forEach(b => b.onclick = () => { sfx('click'); techView(IM.byId(b.dataset.t), 'why'); });
     area().querySelectorAll('[data-exam]').forEach(b => b.onclick = () => { sfx('click'); examIntro(b.dataset.exam); });
@@ -69,7 +69,7 @@ const IndianMath = (function () {
     const box = $('imTab');
     if (tab === 'why') {
       let s = '<div class="im-box im-rule"><b>ワザ</b><p>' + esc(t.short) + '</p></div><div class="im-box"><div class="im-talk">' + aarya('sm') + '<div><b>なぜ そうなる?</b>' + t.why.map(p => '<p>' + p + '</p>').join('') + '</div></div>' + (t.area ? '<div class="im-center">' + areaSVG(t.area) + '<p class="im-small">面積図: 4つの 長方形の 合計が 答え</p></div>' : '') + '</div>';
-      if (typeof Lesson !== 'undefined' && Lesson.has('im_' + t.id)) s += '<div class="im-lesson"><h3 class="im-lesson-h">📖 くわしい 解説</h3>' + Lesson.html('im_' + t.id) + '</div>';
+      if (typeof Lesson !== 'undefined' && Lesson.has('im_' + t.id)) s += '<div class="im-lesson"><h3 class="im-lesson-h">📖 詳しい 解説</h3>' + Lesson.html('im_' + t.id) + '</div>';
       s += '<button class="im-primary" id="imGoEx">👀 例題を 見る</button>';
       box.innerHTML = s; $('imGoEx').onclick = () => { sfx('click'); techView(t, 'ex'); };
     } else if (tab === 'ex') exampleView(t, box, t.make(t.ex));
@@ -85,7 +85,7 @@ const IndianMath = (function () {
     let shown = 1;
     const draw = () => {
       let s = '<div class="im-box"><div class="im-q">' + esc(ex.q) + '</div><ol class="im-steps">' + ex.steps.slice(0, shown).map(x => '<li>' + x + '</li>').join('') + '</ol>';
-      s += shown < ex.steps.length ? '<button class="im-primary" id="imNextStep">次の ステップ ▶</button>' : '<div class="im-okline">✔ ' + esc(ex.q) + ' = ' + fmtA(t, ex.a) + '</div><div class="im-row"><button class="im-secondary" id="imAnother">🎲 ほかの 例題</button><button class="im-primary" id="imToPrac">✏ 練習へ</button></div>';
+      s += shown < ex.steps.length ? '<button class="im-primary" id="imNextStep">次の ステップ ▶</button>' : '<div class="im-okline">✔ ' + esc(ex.q) + ' = ' + fmtA(t, ex.a) + '</div><div class="im-row"><button class="im-secondary" id="imAnother">🎲 他の 例題</button><button class="im-primary" id="imToPrac">✏ 練習へ</button></div>';
       box.innerHTML = s + '</div>';
       const n = $('imNextStep'); if (n) n.onclick = () => { sfx('click'); shown++; draw(); };
       const a = $('imAnother'); if (a) a.onclick = () => { sfx('click'); exampleView(t, box, t.make(t.rand(1))); };
@@ -93,11 +93,11 @@ const IndianMath = (function () {
     };
     draw();
   }
-  function fmtA(t, a) { return t.ans === 'qr' ? a[0] + ' あまり ' + a[1] : t.ans === 'ox' ? (a === 'o' ? '○ 正しい' : '× まちがい') : String(a); }
+  function fmtA(t, a) { return t.ans === 'qr' ? a[0] + ' 余り ' + a[1] : t.ans === 'ox' ? (a === 'o' ? '○ 正しい' : '× 間違い') : String(a); }
 
   // ================= 解答 入力 (テンキー) =================
   function inputHTML(t) {
-    if (t.ans === 'ox') return '<div class="im-ox"><button data-ox="o">○ 正しい</button><button data-ox="x">× まちがい</button></div>';
+    if (t.ans === 'ox') return '<div class="im-ox"><button data-ox="o">○ 正しい</button><button data-ox="x">× 間違い</button></div>';
     let h = '<div class="im-inp">';
     h += t.ans === 'qr' ? '<label>商 <input id="imA" inputmode="numeric" autocomplete="off"></label><label>あまり <input id="imB" inputmode="numeric" autocomplete="off"></label>' : '<input id="imA" inputmode="numeric" autocomplete="off" placeholder="答え">';
     h += '</div><div class="im-pad">' + [7, 8, 9, 4, 5, 6, 1, 2, 3].map(n => '<button data-k="' + n + '">' + n + '</button>').join('') + '<button data-k="del">⌫</button><button data-k="0">0</button><button data-k="ok" class="ok">決定</button></div>';
@@ -165,7 +165,7 @@ const IndianMath = (function () {
     } else {
       sfx('wrong'); R0.wrong.push({ t: t, ex: ex, v: v });
       const box = area().querySelector('.im-box.im-center');
-      box.innerHTML = '<div class="im-q big">' + esc(ex.q) + '</div><div class="im-bad">✗ 答えは <b>' + fmtA(t, ex.a) + '</b>' + (t.ans !== 'ox' ? ' (あなた: ' + esc(Array.isArray(v) ? v[0] + ' あまり ' + v[1] : v) + ')' : '') + '</div><div class="im-talk">' + art(KORARIN, '', 'im-kor') + '<div><b>コラリン: この 問題の 解き方</b><ol class="im-steps">' + ex.steps.map(x => '<li>' + x + '</li>').join('') + '</ol></div></div><button class="im-primary" id="imGoOn">次へ →</button>';
+      box.innerHTML = '<div class="im-q big">' + esc(ex.q) + '</div><div class="im-bad">✗ 答えは <b>' + fmtA(t, ex.a) + '</b>' + (t.ans !== 'ox' ? ' (あなた: ' + esc(Array.isArray(v) ? v[0] + ' 余り ' + v[1] : v) + ')' : '') + '</div><div class="im-talk">' + art(KORARIN, '', 'im-kor') + '<div><b>コラリン: この 問題の 解き方</b><ol class="im-steps">' + ex.steps.map(x => '<li>' + x + '</li>').join('') + '</ol></div></div><button class="im-primary" id="imGoOn">次へ →</button>';
       $('imGoOn').onclick = () => { sfx('click'); R0.i++; nextQ(); };
       document.onkeydown = e => { if (e.key === 'Enter') { document.onkeydown = null; R0.i++; nextQ(); } };
     }
@@ -236,7 +236,7 @@ const IndianMath = (function () {
     stop();
     const c = course(cid), E = c.exam, list = IM.T.filter(t => t.course === cid);
     let h = head('📝 ' + c.name + ' 検定');
-    h += '<div class="im-box"><div class="im-talk">' + aarya('sm') + '<div><b>アーリヤ</b><p>' + c.name + ' コースの ワザ ' + list.length + 'こ から ' + E.n + '問。制限時間 ' + Math.round(E.sec / 60) + '分。' + E.pass + '問 以上 正解で 合格だよ! 答え合わせは 最後に まとめて。</p></div></div><p class="im-small">出題する ワザ: ' + list.map(t => t.icon + esc(t.name)).join(' / ') + '</p></div>';
+    h += '<div class="im-box"><div class="im-talk">' + aarya('sm') + '<div><b>アーリヤ</b><p>' + c.name + ' コースの ワザ ' + list.length + '個 から ' + E.n + '問。制限時間 ' + Math.round(E.sec / 60) + '分。' + E.pass + '問 以上 正解で 合格だよ! 答え合わせは 最後に まとめて。</p></div></div><p class="im-small">出題する ワザ: ' + list.map(t => t.icon + esc(t.name)).join(' / ') + '</p></div>';
     h += '<button class="im-primary" id="imStart">はじめる</button>';
     area().innerHTML = h; bindBack();
     $('imStart').onclick = () => { sfx('click'); exam(cid); };

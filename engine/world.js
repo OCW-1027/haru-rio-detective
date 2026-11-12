@@ -1,8 +1,8 @@
 /* engine/world.js — 新コンテンツ① コラドン航空 世界追跡 v2
- * ブランク団の 8人の うち だれが 犯人か わからない。各都市で 証言を 集めて
+ * ブランク団の 8人の うち だれが 犯人か 分からない。各都市で 証言を 集めて
  *   ① 次の 行き先 (言語·通貨·国旗·名所·名物·自然) を 推理し、
  *   ② 犯人の 特徴 (帽子·小物·マント·趣味) を メモして 容疑者ファイルで しぼりこみ、
- *   ③ 逮捕状を 出してから 最後の かくれ家に たどり着く。
+ *   ③ 逮捕状を 出してから 最後の 隠れ家に たどり着く。
  * 証人の 中には ブランク団の 仲間が まぎれていて、うその 行き先 (と うその 特徴) を 言うことが ある。
  * 時間制限: 聞きこみ 2時間 · 飛行時間は 実際の 距離から 計算 · 夜 (22時〜6時) は 現地で 眠る (時差が 効く)。
  * 画面: pageWorldChase (#wcArea). 保存: State.v2.world = { cleared: {caseId: stars}, visited: {cityId: 1} }
@@ -16,7 +16,7 @@ const WorldChase = (function () {
   const IMG = 'assets/img/world/';
   const ASK_H = 2;                     // 聞きこみ 1回の 時間
 
-  // ---------- ブランク団 8人 (4つの 特徴 × 2通り。どの 3つが わかっても 1人に しぼれる) ----------
+  // ---------- ブランク団 8人 (4つの 特徴 × 2通り。どの 3つが 分かっても 1人に しぼれる) ----------
   const T = {
     hat:   { label: '帽子',  v: { top: 'シルクハット', beret: 'ベレー帽' }, en: { top: 'a tall black top hat', beret: 'a beret' } },
     acc:   { label: '小物',  v: { scarf: 'しまもようの マフラー', glasses: '丸い メガネ' }, en: { scarf: 'a striped scarf', glasses: 'round glasses' } },
@@ -34,7 +34,7 @@ const WorldChase = (function () {
     { id: 'jester',   name: 'ジェスター',         hat: 'beret', acc: 'glasses', cape: 'red',  hobby: 'chess',  who: 'いたずら好きの 道化師' },
     { id: 'zero',     name: 'ゼロ',               hat: 'beret', acc: 'glasses', cape: 'navy', hobby: 'violin', who: 'ブランク団の 幹部。正体は 謎' },
   ];
-  // 事件 (後ろほど むずかしい)  hops=飛ぶ 回数  liar=うそつきが 出はじめる 都市番号 (-1 は なし)  liarTrait=うそつきが 特徴も いつわる  en=英語の 証人数  slack=時間の 余裕  allow=まちがった 往復を 何回分 見こむか (max/mid/min = 一番 長い/ふつう/一番 短い 往復 1回分)
+  // 事件 (後ろほど 難しい)  hops=飛ぶ 回数  liar=うそつきが 出はじめる 都市番号 (-1 は なし)  liarTrait=うそつきが 特徴も いつわる  en=英語の 証人数  slack=時間の 余裕  allow=まちがった 往復を 何回分 見こむか (max/mid/min = 一番 長い/普通/一番 短い 往復 1回分)
   const CASES = [
     { id: 'w1', name: '消えた 金の 招き猫', item: '浅草の 老舗に かざられていた 金の 招き猫', icon: '🐱', hops: 4, liar: -1, liarTrait: false, en: 1, slack: 10, allow: 'max',
       intro: '浅草の 老舗から 金の 招き猫が 盗まれた! 現場には 白い カードが 1枚… ブランク団の しわざだ。8人の 団員の うち、だれが 犯人だろう?' },
@@ -258,8 +258,8 @@ const WorldChase = (function () {
     h += '<div class="wc-box"><div class="wc-h2">📜 捜査の ルール</div><ul class="wc-rules">' +
       '<li>聞きこみ 1人 = <b>' + ASK_H + '時間</b>。飛行機は 距離で 時間が 決まる (約850km/時)。</li>' +
       '<li>夜 22時〜朝 6時に なると、その 都市の 時刻で 朝 7時まで 眠る。<b>時差</b>に 注意!</li>' +
-      '<li>犯人の 特徴は 証言の 中に まざっている。自分で <b>捜査メモ</b>を 見て、容疑者ファイルで しぼりこもう。</li>' +
-      (st.cs.liar >= 0 ? '<li>⚠ ' + (st.cs.liar === 0 ? 'どの 都市にも' : (st.cs.liar + 1) + '番目の 都市から') + ' <b>うそつき</b>が 1人 まざる。2人の 証言が 一致する 行き先を 信じよう。' + (st.cs.liarTrait ? ' うそつきは <b>特徴も いつわる</b>!' : '') + '</li>' : '') +
+      '<li>犯人の 特徴は 証言の 中に 混ざっている。自分で <b>捜査メモ</b>を 見て、容疑者ファイルで しぼりこもう。</li>' +
+      (st.cs.liar >= 0 ? '<li>⚠ ' + (st.cs.liar === 0 ? 'どの 都市にも' : (st.cs.liar + 1) + '番目の 都市から') + ' <b>うそつき</b>が 1人 混ざる。2人の 証言が 一致する 行き先を 信じよう。' + (st.cs.liarTrait ? ' うそつきは <b>特徴も いつわる</b>!' : '') + '</li>' : '') +
       '<li>最後の 都市に 着く 前に <b>逮捕状</b>を 出しておかないと 逮捕できない。</li></ul>' +
       '<p>⏰ 出発: <b>' + clockStr(st.t, 9) + '</b> (東京)<br>⌛ 締め切り: <b>' + clockStr(st.deadline, 9) + '</b> (東京時間)</p></div>';
     h += '<button class="wc-primary" id="wcGo">🔎 東京で 聞きこみ 開始</button>';
@@ -369,7 +369,7 @@ const WorldChase = (function () {
   function memoView(back) {
     let h = header();
     h += '<div class="wc-box"><div class="wc-h2">📒 捜査メモ — 犯人の 特徴について の 証言</div>';
-    if (!st.memo.length) h += '<p class="wc-small">まだ 特徴の 証言は ない。聞きこみの 中に「その人は…」という 話が まざっているよ。</p>';
+    if (!st.memo.length) h += '<p class="wc-small">まだ 特徴の 証言は ない。聞きこみの 中に「その人は…」という 話が 混ざっているよ。</p>';
     else {
       h += '<table class="wc-memo"><tr><th>都市</th><th>だれ</th><th>' + '特徴</th></tr>';
       st.memo.forEach(m => { h += '<tr><td>' + esc(m.at) + '</td><td>' + esc(m.who) + '</td><td><b>' + T[m.k].label + '</b>: ' + esc(T[m.k].v[m.v]) + '</td></tr>'; });
@@ -388,13 +388,13 @@ const WorldChase = (function () {
     const F = st.filt;
     const cand = GANG.filter(g => TK.every(k => !F[k] || g[k] === F[k]));
     let h = header();
-    h += '<div class="wc-box"><div class="wc-h2">🗂 容疑者ファイル — わかった 特徴を 選んで しぼりこもう</div><div class="wc-filt">';
+    h += '<div class="wc-box"><div class="wc-h2">🗂 容疑者ファイル — 分かった 特徴を 選んで しぼりこもう</div><div class="wc-filt">';
     TK.forEach(k => {
       h += '<div class="wc-fr"><b>' + T[k].label + '</b><button class="wc-fb2' + (!F[k] ? ' on' : '') + '" data-k="' + k + '" data-v="">？</button>';
       Object.keys(T[k].v).forEach(v => { h += '<button class="wc-fb2' + (F[k] === v ? ' on' : '') + '" data-k="' + k + '" data-v="' + v + '">' + esc(T[k].v[v]) + '</button>'; });
       h += '</div>';
     });
-    h += '</div><p class="wc-small">あてはまる 団員: <b>' + cand.length + '人</b>' + (cand.length > 1 ? ' — 1人に なるまで 特徴を 集めよう (4つの うち 3つ わかれば しぼれる)' : '') + '</p><div class="wc-gang">';
+    h += '</div><p class="wc-small">あてはまる 団員: <b>' + cand.length + '人</b>' + (cand.length > 1 ? ' — 1人に なるまで 特徴を 集めよう (4つの うち 3つ 分かれば しぼれる)' : '') + '</p><div class="wc-gang">';
     GANG.forEach(g => { const ok = cand.includes(g); h += '<div class="wc-gm' + (ok ? '' : ' out') + (st.warrant === g.id ? ' war' : '') + '">' + gangPic(g, 60) + '<b>' + esc(g.name) + '</b><small>' + TK.map(k => T[k].v[g[k]]).join('<br>') + '</small></div>'; });
     h += '</div>';
     if (cand.length === 1) h += '<button class="wc-primary" id="wcWar">📝 ' + esc(cand[0].name) + 'の 逮捕状を 出す</button>';
@@ -447,7 +447,7 @@ const WorldChase = (function () {
         const back = spend(fh, here.tz);
         let m = header();
         m += art(IMG + 'cities/' + dest.id + '.webp', '', 'wc-cityimg');
-        m += '<div class="wc-box wc-talk"><img src="' + KORADON_IDLE + '" alt=""><div><b>コラドン</b><p>' + esc(dest.name) + 'には 怪盗の 足あとが ない… ちがう 都市だった。' + esc(here.name) + 'まで 飛んで もどったよ (往復 約' + (fh * 2) + '時間' + (slept + back ? ' + 夜の 休み ' + fmtH(slept + back) : '') + ')。</p>' +
+        m += '<div class="wc-box wc-talk"><img src="' + KORADON_IDLE + '" alt=""><div><b>コラドン</b><p>' + esc(dest.name) + 'には 怪盗の 足あとが ない… 違う 都市だった。' + esc(here.name) + 'まで 飛んで もどったよ (往復 約' + (fh * 2) + '時間' + (slept + back ? ' + 夜の 休み ' + fmtH(slept + back) : '') + ')。</p>' +
           (S.decoy === id ? '<p class="wc-small">⚠ この 行き先を 言った 証人は うそつき だったのかも!</p>' : '') + '<p class="wc-small">📘 ' + esc(dest.fact) + '</p></div></div>';
         if (timeUp()) { area().innerHTML = m; bindHeader(); return setTimeout(() => failView('⌛ 時間を 使いすぎて 締め切りを 過ぎてしまった…'), 1600); }
         m += '<button class="wc-primary" id="wcRe">' + esc(here.name) + 'で 推理し直す</button>';
@@ -512,7 +512,7 @@ const WorldChase = (function () {
     const d = data(); d.cleared[st.cs.id] = Math.max(d.cleared[st.cs.id] || 0, stars); save();
     const g = st.thief;
     let h = header();
-    h += '<div class="wc-box wc-center"><div class="wc-big">🎉</div>' + gangPic(g, 110) + '<p>ブランク団の <b>' + esc(g.name) + '</b> を 逮捕した!<br>「' + esc(st.cs.item) + '」を 取り返した!</p><div class="wc-stars big">' + '★'.repeat(stars) + '☆'.repeat(3 - stars) + '</div><p class="wc-small">残り時間 ' + fmtH(Math.max(0, L)) + ' ・ まちがった 飛行 ' + st.wrong + '回 ・ 時差クイズ 正解 ' + st.tzOk + '回</p></div>';
+    h += '<div class="wc-box wc-center"><div class="wc-big">🎉</div>' + gangPic(g, 110) + '<p>ブランク団の <b>' + esc(g.name) + '</b> を 逮捕した!<br>「' + esc(st.cs.item) + '」を 取り返した!</p><div class="wc-stars big">' + '★'.repeat(stars) + '☆'.repeat(3 - stars) + '</div><p class="wc-small">残り時間 ' + fmtH(Math.max(0, L)) + ' ・ 間違った 飛行 ' + st.wrong + '回 ・ 時差クイズ 正解 ' + st.tzOk + '回</p></div>';
     h += mapSVG({ trail: st.trail, here: st.route[st.pos] });
     h += '<div class="wc-box wc-talk"><img src="' + KORARIN + '" alt=""><div><b>コラリンの まとめ</b><ul class="wc-sum">';
     st.trail.forEach(id => { const c = city(id); h += '<li><b>' + esc(c.name) + '</b> (' + esc(c.country) + ') — ' + esc(c.lang) + ' / 通貨 ' + esc(c.cur) + ' / UTC' + (c.tz >= 0 ? '+' : '') + c.tz + '</li>'; });

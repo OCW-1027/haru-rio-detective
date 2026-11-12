@@ -185,7 +185,7 @@ const WeatherChallenge = (function () {
       const pr = dayRec(dt.main, target);
       data().preds.push({ city: cityId, date: target, wx: p.wx, tmax: p.tmax, tmin: p.tmin, pro: pr ? { wx: pr.wx, tmax: Math.round(pr.tmax), tmin: Math.round(pr.tmin) } : null, made: new Date().toISOString() });
       save();
-      area().innerHTML = head('予報 完了') + '<div class="wx-box wx-talk"><img src="' + KORADON + '" alt=""><div><b>コラドン</b><p>予報を 受け付けたよ! ' + jpDate(target) + ' が 終わったら、実際の 天気と くらべて 採点するね。プロの 予報とも 勝負だ!</p></div></div><button class="wx-primary" id="wxHome">もどる</button>';
+      area().innerHTML = head('予報 完了') + '<div class="wx-box wx-talk"><img src="' + KORADON + '" alt=""><div><b>コラドン</b><p>予報を 受け付けたよ! ' + jpDate(target) + ' が 終わったら、実際の 天気と 比べて 採点するね。プロの 予報とも 勝負だ!</p></div></div><button class="wx-primary" id="wxHome">もどる</button>';
       bindHead(); document.getElementById('wxHome').onclick = () => home();
     });
   }

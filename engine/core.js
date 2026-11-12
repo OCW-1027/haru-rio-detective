@@ -102,11 +102,11 @@ function buildAllChapters() {
     buildChapter('i5', '🔗', '熟語 (2級) ①', '高校2年レベル', [...IDIOMS_G2], 15, 'meaning'),
     buildChapter('i6', '🔗', '熟語 (2級) ②', '高校2年レベル', [...IDIOMS_G2_PLUS], 15, 'meaning'),
     // ===== 신규: 日常会話 2개 (50개) =====
-    buildChapter('d1', '💬', '日常会話 ①', 'まいにち つかえる', ALL_DAILY.slice(0, 25), 12, 'meaning'),
-    buildChapter('d2', '💬', '日常会話 ②', 'まいにち つかえる', ALL_DAILY.slice(25), 12, 'meaning'),
+    buildChapter('d1', '💬', '日常会話 ①', '毎日 使える', ALL_DAILY.slice(0, 25), 12, 'meaning'),
+    buildChapter('d2', '💬', '日常会話 ②', '毎日 使える', ALL_DAILY.slice(25), 12, 'meaning'),
     // ===== 신규: 学校生活 2개 (40개) =====
-    buildChapter('sc1', '🎒', '学校の 単語 ①', 'がっこうで つかう', ALL_SCHOOL.slice(0, 20), 12, 'meaning'),
-    buildChapter('sc2', '🎒', '学校の 単語 ②', 'がっこうで つかう', ALL_SCHOOL.slice(20), 12, 'meaning'),
+    buildChapter('sc1', '🎒', '学校の 単語 ①', '学校で 使う', ALL_SCHOOL.slice(0, 20), 12, 'meaning'),
+    buildChapter('sc2', '🎒', '学校の 単語 ②', '学校で 使う', ALL_SCHOOL.slice(20), 12, 'meaning'),
     // ===== 준1급 5개 (총 352개, v76 확장: 152 → 352) =====
     buildChapter('p1', '🔥', '準1級 ①', 'チャレンジ!基礎', ALL_PRE1.slice(0, 70), 15, 'meaning'),
     buildChapter('p2', '🔥', '準1級 ②', 'チャレンジ!基礎', ALL_PRE1.slice(60, 140), 15, 'meaning'),
@@ -114,12 +114,12 @@ function buildAllChapters() {
     buildChapter('p4', '🔥', '準1級 ④', 'チャレンジ!応用', ALL_PRE1.slice(200, 280), 15, 'meaning'),
     buildChapter('p5', '🔥', '準1級 ⑤', 'チャレンジ!上級', ALL_PRE1.slice(270), 15, 'meaning'),
     // ===== 종합 =====
-    buildChapter('mix2', '⭐', '腕だめし!2級', 'ぜんぶ ごちゃまぜ', [...ALL_G2, ...ALL_IDIOMS], 25, 'meaning'),
+    buildChapter('mix2', '⭐', '腕だめし!2級', '全部 ごちゃまぜ', [...ALL_G2, ...ALL_IDIOMS], 25, 'meaning'),
     buildChapter('mixall', '🌟', 'マスター挑戦', '2級+準1級ぜんぶ', [...ALL_G2, ...ALL_IDIOMS, ...ALL_PRE1], 30, 'meaning'),
     // ===== スペル =====
     buildChapter('s1', '✏️', 'スペル ①', '基本のスペル', ALL_G2.slice(0, 100), 10, 'spell'),
     buildChapter('s2', '✏️', 'スペル ②', '応用のスペル', ALL_G2.slice(100, 250), 10, 'spell'),
-    buildChapter('s3', '✏️', 'スペル ③', 'むずかしいスペル', ALL_G2.slice(250), 10, 'spell'),
+    buildChapter('s3', '✏️', 'スペル ③', '難しいスペル', ALL_G2.slice(250), 10, 'spell'),
     // ===== ✍️ ライティング (영검 2급, 30주제) =====
     { id: 'wr1', icon: '✍️', title: 'ライティング ①', desc: '環境・教育 (10題)', isWriting: true, topics: ALL_WRITING.slice(0, 10) },
     { id: 'wr2', icon: '✍️', title: 'ライティング ②', desc: '技術・健康 (10題)', isWriting: true, topics: ALL_WRITING.slice(10, 20) },
@@ -188,9 +188,9 @@ function buildReviewChapter(wrongList) {
   const distractorPool = [...ALL_G2, ...ALL_IDIOMS, ...G_PRE1_WORDS];
   const questions = sample.map(item => makeMeaningQuestion(item, distractorPool));
   return {
-    id: 'review', icon: '📝', title: '復習チャレンジ', desc: 'まちがえた 単語',
+    id: 'review', icon: '📝', title: '復習チャレンジ', desc: '間違えた 単語',
     questions,
-    note: { title: '復習 クリア!', desc: 'まちがえた 単語を マスター!' },
+    note: { title: '復習 クリア!', desc: '間違えた 単語を マスター!' },
     isReview: true,
   };
 }

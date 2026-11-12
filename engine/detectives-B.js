@@ -84,7 +84,7 @@ function buildScientistsGrid(grid) {
   html += '偉人科学者の 発見を 追体験しよう! (進行: ' + clearedCount + ' / ' + totalCases + ')';
   html += '</div>';
   let dueN = 0; try { dueN = ReviewEngine.dueCount('scientists'); } catch (e) {}
-  if (dueN > 0) html += '<button class="v2-review-btn" id="sciFileReviewBtn">🔁 まちがえた 問題を 復習 (' + dueN + '問)</button>';
+  if (dueN > 0) html += '<button class="v2-review-btn" id="sciFileReviewBtn">🔁 間違えた 問題を 復習 (' + dueN + '問)</button>';
   html += '</div>';
 
   SCIENTISTS_STORY.forEach((s, i) => {

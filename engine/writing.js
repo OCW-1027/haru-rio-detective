@@ -421,11 +421,11 @@ function checkWritingOrder() {
   const result = document.getElementById('wrOrderResult');
   if (allCorrect) {
     result.style.color = '#4a8a4a';
-    result.innerHTML = '🎉 正解!じゅんばんが あっています!';
+    result.innerHTML = '🎉 正解!順番が あっています!';
     sfx('correct');
   } else {
     result.style.color = 'var(--accent-red)';
-    result.innerHTML = '✗ 順番が ちがいます。もう一度!';
+    result.innerHTML = '✗ 順番が 違います。もう一度!';
     sfx('wrong');
   }
 }

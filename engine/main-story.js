@@ -114,7 +114,7 @@ const MainStory = (function () {
     });
     h += '</div>';
     const bossOk = n >= 10;
-    h += '<button class="ms-boss' + (bossOk ? '' : ' off') + '" id="msBoss">' + portrait('zero') + '<span><b>' + (D.boss.won ? '🏆 ゼロに 勝利' : '⚔ 幹部 ゼロとの 対決') + '</b><small>' + (bossOk ? (D.boss.won ? 'もう一度 挑戦できる' : '5つの 試練 · まちがいは 3回まで') : 'カケラ 10こで 出現 (あと ' + (10 - n) + ')') + '</small></span></button>';
+    h += '<button class="ms-boss' + (bossOk ? '' : ' off') + '" id="msBoss">' + portrait('zero') + '<span><b>' + (D.boss.won ? '🏆 ゼロに 勝利' : '⚔ 幹部 ゼロとの 対決') + '</b><small>' + (bossOk ? (D.boss.won ? 'もう一度 挑戦できる' : '5つの 試練 · 間違いは 3回まで') : 'カケラ 10こで 出現 (あと ' + (10 - n) + ')') + '</small></span></button>';
     h += '<div class="ms-row"><button class="ms-sec" id="msNotes">🃏 ブランクの カード (' + Object.keys(D.got).length + ')</button><button class="ms-sec" id="msPro">📜 プロローグ</button></div>';
     area().innerHTML = h;
     bindSeasons();
@@ -143,7 +143,7 @@ const MainStory = (function () {
   function fragView(f, fresh) {
     let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">' + f.icon + ' ' + esc(f.name) + 'の カケラ</div></div>';
     h += '<div class="ms-card' + (fresh ? ' bloom' : '') + '"><span class="ms-img" style="background-image:url(\'' + cover(f) + '\')"></span><span class="ms-gem" style="--fc:' + f.color + '">' + f.icon + '</span></div>';
-    h += '<div class="ms-boxw"><div class="ms-lesson">📖 知の ことば<br><b>' + esc(f.lesson) + '</b></div></div>';
+    h += '<div class="ms-boxw"><div class="ms-lesson">📖 知の 言葉<br><b>' + esc(f.lesson) + '</b></div></div>';
     h += '<div class="ms-note"><div class="ms-note-h">🃏 カケラの そばに 落ちていた 白い カード</div><p>「' + esc(f.note) + '」</p><small>— B</small></div>';
     h += '<button class="ms-pri" id="msOk">地図へ もどる</button>';
     area().innerHTML = h;
@@ -204,7 +204,7 @@ const MainStory = (function () {
         const ok = +b.dataset.o === Q.a;
         area().querySelectorAll('[data-o]').forEach(x => { x.disabled = true; if (+x.dataset.o === Q.a) x.classList.add('ok'); });
         if (ok) { sfx('unlock'); B.hp--; } else { sfx('wrong'); b.classList.add('ng'); B.life--; }
-        $('msFb').innerHTML = '<div class="' + (ok ? 'ms-good' : 'ms-bad') + '">' + (ok ? '⚡ 命中! ' + cfg.short + 'に 1ダメージ' : '💥 はずれ… ハートが 1つ へった') + '</div>' + (Q.exp ? '<p class="ms-small">' + esc(Q.exp) + '</p>' : '') + '<button class="ms-pri" id="msGo">次へ →</button>';
+        $('msFb').innerHTML = '<div class="' + (ok ? 'ms-good' : 'ms-bad') + '">' + (ok ? '⚡ 命中! ' + cfg.short + 'に 1ダメージ' : '💥 外れ… ハートが 1つ 減った') + '</div>' + (Q.exp ? '<p class="ms-small">' + esc(Q.exp) + '</p>' : '') + '<button class="ms-pri" id="msGo">次へ →</button>';
         $('msGo').onclick = () => {
           sfx('click');
           if (B.life <= 0) return talk(cfg.lose, cfg.name, () => map('💪 また 挑戦しよう!'));
@@ -280,7 +280,7 @@ const MainStory = (function () {
     const view = fresh => {
       let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">' + f.icon + ' ' + esc(f.name) + 'の カケラ</div></div>';
       h += '<div class="ms-card s2' + (fresh ? ' bloom' : '') + '"><span class="ms-emoji big">' + S2COVER[f.id] + '</span><span class="ms-gem" style="--fc:' + f.color + '">' + f.icon + '</span></div>';
-      h += '<div class="ms-boxw"><div class="ms-lesson">📖 真実の ことば<br><b>' + esc(f.lesson) + '</b></div></div>';
+      h += '<div class="ms-boxw"><div class="ms-lesson">📖 真実の 言葉<br><b>' + esc(f.lesson) + '</b></div></div>';
       h += '<div class="ms-note"><div class="ms-note-h">🃏 カケラの そばの 白い カード</div><p>「' + esc(f.note) + '」</p><small>— B</small></div><button class="ms-pri" id="msOk">地図へ もどる</button>';
       area().innerHTML = h;
       $('msBack').onclick = $('msOk').onclick = () => { sfx('click'); map(fresh ? '✨ ' + f.area + 'の 真実が 明らかに なった!' : null); };
@@ -300,7 +300,7 @@ const MainStory = (function () {
   }
   function notes2() {
     const D = d2();
-    let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">🃏 シロの カード</div></div><p class="ms-small">真実の カケラの そばに あった カード。ブランクの 本当の 気持ちが 少しずつ わかる。</p>';
+    let h = '<div class="ms-head"><button class="ms-back" id="msBack">← 地図</button><div class="ms-title">🃏 シロの カード</div></div><p class="ms-small">真実の カケラの そばに あった カード。ブランクの 本当の 気持ちが 少しずつ 分かる。</p>';
     MAIN_STORY.s2.frags.forEach((f, i) => { h += '<div class="ms-note sm' + (D.got[f.id] ? '' : ' locked') + '"><span>' + (i + 1) + '</span><p>' + (D.got[f.id] ? '「' + esc(f.note) + '」' : '? ? ?') + '</p></div>'; });
     area().innerHTML = h; $('msBack').onclick = () => { sfx('click'); map(); };
   }
@@ -326,7 +326,7 @@ const MainStory = (function () {
     battle({ S: finalQs(), who: 'bl', name: '怪盗ブランク', short: 'ブランク', lose: MAIN_STORY.s2.finalLose, onWin: () => {
       MAIN_STORY.s2.frags.forEach(f => { D.got[f.id] = 1; }); D.boss.won = 1; save();
       try { if (typeof triggerConfetti === 'function') triggerConfetti(); } catch (e) {}
-      talk(MAIN_STORY.s2.finalWin, 'エンディング', () => map('🤝 シロが なかまに なった! 知の図書館に 色が もどった!'));
+      talk(MAIN_STORY.s2.finalWin, 'エンディング', () => map('🤝 シロが 仲間に なった! 知の図書館に 色が もどった!'));
     } });
   }
 

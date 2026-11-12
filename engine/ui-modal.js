@@ -231,7 +231,7 @@ function buildChapterGrid() {
   const resetBtn = document.getElementById('btnReset');
   if (resetBtn) {
     resetBtn.onclick = () => {
-      showModal('⚠️', 'きろくをリセット?', 'すべての クリア記録、まちがえた単語、せいせきが\n きえます。\n\nほんとうに リセットしますか?',
+      showModal('⚠️', 'きろくをリセット?', 'すべての クリア記録、間違えた単語、せいせきが\n きえます。\n\nほんとうに リセットしますか?',
         [
           {text:'はい、リセット', cb:() => { resetSave(); closeModal(); buildChapterGrid(); }},
           {text:'キャンセル', cb:closeModal},
