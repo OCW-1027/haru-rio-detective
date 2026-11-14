@@ -1,6 +1,7 @@
 /* engine/scilab.js — 理科 実験室 (さわって 確かめる シミュレーター + 実験ノート)
- * 物理: ① 電気回路 ② 凸レンズ ③ 光の 屈折 ④ ふりこ ⑤ 斜面と エネルギー
- * 化学: ⑥ 化学変化と 質量   地学: ⑦ 月の 満ち欠け ⑧ 太陽の 日周運動
+ * 物理: 電気回路・凸レンズ・光の 屈折・ふりこ・斜面と エネルギー・電磁誘導
+ * 化学: 化学変化と 質量・中和と pH   生物: 植物の 蒸散
+ * 地学: 流水と 堆積・露点と 湿度・月の 満ち欠け・太陽の 日周運動
  * 各実験 = 実験ノート (目的・器具・予想 → 記録表・グラフ → 考察) + ミッション 3つ
  * 保存: State.v2.scilab = { done: {'実験:番号':1}, note: {実験: {p, rows, c}}, nb: {実験:1} }
  * 画面: pageSciLab (#slArea)。Dependencies: State, saveState, showPage, sfx, escapeHtml
@@ -22,6 +23,11 @@ const SciLab = (function () {
     { id: 'pend', g: '物理', icon: '🕰️', name: 'ふりこ', sub: 'ストップウォッチで 10往復を はかろう', lv: '小5' },
     { id: 'slope', g: '物理', icon: '🎢', name: '斜面と エネルギー', sub: '小球を 転がして 木片を 動かそう', lv: '中3' },
     { id: 'chem', g: '化学', icon: '⚗️', name: '化学変化と 質量', sub: '金属を 加熱すると 重く なる? 質量保存の 法則', lv: '中2' },
+    { id: 'induct', g: '物理', icon: '🧲', name: '電磁誘導', sub: '磁石を コイルに 出し入れして 電流を 作ろう', lv: '中2' },
+    { id: 'neut', g: '化学', icon: '🧪', name: '中和と pH', sub: 'BTB液の 色を 見ながら 塩酸を 中和しよう', lv: '中3' },
+    { id: 'transp', g: '生物', icon: '🌿', name: '植物の 蒸散', sub: '葉の 表・裏、どこから 水が 出ていく?', lv: '中1' },
+    { id: 'sedi', g: '地学', icon: '🪨', name: '流水と 堆積', sub: '粒の 大きさと しずむ 速さ・地層の でき方', lv: '中1' },
+    { id: 'dew', g: '地学', icon: '💧', name: '露点と 湿度', sub: 'コップに 水てきが つく 温度から 湿度を 求めよう', lv: '中2' },
     { id: 'moon', g: '地学', icon: '🌙', name: '月の 満ち欠け', sub: '月・地球・太陽の 位置と 見え方', lv: '中3' },
     { id: 'sky', g: '地学', icon: '☀️', name: '太陽の 日周運動', sub: '透明半球に 太陽の 位置を 記録しよう', lv: '中3' },
   ];
@@ -32,6 +38,11 @@ const SciLab = (function () {
     pend: ['周期 (1往復の 時間) を 2.0秒 に 近づけよう (±0.05秒)', '長さを 変えずに おもりの 重さだけ 変えて、周期を くらべよう', '長さ 0.25m と 1.00m の 両方で 周期を はかろう'],
     slope: ['木片を ちょうど 16cm 動かそう', '高さを 変えずに 角度だけ 変えて 2回 転がそう (速さは?)', '小球の 運動エネルギーが 0.2J を こえる 条件で 転がそう'],
     chem: ['銅 1.2g を 完全に 酸化させよう (質量が 変わらなく なるまで)', 'マグネシウムに 結びつく 酸素を ちょうど 0.4g に しよう', '質量保存: ふたを したまま 反応させて 質量を はかろう'],
+    induct: ['検流計の 針を 右に 10目盛り 以上 ふらせよう', '針を 左に ふらせる 方法を 2通り 見つけよう', '巻数 200回・いちばん 速く 動かして 最大の 電流を 作ろう'],
+    neut: ['BTB液を ちょうど 緑 (中性・pH 7) に しよう', 'こさ 2倍の 塩酸を ちょうど 中和しよう', '水よう液を アルカリ性 (青) に しよう'],
+    transp: ['明るい 所で 6時間 たった 結果を 見よう', '暗い 所で 4時間 以上 — 蒸散は どう なる?', '風を 当てて、A の 水を 4mL 以上 へらそう'],
+    sedi: ['泥が しずむ 時間を はかろう', '4種類 すべての 粒の しずむ 時間を はかろう', '土砂を 3回 流しこんで 地層を 作ろう'],
+    dew: ['教室の 露点を はかろう', '湿度 80% 以上の 部屋を 見つけよう', '3つの 部屋で 湿度を 求めよう'],
     moon: ['満月の 位置に 月を 動かそう', '上弦の 月に しよう (夕方、南の 空に 見える 半月)', '三日月に しよう (夕方、西の 空に 見える)'],
     sky: ['東京で 夏至の 日の 南中高度を はかろう', '同じ 日に 太陽の 位置を 5回 以上 透明半球に 記録しよう', '一日中 太陽が しずまない「白夜」を 起こそう'],
   };
@@ -69,6 +80,32 @@ const SciLab = (function () {
       cols: [['met', '金属'], ['m0', '金属 g'], ['m1', '加熱後 g'], ['o', '酸素 g']], gx: 'm0', gy: 'o', grp: 'met', xl: '金属の 質量 (g)', yl: '結びついた 酸素 (g)', gl: v => v, need: 3, xr: [0, 2.5],
       tip: '質量が 変わらなく なるまで 加熱してから 記録。同じ 金属で 質量を 変えて 3回 以上',
       con: { q: '銅と、それに 結びついた 酸素の 質量の 比は?', o: ['銅 : 酸素 = 4 : 1', '銅 : 酸素 = 1 : 1', '銅 : 酸素 = 3 : 2'], a: 0, why: '銅 1.2g → 酸化銅 1.5g (酸素 0.3g) で 4 : 1。マグネシウムは 3 : 2 (0.6g に 0.4g)。結びつく 質量の 比は 物質ごとに 決まって いる (定比例の 法則)。' } },
+    induct: { aim: 'コイルの 中の 磁界を 変化させて、流れる 電流 (誘導電流) の 大きさ・向きを 調べる', tools: ['コイル (50〜200回巻き)', '棒磁石', '検流計', '導線'],
+      pre: { q: '磁石を コイルに 速く 入れると、流れる 電流は?', o: ['大きく なる', '小さく なる', '変わらない'], a: 0 },
+      cols: [['pole', '磁極'], ['act', '動かし方'], ['n', '巻数 回'], ['sp', '速さ'], ['D', '針の ふれ', v => (v > 0 ? '右 ' : v < 0 ? '左 ' : '') + Math.abs(v)]], gx: 'sp', gy: 'a', grp: 'n', xl: '磁石の 速さ (1〜5)', yl: '針の ふれ (目盛り)', gl: v => v + '回巻き', need: 3, xr: [0, 5], yr: [0, 20],
+      tip: '巻数を 同じに して 速さを 変えたり、速さを 同じに して 巻数を 変えたり して 記録しよう',
+      con: { q: '記録から、誘導電流を 大きく する 方法は?', o: ['磁石を 速く 動かす・コイルの 巻数を ふやす', '磁石を ゆっくり 動かす', 'コイルの 巻数を へらす'], a: 0, why: 'コイルの 中の 磁界が 変化すると 電流が 流れる (電磁誘導)。変化が 速いほど・巻数が 多いほど・磁石が 強いほど 大きい。入れると ぬくで、N極と S極で 向きが 逆。磁石を 止めると 電流は 0。発電機の しくみ。' } },
+    neut: { aim: '塩酸に 水酸化ナトリウム水溶液を 加えた ときの 性質 (pH) の 変化を 調べる', tools: ['ビーカー', 'うすい 塩酸 10mL', 'うすい 水酸化ナトリウム水溶液', 'こまごめピペット', 'BTB液', 'pHメーター', 'ガラス棒'],
+      pre: { q: '塩酸に 水酸化ナトリウム水溶液を 少しずつ 加えていくと、BTB液の 色は?', o: ['黄 → 緑 → 青', '青 → 緑 → 黄', '変わらない'], a: 0 },
+      cols: [['c', '塩酸の こさ'], ['v', '加えた量 mL'], ['pH', 'pH'], ['col', 'BTBの 色']], gx: 'v', gy: 'pH', grp: 'c', xl: '加えた 水酸化ナトリウム水溶液 (mL)', yl: 'pH', gl: v => '塩酸 ' + v, need: 4, xr: [0, 30], yr: [0, 14], xt: 6, yt: 7,
+      tip: '少しずつ 加えながら 何回も 記録すると、中和の グラフ (pHが 急に 変わる) が 見えるよ',
+      con: { q: '塩酸の こさを 2倍に すると、中和に 必要な 水酸化ナトリウム水溶液の 量は?', o: ['2倍に なる', '半分に なる', '同じ'], a: 0, why: '中和: H⁺ + OH⁻ → H₂O。塩酸の H⁺ が 2倍なら、打ち消す OH⁻ も 2倍 必要。中和で 水と 塩 (塩化ナトリウム NaCl) が できる。中和点の 近くで pH は 急に 変わる。' } },
+    transp: { aim: '植物の 葉の どこから、どんな ときに 水が 出ていくか (蒸散) を 調べる', tools: ['同じ ような 枝 4本', '試験管 4本', '水と 油', 'ワセリン', 'ものさし (目盛り)'],
+      pre: { q: '葉の 表と 裏、どちらから 多く 水が 出ていく?', o: ['表', '裏', 'どちらも 同じ'], a: 1 },
+      cols: [['t', '時間'], ['cond', '条件'], ['tube', '枝'], ['w', '減った 水 mL']], gx: 't', gy: 'w', grp: 'tube', xl: '時間 (時間)', yl: '減った 水 (mL)', gl: v => v, need: 8, xr: [0, 8], cap: 24, xt: 8,
+      tip: '同じ 条件で 時間を 2回 以上 変えて 記録 (1回で A〜D の 4本 ぶん 記録される)',
+      con: { q: '葉の 裏から 出ていった 水の 量を 求める 式は?', o: ['A − C', 'A − B', 'C − D'], a: 0, why: 'A (何も ぬらない) − C (裏に ワセリン) = 裏から 出た 量 (B − D でも 同じ)。気孔は 葉の 裏に 多い ので 裏から 多く 出る。明るい・風が ある・あたたかい と さかん、暗いと 気孔が 閉じて へる。油は 水面からの 蒸発を ふせぐ ため。' } },
+    sedi: { aim: '粒の 大きさと しずむ 速さ、地層が できる 順番を 調べる', tools: ['水を 入れた メスシリンダー (50cm)', 'れき・砂・泥', 'ストップウォッチ', '水そう', '土砂'],
+      pre: { q: '大きな 粒と 小さな 粒を 同時に 水に 入れると、先に 底に つくのは?', o: ['大きな 粒', '小さな 粒', '同時'], a: 0 },
+      cols: [['g', '粒'], ['mm', '大きさ mm'], ['sec', 'しずむ 時間 秒'], ['v', '速さ cm/秒']], gx: 'mm', gy: 'v', xl: '粒の 大きさ (mm)', yl: 'しずむ 速さ (cm/秒)', need: 4, xr: [0, 4], yr: [0, 40], xt: 4, yt: 4,
+      tip: '4種類の 粒を それぞれ 落として、底に つくまでの 時間を はかろう',
+      con: { q: '1回 流しこんだ 土砂で できる 地層は、下から 順に?', o: ['れき → 砂 → 泥', '泥 → 砂 → れき', 'まざって 区別 できない'], a: 0, why: '大きく 重い 粒ほど 速く しずむ → 下が あらく 上が 細かい。川が 海に 出ると、河口の 近くに れき、少し 沖に 砂、遠くに 泥が つもる。地層の 粒の 大きさで、当時 海が 深かったか 浅かったかが わかる。' } },
+    dew: { aim: 'コップの 表面に 水てきが つく 温度 (露点) から、部屋の 湿度を 求める', tools: ['金属製の コップ', 'くみおきの 水', '氷水', '温度計 2本', 'ガラス棒'],
+      pre: { q: '冷たい 水を 入れた コップの 外側に 水てきが つくのは なぜ?', o: ['空気中の 水蒸気が 冷やされて 水に なるから', 'コップの 水が しみ出るから', '氷が とけたから'], a: 0 },
+      cols: [['room', '部屋'], ['T', '室温 ℃'], ['dp', '露点 ℃'], ['a', '水蒸気量 g/m³'], ['sat', '飽和水蒸気量'], ['hum', '湿度 %']], gx: 'T', gy: 'a', grp: 'room', xl: '気温 (℃)', yl: '水蒸気量 (g/m³)', gl: v => v, need: 3, xr: [0, 35], yr: [0, 40], xt: 7, yt: 4,
+      curve: t => satVap(t), curveL: '飽和水蒸気量',
+      tip: '部屋を えらび、氷水で コップの 水を 少しずつ 冷やして、くもり始めた 温度を 記録しよう',
+      con: { q: '露点が 室温に 近い 部屋ほど、湿度は?', o: ['高い', '低い', '関係ない'], a: 0, why: '湿度 (%) = 空気 1m³ 中の 水蒸気量 ÷ その 気温の 飽和水蒸気量 × 100。露点の 飽和水蒸気量 = 今 ふくまれて いる 水蒸気量。露点と 室温が 近い = 飽和に 近い = 湿度が 高い。雲は 上昇した 空気が 露点まで 冷えて できる。' } },
     moon: { aim: '月の 位置と 満ち欠けの 関係を 調べる (モデル実験)', tools: ['ボール (月)', '電灯 (太陽)', '自分の 頭 (地球)', '暗い 部屋'],
       pre: { q: '満月に 見えるのは、月が どこに あるとき?', o: ['太陽と 同じ 方向', '地球を はさんで 太陽の 反対側', '太陽から 見て 直角の 方向'], a: 1 },
       cols: [['d', '月齢 日'], ['name', '形'], ['k', '光る 割合 %']], gx: 'd', gy: 'k', xl: '月齢 (日)', yl: '光って 見える 割合 (%)', need: 5, xr: [0, 30], yr: [0, 100], xt: 6,
@@ -97,8 +134,8 @@ const SciLab = (function () {
       const n = note(exp);
       if (n.p == null) { msg('まず 上で 予想を えらぼう'); sfx('wrong'); return; }
       const r = cur(); if (!r || typeof r === 'string') { msg(r || 'まだ 記録 できないよ'); sfx('wrong'); return; }
-      const key = JSON.stringify(r); if (n.rows.some(x => JSON.stringify(x) === key)) { msg('同じ 条件は もう 記録したよ'); return; }
-      n.rows.push(r); if (n.rows.length > 14) n.rows.shift(); save(); sfx('click'); msg('記録した! (' + n.rows.length + '件)', 1); renderRec(exp); checkNote(exp);
+      const add = Array.isArray(r) ? r : [r], key = JSON.stringify(add[0]); if (n.rows.some(x => JSON.stringify(x) === key)) { msg('同じ 条件は もう 記録したよ'); return; }
+      add.forEach(x => n.rows.push(x)); while (n.rows.length > (s.cap || 14)) n.rows.shift(); save(); sfx('click'); msg('記録した! (' + n.rows.length + '件)', 1); renderRec(exp); checkNote(exp); if (s.onRec) s.onRec(n.rows);
     };
     renderRec(exp);
   }
@@ -134,13 +171,14 @@ const SciLab = (function () {
     const pts = rows.filter(r => typeof r[s.gx] === 'number' && typeof r[s.gy] === 'number' && (!s.onlyPos || r[s.gy] > 0));
     const W = 340, H = 210, x0 = 46, y0 = 172, gw = 276, gh = 150;
     const xmax = s.xr ? s.xr[1] : nice(Math.max(...pts.map(p => p[s.gx]), 0) * 1.1), ymax = s.yr ? s.yr[1] : nice(Math.max(...pts.map(p => p[s.gy]), 0) * 1.1);
-    const X = v => x0 + Math.min(xmax, v) / xmax * gw, Y = v => y0 - Math.max(0, Math.min(ymax, v)) / ymax * gh, fx = v => Math.round(v * 100) / 100;
+    const xmin = s.xr ? s.xr[0] : 0, X = v => x0 + (Math.min(xmax, v) - xmin) / (xmax - xmin) * gw, Y = v => y0 - Math.max(0, Math.min(ymax, v)) / ymax * gh, fx = v => Math.round(v * 100) / 100;
     let g = '<rect width="' + W + '" height="' + H + '" fill="#fff"/>';
     const NX = s.xt || 5, NY = s.yt || 5;
-    for (let i = 0; i <= Math.max(NX, NY); i++) { const xv = i <= NX ? xmax * i / NX : null, yv = i <= NY ? ymax * i / NY : null; if (xv != null) g += '<line x1="' + X(xv) + '" y1="' + y0 + '" x2="' + X(xv) + '" y2="' + (y0 - gh) + '" stroke="#e8edf2"/><text x="' + X(xv) + '" y="' + (y0 + 14) + '" font-size="10" text-anchor="middle" fill="#5a6a7a">' + fx(xv) + '</text>';
+    for (let i = 0; i <= Math.max(NX, NY); i++) { const xv = i <= NX ? xmin + (xmax - xmin) * i / NX : null, yv = i <= NY ? ymax * i / NY : null; if (xv != null) g += '<line x1="' + X(xv) + '" y1="' + y0 + '" x2="' + X(xv) + '" y2="' + (y0 - gh) + '" stroke="#e8edf2"/><text x="' + X(xv) + '" y="' + (y0 + 14) + '" font-size="10" text-anchor="middle" fill="#5a6a7a">' + fx(xv) + '</text>';
       if (yv != null) g += '<line x1="' + x0 + '" y1="' + Y(yv) + '" x2="' + (x0 + gw) + '" y2="' + Y(yv) + '" stroke="#e8edf2"/><text x="' + (x0 - 5) + '" y="' + (Y(yv) + 3) + '" font-size="10" text-anchor="end" fill="#5a6a7a">' + fx(yv) + '</text>'; }
     g += '<line x1="' + x0 + '" y1="' + y0 + '" x2="' + (x0 + gw) + '" y2="' + y0 + '" stroke="#3a3a4a" stroke-width="1.5"/><line x1="' + x0 + '" y1="' + y0 + '" x2="' + x0 + '" y2="' + (y0 - gh) + '" stroke="#3a3a4a" stroke-width="1.5"/>';
     g += '<text x="' + (x0 + gw / 2) + '" y="' + (H - 4) + '" font-size="11" text-anchor="middle" fill="#26323d">' + esc(s.xl) + '</text><text x="12" y="' + (y0 - gh / 2) + '" font-size="11" text-anchor="middle" fill="#26323d" transform="rotate(-90 12 ' + (y0 - gh / 2) + ')">' + esc(s.yl) + '</text>';
+    if (s.curve) { let d = ''; for (let i = 0; i <= 60; i++) { const xv = (s.xr ? s.xr[0] : 0) + (xmax - (s.xr ? s.xr[0] : 0)) * i / 60, yv = s.curve(xv); d += (i ? 'L' : 'M') + X(xv).toFixed(1) + ',' + Y(yv).toFixed(1); } g += '<path d="' + d + '" fill="none" stroke="#7a9ab8" stroke-width="2" stroke-dasharray="5 3"/>' + (s.curveL ? '<text x="' + (x0 + gw - 4) + '" y="' + (Y(s.curve(xmax)) + 14) + '" font-size="10" text-anchor="end" fill="#5a7a98">' + esc(s.curveL) + '</text>' : ''); }
     if (!pts.length) g += '<text x="' + (x0 + gw / 2) + '" y="' + (y0 - gh / 2) + '" font-size="12" text-anchor="middle" fill="#9aa8b5">記録すると ここに 点が 打たれるよ</text>';
     const groups = {}; pts.forEach(p => { const k = s.grp ? String(p[s.grp]) : '_'; (groups[k] = groups[k] || []).push(p); });
     const keys = Object.keys(groups); let leg = '';
@@ -168,8 +206,8 @@ const SciLab = (function () {
     const d = data();
     let h = '<div class="sl-hero"><div class="sl-kicker">さわって 確かめる</div><h1>理科 実験室</h1><p>予想 → 実験 → 記録 → グラフ → 考察。本物の 理科室と 同じ 手順で、教科書の 「法則」を 自分の 手で 見つけよう。</p>' +
       '<div class="sl-steps"><span>🤔 予想</span>›<span>🧪 実験</span>›<span>📋 記録</span>›<span>📈 グラフ</span>›<span>🧠 考察</span></div></div>';
-    ['物理', '化学', '地学'].forEach(g => {
-      h += '<h2 class="sl-g">' + ({ 物理: '⚡ 物理', 化学: '⚗️ 化学', 地学: '🌏 地学' })[g] + '</h2><div class="sl-cards">';
+    ['物理', '化学', '生物', '地学'].forEach(g => {
+      h += '<h2 class="sl-g">' + ({ 物理: '⚡ 物理', 化学: '⚗️ 化学', 生物: '🌱 生物', 地学: '🌏 地学' })[g] + '</h2><div class="sl-cards">';
       EXPS.filter(e => e.g === g).forEach(e => { const n = MISS[e.id].filter((m, i) => d.done[e.id + ':' + i]).length; h += '<button class="sl-card" data-e="' + e.id + '"><span class="sl-ci">' + e.icon + '</span><b>' + e.name + '</b><small>' + e.sub + '</small><em>' + e.lv + '</em><i>ミッション ' + n + ' / 3' + (d.nb[e.id] ? ' · 📒 ノート完成' : '') + '</i></button>'; });
       h += '</div>';
     });
@@ -523,8 +561,208 @@ const SciLab = (function () {
     return '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">' + s + '</svg>';
   }
 
-  const RUN = { circuit: circuit, lens: lens, refract: refract, pend: pend, slope: slope, chem: chem, moon: moon, sky: sky };
+  // ================= ⑨ 電磁誘導 =================
+  function inductD(pole, act, n, sp) { const sign = (pole === 'N' ? 1 : -1) * (act === 'in' ? 1 : -1); return sign * Math.min(20, Math.round(n / 50 * sp)); }
+  function induct() {
+    let pole = 'N', pos = 0, moving = false, last = null; const leftWays = {};
+    page('induct', seg('pole', [['N', 'N極を コイルに 向ける'], ['S', 'S極を コイルに 向ける']], 'N') + '<div class="sl-fig"><svg id="slInd" viewBox="0 0 380 230" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif"></svg></div><div class="sl-read" id="slRead"></div>' +
+      '<div class="sl-sw"><button class="sl-act" id="slIn">▶ コイルに 入れる</button><button class="sl-act" id="slOut">◀ コイルから ぬく</button></div>' +
+      slider('slN', 'コイルの 巻数', 50, 200, 50, 100, ' 回') + slider('slSp', '磁石を 動かす 速さ', 1, 5, 1, 3, ''),
+      '<p>コイルの 中の <b>磁界が 変化</b> すると、コイルに 電圧が 生じて 電流が 流れる (<b>電磁誘導</b>、流れる 電流を 誘導電流 と いう)。</p><p>電流を 大きく するには: ① 磁石を <b>速く</b> 動かす ② コイルの <b>巻数を 多く</b> ③ <b>強い</b> 磁石。</p><p>向き: 入れる ↔ ぬく で 逆、N極 ↔ S極 で 逆。磁石を 止めると 電流は 流れない。</p><p>発電機・IH・非接触 充電 (スマホ・交通系ICカード) は 電磁誘導を 使って いる。</p>');
+    const svg = $('slInd');
+    const draw = (mx, D) => {
+      const n = +$('slN').value, turns = 4 + n / 25; let s = '<rect width="380" height="230" fill="#fbfaf5"/>';
+      // コイル
+      s += '<rect x="196" y="58" width="120" height="44" rx="6" fill="#f0e2c8" stroke="#b08a5a"/>';
+      let wind = ''; for (let i = 0; i < turns; i++) { const x = 200 + i * (112 / turns); wind += '<path d="M' + x.toFixed(1) + ',54 A5,26 0 0 1 ' + x.toFixed(1) + ',106" fill="none" stroke="#c87a2a" stroke-width="2"/>'; }
+      s += '<text x="256" y="48" font-size="11" text-anchor="middle" fill="#7a5a2a">コイル ' + n + '回巻き</text>';
+      // 導線と 検流計
+      s += '<path d="M200,106 L200,170 L230,170 M316,106 L316,170 L286,170" fill="none" stroke="#3a3a4a" stroke-width="2.5"/>';
+      s += '<path d="M228,190 A30,30 0 0 1 288,190 Z" fill="#fff" stroke="#3a3a4a" stroke-width="2"/>';
+      for (let k = -20; k <= 20; k += 5) { const a = (k / 20) * 70 * D2R; s += '<line x1="' + (258 + 24 * Math.sin(a)).toFixed(1) + '" y1="' + (190 - 24 * Math.cos(a)).toFixed(1) + '" x2="' + (258 + 28 * Math.sin(a)).toFixed(1) + '" y2="' + (190 - 28 * Math.cos(a)).toFixed(1) + '" stroke="#3a3a4a"/>'; }
+      const na = (D / 20) * 70 * D2R; s += '<line x1="258" y1="190" x2="' + (258 + 26 * Math.sin(na)).toFixed(1) + '" y2="' + (190 - 26 * Math.cos(na)).toFixed(1) + '" stroke="#d0382a" stroke-width="2.5"/><circle cx="258" cy="190" r="3" fill="#3a3a4a"/><text x="258" y="206" font-size="10" text-anchor="middle">検流計</text><text x="226" y="186" font-size="9">左</text><text x="284" y="186" font-size="9">右</text>';
+      // 磁石
+      const fr = pole === 'N' ? ['#d0382a', '#2e6fb8'] : ['#2e6fb8', '#d0382a'], lab = pole === 'N' ? ['N', 'S'] : ['S', 'N'];
+      s += '<rect x="' + (mx - 40) + '" y="68" width="40" height="24" fill="' + fr[0] + '"/><rect x="' + (mx - 80) + '" y="68" width="40" height="24" fill="' + fr[1] + '"/><text x="' + (mx - 20) + '" y="85" font-size="14" fill="#fff" text-anchor="middle" font-weight="700">' + lab[0] + '</text><text x="' + (mx - 60) + '" y="85" font-size="14" fill="#fff" text-anchor="middle" font-weight="700">' + lab[1] + '</text>';
+      s += wind;
+      if (D) s += '<text x="190" y="24" font-size="13" text-anchor="middle" font-weight="700" fill="#d0382a">電流が 流れた! 針が ' + (D > 0 ? '右' : '左') + 'へ ' + Math.abs(D) + ' 目盛り</text>';
+      svg.innerHTML = s;
+    };
+    const X0 = 140, X1 = 300, show = () => { $('slNV').textContent = $('slN').value; $('slSpV').textContent = $('slSp').value; draw(pos ? X1 : X0, 0);
+      $('slRead').innerHTML = last ? '<span>前回: ' + esc(last.pole + '・' + last.act) + ' → 針 <b>' + (last.D > 0 ? '右 ' : '左 ') + Math.abs(last.D) + '</b></span>' : '<span>磁石を 動かすと 針が ふれるよ (止まって いる ときは 0)</span>'; };
+    const move = act => {
+      if (moving) return; if ((act === 'in') === !!pos) { $('slRead').innerHTML = '<span>' + (act === 'in' ? 'もう コイルの 中に 入って いるよ。ぬいてから 入れよう' : 'まだ コイルの 外だよ。まず 入れよう') + '</span>'; return; }
+      moving = true; sfx('click'); const n = +$('slN').value, sp = +$('slSp').value, D = inductD(pole, act, n, sp), dur = 1400 / sp, t0 = performance.now();
+      const step = now => { if (!document.body.contains(svg)) { raf = null; moving = false; return; } const u = Math.min(1, (now - t0) / dur), x = act === 'in' ? X0 + (X1 - X0) * u : X1 - (X1 - X0) * u;
+        draw(x, u < 1 ? D * Math.sin(Math.PI * Math.min(1, u * 1.15)) ** 0.5 : 0); if (u < 1) { raf = requestAnimationFrame(step); return; }
+        raf = null; moving = false; pos = act === 'in' ? 1 : 0; last = { pole: pole + '極', act: act === 'in' ? '入れる' : 'ぬく', n: n, sp: sp, D: D, a: Math.abs(D) }; show(); draw(pos ? X1 : X0, 0);
+        svg.insertAdjacentHTML('beforeend', '<text x="190" y="24" font-size="13" text-anchor="middle" font-weight="700" fill="#d0382a">針が ' + (D > 0 ? '右' : '左') + 'へ ' + Math.abs(D) + ' 目盛り ふれて、0 に もどった</text>');
+        if (D >= 10) mark('induct', 0); if (D < 0) { leftWays[pole + act] = 1; if (Object.keys(leftWays).length >= 2) mark('induct', 1); } if (Math.abs(D) === 20 && n === 200) mark('induct', 2); };
+      raf = requestAnimationFrame(step);
+    };
+    $('slIn').onclick = () => move('in'); $('slOut').onclick = () => move('out');
+    $('slN').oninput = show; $('slSp').oninput = show; bindSeg('pole', v => { pole = v; pos = 0; show(); });
+    bindNB('induct', () => last || '磁石を 動かしてから 記録しよう'); show();
+  }
+
+  // ================= ⑩ 中和と pH =================
+  function neutPH(c, v10) { const nH = c * 10 - v10 / 10, vol = 10 + v10 / 10; if (Math.abs(nH) < 1e-9) return 7; return nH > 0 ? -Math.log10(0.1 * nH / vol) : 14 + Math.log10(0.1 * -nH / vol); }
+  function btb(pH) { const Y = [222, 196, 40], G = [70, 170, 90], B = [50, 110, 200]; const mix = (a, b, t) => a.map((x, i) => Math.round(x + (b[i] - x) * t)); const c = pH < 6 ? Y : pH < 6.8 ? mix(Y, G, (pH - 6) / 0.8) : pH <= 7.2 ? G : pH < 7.8 ? mix(G, B, (pH - 7.2) / 0.6) : B; return { rgb: 'rgb(' + c.join(',') + ')', name: pH < 6.5 ? '黄' : pH <= 7.5 ? '緑' : '青', prop: pH < 6.5 ? '酸性' : pH <= 7.5 ? '中性' : 'アルカリ性' }; }
+  function neut() {
+    let c = 1, v10 = 0;
+    page('neut', seg('c', [['1', '塩酸 ふつうの こさ'], ['2', '塩酸 2倍の こさ']], '1') + '<div class="sl-fig" id="slFig"></div><div class="sl-read" id="slRead"></div>' +
+      '<div class="sl-sw"><button class="sl-act" data-add="20">+2 mL</button><button class="sl-act" data-add="10">+1 mL</button><button class="sl-act" data-add="2">+0.2 mL (少し)</button><button class="sl-act ghost" id="slNR">はじめから</button></div>',
+      '<p><b>酸性</b>: H⁺ (水素イオン) を 出す — BTB液 <b>黄</b>、pH 7 より 小さい。<b>アルカリ性</b>: OH⁻ (水酸化物イオン) を 出す — BTB液 <b>青</b>、pH 7 より 大きい。<b>中性</b>: 緑、pH 7。</p><p><b>中和</b>: H⁺ + OH⁻ → H₂O。酸と アルカリが たがいの 性質を 打ち消し合う。同時に <b>塩</b> (えん) が できる: HCl + NaOH → NaCl + H₂O。</p><p>中和点の 近くでは、少し 加えただけで pH が 大きく 変わる。</p><p>身近な 例: 胃薬 (胃酸を 中和)、酸性の 土に 石灰を まく、虫さされ。</p>');
+    const upd = () => { const pH = neutPH(c, v10), b = btb(pH), v = v10 / 10;
+      $('slFig').innerHTML = neutSVG(c, v10, pH, b);
+      $('slRead').innerHTML = '<span>加えた 量 <b>' + v.toFixed(1) + ' mL</b></span><span>pH <b>' + pH.toFixed(1) + '</b></span><span>BTB液 <b style="color:' + b.rgb + '">' + b.name + '</b> (' + b.prop + ')</span>';
+      if (c === 1 && Math.abs(pH - 7) < 1e-9) mark('neut', 0); if (c === 2 && Math.abs(pH - 7) < 1e-9) mark('neut', 1); if (pH > 7.5) mark('neut', 2); };
+    $('slArea').querySelectorAll('[data-add]').forEach(bt => bt.onclick = () => { if (v10 >= 300) return; sfx('click'); v10 = Math.min(300, v10 + +bt.dataset.add); upd(); });
+    $('slNR').onclick = () => { sfx('click'); v10 = 0; upd(); };
+    bindSeg('c', v => { c = +v; v10 = 0; upd(); });
+    bindNB('neut', () => { const pH = neutPH(c, v10); return { c: c + '倍', v: v10 / 10, pH: r1(pH), col: btb(pH).name }; }); upd();
+  }
+  function neutSVG(c, v10, pH, b) {
+    const v = v10 / 10, nH = Math.max(0, Math.round(c * 10 - v)), nOH = Math.max(0, Math.round(v - c * 10)), nNa = Math.round(v), nCl = c * 10, nW = Math.min(c * 10, Math.round(v));
+    let s = '<rect width="380" height="230" fill="#fbfaf5"/>';
+    // こまごめピペット
+    s += '<rect x="96" y="14" width="10" height="56" rx="3" fill="rgba(200,220,240,.7)" stroke="#7a8a9a"/><ellipse cx="101" cy="14" rx="9" ry="7" fill="#d0382a"/><path d="M98,70 L101,82 L104,70 Z" fill="rgba(200,220,240,.9)" stroke="#7a8a9a"/><text x="112" y="40" font-size="10" fill="#5a6a7a">水酸化ナトリウム水溶液</text>';
+    // ビーカー
+    const lv = 190 - 40 - v * 1.6; s += '<path d="M48,90 L48,196 Q48,206 58,206 L144,206 Q154,206 154,196 L154,90" fill="none" stroke="#7a8a9a" stroke-width="2.5"/><path d="M50,' + lv.toFixed(1) + ' L152,' + lv.toFixed(1) + ' L152,196 Q152,204 144,204 L58,204 Q50,204 50,196 Z" fill="' + b.rgb + '" opacity=".8"/>';
+    s += '<text x="101" y="222" font-size="10" text-anchor="middle" fill="#5a6a7a">塩酸 10mL + BTB液</text>';
+    // pHメーター
+    s += '<rect x="168" y="150" width="62" height="40" rx="6" fill="#e8ebef" stroke="#8a8a9a"/><rect x="174" y="158" width="50" height="22" rx="3" fill="#1d2a22"/><text x="220" y="174" font-size="14" text-anchor="end" fill="#7aff9a" font-family="monospace">' + pH.toFixed(1) + '</text><text x="199" y="200" font-size="9" text-anchor="middle" fill="#5a6a7a">pHメーター</text><path d="M168,160 Q150,150 140,130" fill="none" stroke="#3a3a4a" stroke-width="1.5"/>';
+    // イオンの モデル
+    s += '<rect x="242" y="14" width="130" height="200" rx="10" fill="#fff" stroke="#d8e2ea"/><text x="307" y="30" font-size="10" text-anchor="middle" fill="#26323d" font-weight="700">ビーカーの 中の イオン (モデル)</text>';
+    const items = []; for (let i = 0; i < nH; i++) items.push(['H⁺', '#d0382a']); for (let i = 0; i < nOH; i++) items.push(['OH⁻', '#2e6fb8']); for (let i = 0; i < nCl; i++) items.push(['Cl⁻', '#2f8a4f']); for (let i = 0; i < nNa; i++) items.push(['Na⁺', '#b0742a']); for (let i = 0; i < nW; i++) items.push(['H₂O', '#9aa8b5']);
+    const per = Math.ceil(Math.sqrt(items.length / 1.35)) || 1, cw = 120 / per, ch = Math.min(22, 160 / Math.ceil(items.length / per || 1)), fs = Math.max(6, Math.min(10, cw / 2.4));
+    items.forEach((it, i) => { const x = 250 + (i % per) * cw + cw / 2, y = 44 + Math.floor(i / per) * ch + ch / 2; s += '<text x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" font-size="' + fs.toFixed(1) + '" text-anchor="middle" font-weight="700" fill="' + it[1] + '">' + it[0] + '</text>'; });
+    s += '<text x="307" y="208" font-size="8.5" text-anchor="middle" fill="#5a6a7a">H⁺ ' + nH + ' · OH⁻ ' + nOH + ' · 水 ' + nW + '</text>';
+    return '<svg viewBox="0 0 380 230" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">' + s + '</svg>';
+  }
+
+  // ================= ⑪ 植物の 蒸散 =================
+  const TUBES = [['A', '何も ぬらない', 1, 1], ['B', '葉の 表に ワセリン', 0, 1], ['C', '葉の 裏に ワセリン', 1, 0], ['D', '葉を すべて とる', -1, -1]];
+  function transpRate(tube, light, wind) { const tb = TUBES.find(x => x[0] === tube), f = (light ? 1 : 0.25) * (wind ? 1.6 : 1); return ((tb[2] === 1 ? 0.2 : 0) + (tb[3] === 1 ? 0.6 : 0) + 0.05) * f; }
+  function transp() {
+    let light = 1, wind = 0;
+    page('transp', seg('lt', [['1', '☀ 明るい 所'], ['0', '🌑 暗い 所']], '1') + seg('wd', [['0', '風 なし'], ['1', '🌬 扇風機の 風']], '0') + '<div class="sl-fig" id="slFig"></div><div class="sl-read" id="slRead"></div>' + slider('slTm', '時間', 0, 8, 1, 0, ' 時間'),
+      '<p><b>蒸散</b>: 植物の 体の 中の 水が 水蒸気に なって 出ていく こと。おもに 葉の <b>気孔</b> (2つの 孔辺細胞に かこまれた すきま) から。</p><p>気孔は ふつう 葉の <b>裏</b> に 多い → 裏からの 蒸散が 多い。</p><p>明るい・風が ある・あたたかい・かわいて いる と さかん。暗いと 気孔が 閉じて へる。</p><p>蒸散の はたらき: 根から 水を 吸い上げる 力に なる・体温を 下げる。水面に 油を うかべるのは、水面からの 蒸発を 防ぐ ため。</p>');
+    const cond = () => (light ? '明るい' : '暗い') + (wind ? '・風' : '');
+    const upd = () => { const t = +$('slTm').value; $('slTmV').textContent = t; const w = TUBES.map(tb => r2(transpRate(tb[0], light, wind) * t));
+      $('slFig').innerHTML = transpSVG(w, light, wind);
+      $('slRead').innerHTML = TUBES.map((tb, i) => '<span>' + tb[0] + ' <b>' + w[i].toFixed(2) + ' mL</b></span>').join('') + '<span>条件 <b>' + cond() + '</b></span>';
+      if (light && !wind && t === 6) mark('transp', 0); if (!light && t >= 4) mark('transp', 1); if (wind && w[0] >= 4) mark('transp', 2); };
+    $('slTm').oninput = upd; bindSeg('lt', v => { light = +v; upd(); }); bindSeg('wd', v => { wind = +v; upd(); });
+    bindNB('transp', () => { const t = +$('slTm').value; if (!t) return '時間を すすめてから 記録しよう'; return TUBES.map(tb => ({ t: t, cond: cond(), tube: tb[0], w: r2(transpRate(tb[0], light, wind) * t) })); }); upd();
+  }
+  function transpSVG(w, light, wind) {
+    let s = '<rect width="380" height="240" fill="' + (light ? '#fbfaf5' : '#3a4256') + '"/>';
+    if (light) s += '<circle cx="356" cy="22" r="14" fill="#ffd84a"/>'; if (wind) s += '<text x="8" y="22" font-size="16">🌬</text><path d="M30,16 q20,-6 40,0 M30,24 q20,6 40,0" stroke="#7a9ab8" fill="none"/>';
+    TUBES.forEach((tb, i) => { const x = 50 + i * 88, top = 108, lv = top + 14 + Math.min(80, w[i] * 12);
+      // 枝と 葉
+      s += '<line x1="' + x + '" y1="' + (top + 20) + '" x2="' + x + '" y2="40" stroke="#5a7a3a" stroke-width="3"/>';
+      if (tb[2] !== -1) [[-1, 54], [1, 66], [-1, 80]].forEach(l => { const lx = x + l[0] * 18, ly = l[1]; s += '<ellipse cx="' + lx + '" cy="' + ly + '" rx="16" ry="7" fill="#5aa04a" transform="rotate(' + (l[0] * -20) + ' ' + lx + ' ' + ly + ')"/>' + (tb[2] === 0 ? '<ellipse cx="' + lx + '" cy="' + (ly - 1) + '" rx="13" ry="3.5" fill="rgba(255,255,255,.75)" transform="rotate(' + (l[0] * -20) + ' ' + lx + ' ' + ly + ')"/>' : '') + (tb[3] === 0 ? '<ellipse cx="' + lx + '" cy="' + (ly + 2.5) + '" rx="13" ry="3" fill="rgba(255,255,255,.75)" stroke="#c8c8c8" stroke-width=".5" transform="rotate(' + (l[0] * -20) + ' ' + lx + ' ' + ly + ')"/>' : ''); });
+      // 試験管
+      s += '<rect x="' + (x - 14) + '" y="' + top + '" width="28" height="104" rx="12" fill="rgba(220,235,245,.5)" stroke="#7a8a9a" stroke-width="1.5"/><rect x="' + (x - 12.5) + '" y="' + lv.toFixed(1) + '" width="25" height="' + (top + 102 - lv).toFixed(1) + '" rx="10" fill="rgba(110,170,230,.6)"/><rect x="' + (x - 12.5) + '" y="' + (lv - 3).toFixed(1) + '" width="25" height="3" fill="#e8c84a"/>';
+      for (let k = 0; k <= 7; k++) s += '<line x1="' + (x + 9) + '" y1="' + (top + 14 + k * 12) + '" x2="' + (x + 14) + '" y2="' + (top + 14 + k * 12) + '" stroke="#7a8a9a" stroke-width=".8"/>';
+      s += '<line x1="' + (x - 18) + '" y1="' + (top + 14) + '" x2="' + (x + 18) + '" y2="' + (top + 14) + '" stroke="#d0382a" stroke-dasharray="2 2"/>';
+      s += '<text x="' + x + '" y="228" font-size="13" font-weight="700" text-anchor="middle" fill="' + (light ? '#26323d' : '#e8eef6') + '">' + tb[0] + '</text><text x="' + x + '" y="102" font-size="8.5" text-anchor="middle" fill="' + (light ? '#5a6a7a' : '#c8d2de') + '">' + tb[1].replace('葉の ', '') + '</text>'; });
+    s += '<text x="' + (wind ? 80 : 8) + '" y="14" font-size="9" fill="' + (light ? '#7a7a8a' : '#c8d2de') + '">赤い 点線 = はじめの 水面 ・ 黄 = 油の 層 ・ 白 = ワセリン</text>';
+    return '<svg viewBox="0 0 380 240" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">' + s + '</svg>';
+  }
+
+  // ================= ⑫ 流水と 堆積 =================
+  const GRAINS = [['reki', 'れき', 4, 30, '#8a7a6a', 7], ['sa', 'あらい 砂', 1, 10, '#c8a86a', 4], ['fs', '細かい 砂', 0.25, 3, '#d8c48e', 2.5], ['doro', '泥', 0.05, 0.2, '#8a6a4a', 1.5]];
+  function sedi() {
+    let gi = 'reki', falling = false, last = null, layers = 0; const measured = {};
+    page('sedi', seg('sm', [['fall', '⏱ しずむ 速さ'], ['pour', '🏞 地層を 作る']], 'fall') + '<div id="slSedBox"></div>',
+      '<p>流れる 水の はたらき: <b>しん食</b> (けずる)・<b>運ぱん</b> (運ぶ)・<b>たい積</b> (つもらせる)。流れが ゆるやかに なると つもる。</p><p>大きく 重い 粒ほど 速く しずむ。1回の 流れで つもった 層は <b>下が あらく、上が 細かい</b>。</p><p>粒の 大きさ: れき (2mm 以上) > 砂 (1/16〜2mm) > 泥 (1/16mm 以下)。河口の 近くに れき・砂、沖の 深い 所に 泥。</p><p>地層を 見れば、そこが むかし 浅い 海だったか 深い 海だったかが わかる。</p>');
+    const box = () => $('slSedBox');
+    function fallUI() {
+      box().innerHTML = seg('gr', GRAINS.map(g => [g[0], g[1]]), gi) + '<div class="sl-fig" id="slFig"></div><div class="sl-read" id="slRead"></div><div class="sl-sw"><span class="sl-swd" id="slSw">0.0</span><button class="sl-act" id="slDrop">▼ 粒を 落とす</button></div>';
+      bindSeg('gr', v => { gi = v; drawFall(-1); });
+      $('slDrop').onclick = drop; drawFall(-1);
+    }
+    function drawFall(y) {
+      const g = GRAINS.find(x => x[0] === gi); let s = '<rect width="380" height="240" fill="#fbfaf5"/><rect x="150" y="20" width="60" height="206" rx="6" fill="rgba(160,200,235,.45)" stroke="#7a8a9a" stroke-width="2"/>';
+      for (let k = 0; k <= 50; k += 5) { const yy = 30 + k * 3.8; s += '<line x1="210" y1="' + yy + '" x2="' + (k % 10 ? 216 : 222) + '" y2="' + yy + '" stroke="#5a6a7a"/>' + (k % 10 ? '' : '<text x="226" y="' + (yy + 3) + '" font-size="9" fill="#5a6a7a">' + k + 'cm</text>'); }
+      if (y >= 0) s += '<circle cx="180" cy="' + (30 + y * 3.8).toFixed(1) + '" r="' + g[5] + '" fill="' + g[4] + '"/>';
+      s += '<text x="20" y="40" font-size="12" font-weight="700" fill="#26323d">' + g[1] + '</text><text x="20" y="58" font-size="11" fill="#5a6a7a">大きさ 約 ' + g[2] + ' mm</text><circle cx="40" cy="84" r="' + g[5] * 1.6 + '" fill="' + g[4] + '"/>';
+      $('slFig').innerHTML = '<svg viewBox="0 0 380 240" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">' + s + '</svg>';
+      if (y < 0) $('slRead').innerHTML = last && last.g === g[1] ? '<span>しずむ 時間 <b>' + last.sec + ' 秒</b></span><span>速さ <b>' + last.v + ' cm/秒</b></span>' : '<span>▼ で 落とすと 50cm しずむまでの 時間を はかるよ</span>';
+    }
+    function drop() {
+      if (falling) return; falling = true; sfx('click'); const g = GRAINS.find(x => x[0] === gi), total = 50 / g[3], ff = total > 20 ? total / 6 : 1, t0 = performance.now(), btn = $('slDrop'); btn.disabled = true;
+      if (ff > 1) btn.textContent = '早送り ×' + Math.round(ff);
+      const step = now => { if (!document.body.contains(btn)) { raf = null; falling = false; return; } const el = (now - t0) / 1000 * ff;
+        if (el >= total) { raf = null; falling = false; btn.disabled = false; btn.textContent = '▼ 粒を 落とす'; const sec = r1(total * (1 + (Math.random() - 0.5) * 0.04)); last = { g: g[1], mm: g[2], sec: sec, v: r2(50 / sec) }; $('slSw').textContent = sec.toFixed(1); drawFall(-1); sfx('correct');
+          measured[gi] = 1; if (gi === 'doro') mark('sedi', 0); if (Object.keys(measured).length >= 4) mark('sedi', 1); return; }
+        $('slSw').textContent = el.toFixed(1); drawFall(el / total * 50); raf = requestAnimationFrame(step); };
+      raf = requestAnimationFrame(step);
+    }
+    let pouring = false;
+    function pourUI() {
+      box().innerHTML = '<div class="sl-fig" id="slFig"></div><div class="sl-read" id="slRead"></div><div class="sl-sw"><button class="sl-act" id="slPour">🪣 土砂を 流しこむ</button><button class="sl-act ghost" id="slPR">水そうを 空に する</button></div>';
+      $('slPour').onclick = () => { if (pouring || layers >= 4) return; pouring = true; sfx('click'); const t0 = performance.now();
+        const step = now => { if (!document.getElementById('slPour')) { raf = null; pouring = false; return; } const u = Math.min(1, (now - t0) / 2200); drawPour(u); if (u < 1) { raf = requestAnimationFrame(step); return; }
+          raf = null; pouring = false; layers++; drawPour(-1); if (layers >= 3) mark('sedi', 2); };
+        raf = requestAnimationFrame(step); };
+      $('slPR').onclick = () => { sfx('click'); layers = 0; drawPour(-1); };
+      drawPour(-1);
+    }
+    function drawPour(u) {
+      let s = '<rect width="380" height="240" fill="#fbfaf5"/><rect x="40" y="40" width="300" height="186" fill="rgba(160,200,235,.35)" stroke="#7a8a9a" stroke-width="2"/>';
+      const H = [10, 14, 12], bands = [['#8a7a6a', 'れき'], ['#d0b47a', '砂'], ['#8a6a4a', '泥']]; let y = 224;
+      const drawSet = (k, frac) => { bands.forEach((b, j) => { const h = H[j] * Math.max(0, Math.min(1, frac * 3 - j)); if (h <= 0) return; y -= h; s += '<rect x="42" y="' + y.toFixed(1) + '" width="296" height="' + h.toFixed(1) + '" fill="' + b[0] + '"/>'; if (j === 0) for (let i = 0; i < 26; i++) s += '<circle cx="' + (48 + i * 11.3) + '" cy="' + (y + h / 2).toFixed(1) + '" r="' + (h / 3).toFixed(1) + '" fill="#6a5a4a"/>'; }); };
+      for (let k = 0; k < layers; k++) drawSet(k, 1);
+      if (u >= 0) { drawSet(layers, u); for (let i = 0; i < 40; i++) { const g = GRAINS[i % 4], px = 60 + (i * 53) % 270, py = 50 + ((u * 600 * g[3] / 10 + i * 13) % (y - 52)); s += '<circle cx="' + px + '" cy="' + py.toFixed(1) + '" r="' + g[5] * 0.6 + '" fill="' + g[4] + '" opacity="' + (1 - u * 0.6).toFixed(2) + '"/>'; } s += '<path d="M190,10 L190,40" stroke="#8a6a4a" stroke-width="6" opacity="' + (1 - u).toFixed(2) + '"/>'; }
+      s += '<text x="346" y="222" font-size="9" fill="#5a6a7a">下</text><text x="346" y="50" font-size="9" fill="#5a6a7a">上</text>';
+      $('slFig').innerHTML = '<svg viewBox="0 0 380 240" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">' + s + '</svg>';
+      $('slRead').innerHTML = '<span>流しこんだ 回数 <b>' + layers + ' 回</b></span><span>1回ごとに 下から <b>れき → 砂 → 泥</b></span>' + (layers >= 4 ? '<span>水そうが いっぱい!</span>' : '');
+    }
+    bindSeg('sm', v => { v === 'fall' ? fallUI() : pourUI(); });
+    bindNB('sedi', () => last ? { g: last.g, mm: last.mm, sec: last.sec, v: last.v } : '⏱ しずむ 速さ で 粒を 落としてから 記録しよう');
+    fallUI();
+  }
+
+  // ================= ⑬ 露点と 湿度 =================
+  function satVap(t) { const e = 6.1078 * Math.pow(10, 7.5 * t / (t + 237.3)); return 217 * e / (t + 273.15); }
+  function dewPoint(a) { let lo = -20, hi = 40; for (let i = 0; i < 40; i++) { const m = (lo + hi) / 2; if (satVap(m) < a) lo = m; else hi = m; } return (lo + hi) / 2; }
+  const ROOMS = [['class', '🏫 教室', 20, 60], ['bath', '🛁 おふろ場', 26, 90], ['winter', '❄ 冬の 暖房の 部屋', 18, 35], ['summer', '🌞 夏の 午後の 部屋', 32, 70], ['ac', '🌀 エアコンの 部屋', 25, 40]];
+  function dew() {
+    let room = 'class', cup = 20, cooling = false; const rec = {};
+    page('dew', '<label class="sl-sel">部屋 <select id="slRm">' + ROOMS.map(r => '<option value="' + r[0] + '">' + r[1] + '</option>').join('') + '</select></label><div class="sl-fig" id="slFig"></div><div class="sl-read" id="slRead"></div>' +
+      '<div class="sl-sw"><button class="sl-act" id="slIce">🧊 氷水を 少し 入れて かきまぜる</button><button class="sl-act ghost" id="slDR">くみおきの 水に もどす</button></div>',
+      '<p><b>飽和水蒸気量</b>: 空気 1m³ が ふくむ ことの できる 水蒸気の 最大量。気温が 高いほど 大きい (20℃ で 17.3g、30℃ で 30.4g)。</p><p><b>露点</b>: 空気を 冷やした とき、水蒸気が 水てきに 変わり始める 温度。露点の 飽和水蒸気量 = 今 空気に ふくまれて いる 水蒸気量。</p><p><b>湿度 (%)</b> = 水蒸気量 ÷ 飽和水蒸気量 × 100</p><p>コップに 金属を 使うのは 熱を よく 伝え、水温 = 表面の 空気の 温度に なる ため。くみおきの 水を 使うのは 室温と 同じ 温度から 始める ため。上昇気流で 空気が 露点まで 冷えると <b>雲</b> が できる。</p>');
+    const R = () => ROOMS.find(r => r[0] === room);
+    const info = () => { const r = R(), a = satVap(r[2]) * r[3] / 100, dp = dewPoint(a); return { r: r, a: a, dp: dp }; };
+    const upd = () => { const o = info(), fog = cup <= o.dp + 1e-9;
+      $('slFig').innerHTML = dewSVG(o.r[2], cup, fog);
+      $('slRead').innerHTML = '<span>室温 <b>' + o.r[2] + ' ℃</b></span><span>コップの 水温 <b>' + cup + ' ℃</b></span><span>' + (fog ? '<b style="color:#2e6fb8">💧 表面が くもった!</b>' : 'まだ くもらない') + '</span>' + (rec[room] ? '<span>露点 <b>' + rec[room] + ' ℃</b> → 湿度 <b>' + Math.round(satVap(rec[room]) / satVap(o.r[2]) * 100) + ' %</b></span>' : '');
+      if (fog && rec[room] == null) { rec[room] = cup; sfx('correct'); upd(); if (room === 'class') mark('dew', 0); if (Math.round(satVap(cup) / satVap(o.r[2]) * 100) >= 80) mark('dew', 1); if (Object.keys(rec).length >= 3) mark('dew', 2); } };
+    const reset = () => { cup = R()[2]; upd(); };
+    $('slRm').onchange = () => { room = $('slRm').value; sfx('click'); reset(); };
+    $('slIce').onclick = () => { if (cooling || cup <= 0) return; cooling = true; sfx('click'); later(() => { cup -= 1; cooling = false; upd(); }, 350); };
+    $('slDR').onclick = () => { sfx('click'); reset(); };
+    bindNB('dew', () => { const o = info(); if (rec[room] == null) return 'コップが くもるまで 冷やしてから 記録しよう'; const dp = rec[room], a = r1(satVap(dp)), sat = r1(satVap(o.r[2])); return { room: o.r[1].replace(/^\S+ /, ''), T: o.r[2], dp: dp, a: a, sat: sat, hum: Math.round(a / sat * 100) }; });
+    reset();
+  }
+  function dewSVG(T, cup, fog) {
+    let s = '<rect width="380" height="230" fill="#fbfaf5"/>';
+    s += '<path d="M120,60 L130,200 Q131,210 141,210 L219,210 Q229,210 230,200 L240,60 Z" fill="#c9ced6" stroke="#7a8a9a" stroke-width="2"/><path d="M123,96 L131,200 Q132,206 141,206 L219,206 Q228,206 229,200 L237,96 Z" fill="rgba(110,170,230,.55)"/>';
+    s += '<rect x="196" y="18" width="8" height="150" rx="4" fill="#fff" stroke="#8a8a9a"/><circle cx="200" cy="172" r="8" fill="#d0382a"/><rect x="198" y="' + (140 - cup * 3.4).toFixed(1) + '" width="4" height="' + (32 + cup * 3.4).toFixed(1) + '" fill="#d0382a"/>';
+    for (let k = 0; k <= 35; k += 5) s += '<line x1="204" y1="' + (164 - k * 3.4) + '" x2="208" y2="' + (164 - k * 3.4) + '" stroke="#5a6a7a"/><text x="210" y="' + (167 - k * 3.4) + '" font-size="8" fill="#5a6a7a">' + k + '</text>';
+    s += '<line x1="160" y1="40" x2="165" y2="190" stroke="#8a8a9a" stroke-width="3"/><text x="150" y="36" font-size="9" fill="#5a6a7a">ガラス棒</text>';
+    if (fog) { s += '<path d="M120,60 L130,200 Q131,210 141,210 L219,210 Q229,210 230,200 L240,60 Z" fill="rgba(255,255,255,.45)"/>'; for (let i = 0; i < 26; i++) { const yy = 70 + (i * 37) % 130, side = i % 2, xx = side ? 236 - (yy - 60) * 0.07 - 2 : 124 + (yy - 60) * 0.07 + 2; s += '<ellipse cx="' + xx.toFixed(1) + '" cy="' + yy + '" rx="2.2" ry="3" fill="rgba(120,170,220,.85)"/>'; } }
+    if (cup < T) for (let i = 0; i < Math.min(6, T - cup); i++) s += '<rect x="' + (140 + i * 13) + '" y="' + (100 + (i % 2) * 6) + '" width="10" height="10" rx="2" fill="rgba(235,245,255,.9)" stroke="#aac"/>';
+    s += '<text x="20" y="40" font-size="12" font-weight="700" fill="#26323d">室温 ' + T + ' ℃</text><text x="20" y="58" font-size="11" fill="#5a6a7a">金属製の コップ</text><text x="270" y="120" font-size="12" font-weight="700" fill="#d0382a">水温 ' + cup + ' ℃</text>';
+    if (fog) s += '<text x="270" y="142" font-size="12" font-weight="700" fill="#2e6fb8">くもった!</text><text x="270" y="160" font-size="10" fill="#2e6fb8">この 温度 = 露点</text>';
+    return '<svg viewBox="0 0 380 230" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">' + s + '</svg>';
+  }
+
+  const RUN = { circuit: circuit, lens: lens, refract: refract, pend: pend, slope: slope, chem: chem, moon: moon, sky: sky, induct: induct, neut: neut, transp: transp, sedi: sedi, dew: dew };
   function open() { showPage('pageSciLab'); home(); }
   function stats() { const d = data(); return { done: Object.keys(d.done).filter(k => MISS[k.split(':')[0]]).length, total: EXPS.length * 3, notes: Object.keys(d.nb).length }; }
-  return { open: open, stats: stats, stop: stopAnim, _lens: lensSVG, _circ: circSVG, _sun: sunPos, _snell: snell, _chem: chemMass, _slope: slopeCalc };
+  return { open: open, stats: stats, stop: stopAnim, _lens: lensSVG, _circ: circSVG, _sun: sunPos, _snell: snell, _chem: chemMass, _slope: slopeCalc, _ph: neutPH, _dew: dewPoint, _sat: satVap, _ind: inductD };
 })();
